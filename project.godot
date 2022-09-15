@@ -1,0 +1,95 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "Reference",
+"class": "CardCatalog",
+"language": "GDScript",
+"path": "res://scripts/card_catalog.gd"
+}, {
+"base": "Reference",
+"class": "CardData",
+"language": "GDScript",
+"path": "res://scripts/card_data.gd"
+}, {
+"base": "Reference",
+"class": "GameData",
+"language": "GDScript",
+"path": "res://scripts/game_data.gd"
+}, {
+"base": "Reference",
+"class": "GameProcessor",
+"language": "GDScript",
+"path": "res://scripts/game_server/game_processor.gd"
+}, {
+"base": "",
+"class": "GitAPI",
+"language": "NativeScript",
+"path": "res://addons/godot-git-plugin/git_api.gdns"
+}, {
+"base": "Reference",
+"class": "IGameServer",
+"language": "GDScript",
+"path": "res://scripts/game_server/game_server.gd"
+}, {
+"base": "Reference",
+"class": "NamedSkillProccessor",
+"language": "GDScript",
+"path": "res://scripts/game_server/named_skill_proccessor.gd"
+}, {
+"base": "Reference",
+"class": "NormalSkill",
+"language": "GDScript",
+"path": "res://scripts/normal_skill.gd"
+}, {
+"base": "Reference",
+"class": "ProccessorData",
+"language": "GDScript",
+"path": "res://scripts/game_server/proccessor_data.gd"
+} ]
+_global_script_class_icons={
+"CardCatalog": "",
+"CardData": "",
+"GameData": "",
+"GameProcessor": "",
+"GitAPI": "",
+"IGameServer": "",
+"NamedSkillProccessor": "",
+"NormalSkill": "",
+"ProccessorData": ""
+}
+
+[application]
+
+config/name="OpenCombat3"
+run/main_scene="res://playing_scene.tscn"
+config/icon="res://icon.png"
+
+[display]
+
+window/size/width=1280
+window/size/height=720
+window/stretch/mode="2d"
+window/stretch/aspect="keep"
+
+[gdnative]
+
+singletons=[ "res://addons/godot-git-plugin/git_api.gdnlib" ]
+
+[physics]
+
+common/enable_pause_aware_picking=true
+
+[rendering]
+
+quality/driver/driver_name="GLES2"
+vram_compression/import_etc=true
+vram_compression/import_etc2=false
+environment/default_environment="res://default_env.tres"
