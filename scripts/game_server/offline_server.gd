@@ -7,12 +7,11 @@ var _player_name:String
 var _cpu_commander
 var _result:int
 
-var card_catalog : CardCatalog
 
-func _init(name:String,commander):
-	initialize(name,commander)
+func _init(name:String,commander,card_catalog : CardCatalog):
+	initialize(name,commander,card_catalog)
 
-func initialize(name:String,commander):
+func initialize(name:String,commander,card_catalog):
 	_game_processor = GameProcessor.new(card_catalog)
 	_player_name = name;
 	_cpu_commander = commander;
@@ -33,7 +32,7 @@ func _send_ready():
 	emit_signal("data_recieved", UpdateData.new())
 #        Callback(p1update, null);
 
-func _send_select(phase:int,index:int):
+func _send_select(phase:int,index:int,hands_order:Array):
 	pass
 
 func _send_surrender():

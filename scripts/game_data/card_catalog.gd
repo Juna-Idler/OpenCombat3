@@ -2,10 +2,15 @@ class_name CardCatalog
 
 var _catalog : Array = []
 
-func _init(catalog_text : String):
-	_catalog.clear()
+func _init():
+	var f = File.new()
+	if f.open("res://card_data/card_data_catalog.csv", File.READ) != OK:
+		return
+	var text = f.get_as_text()
+	f.close()
+	
 	_catalog.append(CardData.new().set_property(0,"",0,0,0,0,[],""))
-	var cards = catalog_text.split("\n")
+	var cards = text.split("\n")
 	for c in cards:
 		var csv = c.split(",")
 		var skills = []
@@ -15,7 +20,7 @@ func _init(catalog_text : String):
 		for s in skill_texts:
 			var c_and_t = s.split(":",true,1);
 			if c_and_t[0] != "named":
-				skills.append(NormalSkill.new(c_and_t[0],c_and_t[1]))
+				skills.append(SkillData.NormalSkill.new(c_and_t[0],c_and_t[1]))
 				continue
 			var named_param = c_and_t[1].split(":");
 			var skill = CardData.NamedSkill.new()

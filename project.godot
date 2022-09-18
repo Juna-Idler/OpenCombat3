@@ -12,22 +12,17 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "CardCatalog",
 "language": "GDScript",
-"path": "res://scripts/card_catalog.gd"
+"path": "res://scripts/game_data/card_catalog.gd"
 }, {
 "base": "Reference",
 "class": "CardData",
 "language": "GDScript",
-"path": "res://scripts/card_data.gd"
-}, {
-"base": "Reference",
-"class": "GameData",
-"language": "GDScript",
-"path": "res://scripts/game_data.gd"
+"path": "res://scripts/game_data/card_data.gd"
 }, {
 "base": "Reference",
 "class": "GameProcessor",
 "language": "GDScript",
-"path": "res://scripts/game_server/game_processor.gd"
+"path": "res://scripts/game_processor/game_processor.gd"
 }, {
 "base": "",
 "class": "GitAPI",
@@ -40,30 +35,41 @@ _global_script_classes=[ {
 "path": "res://scripts/game_server/game_server.gd"
 }, {
 "base": "Reference",
-"class": "NamedSkillProccessor",
+"class": "NamedSkillProcessor",
 "language": "GDScript",
-"path": "res://scripts/game_server/named_skill_proccessor.gd"
+"path": "res://scripts/game_processor/named_skill_processor.gd"
+}, {
+"base": "Object",
+"class": "NormalSkillProcessor",
+"language": "GDScript",
+"path": "res://scripts/game_processor/normal_skill_processor.gd"
 }, {
 "base": "Reference",
-"class": "NormalSkill",
+"class": "ProcessorData",
 "language": "GDScript",
-"path": "res://scripts/normal_skill.gd"
+"path": "res://scripts/game_processor/processor_data.gd"
 }, {
 "base": "Reference",
-"class": "ProccessorData",
+"class": "SkillData",
 "language": "GDScript",
-"path": "res://scripts/game_server/proccessor_data.gd"
+"path": "res://scripts/game_data/skill_data.gd"
+}, {
+"base": "Reference",
+"class": "SkillProcessor",
+"language": "GDScript",
+"path": "res://scripts/game_processor/skill_processor.gd"
 } ]
 _global_script_class_icons={
 "CardCatalog": "",
 "CardData": "",
-"GameData": "",
 "GameProcessor": "",
 "GitAPI": "",
 "IGameServer": "",
-"NamedSkillProccessor": "",
-"NormalSkill": "",
-"ProccessorData": ""
+"NamedSkillProcessor": "",
+"NormalSkillProcessor": "",
+"ProcessorData": "",
+"SkillData": "",
+"SkillProcessor": ""
 }
 
 [application]
@@ -71,6 +77,10 @@ _global_script_class_icons={
 config/name="OpenCombat3"
 run/main_scene="res://playing_scene.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+Global="*res://Global.gd"
 
 [display]
 

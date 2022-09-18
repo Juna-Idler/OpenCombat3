@@ -11,7 +11,7 @@ var color : int
 var level : int
 var power : int
 var hit : int
-var skills : Array
+var skills : Array# of BaseSkill
 var text : String
 #var abilities : Array
 
@@ -42,10 +42,5 @@ static func copy(dest : CardData, src : CardData):
 
 
 
-class NamedSkill:
-	var id : int
-	var name : String
-	var parameter : String
-	var text : String
 
 

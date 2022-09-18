@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://hand_area.tscn" type="PackedScene" id=1]
 [ext_resource path="res://card/card.tscn" type="PackedScene" id=2]
 [ext_resource path="res://playing_scene.gd" type="Script" id=3]
+[ext_resource path="res://Global.gd" type="Script" id=4]
+[ext_resource path="res://card/r_card.tscn" type="PackedScene" id=5]
 
 [node name="Node" type="Node"]
 script = ExtResource( 3 )
@@ -25,5 +27,14 @@ margin_bottom = 240.0
 
 [node name="Node2D" type="Node2D" parent="."]
 
+[node name="Card2" parent="Node2D" instance=ExtResource( 5 )]
+position = Vector2( 327, 123 )
+
+[node name="Card3" parent="Node2D" instance=ExtResource( 2 )]
+position = Vector2( 344, 596 )
+
 [node name="Card" parent="Node2D" instance=ExtResource( 2 )]
-position = Vector2( 686, 612 )
+position = Vector2( 556, 598 )
+
+[node name="Global" type="Node" parent="."]
+script = ExtResource( 4 )

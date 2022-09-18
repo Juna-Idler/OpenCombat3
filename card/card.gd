@@ -1,18 +1,19 @@
 extends Node2D
 
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
 
-var id:int
+var id_in_deck:int
 
-var power:int
-var hit:int
-var level:int
+var data := CardData.new()
+
+var affected := Affected.new()
+class Affected:
+	var power : int = 0
+	var hit : int = 0
+	var damage : int = 0
+	var rush : int = 0
 
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
 
