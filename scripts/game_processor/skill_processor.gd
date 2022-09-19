@@ -30,13 +30,13 @@ func process_after(skills : Array,
 					vs_color,link_color,situation,myself,rival)
 
 func process_end(skills : Array,
-		vs_color : int,link_color : int,situation : int,
+		vs_color : int,link_color : int,
 		myself : ProcessorData.Player,
 		rival : ProcessorData.Player):
 	for s in skills:
 		if s is SkillData.NormalSkill:
-			NormalSkillProcessor.process_end(s,vs_color,link_color,situation,myself,rival)
+			NormalSkillProcessor.process_end(s,vs_color,link_color,myself,rival)
 		elif s is SkillData.NamedSkill:
 			named_skills.get_skill(s.id).process_end(s,
-					vs_color,link_color,situation,myself,rival)
+					vs_color,link_color,myself,rival)
 

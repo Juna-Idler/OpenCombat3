@@ -2,8 +2,8 @@ extends Reference
 class_name IGameServer
 
 # 何らかの事情でゲームを強制終了する時のシグナル
-signal recieved_abort(message)
-# func _on_GameServer_recieved_abort(message:String)->void:
+signal recieved_abort(winlose,message)
+# func _on_GameServer_recieved_abort(winlose:int,message:String)->void:
 # 
 # server.connect("recieved_abort",self,"_on_GameServer_recieved_abort")
 

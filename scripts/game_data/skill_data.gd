@@ -201,7 +201,7 @@ class NormalSkill:
 				return link_color == CardColors.BLUE
 		return false
 		
-	func test_condition_end(rival_color : int,link_color : int,situation : int) -> bool :
+	func test_condition_end(rival_color : int,link_color : int) -> bool :
 		if timing != Timing.END_COMBAT:
 			return false
 		match condition:
@@ -227,3 +227,10 @@ class NamedSkill:
 	var name : String
 	var parameter : String
 	var text : String
+	
+	func _init(i,n,p,t):
+		id = i
+		name = n
+		parameter = p
+		text = t
+		

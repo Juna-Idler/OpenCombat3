@@ -2,7 +2,7 @@
 class_name ProcessorData
 
 class Card:
-	var data := CardData.new()
+	var data : CardData = null
 	var id_in_deck : int = 0
 
 	var affected := Affected.new()
@@ -38,6 +38,9 @@ class Card:
 		func reset_update():
 			updated = false;
 
+	func _init(cd : CardData,iid : int):
+		data = cd
+		id_in_deck = iid
 #	var additional_skills : Array
 #	var addtional_changes : Dictionary = {}
 
@@ -70,9 +73,7 @@ class Player:
 	func _init(deck : Array,hand_count : int,
 			card_catalog : CardCatalog,shuffle : bool = true) -> void:
 		for i in range(deck.size()):
-			var c := Card.new()
-			card_catalog.set_card_data(c.data,deck[i])
-			c.id_in_deck = i
+			var c := Card.new(card_catalog.new_card_data(deck[i]),i)
 			deck_list.append(c);
 			stack_indexes.append(i);
 			_life += c.data.level

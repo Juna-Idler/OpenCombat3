@@ -21,11 +21,11 @@ func initialize(name:String,card_catalog):
 	_processor = GameProcessor.new(card_catalog)
 	_player_name = name;
 
-func standby_single(deck,enemy_id):
+func standby_single(deck:Array,enemy_id:int) -> bool:
 	var edeck := [1,2,3,4,5,6,7,8,9]
-	_commander = ICpuCommander.ZeroCommander.new()
+	_commander = ZeroCommander.new()
 	_processor.standby(deck,4,true,edeck,1,false)
-	pass
+	return true
 
 func _get_primary_data() -> PrimaryData:
 	var my_deck_list = []
@@ -77,7 +77,7 @@ func _send_select(phase:int,index:int,hands_order:Array):
 
 
 func _send_surrender():
-	emit_signal("recieved_abort","Surrender")
+	emit_signal("recieved_abort",-1,"Surrender")
 	pass
 
 # このインターフェイスの破棄

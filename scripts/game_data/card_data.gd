@@ -15,19 +15,17 @@ var skills : Array# of BaseSkill
 var text : String
 #var abilities : Array
 
-func set_property(pid : int,pname : String,
-		pcolor : int,plevel : int,ppower : int,phit : int,
-		pskills : Array,ptext : String) -> CardData:
-	id = pid
-	name = pname
-	color = pcolor
-	level = plevel
-	power = ppower
-	hit = phit
-	skills = pskills
-	text = ptext
-	return self
-	
+func _init(i : int,n : String,
+		c : int,l : int,p : int,h : int,
+		s : Array,t : String):
+	id = i
+	name = n
+	color = c
+	level = l
+	power = p
+	hit = h
+	skills = s
+	text = t
 
 
 static func copy(dest : CardData, src : CardData):

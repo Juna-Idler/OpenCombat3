@@ -4,7 +4,7 @@ extends Node2D
 
 var id_in_deck:int
 
-var data := CardData.new()
+var data : CardData = null
 
 var affected := Affected.new()
 class Affected:

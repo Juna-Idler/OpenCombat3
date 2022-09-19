@@ -17,10 +17,10 @@ static func process_after(skill : SkillData.NormalSkill,
 		_activate_normal_skill(skill,myself,rival)
 
 static func process_end(skill : SkillData.NormalSkill,
-		vs_color : int,link_color : int,situation : int,
+		vs_color : int,link_color : int,
 		myself : ProcessorData.Player,
 		rival : ProcessorData.Player) -> void:
-	if skill.test_condition_end(vs_color,link_color,situation):
+	if skill.test_condition_end(vs_color,link_color):
 		_activate_normal_skill(skill,myself,rival)
 
 static func _activate_normal_skill(skill : SkillData.NormalSkill,
