@@ -3,9 +3,6 @@ extends Reference
 class_name GameProcessor
 
 
-enum PhaseName {GAMEFINISH = -1,COMBAT,RECOVERY}
-
-var round_count : int
 var phase : int
 var player1 : ProcessorData.Player
 var player2 : ProcessorData.Player
@@ -13,23 +10,23 @@ var player2 : ProcessorData.Player
 var situation : int
 
 var _card_catalog : CardCatalog
-var _skill_processor : SkillProcessor = SkillProcessor.new()
+var _skill_processor := SkillProcessor.new()
 
 func _init(card_catalog : CardCatalog):
 	_card_catalog = card_catalog
 	pass
 
 
-func standby(deck1 : Array,deck2 : Array) -> bool:
-	round_count = 1;
+func standby(p1_deck : Array,p1_hands:int,p1_shuffle:bool,
+		p2_deck : Array,p2_hands:int,p2_shuffle:bool) -> bool:
 	phase = 0;
-	player1 = ProcessorData.Player.new(deck1,4,_card_catalog)
-	player2 = ProcessorData.Player.new(deck2,4,_card_catalog)
+	player1 = ProcessorData.Player.new(p1_deck,p1_hands,_card_catalog,p1_shuffle)
+	player2 = ProcessorData.Player.new(p2_deck,p2_hands,_card_catalog,p2_shuffle)
 	return true
 
 
 func combat(index1 : int,index2 : int) -> void:
-	if (phase != PhaseName.COMBAT):
+	if phase & 1 != 0:
 		return
 # warning-ignore:narrowing_conversion
 	index1 = min(max(0, index1), player1.hand_indexes.size() - 1);
@@ -73,24 +70,42 @@ func combat(index1 : int,index2 : int) -> void:
 			combatant1.color,link2color,situation,player2,player1)
 
 	if player1.is_fatal() or player2.is_fatal():
-		phase = PhaseName.GAMEFINISH
+		phase = -phase
+
+	player1.supply()
+	player2.supply()
+	phase += 1
 
 
-func recover1(index : int) -> bool:
-	if phase != PhaseName.RECOVERY or player1.is_recovery():
-		return true
-	var recovery := player1.recover(index)
-	if recovery and player2.is_recovery():
-		phase = PhaseName.BATTLE
-	return recovery
+func recover1(index : int):
+	if phase & 1 != 1 or player1.is_recovery():
+		return
+	player1.recover(index)
+	if player1.is_recovery() and player2.is_recovery():
+		phase += 1
+	if player1.hand_indexes.size() + player1.stack_indexes.size() <= 1:
+		phase = -phase
 
-func recover2(index : int) -> bool:
-	if phase != PhaseName.RECOVERY or player2.is_recovery():
-		return true
-	var recovery = player2.recover(index)
-	if recovery and player1.is_recovery():
-		phase = PhaseName.BATTLE
-	return recovery
+func recover2(index : int):
+	if phase & 1 != 1 or player2.is_recovery():
+		return
+	player2.recover(index)
+	if player2.is_recovery() and player1.is_recovery():
+		phase += 1
+	if player2.hand_indexes.size() + player2.stack_indexes.size() <= 1:
+		phase = -phase
 
-
-
+func recover_both(index1:int,index2:int):
+	if phase & 1 != 1 or player1.is_recovery() or player2.is_recovery():
+		pass
+	player1.recover(index1)
+	player2.recover(index2)
+	if player1.is_recovery() and player2.is_recovery():
+		phase += 1
+	if ((player1.hand_indexes.size() + player1.stack_indexes.size() <= 1) or
+			 (player2.hand_indexes.size() + player2.stack_indexes.size() <= 1)):
+		phase = -phase
+	
+func reset_select():
+	player1.reset_select()
+	player2.reset_select()

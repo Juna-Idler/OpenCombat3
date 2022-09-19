@@ -7,22 +7,42 @@ class Card:
 
 	var affected := Affected.new()
 	class Affected:
-		var power : int = 0
-		var hit : int = 0
-		var damage : int = 0
-		var rush : int = 0
-		func rest():
-			power = 0
-			hit = 0
-			damage = 0
-			rush = 0;
+		var updated : bool = false
+		var power : int = 0 setget set_p
+		var hit : int = 0 setget set_h
+		var damage : int = 0 setget set_d
+		var rush : int = 0 setget set_r
+
+		func set_p(v):
+			power = v
+			updated = true
+		func set_h(v):
+			hit = v
+			updated = true
+		func set_d(v):
+			damage = v
+			updated = true
+		func set_r(v):
+			rush = v
+			updated = true
+
+		func updateaffected(p:int,h:int,d:int,r:int):
+			power += p
+			hit += h
+			damage += d
+			rush += r
+			updated = true;
 		func add(v : Affected):
-			power += v.power
-			hit += v.hit
-			damage += v.damage
-			rush += v.rush
+			updateaffected(v.power,v.hit,v.damage,v.rush)
+			
+		func reset_update():
+			updated = false;
+
 #	var additional_skills : Array
 #	var addtional_changes : Dictionary = {}
+
+
+		
 
 	func get_current_power() -> int:
 		return data.power + affected.power if (data.power + affected.power) > 0 else 0;
@@ -37,7 +57,7 @@ class Player:
 	var stack_indexes : Array = []
 	var played_indexes : Array = []
 	var discard_indexes : Array = []
-	var _hit_point : int = 0
+	var _life : int = 0
 	
 	var next_effect := Card.Affected.new()
 	
@@ -49,17 +69,15 @@ class Player:
 
 	func _init(deck : Array,hand_count : int,
 			card_catalog : CardCatalog,shuffle : bool = true) -> void:
-		for i in deck.size():
+		for i in range(deck.size()):
 			var c := Card.new()
 			card_catalog.set_card_data(c.data,deck[i])
 			c.id_in_deck = i
 			deck_list.append(c);
 			stack_indexes.append(i);
-			_hit_point += c.data.level
-# シャッフル
+			_life += c.data.level
 		if shuffle:
-			stack_indexes.sort()
-		
+			stack_indexes.shuffle()
 		for i in range(hand_count):
 			_draw_card()
 
@@ -70,13 +88,17 @@ class Player:
 	func get_playing_card() -> Card:
 		return playing_card
 		
-	func get_hit_point() -> int:
-		return _hit_point
+	func get_life() -> int:
+		return _life
 		
 	func play_combat_card(i : int) -> Card:
+		select = i
+		draw_indexes.clear()
+		for c in deck_list:
+			(c as Card).affected.reset_update()
 		playing_card_id = hand_indexes.pop_at(i)
 		playing_card = deck_list[playing_card_id]
-		_hit_point -= playing_card.data.level
+		_life -= playing_card.data.level
 		playing_card.affected.add(next_effect)
 		next_effect.rest()
 		return playing_card
@@ -92,10 +114,44 @@ class Player:
 		battle_damage += damage
 		
 	func is_fatal() -> bool:
-		if _hit_point < battle_damage:
+		if _life < battle_damage:
 			return true
 		return false
+		
+	func supply() -> void:
+		_draw_card()
+		if battle_damage > 0:
+			_draw_card()
+		
+	func recover(index : int) -> void:
+		select = index
+		draw_indexes.clear()
+		var id := _discard_card(index)
+		var card := deck_list[id] as Card
+		if battle_damage <= card.level:
+			battle_damage = 0
+			return
+		battle_damage -= card.data.level
+		# warning-ignore:return_value_discarded
+		_draw_card()
+
+		
+	func is_recovery() -> bool:
+		return battle_damage == 0
+
+	func change_order(new_indexies : Array) -> bool:
+		if new_indexies.size() != hand_indexes.size():
+			return false
+		for i in hand_indexes:
+			if not new_indexies.has(i):
+				return false
+		for i in range(hand_indexes.size()):
+			hand_indexes[i] = new_indexies[i]
+		return true
+
 	
+	func reset_select():
+		select = -1
 	
 	func _draw_card() -> int:
 		if stack_indexes.empty():
@@ -106,27 +162,6 @@ class Player:
 		return i
 	func _discard_card(i : int) -> int:
 		var id := hand_indexes.pop_at(i) as int
-		_hit_point -= deck_list[id].data.level
+		_life -= deck_list[id].data.level
 		discard_indexes.push_back(id)
 		return id
-		
-	func recover(index : int) -> bool:
-		var id := _discard_card(index)
-		var card := deck_list[id] as Card
-		if battle_damage <= card.level:
-			battle_damage = 0
-			return true
-		battle_damage -= card.data.level
-		# warning-ignore:return_value_discarded
-		_draw_card()
-		return false
-		
-	func is_recovery() -> bool:
-		return battle_damage == 0
-
-	func change_order(sort_indexies : Array) -> void:
-		var new_hands : Array = []
-		for x in sort_indexies:
-			new_hands.append(hand_indexes[x])
-		hand_indexes = new_hands
-	

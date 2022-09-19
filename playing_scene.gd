@@ -1,14 +1,21 @@
 extends Node
 
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
 
+var game_server : IGameServer = null
+var commander
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
+	var cc := Global.card_catalog
+	
+	if game_server == null:
+		game_server = OfflineServer.new("Tester",cc)
+		
+	game_server.connect("data_recieved",self,"_on_GameServer_data_recieved")
 	pass # Replace with function body.
+
+func _on_GameServer_data_recieved(data:IGameServer.UpdateData):
+	pass
 
 
 func initialize(server:IGameServer):

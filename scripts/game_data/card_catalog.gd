@@ -4,7 +4,7 @@ var _catalog : Array = []
 
 func _init():
 	var f = File.new()
-	if f.open("res://card_data/card_data_catalog.csv", File.READ) != OK:
+	if f.open("res://card_data/card_list.tres", File.READ) != OK:
 		return
 	var text = f.get_as_text()
 	f.close()
