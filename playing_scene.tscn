@@ -27,13 +27,13 @@ anchor_bottom = 0.0
 margin_top = 0.0
 margin_bottom = 240.0
 
+[node name="Card2" parent="Control" instance=ExtResource( 5 )]
+position = Vector2( 335, 122 )
+
 [node name="Node2D" type="Node2D" parent="."]
 
-[node name="Card2" parent="Node2D" instance=ExtResource( 5 )]
-position = Vector2( 327, 123 )
-
 [node name="Card3" parent="Node2D" instance=ExtResource( 2 )]
-position = Vector2( 344, 596 )
+position = Vector2( 369, 604 )
 
 [node name="Card" parent="Node2D" instance=ExtResource( 2 )]
 position = Vector2( 556, 598 )

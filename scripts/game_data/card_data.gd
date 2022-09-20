@@ -38,7 +38,12 @@ static func copy(dest : CardData, src : CardData):
 	dest.skills = src.skills
 	dest.text = src.text
 
-
-
-
-
+static func kanji2color(k : String) -> int:
+	match k:
+		"赤":
+			return CardColors.RED
+		"緑":
+			return CardColors.GREEN
+		"青":
+			return CardColors.BLUE
+	return CardColors.NOCOLOR

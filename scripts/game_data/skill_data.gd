@@ -31,12 +31,6 @@ enum TargetCard {
 	HAND_ONE,
 	HAND_ALL,
 }
-enum EffectAttribute {
-	POWER,
-	HIT,
-	DAMAGE,
-	RUSH,
-}
 
 
 class NormalSkill:
@@ -49,24 +43,7 @@ class NormalSkill:
 		var target_player : int
 		var target_card : int
 		var target_color : int
-		
-		var effects : Array
-		class Effect:
-			var effect_attribute : int
-			var effect_parameter : int
-			
-			func _init(text : String):
-				var param_index = 2
-				if text.find("勢力") == 0:
-					effect_attribute = EffectAttribute.POWER
-				if text.find("打点") == 0:
-					effect_attribute = EffectAttribute.HIT
-				if text.find("損傷") == 0:
-					effect_attribute = EffectAttribute.DAMAGE
-				if text.find("突撃") == 0:
-					effect_attribute = EffectAttribute.RUSH
-				effect_parameter = int(text.substr(param_index))
-			
+		var effects : NormalSkillEffects# of NormalSkillEffect
 			
 		func _init(text : String):
 			var effects_start = text.find("[")
@@ -74,9 +51,7 @@ class NormalSkill:
 			var target_text = text.substr(0,effects_start)
 			var effects_text = text.substr(effects_start + 1,effects_end - effects_start - 1)
 			set_target(target_text)
-			effects = []
-			for e in effects_text.split(" "):
-				effects.append(Effect.new(e))
+			effects = NormalSkillEffects.new(effects_text)
 		
 		func set_target(text : String):
 			if text.find("自") >= 0:
@@ -223,14 +198,38 @@ class NormalSkill:
 
 
 class NamedSkill:
+	enum ParamType {
+		VOID = 0,
+		INTEGER,
+		EFFECTS,
+	}
+	
 	var id : int
 	var name : String
-	var parameter : String
+	var param_type : int
+	var parameter
 	var text : String
 	
-	func _init(i,n,p,t):
+	func _init(i:int,n:String,pt:int,p:String,t:String):
 		id = i
 		name = n
-		parameter = p
+		param_type = pt
+		parameter = null if p == "" else _translate_param(pt,p)
 		text = t
-		
+	
+	static func string2param_type(pt : String) -> int:
+		match pt:
+			"Integer":
+				return ParamType.INTEGER
+			"Effect":
+				return ParamType.EFFECTS
+		return ParamType.VOID
+	
+	static func _translate_param(pt:int,p:String):
+		match pt:
+			ParamType.INTEGER:
+				return int(p)
+			ParamType.EFFECTS:
+				return NormalSkillEffects.new(p)
+		return null
+	

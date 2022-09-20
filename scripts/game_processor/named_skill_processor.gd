@@ -35,7 +35,7 @@ class Rush extends Skill:
 			return
 		var playing_card = myself.get_playing_card()
 		if situation < 0:
-			var stability = int(skill.parameter) + playing_card.affected.rush
+			var stability = skill.parameter + playing_card.affected.rush
 			if stability < rival.get_playing_card().get_current_hit():
 				return
 		var damage = (playing_card.get_current_hit()) + 1 / 2;
@@ -47,16 +47,16 @@ class Charge extends Skill:
 			myself : ProcessorData.Player,rival : ProcessorData.Player) -> void:
 		if myself.battle_damage == 0:
 			var affected := myself.next_effect
-			for p in skill.parameter.split(" "):
-				var e := SkillData.NormalSkill.Target.Effect.new(p)
-				match e.effect_attribute:
-					SkillData.NormalSkill.EffectAttribute.POWER:
-						affected.power += e.effect_parameter
-					SkillData.NormalSkill.EffectAttribute.HIT:
-						affected.hit += e.effect_parameter
-					SkillData.NormalSkill.EffectAttribute.DAMAGE:
-						affected.damage += e.effect_parameter
-					SkillData.NormalSkill.EffectAttribute.RUSH:
-						affected.rush += e.effect_parameter				
+			for p in (skill.parameter as NormalSkillEffects).effects:
+				var e := p as NormalSkillEffects.Effect
+				match e.attribute:
+					NormalSkillEffects.Attribute.POWER:
+						affected.power += e.parameter
+					NormalSkillEffects.Attribute.HIT:
+						affected.hit += e.parameter
+					NormalSkillEffects.Attribute.DAMAGE:
+						affected.damage += e.parameter
+					NormalSkillEffects.Attribute.RUSH:
+						affected.rush += e.parameter				
 
 	

@@ -22,7 +22,7 @@ func initialize(name:String,card_catalog):
 	_player_name = name;
 
 func standby_single(deck:Array,enemy_id:int) -> bool:
-	var edeck := [1,2,3,4,5,6,7,8,9]
+	var edeck := [1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9]
 	_commander = ZeroCommander.new()
 	_processor.standby(deck,4,true,edeck,1,false)
 	return true

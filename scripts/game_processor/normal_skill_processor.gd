@@ -73,15 +73,15 @@ static func _activate_normal_skill(skill : SkillData.NormalSkill,
 									break
 		pass
 
-static func _skill_effect(effects : Array,affected : ProcessorData.Card.Affected) -> void:
-	for e_ in effects:
-		var e := e_ as SkillData.NormalSkill.Target.Effect
-		match e.effect_attribute:
-			SkillData.NormalSkill.EffectAttribute.POWER:
-				affected.power += e.effect_parameter
-			SkillData.NormalSkill.EffectAttribute.HIT:
-				affected.hit += e.effect_parameter
-			SkillData.NormalSkill.EffectAttribute.DAMAGE:
-				affected.damage += e.effect_parameter
-			SkillData.NormalSkill.EffectAttribute.RUSH:
-				affected.rush += e.effect_parameter
+static func _skill_effect(effects : NormalSkillEffects,affected : ProcessorData.Card.Affected) -> void:
+	for e_ in effects.effects:
+		var e := e_ as NormalSkillEffects.Effect
+		match e.attribute:
+			NormalSkillEffects.Attribute.POWER:
+				affected.power += e.parameter
+			NormalSkillEffects.Attribute.HIT:
+				affected.hit += e.parameter
+			NormalSkillEffects.Attribute.DAMAGE:
+				affected.damage += e.parameter
+			NormalSkillEffects.Attribute.RUSH:
+				affected.rush += e.parameter

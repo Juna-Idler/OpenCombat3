@@ -3,41 +3,13 @@ class_name CardCatalog
 var _card_catalog : Dictionary = {}
 var _skill_catalog : Dictionary = {}
 
+var card_version : int
+var skill_version : int
+
 func _init():
-	var namedskill_resource = preload("res://card_data/named_skill_catalog.txt")
-#	_skill_catalog[0] = SkillData.NamedSkill.new(0,"","","")
-	var namedskills := namedskill_resource.text.split("\n") as PoolStringArray
-	var skill_version : String = namedskills[0]
-	namedskills.remove(0)
-	for s in namedskills:
-		var csv = s.split("\t")
-		var id := int(csv[0])
-		_skill_catalog[id] = SkillData.NamedSkill.new(id,csv[1],csv[2],csv[3])
-	
-	var carddata_resource := preload("res://card_data/card_data_catalog.txt")
-#	_card_catalog[0] = CardData.new(0,"",0,0,0,0,[],"")
-	var cards := carddata_resource.text.split("\n") as PoolStringArray
-	var card_version : String = namedskills[0]
-	cards.remove(0)
-	for c in cards:
-		var csv = c.split("\t")
-		var skills = []
-		var skill_texts = csv[6].split(";")
-		if skill_texts.size() == 1 and skill_texts[0] == "":
-			skill_texts.resize(0)
-		for s in skill_texts:
-			var c_and_t = s.split(":",true,1);
-			if c_and_t[0] != "named":
-				skills.append(SkillData.NormalSkill.new(c_and_t[0],c_and_t[1]))
-				continue
-			var named_param = c_and_t[1].split(":");
-			var skill_id := int(named_param[0])
-			var skill = SkillData.NamedSkill.new(skill_id,
-					get_skill_data(skill_id).name,named_param[2],get_skill_data(skill_id).text)
-			skills.append(skill)
-		var id := int(csv[0])
-		_card_catalog[id] = CardData.new(id,csv[1],
-				int(csv[2]),int(csv[3]),int(csv[4]),int(csv[5]),skills,csv[7])
+	_load_skill_data()
+	_load_card_data()
+
 
 func get_skill_data(id : int) -> SkillData.NamedSkill:
 	return _skill_catalog[id]
@@ -51,4 +23,43 @@ func new_card_data(id : int) -> CardData:
 	
 func set_card_data(card : CardData, id : int):
 	CardData.copy(card,get_card_data(id))
-	
+
+
+func _load_skill_data():
+	var namedskill_resource := preload("res://card_data/named_skill_catalog.txt")
+	var namedskills = namedskill_resource.text.split("\n")
+	for s in namedskills:
+		var csv = s.split("\t")
+		var id := int(csv[0])
+		_skill_catalog[id] = SkillData.NamedSkill.new(id,csv[1],
+				SkillData.NamedSkill.string2param_type(csv[2]),"",csv[4])
+	skill_version = int((_skill_catalog[0] as SkillData.NamedSkill).name)
+
+func _load_card_data():
+	var carddata_resource := preload("res://card_data/card_data_catalog.txt")
+	var cards = carddata_resource.text.split("\n")
+	for c in cards:
+		var csv = c.split("\t")
+		var skills = []
+		var skill_texts = csv[6].split(";")
+		if skill_texts.size() == 1 and skill_texts[0] == "":
+			skill_texts.resize(0)
+		for s in skill_texts:
+			var c_and_t = s.split(":",true,1);
+			if c_and_t[0] != "named":
+				skills.append(SkillData.NormalSkill.new(c_and_t[0],c_and_t[1]))
+				continue
+			var named = c_and_t[1].split(":");
+			var skill_id := int(named[0])
+			var base_data := get_skill_data(skill_id)
+
+			var skill = SkillData.NamedSkill.new(skill_id,
+					base_data.name,base_data.param_type,
+					named[2],base_data.text)
+			skills.append(skill)
+		var id := int(csv[0])
+		_card_catalog[id] = CardData.new(id,csv[1],CardData.kanji2color(csv[2]),
+				int(csv[3]),int(csv[4]),int(csv[5]),skills,csv[7])
+	card_version = int((_card_catalog[0] as CardData).name)
+
+

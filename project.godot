@@ -69,6 +69,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/game_processor/named_skill_processor.gd"
 }, {
+"base": "Reference",
+"class": "NormalSkillEffects",
+"language": "GDScript",
+"path": "res://scripts/game_data/skill_effects.gd"
+}, {
 "base": "Object",
 "class": "NormalSkillProcessor",
 "language": "GDScript",
@@ -112,6 +117,7 @@ _global_script_class_icons={
 "JSONResourceLoader": "",
 "JsonResourceSaver": "",
 "NamedSkillProcessor": "",
+"NormalSkillEffects": "",
 "NormalSkillProcessor": "",
 "OfflineServer": "",
 "PlainTextResource": "",
