@@ -105,7 +105,7 @@ func recover_both(index1:int,index2:int):
 	if ((player1.hand_indexes.size() + player1.stack_indexes.size() <= 1) or
 			 (player2.hand_indexes.size() + player2.stack_indexes.size() <= 1)):
 		phase = -phase
-	
+
 func reset_select():
 	player1.reset_select()
 	player2.reset_select()

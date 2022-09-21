@@ -89,9 +89,9 @@ func _terminalize():
 func _create_update_playerData(player : ProcessorData.Player) -> UpdateData.PlayerData:
 	var affecteds = []
 	for c in player.deck_list:
-		var a := (c as ProcessorData.Card).affected
+		var a := (c as ProcessorData.PlayerCard).affected
 		if a.updated:
-			affecteds.append(UpdateData.Affected.new((c as ProcessorData.Card).id_in_deck,
+			affecteds.append(UpdateData.Affected.new((c as ProcessorData.PlayerCard).id_in_deck,
 					a.power,a.hit,a.damage,a.rush))
 	var n := player.next_effect
 	var next = UpdateData.Affected.new(0,n.power,n.hit,n.damage,n.rush)

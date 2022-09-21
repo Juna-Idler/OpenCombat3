@@ -90,20 +90,20 @@ class NormalSkill:
 
 
 	func set_condition(text : String):
-		if text.find("対赤") >= 0:
+		if text.find("無") >= 0:
+			condition = ColorCondition.NOCONDITION
+		elif text.find("対赤") >= 0:
 			condition = ColorCondition.VS_RED
 		elif text.find("対緑") >= 0:
 			condition = ColorCondition.VS_GREEN
 		elif text.find("対青") >= 0:
-			condition = ColorCondition.VS_GREEN
+			condition = ColorCondition.VS_BLUE
 		elif text.find("連赤") >= 0:
 			condition = ColorCondition.LINK_RED
 		elif text.find("連緑") >= 0:
 			condition = ColorCondition.LINK_GREEN
 		elif text.find("連青") >= 0:
 			condition = ColorCondition.LINK_BLUE
-		if text.find("無") >= 0:
-			condition = ColorCondition.NOCONDITION
 		else:
 			condition = ColorCondition.NOCONDITION
 			
@@ -209,19 +209,39 @@ class NamedSkill:
 	var param_type : int
 	var parameter
 	var text : String
+	var condition : int = ColorCondition.NOCONDITION
 	
-	func _init(i:int,n:String,pt:int,p:String,t:String):
+	func _init(i:int,n:String,pt:int,p:String,t:String,c:String):
 		id = i
 		name = n
 		param_type = pt
 		parameter = null if p == "" else _translate_param(pt,p)
 		text = t
+		condition = kanji2condition(c)
+
+	static func kanji2condition(c : String) -> int:
+		if c.find("無") >= 0:
+			return ColorCondition.NOCONDITION
+		if c.find("対赤") >= 0:
+			return ColorCondition.VS_RED
+		if c.find("対緑") >= 0:
+			return ColorCondition.VS_GREEN
+		if c.find("対青") >= 0:
+			return ColorCondition.VS_GREEN
+		if c.find("連赤") >= 0:
+			return ColorCondition.LINK_RED
+		if c.find("連緑") >= 0:
+			return ColorCondition.LINK_GREEN
+		if c.find("連青") >= 0:
+			return ColorCondition.LINK_BLUE
+		return ColorCondition.NOCONDITION
+		
 	
 	static func string2param_type(pt : String) -> int:
 		match pt:
 			"Integer":
 				return ParamType.INTEGER
-			"Effect":
+			"Effects":
 				return ParamType.EFFECTS
 		return ParamType.VOID
 	

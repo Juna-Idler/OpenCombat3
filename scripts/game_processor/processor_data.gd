@@ -1,7 +1,7 @@
 
 class_name ProcessorData
 
-class Card:
+class PlayerCard:
 	var data : CardData = null
 	var id_in_deck : int = 0
 
@@ -62,18 +62,18 @@ class Player:
 	var discard_indexes : Array = []
 	var _life : int = 0
 	
-	var next_effect := Card.Affected.new()
+	var next_effect := PlayerCard.Affected.new()
 	
 	var select : int = -1
 	var battle_damage : int = 0
 	var draw_indexes : Array = []
 	var playing_card_id : int = -1
-	var playing_card : Card = null
+	var playing_card : PlayerCard = null
 
 	func _init(deck : Array,hand_count : int,
 			card_catalog : CardCatalog,shuffle : bool = true) -> void:
 		for i in range(deck.size()):
-			var c := Card.new(card_catalog.new_card_data(deck[i]),i)
+			var c := PlayerCard.new(card_catalog.new_card_data(deck[i]),i)
 			deck_list.append(c);
 			stack_indexes.append(i);
 			_life += c.data.level
@@ -82,21 +82,21 @@ class Player:
 		for i in range(hand_count):
 			_draw_card()
 
-	func get_hand_card(index : int) -> Card:
+	func get_hand_card(index : int) -> PlayerCard:
 		return deck_list[hand_indexes[index]]
-	func get_lastplayed_card() -> Card:
+	func get_lastplayed_card() -> PlayerCard:
 		return null if played_indexes.empty() else deck_list[played_indexes.back()]
-	func get_playing_card() -> Card:
+	func get_playing_card() -> PlayerCard:
 		return playing_card
 		
 	func get_life() -> int:
 		return _life
 		
-	func play_combat_card(i : int) -> Card:
+	func play_combat_card(i : int) -> PlayerCard:
 		select = i
 		draw_indexes.clear()
 		for c in deck_list:
-			(c as Card).affected.reset_update()
+			(c as PlayerCard).affected.reset_update()
 		playing_card_id = hand_indexes.pop_at(i)
 		playing_card = deck_list[playing_card_id]
 		_life -= playing_card.data.level
@@ -128,7 +128,7 @@ class Player:
 		select = index
 		draw_indexes.clear()
 		var id := _discard_card(index)
-		var card := deck_list[id] as Card
+		var card := deck_list[id] as PlayerCard
 		if battle_damage <= card.level:
 			battle_damage = 0
 			return

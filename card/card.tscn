@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=1]
 [ext_resource path="res://card/damage_triangle.png" type="Texture" id=2]
@@ -6,7 +6,6 @@
 [ext_resource path="res://card/rect_power.png" type="Texture" id=4]
 [ext_resource path="res://card/rect_112x172.png" type="Texture" id=5]
 [ext_resource path="res://card/card_base_128x208.png" type="Texture" id=6]
-[ext_resource path="res://card/card_text.tres" type="DynamicFont" id=7]
 [ext_resource path="res://card/card.gd" type="Script" id=8]
 
 [sub_resource type="DynamicFont" id=1]
@@ -30,7 +29,7 @@ font_data = ExtResource( 1 )
 script = ExtResource( 8 )
 
 [node name="CardBase" type="TextureRect" parent="."]
-self_modulate = Color( 0.75, 0, 0, 1 )
+self_modulate = Color( 0.74902, 0, 0, 1 )
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -52,7 +51,7 @@ margin_bottom = 180.0
 texture = ExtResource( 5 )
 expand = true
 
-[node name="Abilities" type="VBoxContainer" parent="CardBase/Picture"]
+[node name="Skills" type="VBoxContainer" parent="CardBase/Picture"]
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -61,47 +60,6 @@ margin_left = -56.0
 margin_top = -112.0
 margin_right = 56.0
 alignment = 2
-
-[node name="ColorRect" type="ColorRect" parent="CardBase/Picture/Abilities"]
-margin_top = 68.0
-margin_right = 112.0
-margin_bottom = 88.0
-rect_min_size = Vector2( 0, 20 )
-color = Color( 1, 1, 1, 0.498039 )
-
-[node name="RichTextLabel2" type="RichTextLabel" parent="CardBase/Picture/Abilities/ColorRect"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 2.0
-margin_right = -2.0
-custom_colors/default_color = Color( 0, 0, 0, 1 )
-custom_fonts/normal_font = ExtResource( 7 )
-bbcode_enabled = true
-bbcode_text = "condition2"
-text = "condition2"
-fit_content_height = true
-
-[node name="ColorRect2" type="ColorRect" parent="CardBase/Picture/Abilities"]
-margin_top = 92.0
-margin_right = 112.0
-margin_bottom = 112.0
-rect_min_size = Vector2( 0, 20 )
-color = Color( 1, 1, 1, 0.498039 )
-
-[node name="RichTextLabel" type="RichTextLabel" parent="CardBase/Picture/Abilities/ColorRect2"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 2.0
-margin_right = -2.0
-hint_tooltip = "hint"
-custom_colors/default_color = Color( 0, 0, 0, 1 )
-custom_fonts/normal_font = ExtResource( 7 )
-bbcode_enabled = true
-bbcode_text = "[color=red]■[/color]:test"
-meta_underlined = false
-text = "■:test"
-fit_content_height = true
-scroll_active = false
 
 [node name="NameBack" type="ColorRect" parent="CardBase"]
 anchor_left = 0.5
@@ -116,32 +74,31 @@ margin_bottom = -6.0
 [node name="Name" type="Label" parent="CardBase/NameBack"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 21.0
-margin_right = -18.0
-margin_bottom = 2.0
+margin_left = 20.0
+margin_top = -1.0
+margin_bottom = 1.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 1 )
 text = "Card Name"
 valign = 2
+max_lines_visible = 1
 
-[node name="Level" type="TextureRect" parent="CardBase"]
+[node name="Level" type="TextureRect" parent="CardBase/NameBack"]
 self_modulate = Color( 0, 0, 0, 1 )
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -126.0
-margin_top = -26.0
-margin_right = -102.0
-margin_bottom = -2.0
+margin_left = -118.0
+margin_top = -20.0
+margin_right = -94.0
+margin_bottom = 4.0
 texture = ExtResource( 3 )
 
-[node name="Label" type="Label" parent="CardBase/Level"]
+[node name="Label" type="Label" parent="CardBase/NameBack/Level"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 1.0
 margin_top = -1.0
-margin_right = 1.0
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_fonts/font = SubResource( 2 )
 text = "1"

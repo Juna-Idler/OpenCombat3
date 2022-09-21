@@ -3,6 +3,8 @@ class_name CardCatalog
 var _card_catalog : Dictionary = {}
 var _skill_catalog : Dictionary = {}
 
+
+
 var card_version : int
 var skill_version : int
 
@@ -11,8 +13,13 @@ func _init():
 	_load_card_data()
 
 
-func get_skill_data(id : int) -> SkillData.NamedSkill:
-	return _skill_catalog[id]
+#const _effect_attribute_string_list = ["","力","打","傷","突"]
+func get_effect_attribute_string(attribute:int)->String:
+	return ["","力","打","傷","突"][attribute]
+	
+
+func get_skill_data(name : String) -> SkillData.NamedSkill:
+	return _skill_catalog[name]
 
 func get_card_data(id : int) -> CardData:
 	return _card_catalog[id]
@@ -30,10 +37,10 @@ func _load_skill_data():
 	var namedskills = namedskill_resource.text.split("\n")
 	for s in namedskills:
 		var csv = s.split("\t")
-		var id := int(csv[0])
-		_skill_catalog[id] = SkillData.NamedSkill.new(id,csv[1],
-				SkillData.NamedSkill.string2param_type(csv[2]),"",csv[4])
-	skill_version = int((_skill_catalog[0] as SkillData.NamedSkill).name)
+		var name : String = csv[1]
+		_skill_catalog[name] = SkillData.NamedSkill.new(int(csv[0]),name,
+				SkillData.NamedSkill.string2param_type(csv[2]),csv[3],csv[4],"無")
+	skill_version = int((_skill_catalog["SkillVersion"] as SkillData.NamedSkill).text)
 
 func _load_card_data():
 	var carddata_resource := preload("res://card_data/card_data_catalog.txt")
@@ -50,13 +57,11 @@ func _load_card_data():
 				skills.append(SkillData.NormalSkill.new(c_and_t[0],c_and_t[1]))
 				continue
 			var named = c_and_t[1].split(":");
-			var skill_id := int(named[0])
-			var base_data := get_skill_data(skill_id)
-
-			var skill = SkillData.NamedSkill.new(skill_id,
+			var skill_name : String = named[0]
+			var base_data := get_skill_data(skill_name)
+			skills.append(SkillData.NamedSkill.new(base_data.id,
 					base_data.name,base_data.param_type,
-					named[2],base_data.text)
-			skills.append(skill)
+					named[1],base_data.text,named[2]))
 		var id := int(csv[0])
 		_card_catalog[id] = CardData.new(id,csv[1],CardData.kanji2color(csv[2]),
 				int(csv[3]),int(csv[4]),int(csv[5]),skills,csv[7])

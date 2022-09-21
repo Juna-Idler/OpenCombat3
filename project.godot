@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Node2D",
+"class": "Card",
+"language": "GDScript",
+"path": "res://card/card.gd"
+}, {
 "base": "Reference",
 "class": "CardCatalog",
 "language": "GDScript",
@@ -99,12 +104,18 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/game_data/skill_data.gd"
 }, {
+"base": "ColorRect",
+"class": "SkillLine",
+"language": "GDScript",
+"path": "res://card/skill_line.gd"
+}, {
 "base": "Reference",
 "class": "SkillProcessor",
 "language": "GDScript",
 "path": "res://scripts/game_processor/skill_processor.gd"
 } ]
 _global_script_class_icons={
+"Card": "",
 "CardCatalog": "",
 "CardData": "",
 "CustomResFormatLoader": "",
@@ -123,6 +134,7 @@ _global_script_class_icons={
 "PlainTextResource": "",
 "ProcessorData": "",
 "SkillData": "",
+"SkillLine": "",
 "SkillProcessor": ""
 }
 

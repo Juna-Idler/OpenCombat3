@@ -73,7 +73,7 @@ static func _activate_normal_skill(skill : SkillData.NormalSkill,
 									break
 		pass
 
-static func _skill_effect(effects : NormalSkillEffects,affected : ProcessorData.Card.Affected) -> void:
+static func _skill_effect(effects : NormalSkillEffects,affected : ProcessorData.PlayerCard.Affected) -> void:
 	for e_ in effects.effects:
 		var e := e_ as NormalSkillEffects.Effect
 		match e.attribute:

@@ -13,6 +13,7 @@ class Effect:
 	var attribute : int
 	var parameter : int
 
+
 	func _init(text : String):
 		var param_index = 2
 		if text.find("勢力") == 0:
