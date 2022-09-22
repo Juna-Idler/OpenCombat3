@@ -11,13 +11,14 @@ var color : int
 var level : int
 var power : int
 var hit : int
-var skills : Array# of BaseSkill
+var skills : Array
 var text : String
-#var abilities : Array
+var image : String 
+
 
 func _init(i : int,n : String,
 		c : int,l : int,p : int,h : int,
-		s : Array,t : String):
+		s : Array,t : String,im : String):
 	id = i
 	name = n
 	color = c
@@ -26,6 +27,7 @@ func _init(i : int,n : String,
 	hit = h
 	skills = s
 	text = t
+	image = im
 
 
 static func copy(dest : CardData, src : CardData):
@@ -37,6 +39,7 @@ static func copy(dest : CardData, src : CardData):
 	dest.hit = src.hit
 	dest.skills = src.skills
 	dest.text = src.text
+	dest.image = src.image
 
 static func kanji2color(k : String) -> int:
 	match k:

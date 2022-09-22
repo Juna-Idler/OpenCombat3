@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=1]
 [ext_resource path="res://card/damage_triangle.png" type="Texture" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://card/rect_power.png" type="Texture" id=4]
 [ext_resource path="res://card/rect_112x172.png" type="Texture" id=5]
 [ext_resource path="res://card/card_base_128x208.png" type="Texture" id=6]
+[ext_resource path="res://card/card_theme.tres" type="Theme" id=7]
 [ext_resource path="res://card/card.gd" type="Script" id=8]
 
 [sub_resource type="DynamicFont" id=1]
@@ -48,8 +49,9 @@ margin_left = -56.0
 margin_top = 8.0
 margin_right = 56.0
 margin_bottom = 180.0
+theme = ExtResource( 7 )
 texture = ExtResource( 5 )
-expand = true
+stretch_mode = 4
 
 [node name="Skills" type="VBoxContainer" parent="CardBase/Picture"]
 anchor_left = 0.5
@@ -76,7 +78,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 20.0
 margin_top = -1.0
+margin_right = -2.0
 margin_bottom = 1.0
+rect_pivot_offset = Vector2( 45, 9 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 1 )
 text = "Card Name"
@@ -93,6 +97,7 @@ margin_left = -118.0
 margin_top = -20.0
 margin_right = -94.0
 margin_bottom = 4.0
+rect_pivot_offset = Vector2( 12, 12 )
 texture = ExtResource( 3 )
 
 [node name="Label" type="Label" parent="CardBase/NameBack/Level"]
@@ -112,6 +117,7 @@ margin_left = 4.0
 margin_top = 4.0
 margin_right = 40.0
 margin_bottom = 40.0
+rect_pivot_offset = Vector2( 18, 18 )
 texture = ExtResource( 4 )
 
 [node name="Label" type="Label" parent="CardBase/Power"]
@@ -138,6 +144,7 @@ margin_left = -36.0
 margin_top = 4.0
 margin_right = -4.0
 margin_bottom = 36.0
+rect_pivot_offset = Vector2( 16, 16 )
 texture = ExtResource( 2 )
 
 [node name="Label" type="Label" parent="CardBase/Hit"]
@@ -146,9 +153,10 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 margin_left = -12.0
-margin_top = -13.5
+margin_top = -12.0
 margin_right = 12.0
-margin_bottom = 17.5
+margin_bottom = 19.0
+rect_pivot_offset = Vector2( 12, 15 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_fonts/font = SubResource( 4 )
 text = "1"

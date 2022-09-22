@@ -26,7 +26,7 @@ func get_card_data(id : int) -> CardData:
 
 func new_card_data(id : int) -> CardData:
 	var c := _card_catalog[id] as CardData
-	return CardData.new(c.id,c.name,c.color,c.level,c.power,c.hit,c.skills,c.text)
+	return CardData.new(c.id,c.name,c.color,c.level,c.power,c.hit,c.skills,c.text,c.image)
 	
 func set_card_data(card : CardData, id : int):
 	CardData.copy(card,get_card_data(id))
@@ -64,7 +64,7 @@ func _load_card_data():
 					named[1],base_data.text,named[2]))
 		var id := int(csv[0])
 		_card_catalog[id] = CardData.new(id,csv[1],CardData.kanji2color(csv[2]),
-				int(csv[3]),int(csv[4]),int(csv[5]),skills,csv[7])
+				int(csv[3]),int(csv[4]),int(csv[5]),skills,csv[7],csv[8])
 	card_version = int((_card_catalog[0] as CardData).name)
 
 

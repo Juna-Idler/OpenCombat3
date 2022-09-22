@@ -18,16 +18,18 @@ class Affected:
 const skillline = preload("res://card/skill_line.tscn")
 const RGB = [Color(0,0,0,0),Color(1,0,0),Color(0,0.7,0),Color(0,0,1)]
 
-func initialize_scene(id:int,cd : CardData):
+const format_pattern := ["  %s","[center]%s[/center]","[right]%s   [/right]"]
+func initialize_card(id:int,cd : CardData,rotate := false):
 	id_in_deck = id
 	data = cd
-	get_node("CardBase/Power/Label").text = str(cd.power)
-	get_node("CardBase/Hit/Label").text = str(cd.hit)
-	get_node("CardBase/NameBack/Level/Label").text = str(cd.level)
-	get_node("CardBase").self_modulate = RGB[cd.color]
+	$CardBase/Power/Label.text = str(cd.power)
+	$CardBase/Hit/Label.text = str(cd.hit)
+	$CardBase/NameBack/Level/Label.text = str(cd.level)
+	$CardBase.self_modulate = RGB[cd.color]
 	$CardBase/NameBack/Name.text = cd.name
 	$CardBase/Picture.hint_tooltip = cd.text
-	var skill_node = get_node("CardBase/Picture/Skills")
+	$CardBase/Picture.texture = load("res://card_images/"+ cd.image +".png")
+	var skill_node = $CardBase/Picture/Skills
 	for skill in cd.skills:
 		var line = skillline.instance()
 		var condition : int = 0
@@ -46,27 +48,38 @@ func initialize_scene(id:int,cd : CardData):
 		match condition:
 			SkillData.ColorCondition.VS_RED:
 				line.left_color = SkillLine.Color3.RED
-				format = "  %s"
+				format = format_pattern[2 if rotate else 0]
 			SkillData.ColorCondition.VS_GREEN:
 				line.left_color = SkillLine.Color3.GREEN
-				format = "  %s"
+				format = format_pattern[2 if rotate else 0]
 			SkillData.ColorCondition.VS_BLUE:
 				line.left_color = SkillLine.Color3.BLUE
-				format = "  %s"
+				format = format_pattern[2 if rotate else 0]
 			SkillData.ColorCondition.LINK_RED:
 				line.right_color = SkillLine.Color3.RED
-				format = "[right]%s  [/right]"
+				format = format_pattern[0 if rotate else 2]
 			SkillData.ColorCondition.LINK_GREEN:
 				line.right_color = SkillLine.Color3.GREEN
-				format = "[right]%s  [/right]"
+				format = format_pattern[0 if rotate else 2]
 			SkillData.ColorCondition.LINK_BLUE:
 				line.right_color = SkillLine.Color3.BLUE
-				format = "[right]%s  [/right]"
+				format = format_pattern[0 if rotate else 2]
 			SkillData.ColorCondition.NOCONDITION:
-				format = "[center]%s[/center]"
+				format = format_pattern[1]
 		line.bbc_text = format % skill_text
+		if rotate:
+			line.get_node("RichTextLabel").rect_rotation = 180		
 		skill_node.add_child(line)
+	if rotate:
+		rotation = PI
+		$CardBase/NameBack/Name.rect_rotation = 180
+		$CardBase/Power.rect_rotation = 180
+		$CardBase/Hit/Label.rect_rotation = 180
+		$CardBase/Hit/Label.rect_position += Vector2(0,2)
+		$CardBase/NameBack/Level.rect_rotation = 180
+
 	return self
+
 
 func _ready():
 	pass # Replace with function body.
