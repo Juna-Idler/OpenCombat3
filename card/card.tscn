@@ -169,3 +169,5 @@ custom_fonts/font = SubResource( 4 )
 text = "1"
 align = 1
 valign = 1
+
+[node name="Tween" type="Tween" parent="."]

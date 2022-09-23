@@ -13,7 +13,7 @@ class Affected:
 	var damage : int = 0
 	var rush : int = 0
 
-
+onready var tween := $Tween
 
 const skillline = preload("res://card/skill_line.tscn")
 const RGB = [Color(0,0,0,0),Color(1,0,0),Color(0,0.7,0),Color(0,0,1)]

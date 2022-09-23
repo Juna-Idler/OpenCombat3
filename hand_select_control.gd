@@ -1,6 +1,12 @@
 extends Control
 
 
+signal slid_card(index,x)
+
+signal decided_card(index)
+
+
+var index : int
 var card : Card
 
 var _draging := false
@@ -14,10 +20,9 @@ var drag_limit_left : int = 150
 var drag_limit_right : int = 150
 const drag_limit_top : int = 50
 
+
 func _ready():
 	pass # Replace with function body.
-
-
 
 
 func _gui_input(event: InputEvent):
@@ -25,9 +30,16 @@ func _gui_input(event: InputEvent):
 		if (event is InputEventMouseButton
 				and event.button_index == BUTTON_LEFT
 				and not event.pressed):
-			card.position = _drag_card_pos
-			card.z_index -= 1
 			_draging = false
+			card.z_index -= 1
+			var point := (event as InputEventMouseButton).global_position
+			var relative := drag_limit(point - _drag_point)
+			if _drag_mode == DragMode.X:
+				emit_signal("slid_card",index,relative.x)
+			elif _drag_mode == DragMode.Y and relative.y == -drag_limit_top:
+				emit_signal("decided_card",index)
+			else:
+				card.position = _drag_card_pos
 			
 		elif event is InputEventMouseMotion:
 			var point := (event as InputEventMouseMotion).global_position
