@@ -8,8 +8,59 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 margin_left = -400.0
-margin_top = -120.0
+margin_top = -115.0
 margin_right = 400.0
-margin_bottom = 120.0
+margin_bottom = 125.0
 color = Color( 1, 1, 1, 0.27451 )
 script = ExtResource( 1 )
+
+[connection signal="mouse_entered" from="HandSelectControl" to="HandSelectControl" method="_on_Control_mouse_entered"]
+[connection signal="mouse_exited" from="HandSelectControl" to="HandSelectControl" method="_on_Control_mouse_exited"]
+[connection signal="mouse_entered" from="HandSelectControl2" to="HandSelectControl2" method="_on_Control_mouse_entered"]
+[connection signal="mouse_exited" from="HandSelectControl2" to="HandSelectControl2" method="_on_Control_mouse_exited"]
+[connection signal="mouse_entered" from="HandSelectControl3" to="HandSelectControl3" method="_on_Control_mouse_entered"]
+[connection signal="mouse_exited" from="HandSelectControl3" to="HandSelectControl3" method="_on_Control_mouse_exited"]
+[connection signal="mouse_entered" from="HandSelectControl4" to="HandSelectControl4" method="_on_Control_mouse_entered"]
+[connection signal="mouse_exited" from="HandSelectControl4" to="HandSelectControl4" method="_on_Control_mouse_exited"]
+[connection signal="mouse_entered" from="HandSelectControl5" to="HandSelectControl5" method="_on_Control_mouse_entered"]
+[connection signal="mouse_exited" from="HandSelectControl5" to="HandSelectControl5" method="_on_Control_mouse_exited"]
+[connection signal="mouse_entered" from="HandSelectControl6" to="HandSelectControl6" method="_on_Control_mouse_entered"]
+[connection signal="mouse_exited" from="HandSelectControl6" to="HandSelectControl6" method="_on_Control_mouse_exited"]
+[connection signal="mouse_entered" from="HandSelectControl7" to="HandSelectControl7" method="_on_Control_mouse_entered"]
+[connection signal="mouse_exited" from="HandSelectControl7" to="HandSelectControl7" method="_on_Control_mouse_exited"]
+[connection signal="mouse_entered" from="HandSelectControl8" to="HandSelectControl8" method="_on_Control_mouse_entered"]
+[connection signal="mouse_exited" from="HandSelectControl8" to="HandSelectControl8" method="_on_Control_mouse_exited"]
+[connection signal="mouse_entered" from="HandSelectControl9" to="HandSelectControl9" method="_on_Control_mouse_entered"]
+[connection signal="mouse_exited" from="HandSelectControl9" to="HandSelectControl9" method="_on_Control_mouse_exited"]
+[connection signal="mouse_entered" from="HandSelectControl10" to="HandSelectControl10" method="_on_Control_mouse_entered"]
+[connection signal="mouse_exited" from="HandSelectControl10" to="HandSelectControl10" method="_on_Control_mouse_exited"]
+[connection signal="mouse_entered" from="HandSelectControl11" to="HandSelectControl11" method="_on_Control_mouse_entered"]
+[connection signal="mouse_exited" from="HandSelectControl11" to="HandSelectControl11" method="_on_Control_mouse_exited"]
+[connection signal="mouse_entered" from="HandSelectControl12" to="HandSelectControl12" method="_on_Control_mouse_entered"]
+[connection signal="mouse_exited" from="HandSelectControl12" to="HandSelectControl12" method="_on_Control_mouse_exited"]
+[connection signal="mouse_entered" from="HandSelectControl13" to="HandSelectControl13" method="_on_Control_mouse_entered"]
+[connection signal="mouse_exited" from="HandSelectControl13" to="HandSelectControl13" method="_on_Control_mouse_exited"]
+[connection signal="mouse_entered" from="HandSelectControl14" to="HandSelectControl14" method="_on_Control_mouse_entered"]
+[connection signal="mouse_exited" from="HandSelectControl14" to="HandSelectControl14" method="_on_Control_mouse_exited"]
+[connection signal="mouse_entered" from="HandSelectControl15" to="HandSelectControl15" method="_on_Control_mouse_entered"]
+[connection signal="mouse_exited" from="HandSelectControl15" to="HandSelectControl15" method="_on_Control_mouse_exited"]
+[connection signal="mouse_entered" from="HandSelectControl16" to="HandSelectControl16" method="_on_Control_mouse_entered"]
+[connection signal="mouse_exited" from="HandSelectControl16" to="HandSelectControl16" method="_on_Control_mouse_exited"]
+[connection signal="mouse_entered" from="HandSelectControl17" to="HandSelectControl17" method="_on_Control_mouse_entered"]
+[connection signal="mouse_exited" from="HandSelectControl17" to="HandSelectControl17" method="_on_Control_mouse_exited"]
+[connection signal="mouse_entered" from="HandSelectControl18" to="HandSelectControl18" method="_on_Control_mouse_entered"]
+[connection signal="mouse_exited" from="HandSelectControl18" to="HandSelectControl18" method="_on_Control_mouse_exited"]
+[connection signal="mouse_entered" from="HandSelectControl19" to="HandSelectControl19" method="_on_Control_mouse_entered"]
+[connection signal="mouse_exited" from="HandSelectControl19" to="HandSelectControl19" method="_on_Control_mouse_exited"]
+[connection signal="mouse_entered" from="HandSelectControl20" to="HandSelectControl20" method="_on_Control_mouse_entered"]
+[connection signal="mouse_exited" from="HandSelectControl20" to="HandSelectControl20" method="_on_Control_mouse_exited"]
+[connection signal="mouse_entered" from="HandSelectControl21" to="HandSelectControl21" method="_on_Control_mouse_entered"]
+[connection signal="mouse_exited" from="HandSelectControl21" to="HandSelectControl21" method="_on_Control_mouse_exited"]
+[connection signal="mouse_entered" from="HandSelectControl22" to="HandSelectControl22" method="_on_Control_mouse_entered"]
+[connection signal="mouse_exited" from="HandSelectControl22" to="HandSelectControl22" method="_on_Control_mouse_exited"]
+[connection signal="mouse_entered" from="HandSelectControl23" to="HandSelectControl23" method="_on_Control_mouse_entered"]
+[connection signal="mouse_exited" from="HandSelectControl23" to="HandSelectControl23" method="_on_Control_mouse_exited"]
+[connection signal="mouse_entered" from="HandSelectControl24" to="HandSelectControl24" method="_on_Control_mouse_entered"]
+[connection signal="mouse_exited" from="HandSelectControl24" to="HandSelectControl24" method="_on_Control_mouse_exited"]
+[connection signal="mouse_entered" from="HandSelectControl25" to="HandSelectControl25" method="_on_Control_mouse_entered"]
+[connection signal="mouse_exited" from="HandSelectControl25" to="HandSelectControl25" method="_on_Control_mouse_exited"]

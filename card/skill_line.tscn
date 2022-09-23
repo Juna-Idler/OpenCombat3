@@ -7,6 +7,7 @@
 margin_right = 112.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 0, 20 )
+mouse_filter = 2
 color = Color( 1, 1, 1, 0.8 )
 script = ExtResource( 2 )
 bbc_text = "[left] [力+3 打+1][/left]"
@@ -16,11 +17,12 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 rect_pivot_offset = Vector2( 56, 10 )
 hint_tooltip = "[left] [力+3 打+1][/left]"
+mouse_filter = 2
 theme = ExtResource( 3 )
 bbcode_enabled = true
-bbcode_text = " [力+3 打+1]"
+bbcode_text = "[left] [力+3 打+1][/left]"
 meta_underlined = false
-text = " [力+3 打+1]"
+text = "[left] [力+3 打+1][/left]"
 scroll_active = false
 
 [node name="ColorRectLeft" type="ColorRect" parent="."]
@@ -28,6 +30,7 @@ margin_left = -2.0
 margin_top = 2.0
 margin_right = 8.0
 margin_bottom = 18.0
+mouse_filter = 2
 color = Color( 0, 0, 0, 0 )
 
 [node name="ColorRectRight" type="ColorRect" parent="."]
@@ -35,4 +38,5 @@ margin_left = 104.0
 margin_top = 2.0
 margin_right = 114.0
 margin_bottom = 18.0
+mouse_filter = 2
 color = Color( 0, 0, 0, 0 )
