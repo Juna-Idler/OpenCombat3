@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/damage_triangle.png-7bd185249a4724337f0bd4cce46ee576.stex"
+path="res://.import/rect_power.png-fe6a6701893c03ace963e989a14273f0.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://card/damage_triangle.png"
-dest_files=[ "res://.import/damage_triangle.png-7bd185249a4724337f0bd4cce46ee576.stex" ]
+source_file="res://playing_scene/card/rect_power.png"
+dest_files=[ "res://.import/rect_power.png-fe6a6701893c03ace963e989a14273f0.stex" ]
 
 [params]
 

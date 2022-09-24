@@ -1,13 +1,13 @@
 [gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=1]
-[ext_resource path="res://card/damage_triangle.png" type="Texture" id=2]
-[ext_resource path="res://card/round.png" type="Texture" id=3]
-[ext_resource path="res://card/rect_power.png" type="Texture" id=4]
-[ext_resource path="res://card/rect_112x172.png" type="Texture" id=5]
-[ext_resource path="res://card/card_base_128x208.png" type="Texture" id=6]
-[ext_resource path="res://card/card_text.tres" type="DynamicFont" id=7]
-[ext_resource path="res://card/card.gd" type="Script" id=8]
+[ext_resource path="res://playing_scene/card/damage_triangle.png" type="Texture" id=2]
+[ext_resource path="res://playing_scene/card/round.png" type="Texture" id=3]
+[ext_resource path="res://playing_scene/card/rect_power.png" type="Texture" id=4]
+[ext_resource path="res://playing_scene/card/rect_112x172.png" type="Texture" id=5]
+[ext_resource path="res://playing_scene/card/card_base_128x208.png" type="Texture" id=6]
+[ext_resource path="res://playing_scene/card/card_text.tres" type="DynamicFont" id=7]
+[ext_resource path="res://playing_scene/card/card.gd" type="Script" id=8]
 
 [sub_resource type="DynamicFont" id=1]
 size = 12

@@ -1,7 +1,6 @@
 extends Node
 
 
-
 var game_server : IGameServer = null
 var commander : ICpuCommander = null
 

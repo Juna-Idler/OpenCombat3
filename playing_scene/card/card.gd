@@ -15,7 +15,7 @@ class Affected:
 
 onready var tween := $Tween
 
-const skillline = preload("res://card/skill_line.tscn")
+const skillline = preload("res://playing_scene/card/skill_line.tscn")
 const RGB = [Color(0,0,0,0),Color(1,0,0),Color(0,0.7,0),Color(0,0,1)]
 
 const format_pattern := ["  %s","[center]%s[/center]","[right]%s   [/right]"]

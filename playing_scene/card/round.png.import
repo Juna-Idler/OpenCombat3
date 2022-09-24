@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/rect_power.png-70fe18c8d8811ce38d60e506f0a5671d.stex"
+path="res://.import/round.png-e333fa90ea30182011dc5a5ceca80d86.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://card/rect_power.png"
-dest_files=[ "res://.import/rect_power.png-70fe18c8d8811ce38d60e506f0a5671d.stex" ]
+source_file="res://playing_scene/card/round.png"
+dest_files=[ "res://.import/round.png-e333fa90ea30182011dc5a5ceca80d86.stex" ]
 
 [params]
 

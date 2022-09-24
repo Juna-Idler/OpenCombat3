@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/round.png-b31d95c03e6ae421fe73ec09a25f57ad.stex"
+path="res://.import/damage_triangle.png-575c83cae96b15dad1dd310ccbb3c29b.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://card/round.png"
-dest_files=[ "res://.import/round.png-b31d95c03e6ae421fe73ec09a25f57ad.stex" ]
+source_file="res://playing_scene/card/damage_triangle.png"
+dest_files=[ "res://.import/damage_triangle.png-575c83cae96b15dad1dd310ccbb3c29b.stex" ]
 
 [params]
 

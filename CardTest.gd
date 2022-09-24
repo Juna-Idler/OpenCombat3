@@ -1,7 +1,7 @@
 extends Node
 
 
-const Card := preload("res://card/card.tscn")
+const Card := preload( "res://playing_scene/card/card.tscn")
 
 func _ready():
 	for i in range(9):
