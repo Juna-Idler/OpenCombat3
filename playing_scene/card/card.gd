@@ -24,11 +24,15 @@ func initialize_card(id:int,cd : CardData,rotate := false):
 	data = cd
 	$CardBase/Power/Label.text = str(cd.power)
 	$CardBase/Hit/Label.text = str(cd.hit)
-	$CardBase/NameBack/Level/Label.text = str(cd.level)
-	$CardBase.self_modulate = RGB[cd.color]
-	$CardBase/NameBack/Name.text = cd.name
+	$CardBase/Level/Label.text = str(cd.level)
+	$CardBase/Name/Label.text = cd.name
 	$CardBase/Picture.hint_tooltip = cd.text
 	$CardBase/Picture.texture = load("res://card_images/"+ cd.image +".png")
+	$CardBase.self_modulate = RGB[cd.color]
+	$CardBase/Power.self_modulate = RGB[cd.color].darkened(0.5)
+	$CardBase/Hit.self_modulate = RGB[cd.color].lightened(0.5)
+
+	
 	var skill_node = $CardBase/Picture/Skills
 	for skill in cd.skills:
 		var line = skillline.instance()
@@ -72,11 +76,11 @@ func initialize_card(id:int,cd : CardData,rotate := false):
 		skill_node.add_child(line)
 	if rotate:
 		rotation = PI
-		$CardBase/NameBack/Name.rect_rotation = 180
+		$CardBase/Name/.rect_rotation = 180
 		$CardBase/Power.rect_rotation = 180
 		$CardBase/Hit/Label.rect_rotation = 180
-		$CardBase/Hit/Label.rect_position += Vector2(0,2)
-		$CardBase/NameBack/Level.rect_rotation = 180
+		$CardBase/Hit/Label.rect_position += Vector2(4,8)
+		$CardBase/Level.rect_rotation = 180
 
 	return self
 

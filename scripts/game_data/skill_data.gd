@@ -209,14 +209,22 @@ class NamedSkill:
 	var param_type : int
 	var parameter
 	var text : String
-	var condition : int = ColorCondition.NOCONDITION
+	var condition : int
 	
 	func _init(i:int,n:String,pt:int,p:String,t:String,c:String):
 		id = i
 		name = n
 		param_type = pt
-		parameter = null if p == "" else _translate_param(pt,p)
-		text = t
+		if pt == ParamType.VOID:
+			parameter = null
+			text = t
+		else:
+			if p.begins_with("{"):
+				parameter = p
+				text = t
+			else:
+				parameter = _translate_param(pt,p)
+				text = _translate_text(t,pt,p)
 		condition = kanji2condition(c)
 
 	static func kanji2condition(c : String) -> int:
@@ -253,3 +261,12 @@ class NamedSkill:
 				return NormalSkillEffects.new(p)
 		return null
 	
+	static func _translate_text(t : String,pt : int,p : String) -> String:
+		var param_string = ""
+		match pt:
+			ParamType.INTEGER:
+				param_string = "{Z}"
+			ParamType.EFFECTS:
+				param_string = "{E}"
+		return t.replace(param_string,"{" + p + "}")
+		

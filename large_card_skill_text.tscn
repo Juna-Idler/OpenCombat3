@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=1]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 1, 1, 1, 0.752941 )
+border_color = Color( 1, 1, 1, 0 )
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="DynamicFont" id=2]
+font_data = ExtResource( 1 )
+
+[sub_resource type="Theme" id=3]
+default_font = SubResource( 2 )
+Panel/styles/panel = SubResource( 1 )
+RichTextLabel/colors/default_color = Color( 0, 0, 0, 1 )
+
+[node name="LargeCardSkillText" type="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -816.0
+margin_bottom = -640.0
+theme = SubResource( 3 )
+
+[node name="Label" type="Label" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_clip_content = true
+size_flags_vertical = 1
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+valign = 2
+autowrap = true
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+bbcode_enabled = true
+fit_content_height = true
+scroll_active = false

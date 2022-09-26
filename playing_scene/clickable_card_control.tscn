@@ -4,6 +4,6 @@
 
 [node name="Control" type="ColorRect"]
 margin_right = 128.0
-margin_bottom = 204.0
-color = Color( 0.560784, 0, 0, 1 )
+margin_bottom = 200.0
+color = Color( 1, 1, 1, 0.25098 )
 script = ExtResource( 1 )

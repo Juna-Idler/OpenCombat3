@@ -1,5 +1,5 @@
 tool
-extends ColorRect
+extends Node
 
 class_name SkillLine
 
