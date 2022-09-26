@@ -23,7 +23,7 @@ var rcards := []
 
 
 func _ready():
-	for i in range(9):
+	for i in range(27):
 		var card := Card.instance().initialize_card(i,Global.card_catalog.get_card_data(i+1)) as Card
 		card.position = my_stack.rect_position + my_stack.rect_size / 2
 		add_child(card)
@@ -33,10 +33,10 @@ func _ready():
 		add_child(card)
 		rcards.append(card)
  
-	var hand := cards.slice(0,3)
+	var hand := cards.slice(12,12 + 3)
 	my_hand_area.set_hand_card(hand)
 
-	var rhand := rcards.slice(4,7)
+	var rhand := rcards.slice(20,23)
 	rival_hand_area.set_hand_card(rhand)
 	
 	my_hand_area.move_card(1)
