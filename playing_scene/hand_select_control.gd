@@ -2,9 +2,9 @@ extends Control
 
 
 signal slid_card(index,x)
-
 signal decided_card(index)
-
+signal held_card(index)
+signal clicked_card(index)
 
 var index : int
 var card : Card
@@ -20,6 +20,10 @@ var drag_limit_left : int = 150
 var drag_limit_right : int = 150
 const drag_limit_top : int = 50
 
+const drag_mode_amount := 10
+
+var hold_timer : Timer = null
+
 
 func _ready():
 	pass # Replace with function body.
@@ -30,6 +34,9 @@ func _gui_input(event: InputEvent):
 		if (event is InputEventMouseButton
 				and event.button_index == BUTTON_LEFT
 				and not event.pressed):
+			if not hold_timer.is_stopped():
+				hold_timer.stop()
+				hold_timer.disconnect("timeout",self,"_on_timer_timeout")
 			_draging = false
 			card.z_index -= 1
 			var point := (event as InputEventMouseButton).global_position
@@ -39,13 +46,19 @@ func _gui_input(event: InputEvent):
 			elif _drag_mode == DragMode.Y and relative.y == -drag_limit_top:
 				emit_signal("decided_card",index)
 			else:
+				emit_signal("clicked_card",index)
 				card.position = _drag_card_pos
+
 			
 		elif event is InputEventMouseMotion:
 			var point := (event as InputEventMouseMotion).global_position
 			var relative := point - _drag_point
 			relative = drag_limit(relative)
 			card.position = _drag_card_pos + relative
+			if _drag_mode != DragMode.NOT_SET:
+				if not hold_timer.is_stopped():
+					hold_timer.stop()
+					hold_timer.disconnect("timeout",self,"_on_timer_timeout")
 	else:
 		if (event is InputEventMouseButton
 				and event.button_index == BUTTON_LEFT
@@ -55,6 +68,14 @@ func _gui_input(event: InputEvent):
 			card.z_index += 1
 			_drag_mode = DragMode.NOT_SET
 			_draging = true
+			hold_timer.start()
+			hold_timer.connect("timeout",self,"_on_timer_timeout")
+
+func _on_timer_timeout():
+	_draging = false
+	card.position = _drag_card_pos
+	emit_signal("held_card",index)
+	hold_timer.disconnect("timeout",self,"_on_timer_timeout")
 
 
 func drag_limit(relative : Vector2) -> Vector2:
@@ -67,10 +88,10 @@ func drag_limit(relative : Vector2) -> Vector2:
 	y = drag_limit_top if -y > drag_limit_top else -y
 	
 	if _drag_mode == DragMode.NOT_SET:
-		if y > x and y > 10:
+		if y > x and y > drag_mode_amount:
 			_drag_mode = DragMode.Y
 			x = 0
-		elif x > y and x > 10:
+		elif x > y and x > drag_mode_amount:
 			_drag_mode = DragMode.X
 			y = 0
 		

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://playing_scene/card/LargeCardBase.png" type="Texture" id=1]
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=3]
@@ -10,17 +10,45 @@ outline_size = 3
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 3 )
 
+[sub_resource type="StyleBoxFlat" id=5]
+bg_color = Color( 1, 1, 1, 1 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 0, 0, 0, 1 )
+border_blend = true
+corner_radius_top_left = 47
+corner_radius_top_right = 47
+corner_radius_bottom_right = 47
+corner_radius_bottom_left = 47
+
 [sub_resource type="DynamicFont" id=2]
 size = 64
+outline_size = 3
+outline_color = Color( 0, 0, 0, 1 )
 extra_spacing_top = -6
 font_data = ExtResource( 3 )
 
 [sub_resource type="DynamicFont" id=4]
 size = 40
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 3 )
+
+[sub_resource type="StyleBoxFlat" id=6]
+bg_color = Color( 1, 1, 1, 1 )
+border_color = Color( 0, 0, 0, 1 )
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_size = 3
 
 [sub_resource type="DynamicFont" id=3]
 size = 40
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
 extra_spacing_top = -4
 font_data = ExtResource( 3 )
 
@@ -44,14 +72,14 @@ margin_right = 488.0
 margin_bottom = 688.0
 stretch_mode = 7
 
-[node name="NameBack" type="ColorRect" parent="CardBase"]
+[node name="Name" type="ColorRect" parent="CardBase"]
 margin_left = 24.0
 margin_top = 624.0
 margin_right = 488.0
 margin_bottom = 688.0
 color = Color( 0, 0, 0, 0.501961 )
 
-[node name="Name" type="Label" parent="CardBase/NameBack"]
+[node name="Name" type="Label" parent="CardBase/Name"]
 anchor_top = 0.5
 anchor_bottom = 0.5
 margin_top = -32.0
@@ -74,56 +102,50 @@ margin_bottom = -104.0
 rect_min_size = Vector2( 464, 0 )
 alignment = 2
 
-[node name="PowerBack" type="NinePatchRect" parent="CardBase"]
-margin_left = 16.0
-margin_top = 16.0
-margin_right = 112.0
-margin_bottom = 112.0
-texture = ExtResource( 1 )
-patch_margin_left = 24
-patch_margin_top = 24
-patch_margin_right = 24
-patch_margin_bottom = 24
+[node name="Power" type="Panel" parent="CardBase"]
+margin_left = 12.0
+margin_top = 12.0
+margin_right = 108.0
+margin_bottom = 108.0
+custom_styles/panel = SubResource( 5 )
 
-[node name="Label" type="Label" parent="CardBase/PowerBack"]
+[node name="Label" type="Label" parent="CardBase/Power"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_pivot_offset = Vector2( 48, 48 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_fonts/font = SubResource( 2 )
 text = "1"
 align = 1
 valign = 1
 max_lines_visible = 1
 
-[node name="HitBack" type="Polygon2D" parent="CardBase"]
-position = Vector2( 64, 120 )
+[node name="Hit" type="Polygon2D" parent="CardBase"]
+position = Vector2( 60, 112 )
 polygon = PoolVector2Array( 0, 0, 40, 80, -40, 80 )
 
-[node name="Label" type="Label" parent="CardBase/HitBack"]
+[node name="Label" type="Label" parent="CardBase/Hit"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -32.0
 margin_top = 16.0
 margin_right = 32.0
 margin_bottom = 80.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_fonts/font = SubResource( 4 )
 text = "1"
 align = 1
 valign = 1
 max_lines_visible = 1
 
-[node name="LevelBack" type="TextureRect" parent="CardBase"]
-self_modulate = Color( 0, 0.0117647, 0.796078, 1 )
-margin_left = 432.0
-margin_top = 16.0
-margin_right = 496.0
-margin_bottom = 80.0
-texture = ExtResource( 1 )
-expand = true
+[node name="Level" type="Panel" parent="CardBase"]
+margin_left = 436.0
+margin_top = 12.0
+margin_right = 500.0
+margin_bottom = 76.0
+custom_styles/panel = SubResource( 6 )
 
-[node name="Label" type="Label" parent="CardBase/LevelBack"]
+[node name="Label" type="Label" parent="CardBase/Level"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_colors/font_color = Color( 1, 1, 1, 1 )

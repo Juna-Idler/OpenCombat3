@@ -4,9 +4,13 @@ extends Control
 const ClickableCardControl = preload("res://playing_scene/clickable_card_control.tscn")
 
 signal clicked_card(index,card)
+signal held_card(index,card)
 
 var controls : Array = []
 var hands : Array# of Card
+
+export var timer_path: NodePath
+onready var timer := get_node(timer_path) as Timer
 
 func _init():
 	pass
@@ -23,8 +27,9 @@ func set_hand_card(cards : Array):
 	if new_count > controls.size():
 		for i in range(new_count - controls.size()):
 			var c := ClickableCardControl.instance()
-			c.index = i
 			c.connect("clicked_card",self,"_on_clicked_card")
+			c.connect("held_card",self,"_on_held_card")
+			c.hold_timer = timer
 			controls.append(c)
 
 	if new_count > old_count:
@@ -62,5 +67,14 @@ func move_card(sec : float):
 		)
 		h.tween.start()
 
-func _on_clicked_card(index : int):
-	emit_signal("clicked_card",index,hands[index])
+func _on_clicked_card(card : Card):
+	var i := hands.find(card)
+	emit_signal("clicked_card",i,card)
+	print("clicked" + str(i))
+
+func _on_held_card(card : Card):
+	var i := hands.find(card)
+	emit_signal("held_card",i,card)
+	print("hold timeout" + str(i))
+
+	

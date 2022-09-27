@@ -3,7 +3,18 @@ extends Control
 
 const HandSelectControl = preload("res://playing_scene/hand_select_control.tscn")
 
+const control_width := 144
+const control_height := 216
+const control_space := 10
+const control_drag_play := 50
+const slide_change_duration := 0.5
+const slide_nochange_duration := 0.1
+
 signal decided_card(index,card)
+signal held_card(index,card)
+
+export var timer_path: NodePath
+onready var timer := get_node(timer_path) as Timer
 
 var controls : Array = []
 var hands : Array# of Card
@@ -27,6 +38,8 @@ func set_hand_card(cards : Array):
 			c.index = i
 			c.connect("slid_card",self,"_on_slid_card")
 			c.connect("decided_card",self,"_on_decided_card")
+			c.connect("held_card",self,"_on_held_card")
+			c.hold_timer = timer
 			controls.append(c)
 
 	if new_count > old_count:
@@ -40,18 +53,18 @@ func set_hand_card(cards : Array):
 	align()
 
 func align():
-	var y = (rect_size.y - 204) / 2
+	var y = (rect_size.y - control_height) / 2
 	var hand_count := hands.size()
 	var step := rect_size.x / (hand_count + 1)
-	var start := step - 128 / 2
-	if step < 128 + 10:
+	var start := step - control_width / 2
+	if step < control_width + control_space:
 		start = step / 10
-		step = (rect_size.x - 128 - start*2) / (hand_count - 1);
+		step = (rect_size.x - control_width - start*2) / (hand_count - 1);
 	for i in range(hand_count):
 		controls[i].rect_position.x = start + step * i
 		controls[i].rect_position.y = y
-		controls[i].drag_limit_left = i * step + 50
-		controls[i].drag_limit_right = (hand_count - 1 - i) * step + 50
+		controls[i].drag_limit_left = i * step + control_drag_play
+		controls[i].drag_limit_right = (hand_count - 1 - i) * step + control_drag_play
 	distance = step
 
 
@@ -71,7 +84,7 @@ func move_card(sec : float):
 func _on_slid_card(index,x):
 	var skip : int = x / distance
 	if skip == 0:
-		move_card(0.1)
+		move_card(slide_nochange_duration)
 		return
 	var old_index : int = index
 	var new_index : int = index + skip
@@ -81,8 +94,13 @@ func _on_slid_card(index,x):
 	for i in range(hands.size()):
 		controls[i].card = hands[i]
 	align()
-	move_card(0.5)
+	move_card(slide_change_duration)
 	
 	
 func _on_decided_card(index):
+	print("decide" + str(index))
 	emit_signal("decided_card",index,hands[index])
+
+func _on_held_card(index):
+	print("hold timeout" + str(index))
+	emit_signal("held_card",index,hands[index])

@@ -18,7 +18,9 @@ onready var tween := $Tween
 const skillline = preload("res://playing_scene/card/skill_line.tscn")
 const RGB = [Color(0,0,0,0),Color(1,0,0),Color(0,0.7,0),Color(0,0,1)]
 
-const format_pattern := ["  %s","[center]%s[/center]","[right]%s   [/right]"]
+const format_pattern := ["  %s","[center]%s[/center]","[right]%s    [/right]"]
+const rotate_format_pattern := ["[right]%s   [/right]","[center]%s[/center]","   %s"]
+
 func initialize_card(id:int,cd : CardData,rotate := false):
 	id_in_deck = id
 	data = cd
@@ -48,28 +50,29 @@ func initialize_card(id:int,cd : CardData,rotate := false):
 			skill_text = n.name + " (" + _get_parameter_string(n.param_type,n.parameter) + ")"
 		line.left_color = SkillLine.Color3.NOCOLOR
 		line.right_color = SkillLine.Color3.NOCOLOR
-		var format : String = ""
+		var align : int
 		match condition:
 			SkillData.ColorCondition.VS_RED:
 				line.left_color = SkillLine.Color3.RED
-				format = format_pattern[2 if rotate else 0]
+				align = 0
 			SkillData.ColorCondition.VS_GREEN:
 				line.left_color = SkillLine.Color3.GREEN
-				format = format_pattern[2 if rotate else 0]
+				align = 0
 			SkillData.ColorCondition.VS_BLUE:
 				line.left_color = SkillLine.Color3.BLUE
-				format = format_pattern[2 if rotate else 0]
+				align = 0
 			SkillData.ColorCondition.LINK_RED:
 				line.right_color = SkillLine.Color3.RED
-				format = format_pattern[0 if rotate else 2]
+				align = 2
 			SkillData.ColorCondition.LINK_GREEN:
 				line.right_color = SkillLine.Color3.GREEN
-				format = format_pattern[0 if rotate else 2]
+				align = 2
 			SkillData.ColorCondition.LINK_BLUE:
 				line.right_color = SkillLine.Color3.BLUE
-				format = format_pattern[0 if rotate else 2]
+				align = 2
 			SkillData.ColorCondition.NOCONDITION:
-				format = format_pattern[1]
+				align = 1
+		var format : String = (rotate_format_pattern if rotate else format_pattern)[align]
 		line.bbc_text = format % skill_text
 		if rotate:
 			line.get_node("RichTextLabel").rect_rotation = 180		

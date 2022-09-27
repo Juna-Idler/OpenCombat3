@@ -10,11 +10,16 @@ func _ready():
 	pass
 	
 func initialize_card(cd : CardData):
-	$CardBase/NameBack/Name.text = cd.name
-	$CardBase.self_modulate = RGB[cd.color]
-	$CardBase/PowerBack/Label.text = str(cd.power)
-	$CardBase/LevelBack/Label.text = str(cd.level)
-	$CardBase/HitBack/Label.text = str(cd.hit)
+	var color = RGB[cd.color]
+	$CardBase/Name/Name.text = cd.name
+	$CardBase.self_modulate = color
+	$CardBase/Power.self_modulate = color.darkened(0.2)
+	$CardBase/Hit.self_modulate = color.lightened(0.4)
+	$CardBase/Level.self_modulate = color.lightened(0.6)
+
+	$CardBase/Power/Label.text = str(cd.power)
+	$CardBase/Level/Label.text = str(cd.level)
+	$CardBase/Hit/Label.text = str(cd.hit)
 	$CardBase/Picture.texture = load("res://card_images/"+ cd.image +".png")
 	
 	var skill_node = $CardBase/Skills
