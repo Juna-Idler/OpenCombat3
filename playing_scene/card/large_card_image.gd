@@ -1,28 +1,29 @@
-extends Node2D
+extends Control
 
-const SkillText := preload("res://large_card_skill_text.tscn")
+const SkillText := preload("res://playing_scene/card/large_card_skill_text.tscn")
 
 const RGB = [Color(0,0,0,0),Color(0.9,0,0),Color(0,0.7,0),Color(0,0,1)]
 
 func _ready():
-	var cd := Global.card_catalog.get_card_data(17)
-	initialize_card(cd)
 	pass
 	
 func initialize_card(cd : CardData):
 	var color = RGB[cd.color]
-	$CardBase/Name/Name.text = cd.name
-	$CardBase.self_modulate = color
-	$CardBase/Power.self_modulate = color.darkened(0.2)
-	$CardBase/Hit.self_modulate = color.lightened(0.4)
-	$CardBase/Level.self_modulate = color.lightened(0.6)
+	$Name/Name.text = cd.name
+	self_modulate = color
+	$Power.self_modulate = color.darkened(0.2)
+	$Hit.self_modulate = color.lightened(0.4)
+	$Level.self_modulate = color.lightened(0.6)
 
-	$CardBase/Power/Label.text = str(cd.power)
-	$CardBase/Level/Label.text = str(cd.level)
-	$CardBase/Hit/Label.text = str(cd.hit)
-	$CardBase/Picture.texture = load("res://card_images/"+ cd.image +".png")
+	$Power/Label.text = str(cd.power)
+	$Level/Label.text = str(cd.level)
+	$Hit/Label.text = str(cd.hit)
+	$Picture.texture = load("res://card_images/"+ cd.image +".png")
 	
-	var skill_node = $CardBase/Skills
+	var skill_node = $Skills
+	for n in skill_node.get_children():
+		skill_node.remove_child(n)
+		n.queue_free()
 	for skill in cd.skills:
 		var line = SkillText.instance()
 		var skill_text : String = ""

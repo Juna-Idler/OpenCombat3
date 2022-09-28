@@ -15,22 +15,22 @@ func get_skill(id : int) -> Skill:
 class Skill:
 	func _process_before(skill : SkillData.NamedSkill,
 			vs_color : int,link_color : int,
-			myself : ProcessorData.Player,rival : ProcessorData.Player) -> void:
+			myself : ProcessorData.PlayerData,rival : ProcessorData.PlayerData) -> void:
 		pass
 	func _process_after(skill : SkillData.NamedSkill,
 			vs_color : int,link_color : int,situation : int,
-			myself : ProcessorData.Player,rival : ProcessorData.Player) -> void:
+			myself : ProcessorData.PlayerData,rival : ProcessorData.PlayerData) -> void:
 		pass
 	func _process_end(skill : SkillData.NamedSkill,
 			vs_color : int,link_color : int,situation : int,
-			myself : ProcessorData.Player,rival : ProcessorData.Player) -> void:
+			myself : ProcessorData.PlayerData,rival : ProcessorData.PlayerData) -> void:
 		pass
 
 
 class Rush extends Skill:
 	func _process_after(skill : SkillData.NamedSkill,
 			vs_color : int,link_color : int,situation : int,
-			myself : ProcessorData.Player,rival : ProcessorData.Player) -> void:
+			myself : ProcessorData.PlayerData,rival : ProcessorData.PlayerData) -> void:
 		if situation > 0:
 			return
 		var playing_card = myself.get_playing_card()
@@ -44,7 +44,7 @@ class Rush extends Skill:
 class Charge extends Skill:
 	func _process_end(skill : SkillData.NamedSkill,
 			vs_color : int,link_color : int,situation : int,
-			myself : ProcessorData.Player,rival : ProcessorData.Player) -> void:
+			myself : ProcessorData.PlayerData,rival : ProcessorData.PlayerData) -> void:
 		if myself.battle_damage == 0:
 			var affected := myself.next_effect
 			for p in (skill.parameter as NormalSkillEffects).effects:

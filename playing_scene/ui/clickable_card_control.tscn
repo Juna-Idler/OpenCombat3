@@ -1,15 +1,15 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://playing_scene/hand_select_control.gd" type="Script" id=1]
+[ext_resource path="res://playing_scene/ui/clickable_card_control.gd" type="Script" id=1]
 
 [sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 1, 1, 1, 0.501961 )
+bg_color = Color( 1, 1, 1, 0.247059 )
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
-[node name="HandSelectControl" type="Panel"]
+[node name="Control" type="Panel"]
 margin_right = 144.0
 margin_bottom = 216.0
 custom_styles/panel = SubResource( 1 )

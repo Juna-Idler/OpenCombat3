@@ -4,27 +4,27 @@ class_name NormalSkillProcessor
 
 static func process_before(skill : SkillData.NormalSkill,
 		vs_color : int,link_color : int,
-		myself : ProcessorData.Player,
-		rival : ProcessorData.Player) -> void:
+		myself : ProcessorData.PlayerData,
+		rival : ProcessorData.PlayerData) -> void:
 	if skill.test_condition_before(vs_color,link_color):
 		_activate_normal_skill(skill,myself,rival)
 
 static func process_after(skill : SkillData.NormalSkill,
 		vs_color : int,link_color : int,situation : int,
-		myself : ProcessorData.Player,
-		rival : ProcessorData.Player) -> void:
+		myself : ProcessorData.PlayerData,
+		rival : ProcessorData.PlayerData) -> void:
 	if skill.test_condition_after(vs_color,link_color,situation):
 		_activate_normal_skill(skill,myself,rival)
 
 static func process_end(skill : SkillData.NormalSkill,
 		vs_color : int,link_color : int,
-		myself : ProcessorData.Player,
-		rival : ProcessorData.Player) -> void:
+		myself : ProcessorData.PlayerData,
+		rival : ProcessorData.PlayerData) -> void:
 	if skill.test_condition_end(vs_color,link_color):
 		_activate_normal_skill(skill,myself,rival)
 
 static func _activate_normal_skill(skill : SkillData.NormalSkill,
-		myself : ProcessorData.Player,rival : ProcessorData.Player) -> void:
+		myself : ProcessorData.PlayerData,rival : ProcessorData.PlayerData) -> void:
 	for t_ in skill.targets:
 		var t := t_ as SkillData.NormalSkill.Target
 		match t.target_card:

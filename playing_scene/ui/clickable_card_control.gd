@@ -4,9 +4,10 @@ extends Control
 signal clicked_card(card)
 signal held_card(card)
 
+export var timer_path: NodePath
+onready var _timer := (get_node(timer_path) if timer_path else _timer) as Timer
 
 var card : Card
-var hold_timer : Timer = null
 
 var _holding := false
 
@@ -19,9 +20,9 @@ func _gui_input(event: InputEvent):
 		if (event is InputEventMouseButton
 				and event.button_index == BUTTON_LEFT
 				and not event.pressed):
-			if not hold_timer.is_stopped():
-				hold_timer.stop()
-				hold_timer.disconnect("timeout",self,"_on_timer_timeout")
+			if _timer != null and not _timer.is_stopped():
+				_timer.stop()
+				_timer.disconnect("timeout",self,"_on_timer_timeout")
 			_holding = false
 			emit_signal("clicked_card",card)
 	else:
@@ -29,11 +30,13 @@ func _gui_input(event: InputEvent):
 				and event.button_index == BUTTON_LEFT
 				and event.pressed):
 			_holding = true
-			hold_timer.start()
-			hold_timer.connect("timeout",self,"_on_timer_timeout")
+			if _timer != null:
+				_timer.start()
+# warning-ignore:return_value_discarded
+				_timer.connect("timeout",self,"_on_timer_timeout")
 
 func _on_timer_timeout():
 	_holding = false
 	emit_signal("held_card",card)
-	hold_timer.disconnect("timeout",self,"_on_timer_timeout")
+	_timer.disconnect("timeout",self,"_on_timer_timeout")
 

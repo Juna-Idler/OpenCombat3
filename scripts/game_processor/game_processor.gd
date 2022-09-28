@@ -4,8 +4,8 @@ class_name GameProcessor
 
 
 var phase : int
-var player1 : ProcessorData.Player
-var player2 : ProcessorData.Player
+var player1 : ProcessorData.PlayerData
+var player2 : ProcessorData.PlayerData
 
 var situation : int
 
@@ -20,8 +20,8 @@ func _init(card_catalog : CardCatalog):
 func standby(p1_deck : Array,p1_hands:int,p1_shuffle:bool,
 		p2_deck : Array,p2_hands:int,p2_shuffle:bool) -> bool:
 	phase = 0;
-	player1 = ProcessorData.Player.new(p1_deck,p1_hands,_card_catalog,p1_shuffle)
-	player2 = ProcessorData.Player.new(p2_deck,p2_hands,_card_catalog,p2_shuffle)
+	player1 = ProcessorData.PlayerData.new(p1_deck,p1_hands,_card_catalog,p1_shuffle)
+	player2 = ProcessorData.PlayerData.new(p2_deck,p2_hands,_card_catalog,p2_shuffle)
 	return true
 
 
@@ -40,10 +40,10 @@ func combat(index1 : int,index2 : int) -> void:
 	var combatant1 = player1.play_combat_card(index1)
 	var combatant2 = player2.play_combat_card(index2)
 
-	_skill_processor.process_before(combatant1.skills,
-			combatant2.color,link1color,player1,player2)
-	_skill_processor.process_before(combatant2.skills,
-			combatant1.color,link2color,player2,player1)
+	_skill_processor.process_before(combatant1.data.skills,
+			combatant2.data.color,link1color,player1,player2)
+	_skill_processor.process_before(combatant2.data.skills,
+			combatant1.data.color,link2color,player2,player1)
 	
 	var current_power1 : int = combatant1.get_current_power()
 	var current_power2 : int = combatant2.get_current_power()
@@ -56,18 +56,18 @@ func combat(index1 : int,index2 : int) -> void:
 	else:
 		pass
 
-	_skill_processor.process_after(combatant1.skills,
-			combatant2.color,link1color,situation,player1,player2)
-	_skill_processor.process_after(combatant2.skills,
-			combatant1.color,link2color,situation,player2,player1)
+	_skill_processor.process_after(combatant1.data.skills,
+			combatant2.data.color,link1color,situation,player1,player2)
+	_skill_processor.process_after(combatant2.data.skills,
+			combatant1.data.color,link2color,situation,player2,player1)
 
 	player1.combat_end()
 	player2.combat_end()
 
-	_skill_processor.process_end(combatant1.skills,
-			combatant2.color,link1color,player1,player2)
-	_skill_processor.process_end(combatant2.skills,
-			combatant1.color,link2color,player2,player1)
+	_skill_processor.process_end(combatant1.data.skills,
+			combatant2.data.color,link1color,situation,player1,player2)
+	_skill_processor.process_end(combatant2.data.skills,
+			combatant1.data.color,link2color,situation,player2,player1)
 
 	if player1.is_fatal() or player2.is_fatal():
 		phase = -phase

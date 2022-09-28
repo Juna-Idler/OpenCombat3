@@ -16,11 +16,13 @@ var _drag_card_pos : Vector2
 enum DragMode {NOT_SET,X,Y}
 var _drag_mode : int
 
-var drag_limit_left : int = 150
-var drag_limit_right : int = 150
-const drag_limit_top : int = 50
+var drag_limit_left : float = 150
+var drag_limit_right : float = 150
+const drag_limit_top : float = 50.0
 
 const drag_mode_amount := 10
+
+var ban_drag : bool = false
 
 var hold_timer : Timer = null
 
@@ -38,7 +40,6 @@ func _gui_input(event: InputEvent):
 				hold_timer.stop()
 				hold_timer.disconnect("timeout",self,"_on_timer_timeout")
 			_draging = false
-			card.z_index -= 1
 			var point := (event as InputEventMouseButton).global_position
 			var relative := drag_limit(point - _drag_point)
 			if _drag_mode == DragMode.X:
@@ -51,6 +52,8 @@ func _gui_input(event: InputEvent):
 
 			
 		elif event is InputEventMouseMotion:
+			if ban_drag:
+				return
 			var point := (event as InputEventMouseMotion).global_position
 			var relative := point - _drag_point
 			relative = drag_limit(relative)
@@ -65,10 +68,11 @@ func _gui_input(event: InputEvent):
 				and event.pressed):
 			_drag_point = (event as InputEventMouseButton).global_position
 			_drag_card_pos = card.position
-			card.z_index += 1
+			card.z_index += 10
 			_drag_mode = DragMode.NOT_SET
 			_draging = true
 			hold_timer.start()
+# warning-ignore:return_value_discarded
 			hold_timer.connect("timeout",self,"_on_timer_timeout")
 
 func _on_timer_timeout():

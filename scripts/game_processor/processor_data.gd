@@ -26,17 +26,23 @@ class PlayerCard:
 			rush = v
 			updated = true
 
-		func updateaffected(p:int,h:int,d:int,r:int):
+		func add(p:int,h:int,d:int,r:int):
 			power += p
 			hit += h
 			damage += d
 			rush += r
 			updated = true;
-		func add(v : Affected):
-			updateaffected(v.power,v.hit,v.damage,v.rush)
+		func add_other(v : Affected):
+			add(v.power,v.hit,v.damage,v.rush)
 			
 		func reset_update():
 			updated = false;
+		func reset():
+			power = 0
+			hit = 0
+			damage = 0
+			rush = 0
+			updated = true;
 
 	func _init(cd : CardData,iid : int):
 		data = cd
@@ -53,7 +59,7 @@ class PlayerCard:
 		return data.hit + affected.hit if (data.hit + affected.hit) > 0 else 0;
 
 
-class Player:
+class PlayerData:
 	var deck_list : Array = []
 	
 	var hand_indexes : Array = []
@@ -79,7 +85,9 @@ class Player:
 			_life += c.data.level
 		if shuffle:
 			stack_indexes.shuffle()
+# warning-ignore:unused_variable
 		for i in range(hand_count):
+# warning-ignore:return_value_discarded
 			_draw_card()
 
 	func get_hand_card(index : int) -> PlayerCard:
@@ -100,8 +108,8 @@ class Player:
 		playing_card_id = hand_indexes.pop_at(i)
 		playing_card = deck_list[playing_card_id]
 		_life -= playing_card.data.level
-		playing_card.affected.add(next_effect)
-		next_effect.rest()
+		playing_card.affected.add_other(next_effect)
+		next_effect.reset()
 		return playing_card
 
 	func combat_end() -> void:
@@ -120,8 +128,10 @@ class Player:
 		return false
 		
 	func supply() -> void:
+# warning-ignore:return_value_discarded
 		_draw_card()
 		if battle_damage > 0:
+# warning-ignore:return_value_discarded
 			_draw_card()
 		
 	func recover(index : int) -> void:
@@ -129,7 +139,7 @@ class Player:
 		draw_indexes.clear()
 		var id := _discard_card(index)
 		var card := deck_list[id] as PlayerCard
-		if battle_damage <= card.level:
+		if battle_damage <= card.data.level:
 			battle_damage = 0
 			return
 		battle_damage -= card.data.level

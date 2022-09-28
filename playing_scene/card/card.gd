@@ -2,7 +2,16 @@ extends Node2D
 
 class_name Card
 
+
+enum Place{
+	STACK,
+	HAND,
+	PLAYED,
+	DISCARD,
+}
+
 var id_in_deck:int
+var place : int
 
 var data : CardData = null
 
@@ -13,7 +22,6 @@ class Affected:
 	var damage : int = 0
 	var rush : int = 0
 
-onready var tween := $Tween
 
 const skillline = preload("res://playing_scene/card/skill_line.tscn")
 const RGB = [Color(0,0,0,0),Color(1,0,0),Color(0,0.7,0),Color(0,0,1)]
@@ -21,8 +29,9 @@ const RGB = [Color(0,0,0,0),Color(1,0,0),Color(0,0.7,0),Color(0,0,1)]
 const format_pattern := ["  %s","[center]%s[/center]","[right]%s    [/right]"]
 const rotate_format_pattern := ["[right]%s   [/right]","[center]%s[/center]","   %s"]
 
-func initialize_card(id:int,cd : CardData,rotate := false):
+func initialize_card(id:int,cd : CardData,rotate := false) -> Card:
 	id_in_deck = id
+	place = Place.STACK
 	data = cd
 	$CardBase/Power/Label.text = str(cd.power)
 	$CardBase/Hit/Label.text = str(cd.hit)
@@ -91,6 +100,10 @@ func initialize_card(id:int,cd : CardData,rotate := false):
 func _ready():
 	pass # Replace with function body.
 
+
+func move_to(final_position : Vector2,duration:float,tween : Tween):
+	tween.interpolate_property(self,"position",null,final_position,duration)
+	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

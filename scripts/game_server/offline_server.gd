@@ -41,13 +41,15 @@ func _send_ready():
 	var p1 := FirstData.PlayerData.new(_processor.player1.hand_indexes,_processor.player1.get_life())
 	var p2 := FirstData.PlayerData.new(_processor.player2.hand_indexes,_processor.player2.get_life())
 	var p1first := FirstData.new(p1,p2)
-	_result = _commander._first_select(p2.draw_indexes,p1.draw_indexes)
-	emit_signal("recieved_first_data", p1first,null)
+	_result = _commander._first_select(p2.hand_indexes,p1.hand_indexes)
+	emit_signal("recieved_first_data", p1first)
 
 
 func _send_select(phase:int,index:int,hands_order:Array):
 	var index2 = _result
-	if phase & 1 == 0:
+	if _processor.phase != phase:
+		pass
+	if _processor.phase & 1 == 0:
 		_processor.combat(index,index2)
 	else:
 		if _processor.player1.is_recovery():
@@ -70,7 +72,7 @@ func _send_select(phase:int,index:int,hands_order:Array):
 		if not _processor.player2.is_recovery():
 			_result = _commander._recover_select(p2update)
 	
-	emit_signal("recieved_update_data", p1update,null)
+	emit_signal("recieved_update_data", p1update)
 
 #	if _processor.phase & 1 == 1 and _processor.player1.is_recovery() and not processor.player2.is_recovery():
 #		_send_select(_processor.phase,-1,[])
@@ -86,7 +88,7 @@ func _terminalize():
 
 
 
-func _create_update_playerData(player : ProcessorData.Player) -> UpdateData.PlayerData:
+func _create_update_playerData(player : ProcessorData.PlayerData) -> UpdateData.PlayerData:
 	var affecteds = []
 	for c in player.deck_list:
 		var a := (c as ProcessorData.PlayerCard).affected

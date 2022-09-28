@@ -95,6 +95,11 @@ _global_script_classes=[ {
 "path": "res://addons/custom_resource/plain_text_resource.gd"
 }, {
 "base": "Reference",
+"class": "Player",
+"language": "GDScript",
+"path": "res://playing_scene/player.gd"
+}, {
+"base": "Reference",
 "class": "ProcessorData",
 "language": "GDScript",
 "path": "res://scripts/game_processor/processor_data.gd"
@@ -132,6 +137,7 @@ _global_script_class_icons={
 "NormalSkillProcessor": "",
 "OfflineServer": "",
 "PlainTextResource": "",
+"Player": "",
 "ProcessorData": "",
 "SkillData": "",
 "SkillLine": "",
