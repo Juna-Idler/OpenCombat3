@@ -17,12 +17,11 @@ signal clicked_card(index,card)
 export var timer_path: NodePath
 onready var timer := get_node(timer_path) as Timer
 
-export var tween_path: NodePath
-onready var tween := get_node(tween_path) as Tween
 
 var controls : Array = []
 var hands : Array# of Card
 var distance : int
+var reorder : bool = false
 
 
 func _init():
@@ -83,21 +82,17 @@ func align():
 	distance = int(step)
 
 func move_card(sec : float):
+	var tween := create_tween()
 	for i in range(hands.size()):
 		var c := controls[i] as Control
 		var h := hands[i] as Card
 		var pos := c.rect_global_position + c.rect_size / 2
-#		var tween := h.tween as Tween
-# warning-ignore:return_value_discarded
-		tween.interpolate_property(
-				h,"global_position",
-				null,pos,sec,
-				Tween.TRANS_CUBIC,Tween.EASE_OUT
-		)
-# warning-ignore:return_value_discarded
-	tween.interpolate_callback(self,tween.get_runtime(),"_on_tween_end")
-# warning-ignore:return_value_discarded
-	tween.start()
+		tween.parallel()
+		tween.tween_property(h,"global_position",pos,sec)
+		
+	tween.chain()
+	tween.tween_callback(self,"_on_tween_end")
+
 
 func _on_tween_end():
 	for i in range(hands.size()):
@@ -118,10 +113,16 @@ func _on_slid_card(index,x):
 		controls[i].card = hands[i]
 	align()
 	move_card(slide_change_duration)
+	reorder = true
 	
 	
 func _on_decided_card(index):
-	emit_signal("decided_card",index,hands)
+	var reorder_hand := []
+	if reorder:
+		for c in hands:
+			reorder_hand.append(c.id_in_deck)
+	emit_signal("decided_card",index,reorder_hand)
+	reorder = false
 
 func _on_held_card(index):
 	emit_signal("held_card",index,hands[index])

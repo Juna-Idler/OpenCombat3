@@ -1,48 +1,50 @@
 
 class_name ProcessorData
 
+class Affected:
+	var updated : bool = false
+	var power : int = 0 setget set_p
+	var hit : int = 0 setget set_h
+	var damage : int = 0 setget set_d
+	var rush : int = 0 setget set_r
+
+	func set_p(v):
+		power = v
+		updated = true
+	func set_h(v):
+		hit = v
+		updated = true
+	func set_d(v):
+		damage = v
+		updated = true
+	func set_r(v):
+		rush = v
+		updated = true
+
+	func add(p:int,h:int,d:int,r:int):
+		power += p
+		hit += h
+		damage += d
+		rush += r
+		updated = true;
+	func add_other(v : Affected):
+		add(v.power,v.hit,v.damage,v.rush)
+		
+	func reset_update():
+		updated = false;
+	func reset():
+		power = 0
+		hit = 0
+		damage = 0
+		rush = 0
+		updated = true;
+
+
 class PlayerCard:
 	var data : CardData = null
 	var id_in_deck : int = 0
 
 	var affected := Affected.new()
-	class Affected:
-		var updated : bool = false
-		var power : int = 0 setget set_p
-		var hit : int = 0 setget set_h
-		var damage : int = 0 setget set_d
-		var rush : int = 0 setget set_r
-
-		func set_p(v):
-			power = v
-			updated = true
-		func set_h(v):
-			hit = v
-			updated = true
-		func set_d(v):
-			damage = v
-			updated = true
-		func set_r(v):
-			rush = v
-			updated = true
-
-		func add(p:int,h:int,d:int,r:int):
-			power += p
-			hit += h
-			damage += d
-			rush += r
-			updated = true;
-		func add_other(v : Affected):
-			add(v.power,v.hit,v.damage,v.rush)
-			
-		func reset_update():
-			updated = false;
-		func reset():
-			power = 0
-			hit = 0
-			damage = 0
-			rush = 0
-			updated = true;
 
 	func _init(cd : CardData,iid : int):
 		data = cd
@@ -68,7 +70,7 @@ class PlayerData:
 	var discard_indexes : Array = []
 	var _life : int = 0
 	
-	var next_effect := PlayerCard.Affected.new()
+	var next_effect := Affected.new()
 	
 	var select : int = -1
 	var battle_damage : int = 0
@@ -94,8 +96,7 @@ class PlayerData:
 		return deck_list[hand_indexes[index]]
 	func get_lastplayed_card() -> PlayerCard:
 		return null if played_indexes.empty() else deck_list[played_indexes.back()]
-	func get_playing_card() -> PlayerCard:
-		return playing_card
+
 		
 	func get_life() -> int:
 		return _life
@@ -116,8 +117,7 @@ class PlayerData:
 		var damage := battle_damage + playing_card.affected.damage
 		battle_damage = 0 if damage < 0 else damage
 		played_indexes.push_back(playing_card_id)
-		playing_card_id = -1;
-		playing_card = null
+
 		
 	func add_damage(damage : int):
 		battle_damage += damage
@@ -145,7 +145,10 @@ class PlayerData:
 		battle_damage -= card.data.level
 		# warning-ignore:return_value_discarded
 		_draw_card()
-
+	
+	func no_recover() -> void:
+		select = -1
+		draw_indexes.clear()
 		
 	func is_recovery() -> bool:
 		return battle_damage == 0

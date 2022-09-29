@@ -67,18 +67,13 @@ func align():
 
 
 func move_card(sec : float):
+	var tween := create_tween()
 	for i in range(hands.size()):
 		var c := controls[i] as Control
 		var h := hands[i] as Card
 		var pos := c.rect_global_position + c.rect_size / 2
-# warning-ignore:return_value_discarded
-		tween.interpolate_property(
-				h,"global_position",
-				h.global_position,pos,sec,
-				Tween.TRANS_CUBIC,Tween.EASE_OUT
-		)
-# warning-ignore:return_value_discarded
-		tween.start()
+		tween.parallel()
+		tween.tween_property(h,"global_position",pos,sec)
 
 func _on_clicked_card(card : Card):
 	var i := hands.find(card)

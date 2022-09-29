@@ -52,8 +52,8 @@ func combat(index1 : int,index2 : int) -> void:
 
 	var link1 = player1.get_lastplayed_card()
 	var link2 = player2.get_lastplayed_card()
-	var link1color = 0 if link1 == null else link1.color
-	var link2color = 0 if link2 == null else link2.color
+	var link1color = 0 if link1 == null else link1.data.color
+	var link2color = 0 if link2 == null else link2.data.color
 	var combatant1 = player1.play_combat_card(index1)
 	var combatant2 = player2.play_combat_card(index2)
 
@@ -91,16 +91,23 @@ func combat(index1 : int,index2 : int) -> void:
 
 	player1.supply()
 	player2.supply()
+	if player1.battle_damage == 0 and player2.battle_damage == 0:
+		phase += 1
 	phase += 1
 
 func recover(index1:int,index2:int):
-	if not player1.is_recovery():
+	if player1.is_recovery():
+		player1.no_recover()
+	else:
 		player1.recover(index1)
-	if not player2.is_recovery():
+	if player2.is_recovery():
+		player2.no_recover()
+	else:
 		player2.recover(index2)
+		
 	if player1.is_recovery() and player2.is_recovery():
 		phase += 1
-	if (((not player1.is_recovery()) and
+	elif (((not player1.is_recovery()) and
 			player1.hand_indexes.size() + player1.stack_indexes.size() <= 1)
 			or
 			((not player2.is_recovery()) and

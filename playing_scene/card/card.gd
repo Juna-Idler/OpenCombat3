@@ -101,9 +101,6 @@ func _ready():
 	pass # Replace with function body.
 
 
-func move_to(final_position : Vector2,duration:float,tween : Tween):
-	tween.interpolate_property(self,"position",null,final_position,duration)
-	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
