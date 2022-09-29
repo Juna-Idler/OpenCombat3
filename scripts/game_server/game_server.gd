@@ -29,28 +29,27 @@ class FirstData:
 		rival = p2
 
 
-# 2ターン目以降の情報を受信した時のシグナル
-signal recieved_update_data(update_data)
-# func _on_GameServer_recieved_update_data(data:UpdateData)->void:
 # 
-# server.connect("recieved_update_data",self,"_on_GameServer_recieved_update_data")
+signal recieved_combat_result(data,situation)
+# func _on_GameServer_recieved_combat_result(data:UpdateData,situation:int)->void:
+# server.connect("recieved_combat_result",self,"_on_GameServer_recieved_combat_result")
+signal recieved_recovery_result(data)
+# func _on_GameServer_recieved_recovery_result(data:UpdateData)->void:
+# server.connect("recieved_recovery_result",self,"_on_GameServer_recieved_recovery_result")
+
+enum  Phase {GAMEFINISH = -1,COMBAT = 0,RECOVERY = 1}
+enum  Situation {INFERIOR = -1,EVEN = 0,SUPERIOR = 1}
 
 class UpdateData:
-	var phase : int
-	
+	var round_count : int
+	var next_phase : int
+
 	class Affected:
 		var id : int
 		var power : int = 0
 		var hit : int = 0
 		var damage : int = 0
 		var rush : int = 0
-		
-		func _init(pid:int,ppower:int,phit:int,pdamage:int,prush:int):
-			id = pid
-			power= ppower
-			hit = phit
-			damage = pdamage
-			rush = prush
 	
 	class PlayerData:
 		var hand_indexes : Array# of int
@@ -60,23 +59,10 @@ class UpdateData:
 		var draw_indexes:Array# of int
 		var damage : int
 		var life : int
-		
-		func _init(hi,hs,cu,ne,di,d,l):
-			hand_indexes = hi
-			hand_select = hs
-			cards_update = cu
-			next_effect = ne
-			draw_indexes = di
-			damage = d
-			life = l
 	
 	var myself:PlayerData
 	var rival:PlayerData
-	
-	func _init(p:int,p1:PlayerData,p2:PlayerData):
-		phase = p
-		myself = p1
-		rival = p2
+
 
 
 # 初期データ（このゲームのルールパラメータとかマッチング時に提出したお互いのデータ）
@@ -101,8 +87,11 @@ class PrimaryData:
 func _send_ready():
 	pass
 
-# 選択した手札を送信。手札の位置を入れ替えた場合はそれも
-func _send_select(phase:int,index:int,hands_order:Array):
+#
+func _send_combat_select(round_count:int,index:int,hands_order:Array = []):
+	pass
+#
+func _send_recovery_select(round_count:int,index:int,hands_order:Array = []):
 	pass
 
 # 即時ゲーム終了（降参）を送信
@@ -113,25 +102,3 @@ func _send_surrender():
 func _terminalize():
 	pass
 
-
-# 現状の（差分ではない）完全データを要求する
-func _get_complete_data() -> CompleteData:
-	return null
-
-
-class CompleteData:
-	var InitialData : PrimaryData
-	var phase : int
-
-	class PlayerData:
-		var hand_indexes : Array# of int
-		var played_indexes : Array# of int
-		var discard_indexes : Array# of int
-		var stack_count : int
-		var cards_affected : Array# of Affected
-		var next_effect : UpdateData.Affected
-		var damage : int
-		var life : int
-		
-	var myself:PlayerData
-	var rival:PlayerData

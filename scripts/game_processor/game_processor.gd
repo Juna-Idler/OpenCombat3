@@ -24,6 +24,23 @@ func standby(p1_deck : Array,p1_hands:int,p1_shuffle:bool,
 	player2 = ProcessorData.PlayerData.new(p2_deck,p2_hands,_card_catalog,p2_shuffle)
 	return true
 
+#hand_indexes is deck_in_id Array
+func reorder_hand1(hand_indexes:Array):
+	if hand_indexes.size() != player1.hand_indexes.size():
+		return
+	for i in player1.hand_indexes:
+		if not hand_indexes.has(i):
+			return
+	player1.hand_indexes = hand_indexes.duplicate()
+
+func reorder_hand2(hand_indexes:Array):
+	if hand_indexes.size() != player2.hand_indexes.size():
+		return
+	for i in player2.hand_indexes:
+		if not hand_indexes.has(i):
+			return
+	player2.hand_indexes = hand_indexes.duplicate()
+
 
 func combat(index1 : int,index2 : int) -> void:
 	if phase & 1 != 0:
@@ -76,34 +93,18 @@ func combat(index1 : int,index2 : int) -> void:
 	player2.supply()
 	phase += 1
 
-
-func recover1(index : int):
-	if phase & 1 != 1 or player1.is_recovery():
-		return
-	player1.recover(index)
+func recover(index1:int,index2:int):
+	if not player1.is_recovery():
+		player1.recover(index1)
+	if not player2.is_recovery():
+		player2.recover(index2)
 	if player1.is_recovery() and player2.is_recovery():
 		phase += 1
-	if player1.hand_indexes.size() + player1.stack_indexes.size() <= 1:
-		phase = -phase
-
-func recover2(index : int):
-	if phase & 1 != 1 or player2.is_recovery():
-		return
-	player2.recover(index)
-	if player2.is_recovery() and player1.is_recovery():
-		phase += 1
-	if player2.hand_indexes.size() + player2.stack_indexes.size() <= 1:
-		phase = -phase
-
-func recover_both(index1:int,index2:int):
-	if phase & 1 != 1 or player1.is_recovery() or player2.is_recovery():
-		pass
-	player1.recover(index1)
-	player2.recover(index2)
-	if player1.is_recovery() and player2.is_recovery():
-		phase += 1
-	if ((player1.hand_indexes.size() + player1.stack_indexes.size() <= 1) or
-			 (player2.hand_indexes.size() + player2.stack_indexes.size() <= 1)):
+	if (((not player1.is_recovery()) and
+			player1.hand_indexes.size() + player1.stack_indexes.size() <= 1)
+			or
+			((not player2.is_recovery()) and
+			player2.hand_indexes.size() + player2.stack_indexes.size() <= 1)):
 		phase = -phase
 
 func reset_select():

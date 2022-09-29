@@ -5,7 +5,8 @@ const Card = preload("res://playing_scene/card/card.tscn")
 var game_server : IGameServer = null
 var commander : ICpuCommander = null
 
-var phase : int = 0
+var round_count = 0
+var phase : int = IGameServer.Phase.COMBAT
 var player : Player
 var rival : Player
 
@@ -17,7 +18,8 @@ func _ready():
 	game_server = offline
 	var e = game_server.connect("recieved_first_data",self,"_on_GameServer_recieved_first_data")
 # warning-ignore:return_value_discarded
-	game_server.connect("recieved_update_data",self,"_on_GameServer_recieved_update_data")
+	game_server.connect("recieved_combat_result",self,"_on_GameServer_recieved_combat_result")
+	game_server.connect("recieved_recovery_result",self,"_on_GameServer_recieved_recovery_result")
 
 	var deck = []
 	for i in range(27):
@@ -49,10 +51,12 @@ func _ready():
 	
 
 func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
+	phase = IGameServer.Phase.COMBAT
+	round_count = 1
 	player.set_hand(data.myself.hand_indexes)
 	rival.set_hand(data.rival.hand_indexes)
 	
-func _on_GameServer_recieved_update_data(data:IGameServer.UpdateData):
+func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData,_situation:int):
 	var my_select_id : int = data.myself.hand_indexes[data.myself.hand_select]
 	data.myself.hand_indexes.remove(data.myself.hand_select)
 	var rival_select_id : int = data.rival.hand_indexes[data.rival.hand_select]
@@ -61,8 +65,22 @@ func _on_GameServer_recieved_update_data(data:IGameServer.UpdateData):
 	rival.set_hand(data.rival.hand_indexes)
 	
 	$UILayer/MyField/HandArea.ban_drag(false)
+	round_count = data.round_count
+	phase = data.next_phase
 
 
+
+func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
+	var my_select_id : int = data.myself.hand_indexes[data.myself.hand_select]
+	data.myself.hand_indexes.remove(data.myself.hand_select)
+	var rival_select_id : int = data.rival.hand_indexes[data.rival.hand_select]
+	data.rival.hand_indexes.remove(data.rival.hand_select)
+	player.set_hand(data.myself.hand_indexes)
+	rival.set_hand(data.rival.hand_indexes)
+	
+	$UILayer/MyField/HandArea.ban_drag(false)
+	round_count = data.round_count
+	phase = data.next_phase
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -73,7 +91,11 @@ func _on_GameServer_recieved_update_data(data:IGameServer.UpdateData):
 
 func _on_MyHandArea_decided_card(index:int,hands:Array):
 	$UILayer/MyField/HandArea.ban_drag(true)
-	game_server._send_select(phase,index,hands)
+	
+	if phase == IGameServer.Phase.COMBAT:
+		game_server._send_combat_select(round_count,index,hands)
+	elif phase == IGameServer.Phase.RECOVERY:
+		game_server._send_recovery_select(round_count,index,hands)
 
 
 

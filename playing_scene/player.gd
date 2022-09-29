@@ -50,3 +50,4 @@ func set_hand(new_hand_indexes:Array):
 		cards.append(deck_list[i])
 	hand_area.set_hand_card(cards)
 	hand_area.move_card(1)
+

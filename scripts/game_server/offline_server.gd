@@ -45,37 +45,81 @@ func _send_ready():
 	emit_signal("recieved_first_data", p1first)
 
 
-func _send_select(phase:int,index:int,hands_order:Array):
+func _send_combat_select(round_count:int,index:int,hands_order:Array = []):
 	var index2 = _result
-	if _processor.phase != phase:
-		pass
-	if _processor.phase & 1 == 0:
-		_processor.combat(index,index2)
-	else:
-		if _processor.player1.is_recovery():
-			_processor.recover2(index2)
-		elif _processor.player2.is_recovery():
-			_processor.recover1(index)
-		else:
-			_processor.recover_both(index,index2)
+	if int(_processor.phase / 2) + 1 != round_count:
+		return
+	if _processor.phase & 1 != 0:
+		return
+	if not hands_order.empty():
+		_processor.reorder_hand1(hands_order)
 
-	var p = _processor.phase
+	_processor.combat(index,index2)
+
+	var phase : int = (Phase.GAMEFINISH if _processor.phase < 0
+			else Phase.COMBAT if _processor.phase & 1 == 0
+			else Phase.RECOVERY)
+	if phase == Phase.COMBAT:
+		round_count += 1
+
 	var p1 := _create_update_playerData(_processor.player1)
 	var p2 := _create_update_playerData(_processor.player2)
-	var p1update := UpdateData.new(p,p1,p2)
-	var p2update := UpdateData.new(p,p2,p1)
+	var p1update := UpdateData.new()
+	p1update.round_count = round_count
+	p1update.next_phase = phase
+	p1update.myself = p1
+	p1update.rival = p2
+	var p2update := UpdateData.new()
+	p2update.round_count = round_count
+	p2update.next_phase = phase
+	p2update.myself = p2
+	p2update.rival = p1
 	_processor.reset_select()
 	
-	if p & 1 == 0:
+	if phase == Phase.COMBAT:
 		_result = _commander._combat_select(p2update);
-	else:
+	elif phase == Phase.RECOVERY:
 		if not _processor.player2.is_recovery():
 			_result = _commander._recover_select(p2update)
-	
-	emit_signal("recieved_update_data", p1update)
+	emit_signal("recieved_combat_result", p1update,_processor.situation)
 
-#	if _processor.phase & 1 == 1 and _processor.player1.is_recovery() and not processor.player2.is_recovery():
-#		_send_select(_processor.phase,-1,[])
+
+func _send_recovery_select(round_count:int,index:int,hands_order:Array = []):
+	var index2 = _result
+	if int(_processor.phase / 2) + 1 != round_count:
+		return
+	if _processor.phase & 1 == 0:
+		return
+	if not hands_order.empty():
+		_processor.reorder_hand1(hands_order)
+
+	_processor.recover(index,index2)
+
+	var phase : int = (Phase.GAMEFINISH if _processor.phase < 0
+			else Phase.COMBAT if _processor.phase & 1 == 0
+			else Phase.RECOVERY)
+	if phase == Phase.COMBAT:
+		round_count += 1
+	var p1 := _create_update_playerData(_processor.player1)
+	var p2 := _create_update_playerData(_processor.player2)
+	var p1update := UpdateData.new()
+	p1update.round_count = round_count
+	p1update.next_phase = phase
+	p1update.myself = p1
+	p1update.rival = p2
+	var p2update := UpdateData.new()
+	p2update.round_count = round_count
+	p2update.next_phase = phase
+	p2update.myself = p2
+	p2update.rival = p1
+	_processor.reset_select()
+	
+	if phase == Phase.COMBAT:
+		_result = _commander._combat_select(p2update);
+	elif phase == Phase.RECOVERY:
+		if not _processor.player2.is_recovery():
+			_result = _commander._recover_select(p2update)
+	emit_signal("recieved_recovery_result", p1update)
 
 
 func _send_surrender():
@@ -88,21 +132,31 @@ func _terminalize():
 
 
 
-func _create_update_playerData(player : ProcessorData.PlayerData) -> UpdateData.PlayerData:
+static func _create_update_playerData(player : ProcessorData.PlayerData) -> UpdateData.PlayerData:
 	var affecteds = []
 	for c in player.deck_list:
 		var a := (c as ProcessorData.PlayerCard).affected
 		if a.updated:
-			affecteds.append(UpdateData.Affected.new((c as ProcessorData.PlayerCard).id_in_deck,
-					a.power,a.hit,a.damage,a.rush))
+			var ua := IGameServer.UpdateData.Affected.new()
+			ua.id = (c as ProcessorData.PlayerCard).id_in_deck
+			ua.power = a.power
+			ua.hit = a.hit
+			ua.damage = a.damage
+			ua.rush = a.rush
+			affecteds.append(ua)
 	var n := player.next_effect
-	var next = UpdateData.Affected.new(0,n.power,n.hit,n.damage,n.rush)
-	var p = UpdateData.PlayerData.new(
-			player.hand_indexes,
-			player.select,
-			affecteds,
-			next,
-			player.draw_indexes,
-			player.battle_damage,
-			player.get_life())
+	var next = IGameServer.UpdateData.Affected.new()
+	next.id = 0
+	next.power = n.power
+	next.hit = n.hit
+	next.damage = n.damage
+	next.rush = n.rush
+	var p = IGameServer.UpdateData.PlayerData.new()
+	p.hand_indexes = player.hand_indexes
+	p.hand_select = player.select
+	p.cards_update = affecteds
+	p.next_effect = next
+	p.draw_indexes = player.draw_indexes
+	p.damage = player.battle_damage
+	p.life = player.get_life()
 	return p;
