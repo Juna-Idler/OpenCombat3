@@ -31,12 +31,12 @@ static func _activate_normal_skill(skill : SkillData.NormalSkill,
 			SkillData.TargetCard.PLAYED_CARD:
 				match t.target_player:
 					SkillData.TargetPlayer.MYSELF:
-						_skill_effect(t.effects,myself.playing_card.affected)
+						_skill_effect(t.effects,myself.select_card.affected)
 					SkillData.TargetPlayer.RIVAL:
-						_skill_effect(t.effects,rival.playing_card.affected)
+						_skill_effect(t.effects,rival.select_card.affected)
 					SkillData.TargetPlayer.BOTH:
-						_skill_effect(t.effects,myself.playing_card.affected)
-						_skill_effect(t.effects,rival.playing_card.affected)
+						_skill_effect(t.effects,myself.select_card.affected)
+						_skill_effect(t.effects,rival.select_card.affected)
 			SkillData.TargetCard.NEXT_CARD:
 				match t.target_player:
 					SkillData.TargetPlayer.MYSELF:

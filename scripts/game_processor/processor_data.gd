@@ -75,8 +75,7 @@ class PlayerData:
 	var select : int = -1
 	var battle_damage : int = 0
 	var draw_indexes : Array = []
-	var playing_card_id : int = -1
-	var playing_card : PlayerCard = null
+	var select_card : PlayerCard = null
 
 	func _init(deck : Array,hand_count : int,
 			card_catalog : CardCatalog,shuffle : bool = true) -> void:
@@ -106,17 +105,16 @@ class PlayerData:
 		draw_indexes.clear()
 		for c in deck_list:
 			(c as PlayerCard).affected.reset_update()
-		playing_card_id = hand_indexes.pop_at(i)
-		playing_card = deck_list[playing_card_id]
-		_life -= playing_card.data.level
-		playing_card.affected.add_other(next_effect)
+		select_card = deck_list[hand_indexes.pop_at(i)]
+		_life -= select_card.data.level
+		select_card.affected.add_other(next_effect)
 		next_effect.reset()
-		return playing_card
+		return select_card
 
 	func combat_end() -> void:
-		var damage := battle_damage + playing_card.affected.damage
+		var damage := battle_damage + select_card.affected.damage
 		battle_damage = 0 if damage < 0 else damage
-		played_indexes.push_back(playing_card_id)
+		played_indexes.push_back(select_card.id_in_deck)
 
 		
 	func add_damage(damage : int):
@@ -137,6 +135,7 @@ class PlayerData:
 	func recover(index : int) -> void:
 		select = index
 		draw_indexes.clear()
+		select_card = deck_list[hand_indexes[index]]
 		var id := _discard_card(index)
 		var card := deck_list[id] as PlayerCard
 		if battle_damage <= card.data.level:

@@ -76,7 +76,7 @@ func combat(index1 : int,index2 : int) -> void:
 	_skill_processor.process_after(combatant1.data.skills,
 			combatant2.data.color,link1color,situation,player1,player2)
 	_skill_processor.process_after(combatant2.data.skills,
-			combatant1.data.color,link2color,situation,player2,player1)
+			combatant1.data.color,link2color,-situation,player2,player1)
 
 	player1.combat_end()
 	player2.combat_end()
@@ -84,7 +84,7 @@ func combat(index1 : int,index2 : int) -> void:
 	_skill_processor.process_end(combatant1.data.skills,
 			combatant2.data.color,link1color,situation,player1,player2)
 	_skill_processor.process_end(combatant2.data.skills,
-			combatant1.data.color,link2color,situation,player2,player1)
+			combatant1.data.color,link2color,-situation,player2,player1)
 
 	if player1.is_fatal() or player2.is_fatal():
 		phase = -phase

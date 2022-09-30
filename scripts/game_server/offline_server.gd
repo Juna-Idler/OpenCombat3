@@ -153,7 +153,7 @@ static func _create_update_playerData(player : ProcessorData.PlayerData) -> Upda
 	next.rush = n.rush
 	var p = IGameServer.UpdateData.PlayerData.new()
 	p.hand_indexes = player.hand_indexes.duplicate()
-	p.hand_indexes.insert(player.select,player.playing_card_id)
+	p.hand_indexes.insert(player.select,player.select_card.id_in_deck)
 	p.hand_indexes.resize(p.hand_indexes.size() - player.draw_indexes.size())
 	p.hand_select = player.select
 	p.cards_update = affecteds

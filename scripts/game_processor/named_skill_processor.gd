@@ -33,10 +33,10 @@ class Rush extends Skill:
 			myself : ProcessorData.PlayerData,rival : ProcessorData.PlayerData) -> void:
 		if situation > 0:
 			return
-		var playing_card = myself.playing_card
+		var playing_card = myself.select_card
 		if situation < 0:
 			var stability = skill.parameter + playing_card.affected.rush
-			if stability < rival.playing_card.get_current_hit():
+			if stability < rival.select_card.get_current_hit():
 				return
 		var damage = (playing_card.get_current_hit()) + 1 / 2;
 		rival.add_damage(damage)

@@ -88,7 +88,7 @@ margin_left = 872.0
 margin_top = 272.0
 margin_right = 1016.0
 margin_bottom = 488.0
-rect_rotation = -90.0
+rect_rotation = 90.0
 rect_pivot_offset = Vector2( 72, 108 )
 custom_styles/panel = SubResource( 1 )
 timer_path = NodePath("../../../Timer")
@@ -140,7 +140,7 @@ margin_left = 264.0
 margin_top = 228.0
 margin_right = 408.0
 margin_bottom = 444.0
-rect_rotation = 90.0
+rect_rotation = -90.0
 rect_pivot_offset = Vector2( 72, 108 )
 custom_styles/panel = SubResource( 1 )
 timer_path = NodePath("../../../Timer")
@@ -188,10 +188,15 @@ wait_time = 0.5
 one_shot = true
 
 [connection signal="clicked" from="UILayer/MyField/Stack" to="." method="_on_MyStack_clicked"]
+[connection signal="clicked_card" from="UILayer/MyField/HandArea" to="." method="_on_MyHandArea_clicked_card"]
+[connection signal="decided_card" from="UILayer/MyField/HandArea" to="." method="_on_MyHandArea_decided_card"]
+[connection signal="held_card" from="UILayer/MyField/HandArea" to="." method="_on_MyHandArea_held_card"]
 [connection signal="clicked_card" from="UILayer/MyField/Played" to="." method="_on_MyPlayed_clicked_card"]
 [connection signal="held_card" from="UILayer/MyField/Played" to="." method="_on_held_card"]
 [connection signal="clicked" from="UILayer/MyField/Discard" to="." method="_on_MyDiscard_clicked"]
 [connection signal="clicked" from="UILayer/RivalField/Stack" to="." method="_on_RivalStack_clicked"]
+[connection signal="clicked_card" from="UILayer/RivalField/HandArea" to="." method="_on_RivalHandArea_clicked_card"]
+[connection signal="held_card" from="UILayer/RivalField/HandArea" to="." method="_on_RivalHandArea_held_card"]
 [connection signal="clicked_card" from="UILayer/RivalField/Played" to="." method="_on_RivalPlayed_clicked_card"]
 [connection signal="held_card" from="UILayer/RivalField/Played" to="." method="_on_held_card"]
 [connection signal="clicked" from="UILayer/RivalField/Discard" to="." method="_on_RivalDiscard_clicked"]
