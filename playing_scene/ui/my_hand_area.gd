@@ -43,7 +43,7 @@ func set_hand_card(cards : Array):
 	if new_count > controls.size():
 		for i in range(new_count - controls.size()):
 			var c := HandSelectControl.instance()
-			c.index = i
+			c.index = controls.size()
 # warning-ignore:return_value_discarded
 			c.connect("slid_card",self,"_on_slid_card")
 # warning-ignore:return_value_discarded
@@ -95,8 +95,8 @@ func move_card(sec : float):
 
 
 func _on_tween_end():
-	for i in range(hands.size()):
-		controls[i].card.z_index =  -i
+	for i in hands.size():
+		controls[i].card.z_index =  i
 	pass
 
 func _on_slid_card(index,x):

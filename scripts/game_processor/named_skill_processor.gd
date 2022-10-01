@@ -38,7 +38,7 @@ class Rush extends Skill:
 			var stability = skill.parameter + playing_card.affected.rush
 			if stability < rival.select_card.get_current_hit():
 				return
-		var damage = (playing_card.get_current_hit()) + 1 / 2;
+		var damage := int(playing_card.get_current_hit() + 1) / 2;
 		rival.add_damage(damage)
 
 class Charge extends Skill:

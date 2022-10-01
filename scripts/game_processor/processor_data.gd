@@ -121,7 +121,7 @@ class PlayerData:
 		battle_damage += damage
 		
 	func is_fatal() -> bool:
-		if _life < battle_damage:
+		if _life <= battle_damage:
 			return true
 		return false
 		
