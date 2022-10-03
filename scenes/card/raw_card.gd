@@ -1,50 +1,31 @@
-extends Node2D
-
-class_name Card
+extends Panel
 
 
-enum Place{
-	STACK,
-	HAND,
-	PLAYED,
-	DISCARD,
-}
-
-var id_in_deck:int
-var place : int
+class_name RawCard
 
 var data : CardData = null
 
-var affected := Affected.new()
-class Affected:
-	var power : int = 0
-	var hit : int = 0
-	var damage : int = 0
-	var rush : int = 0
 
-
-const skillline = preload("res://playing_scene/card/skill_line.tscn")
+const skillline = preload("skill_line.tscn")
 const RGB = [Color(0,0,0,0),Color(1,0,0),Color(0,0.7,0),Color(0,0,1)]
 
 const format_pattern := ["  %s","[center]%s[/center]","[right]%s    [/right]"]
 const rotate_format_pattern := ["[right]%s   [/right]","[center]%s[/center]","   %s"]
 
-func initialize_card(id:int,cd : CardData,rotate := false) -> Card:
-	id_in_deck = id
-	place = Place.STACK
+func initialize_card(cd : CardData,rotate := false) -> RawCard:
 	data = cd
-	$CardBase/Power/Label.text = str(cd.power)
-	$CardBase/Hit/Label.text = str(cd.hit)
-	$CardBase/Level/Label.text = str(cd.level)
-	$CardBase/Name/Label.text = cd.name
-	$CardBase/Picture.hint_tooltip = cd.text
-	$CardBase/Picture.texture = load("res://card_images/"+ cd.image +".png")
-	$CardBase.self_modulate = RGB[cd.color]
-	$CardBase/Power.self_modulate = RGB[cd.color].darkened(0.5)
-	$CardBase/Hit.self_modulate = RGB[cd.color].lightened(0.5)
+	$Power/Label.text = str(cd.power)
+	$Hit/Label.text = str(cd.hit)
+	$Level/Label.text = str(cd.level)
+	$Name/Label.text = cd.name
+	$Picture.hint_tooltip = cd.text
+#	ResourceLoader.load_interactive
+	$Picture.texture = load("res://card_images/"+ cd.image +".png")
+	self_modulate = RGB[cd.color]
+	$Power.self_modulate = RGB[cd.color].darkened(0.5)
+	$Hit.self_modulate = RGB[cd.color].lightened(0.5)
 
-	
-	var skill_node = $CardBase/Picture/Skills
+	var skill_node = $Picture/Skills
 	for skill in cd.skills:
 		var line = skillline.instance()
 		var condition : int = 0
@@ -87,19 +68,18 @@ func initialize_card(id:int,cd : CardData,rotate := false) -> Card:
 			line.get_node("RichTextLabel").rect_rotation = 180		
 		skill_node.add_child(line)
 	if rotate:
-		rotation = PI
-		$CardBase/Name/.rect_rotation = 180
-		$CardBase/Power.rect_rotation = 180
-		$CardBase/Hit/Label.rect_rotation = 180
-		$CardBase/Hit/Label.rect_position += Vector2(4,8)
-		$CardBase/Level.rect_rotation = 180
+		rect_rotation = 180
+		$Name/.rect_rotation = 180
+		$Power.rect_rotation = 180
+		$Hit/Label.rect_rotation = 180
+		$Hit/Label.rect_position += Vector2(4,8)
+		$Level.rect_rotation = 180
 
 	return self
 
 
 func _ready():
 	pass # Replace with function body.
-
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

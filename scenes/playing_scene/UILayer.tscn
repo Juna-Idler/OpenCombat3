@@ -1,10 +1,10 @@
 [gd_scene load_steps=10 format=2]
 
-[ext_resource path="res://playing_scene/ui/clickable_card_control.tscn" type="PackedScene" id=1]
-[ext_resource path="res://playing_scene/ui/rival_hand_area.tscn" type="PackedScene" id=2]
-[ext_resource path="res://playing_scene/ui/my_hand_area.tscn" type="PackedScene" id=3]
-[ext_resource path="res://playing_scene/UILayer.gd" type="Script" id=4]
-[ext_resource path="res://scripts/clickable_control.gd" type="Script" id=5]
+[ext_resource path="res://scenes/playing_scene/ui/clickable_card_control.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/playing_scene/ui/rival_hand_area.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/playing_scene/ui/my_hand_area.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/playing_scene/UILayer.gd" type="Script" id=4]
+[ext_resource path="res://scenes/playing_scene/ui/clickable_control.gd" type="Script" id=5]
 
 [sub_resource type="StyleBoxFlat" id=4]
 bg_color = Color( 1, 1, 1, 0.498039 )

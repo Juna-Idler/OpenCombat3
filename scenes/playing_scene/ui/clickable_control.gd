@@ -4,9 +4,9 @@ extends Control
 signal clicked()
 signal held()
 
+export var timer_path: NodePath
+onready var _timer := get_node(timer_path) as Timer if timer_path else null
 
-var hold_timer : Timer = null
-var hold_time : float = 1
 
 var _holding := false
 
@@ -19,9 +19,9 @@ func _gui_input(event: InputEvent):
 		if (event is InputEventMouseButton
 				and event.button_index == BUTTON_LEFT
 				and not event.pressed):
-			if hold_timer != null and not hold_timer.is_stopped():
-				hold_timer.stop()
-				hold_timer.disconnect("timeout",self,"_on_timer_timeout")
+			if _timer != null and not _timer.is_stopped():
+				_timer.stop()
+				_timer.disconnect("timeout",self,"_on_timer_timeout")
 			_holding = false
 			emit_signal("clicked")
 	else:
@@ -29,13 +29,13 @@ func _gui_input(event: InputEvent):
 				and event.button_index == BUTTON_LEFT
 				and event.pressed):
 			_holding = true
-			if hold_timer != null:
-				hold_timer.start(hold_time)
+			if _timer != null:
+				_timer.start()
 # warning-ignore:return_value_discarded
-				hold_timer.connect("timeout",self,"_on_timer_timeout")
+				_timer.connect("timeout",self,"_on_timer_timeout")
 
 func _on_timer_timeout():
 	_holding = false
 	emit_signal("held")
-	hold_timer.disconnect("timeout",self,"_on_timer_timeout")
+	_timer.disconnect("timeout",self,"_on_timer_timeout")
 

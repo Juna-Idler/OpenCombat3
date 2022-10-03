@@ -1,6 +1,6 @@
 extends Control
 
-const SkillText := preload("res://playing_scene/card/large_card_skill_text.tscn")
+const SkillText := preload("large_card_skill_text.tscn")
 
 const RGB = [Color(0,0,0,0),Color(0.9,0,0),Color(0,0.7,0),Color(0,0,1)]
 

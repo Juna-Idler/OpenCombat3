@@ -12,7 +12,7 @@ _global_script_classes=[ {
 "base": "Node2D",
 "class": "Card",
 "language": "GDScript",
-"path": "res://playing_scene/card/card.gd"
+"path": "res://scenes/card/card.gd"
 }, {
 "base": "Reference",
 "class": "CardCatalog",
@@ -97,12 +97,17 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "Player",
 "language": "GDScript",
-"path": "res://playing_scene/player.gd"
+"path": "res://scenes/playing_scene/player.gd"
 }, {
 "base": "Reference",
 "class": "ProcessorData",
 "language": "GDScript",
 "path": "res://scripts/game_processor/processor_data.gd"
+}, {
+"base": "Panel",
+"class": "RawCard",
+"language": "GDScript",
+"path": "res://scenes/card/raw_card.gd"
 }, {
 "base": "Reference",
 "class": "SkillData",
@@ -112,7 +117,7 @@ _global_script_classes=[ {
 "base": "Node",
 "class": "SkillLine",
 "language": "GDScript",
-"path": "res://playing_scene/card/skill_line.gd"
+"path": "res://scenes/card/skill_line.gd"
 }, {
 "base": "Reference",
 "class": "SkillProcessor",
@@ -139,6 +144,7 @@ _global_script_class_icons={
 "PlainTextResource": "",
 "Player": "",
 "ProcessorData": "",
+"RawCard": "",
 "SkillData": "",
 "SkillLine": "",
 "SkillProcessor": ""
@@ -147,7 +153,7 @@ _global_script_class_icons={
 [application]
 
 config/name="OpenCombat3"
-run/main_scene="res://playing_scene/playing_scene.tscn"
+run/main_scene="res://scenes/playing_scene/playing_scene.tscn"
 config/icon="res://icon.png"
 
 [autoload]

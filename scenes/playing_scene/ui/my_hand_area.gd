@@ -1,7 +1,7 @@
 extends Control
 
 
-const HandSelectControl = preload("res://playing_scene/ui/hand_select_control.tscn")
+const HandSelectControl = preload("hand_select_control.tscn")
 
 const control_width := 144
 const control_height := 216
@@ -87,7 +87,7 @@ func move_card(sec : float):
 		var c := controls[i] as Control
 		var h := hands[i] as Card
 		var pos := c.rect_global_position + c.rect_size / 2
-		tween.parallel()
+		tween.parallel().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 		tween.tween_property(h,"global_position",pos,sec)
 		
 	tween.chain()

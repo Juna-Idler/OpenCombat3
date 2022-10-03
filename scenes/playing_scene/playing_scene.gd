@@ -1,6 +1,6 @@
 extends Node
 
-const Card = preload("res://playing_scene/card/card.tscn")
+const Card = preload("../card/card.tscn")
 
 onready var my_combat_pos : Vector2 = $UILayer/MyField/Playing.rect_global_position + $UILayer/MyField/Playing.rect_size / 2
 onready var rival_combat_pos : Vector2 = $UILayer/RivalField/Playing.rect_global_position + $UILayer/RivalField/Playing.rect_size / 2
@@ -13,6 +13,11 @@ onready var rival_played_pos : Vector2 = $UILayer/RivalField/Played.rect_global_
 
 onready var my_discard_pos : Vector2 = $UILayer/MyField/Discard.rect_global_position + $UILayer/MyField/Discard.rect_size / 2
 onready var rival_discard_pos : Vector2 = $UILayer/RivalField/Discard.rect_global_position + $UILayer/RivalField/Discard.rect_size / 2
+
+onready var my_stack_count := $TopUILayer/Control/MyStackCount
+onready var rival_stack_count := $TopUILayer/Control/RivalStackCount
+onready var my_life := $TopUILayer/Control/MyLife
+onready var rival_life := $TopUILayer/Control/RivalLife
 
 var game_server : IGameServer = null
 var commander : ICpuCommander = null
@@ -62,21 +67,30 @@ func _ready():
 			$UILayer/MyField/HandArea,
 			my_combat_pos,
 			my_played_pos,
-			my_discard_pos)
+			my_discard_pos,
+			my_stack_count,
+			my_life)
 	rival = Player.new(rcdeck,pd.rival_name,
 			$UILayer/RivalField/HandArea,
 			rival_combat_pos,
 			rival_played_pos,
-			rival_discard_pos)
+			rival_discard_pos,
+			rival_stack_count,
+			rival_life)
 	
 	game_server._send_ready()
 	
 
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+#func _process(delta):
+#	pass
+
+
 func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
 	phase = IGameServer.Phase.COMBAT
 	round_count = 1
-	myself.set_hand(data.myself.hand_indexes)
-	rival.set_hand(data.rival.hand_indexes)
+	myself.draw(data.myself.hand_indexes)
+	rival.draw(data.rival.hand_indexes)
 
 
 func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData,_situation:int):
@@ -115,12 +129,9 @@ func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
 	var my_select_id : int = -1
 	var rival_select_id : int = -1
 	
-	data.myself.hand_indexes.append_array(data.myself.draw_indexes)
-	data.rival.hand_indexes.append_array(data.rival.draw_indexes)
-
 	var tween := create_tween()
-	myself.recover(data.myself.hand_select,data.myself.hand_indexes,tween)
-	rival.recover(data.rival.hand_select,data.rival.hand_indexes,tween)
+	myself.recover(data.myself.hand_select,data.myself.hand_indexes,data.myself.draw_indexes,tween)
+	rival.recover(data.rival.hand_select,data.rival.hand_indexes,data.rival.draw_indexes,tween)
 
 #
 	round_count = data.round_count
@@ -132,11 +143,6 @@ func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
 		game_server._send_recovery_select(data.round_count,-1)
 	else:
 		$UILayer/MyField/HandArea.ban_drag(false)
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
 
 
 
@@ -161,19 +167,31 @@ func _on_RivalHandArea_clicked_card(_index:int,_card:Card):
 
 func _on_MyHandArea_held_card(_index:int,card:Card):
 	if card != null:
-		$LargeCardLayer/LargeCardView.show_layer(card.data)
+		$LargeCardLayer/LargeCardView.show_layer(card.get_card_data())
 
 func _on_RivalHandArea_held_card(_index:int,card:Card):
 	if card != null:
-		$LargeCardLayer/LargeCardView.show_layer(card.data)
+		$LargeCardLayer/LargeCardView.show_layer(card.get_card_data())
 
 func _on_held_card(card:Card):
 	if card != null:
-		$LargeCardLayer/LargeCardView.show_layer(card.data)
+		$LargeCardLayer/LargeCardView.show_layer(card.get_card_data())
 
-
-func _on_MyPlayed_clicked_card(_card):
+func _on_MyPlayed_clicked():
 	pass # Replace with function body.
+
+
+func _on_MyPlayed_held():
+	if not myself.played.empty():
+		$LargeCardLayer/LargeCardView.show_layer(myself.deck_list[myself.played.back()].get_card_data())
+
+func _on_RivalPlayed_clicked():
+	pass # Replace with function body.
+
+
+func _on_RivalPlayed_held():
+	if not rival.played.empty():
+		$LargeCardLayer/LargeCardView.show_layer(rival.deck_list[rival.played.back()].get_card_data())
 
 
 func _on_RivalPlayed_clicked_card(_card):
@@ -194,5 +212,3 @@ func _on_MyDiscard_clicked():
 
 func _on_RivalDiscard_clicked():
 	pass # Replace with function body.
-
-

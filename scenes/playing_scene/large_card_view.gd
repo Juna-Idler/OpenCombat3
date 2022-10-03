@@ -1,5 +1,4 @@
-extends "res://scripts/clickable_control.gd"
-
+extends "res://scenes/playing_scene/ui/clickable_control.gd"
 
 func _ready():
 	pass

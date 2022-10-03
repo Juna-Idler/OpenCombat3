@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://playing_scene/ui/clickable_card_control.gd" type="Script" id=1]
+[ext_resource path="res://scenes/playing_scene/ui/rival_hand_area.gd" type="Script" id=1]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 1, 1, 1, 0.247059 )
@@ -9,8 +9,14 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
-[node name="Control" type="Panel"]
-margin_right = 144.0
-margin_bottom = 216.0
+[node name="RivalHandArea" type="Panel"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -640.0
+margin_top = -360.0
+margin_right = 160.0
+margin_bottom = -120.0
 custom_styles/panel = SubResource( 1 )
 script = ExtResource( 1 )

@@ -1,7 +1,7 @@
 extends Control
 
 
-const ClickableCardControl = preload("res://playing_scene/ui/clickable_card_control.tscn")
+const ClickableCardControl = preload("clickable_card_control.tscn")
 
 signal clicked_card(index,card)
 signal held_card(index,card)
@@ -15,9 +15,6 @@ var hands : Array# of Card
 
 export var timer_path: NodePath
 onready var _timer := get_node(timer_path) as Timer
-
-export var tween_path: NodePath
-onready var tween := get_node(tween_path) as Tween
 
 
 func _init():
