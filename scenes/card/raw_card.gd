@@ -26,6 +26,9 @@ func initialize_card(cd : CardData,rotate := false) -> RawCard:
 	$Hit.self_modulate = RGB[cd.color].lightened(0.5)
 
 	var skill_node = $Picture/Skills
+	for c in skill_node.get_children():
+		skill_node.remove_child(c)
+		c.queue_free()
 	for skill in cd.skills:
 		var line = skillline.instance()
 		var condition : int = 0

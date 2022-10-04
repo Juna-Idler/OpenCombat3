@@ -1,0 +1,107 @@
+[gd_scene load_steps=4 format=2]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0, 0, 0, 0.741176 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 1, 1, 1, 0.454902 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+
+[node name="DeckList" type="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/panel = SubResource( 1 )
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 50.0
+margin_top = 50.0
+margin_right = -50.0
+margin_bottom = -50.0
+scroll_horizontal_enabled = false
+
+[node name="Panel" type="Panel" parent="ScrollContainer"]
+margin_right = 1180.0
+margin_bottom = 620.0
+rect_min_size = Vector2( 1180, 620 )
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 2 )
+
+[node name="CardSlot" type="Panel" parent="ScrollContainer/Panel"]
+margin_left = 14.0
+margin_top = 14.0
+margin_right = 134.0
+margin_bottom = 194.0
+custom_styles/panel = SubResource( 3 )
+
+[node name="CardSlot10" type="Panel" parent="ScrollContainer/Panel"]
+margin_left = 14.0
+margin_top = 206.0
+margin_right = 134.0
+margin_bottom = 386.0
+custom_styles/panel = SubResource( 3 )
+
+[node name="CardSlot11" type="Panel" parent="ScrollContainer/Panel"]
+margin_left = 14.0
+margin_top = 398.0
+margin_right = 134.0
+margin_bottom = 578.0
+custom_styles/panel = SubResource( 3 )
+
+[node name="CardSlot2" type="Panel" parent="ScrollContainer/Panel"]
+margin_left = 142.0
+margin_top = 14.0
+margin_right = 262.0
+margin_bottom = 194.0
+custom_styles/panel = SubResource( 3 )
+
+[node name="CardSlot3" type="Panel" parent="ScrollContainer/Panel"]
+margin_left = 270.0
+margin_top = 14.0
+margin_right = 390.0
+margin_bottom = 194.0
+custom_styles/panel = SubResource( 3 )
+
+[node name="CardSlot4" type="Panel" parent="ScrollContainer/Panel"]
+margin_left = 398.0
+margin_top = 14.0
+margin_right = 518.0
+margin_bottom = 194.0
+custom_styles/panel = SubResource( 3 )
+
+[node name="CardSlot5" type="Panel" parent="ScrollContainer/Panel"]
+margin_left = 526.0
+margin_top = 14.0
+margin_right = 646.0
+margin_bottom = 194.0
+custom_styles/panel = SubResource( 3 )
+
+[node name="CardSlot6" type="Panel" parent="ScrollContainer/Panel"]
+margin_left = 654.0
+margin_top = 14.0
+margin_right = 774.0
+margin_bottom = 194.0
+custom_styles/panel = SubResource( 3 )
+
+[node name="CardSlot7" type="Panel" parent="ScrollContainer/Panel"]
+margin_left = 782.0
+margin_top = 14.0
+margin_right = 902.0
+margin_bottom = 194.0
+custom_styles/panel = SubResource( 3 )
+
+[node name="CardSlot8" type="Panel" parent="ScrollContainer/Panel"]
+margin_left = 910.0
+margin_top = 14.0
+margin_right = 1030.0
+margin_bottom = 194.0
+custom_styles/panel = SubResource( 3 )
+
+[node name="CardSlot9" type="Panel" parent="ScrollContainer/Panel"]
+margin_left = 1038.0
+margin_top = 14.0
+margin_right = 1158.0
+margin_bottom = 194.0
+custom_styles/panel = SubResource( 3 )

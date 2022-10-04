@@ -12,5 +12,6 @@ corner_radius_bottom_left = 8
 [node name="HandSelectControl" type="Panel"]
 margin_right = 144.0
 margin_bottom = 216.0
+mouse_filter = 1
 custom_styles/panel = SubResource( 1 )
 script = ExtResource( 1 )

@@ -4,8 +4,8 @@ extends Control
 signal clicked(_self)
 signal held(_self)
 signal dragged(_self,pos)
-signal dragging(_self,relative_pos)
-signal dropped(_self,relative_pos)
+signal dragging(_self,relative_pos,start_pos)
+signal dropped(_self,relative_pos,start_pos)
 
 export var timer_path: NodePath
 onready var _timer := get_node(timer_path) as Timer if timer_path else null
@@ -27,10 +27,10 @@ func _gui_input(event: InputEvent):
 				and event.button_index == BUTTON_LEFT
 				and not event.pressed):
 			if _dragging:
-				var point := (event as InputEventMouseButton).position
-				var relative := point - _drag_point
+				var point := (event as InputEventMouseButton).global_position
+				var relative := point - (_drag_point + get_global_rect().position)
 				_dragging = false
-				emit_signal("dropped",self,relative)
+				emit_signal("dropped",self,relative,_drag_point)
 			else:
 				if _timer != null and not _timer.is_stopped():
 					_timer.stop()
@@ -39,16 +39,16 @@ func _gui_input(event: InputEvent):
 			_holding = false
 			
 		elif event is InputEventMouseMotion:
-			var point := (event as InputEventMouseMotion).position
-			var relative := point - _drag_point
-			if relative.length_squared() >= drag_amount:
+			var point := (event as InputEventMouseMotion).global_position
+			var relative := point - (_drag_point + get_global_rect().position)
+			if not _dragging and relative.length_squared() >= drag_amount:
 				_dragging = true
 				emit_signal("dragged",self,_drag_point)
 				if _timer != null and not _timer.is_stopped():
 					_timer.stop()
 					_timer.disconnect("timeout",self,"_on_timer_timeout")
 			if _dragging:
-				emit_signal("dragging",self,relative)
+				emit_signal("dragging",self,relative,_drag_point)
 	else:
 		if (event is InputEventMouseButton
 				and event.button_index == BUTTON_LEFT

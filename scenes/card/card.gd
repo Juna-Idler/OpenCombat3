@@ -24,7 +24,6 @@ class Affected:
 
 
 const skillline = preload("skill_line.tscn")
-const RGB = [Color(0,0,0,0),Color(1,0,0),Color(0,0.7,0),Color(0,0,1)]
 
 const format_pattern := ["  %s","[center]%s[/center]","[right]%s    [/right]"]
 const rotate_format_pattern := ["[right]%s   [/right]","[center]%s[/center]","   %s"]
