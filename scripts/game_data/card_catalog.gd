@@ -21,6 +21,9 @@ func get_effect_attribute_string(attribute:int)->String:
 func get_skill_data(name : String) -> SkillData.NamedSkill:
 	return _skill_catalog[name]
 
+func get_max_card_id() -> int:
+	return _card_catalog.size() - 1
+
 func get_card_data(id : int) -> CardData:
 	return _card_catalog[id]
 

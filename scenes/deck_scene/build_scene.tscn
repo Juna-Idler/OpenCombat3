@@ -1,14 +1,15 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scenes/deck_scene/build_scene.gd" type="Script" id=1]
 [ext_resource path="res://scenes/card/raw_card.tscn" type="PackedScene" id=2]
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=3]
+[ext_resource path="res://scenes/card/large_card_view.tscn" type="PackedScene" id=4]
 
 [sub_resource type="DynamicFont" id=6]
 size = 24
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=7]
+[sub_resource type="DynamicFont" id=9]
 size = 24
 font_data = ExtResource( 3 )
 
@@ -69,15 +70,14 @@ margin_bottom = 52.0
 custom_fonts/font = SubResource( 6 )
 text = "一覧"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Panel"]
+[node name="Infomation" type="Label" parent="Panel"]
 margin_left = 156.0
-margin_top = 8.0
+margin_top = 5.0
 margin_right = 640.0
-margin_bottom = 56.0
-custom_fonts/normal_font = SubResource( 7 )
-bbcode_text = "デッキ枚数            総コスト"
+margin_bottom = 53.0
+custom_fonts/font = SubResource( 9 )
 text = "デッキ枚数            総コスト"
-scroll_active = false
+valign = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 anchor_right = 1.0
@@ -99,14 +99,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 320.0
 
-[node name="Button" type="Button" parent="PoolList"]
+[node name="Prev" type="Button" parent="PoolList"]
 margin_top = 136.0
 margin_right = 64.0
 margin_bottom = 264.0
 custom_fonts/font = SubResource( 8 )
 text = "<"
 
-[node name="Button2" type="Button" parent="PoolList"]
+[node name="Next" type="Button" parent="PoolList"]
 margin_left = 1216.0
 margin_top = 136.0
 margin_right = 1280.0
@@ -114,9 +114,14 @@ margin_bottom = 264.0
 custom_fonts/font = SubResource( 8 )
 text = ">"
 
-[node name="Node" type="Control" parent="."]
-margin_top = 64.0
-margin_bottom = 64.0
-
-[node name="CardFront" parent="." instance=ExtResource( 2 )]
+[node name="DragMover" parent="." instance=ExtResource( 2 )]
 visible = false
+
+[node name="LargeCardView" parent="." instance=ExtResource( 4 )]
+visible = false
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.5
+
+[connection signal="pressed" from="PoolList/Prev" to="." method="_on_Prev_pressed"]
+[connection signal="pressed" from="PoolList/Next" to="." method="_on_Next_pressed"]

@@ -8,7 +8,7 @@ signal dragging(_self,relative_pos,start_pos)
 signal dropped(_self,relative_pos,start_pos)
 
 export var timer_path: NodePath
-onready var _timer := get_node(timer_path) as Timer if timer_path else null
+onready var _timer := get_node(timer_path) as Timer if timer_path  else _timer
 
 var _holding := false
 
