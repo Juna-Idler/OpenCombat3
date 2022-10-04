@@ -2,7 +2,7 @@ extends Control
 
 const RawCard := preload( "../card/raw_card.tscn")
 const DeckItem := preload("control_in_deck.tscn")
-const PoolItem := preload("control_in_pool.tscn")
+const PoolItem := preload("small_card.tscn")
 
 onready var deck_container := $ScrollContainer/HBoxContainer
 const deck_item_width := 144
@@ -42,8 +42,11 @@ func _ready():
 			p.connect("dropped",self,"_on_PoolItem_dropped")
 			p.connect("held",self,"_on_PoolItem_held")
 			p._timer = $Timer
+			p.connect("mouse_entered",self,"_on_PoolItem_mouse_entered",[p])
+			p.connect("mouse_exited",self,"_on_PoolItem_mouse_exited",[p])
 			$PoolList.add_child(p)
 			
+	$PoolList.move_child(zoomer,$PoolList.get_child_count()-1)
 	var deck := []
 	for i in 27:
 		deck.append(i+1)
@@ -79,7 +82,7 @@ func set_deck(deck : Array):
 		c.get_node("CardFront").initialize_card(cd)
 		deck_cost += cd.level
 		
-	$Panel/Infomation.text = "デッキ枚数：%s    総コスト：%s" % [deck_cards_count,deck_cost]
+	$Header/Infomation.text = "デッキ枚数：%s    総コスト：%s" % [deck_cards_count,deck_cost]
 
 
 func add_card(id : int,index : int):
@@ -117,7 +120,7 @@ func get_deck() -> Array:
 	return r
 
 		
-onready var mover = $DragMover
+onready var mover = $"%DragMover"
 		
 func _on_DeckItem_dragged(_self,pos):
 	_self.modulate.a = 0.5
@@ -144,8 +147,6 @@ func _on_DeckItem_dropped(_self,relative_pos,start_pos):
 		deck_container.remove_child(_self)
 		_self.queue_free()
 		remove_card(cd)
-		
-
 	
 	_self.modulate.a = 1
 	mover.visible = false
@@ -161,6 +162,7 @@ func _on_PoolItem_dragged(_self,pos):
 	var diff : Vector2 = (_self.rect_size - Vector2(144,216)) / 2
 	mover.rect_global_position = gp + diff
 	mover.visible = true
+	zoomer.visible = false
 	
 func _on_PoolItem_dragging(_self,relative_pos,start_pos):
 	var gp = _self.rect_global_position
@@ -181,6 +183,17 @@ func _on_PoolItem_dropped(_self,relative_pos,start_pos):
 func _on_PoolItem_held(_self):
 	$LargeCardView.show_layer(_self.get_node("CardFront").data)
 
+onready var zoomer := $PoolList/Zoom
+
+func _on_PoolItem_mouse_entered(pool_item):
+	zoomer.initialize_card(pool_item.get_node("CardFront").data)
+	var gp = pool_item.rect_global_position
+	var diff : Vector2 = (pool_item.rect_size - Vector2(144,216)) / 2
+	zoomer.rect_global_position = gp + diff
+	zoomer.visible = true
+	
+func _on_PoolItem_mouse_exited(pool_item):
+	zoomer.visible = false
 
 
 func _on_Next_pressed():
@@ -189,6 +202,7 @@ func _on_Next_pressed():
 	if pool_start_id + 18 > Global.card_catalog.get_max_card_id():
 		$PoolList/Next.disabled = true
 	$PoolList/Prev.disabled = false
+	zoomer.visible = false
 
 
 func _on_Prev_pressed():
@@ -197,5 +211,26 @@ func _on_Prev_pressed():
 	if pool_start_id <= 1:
 		$PoolList/Prev.disabled = true
 	$PoolList/Next.disabled = false
+	zoomer.visible = false
 	
-	
+
+func _on_PoolList_gui_input(event):
+	if mover.visible == true:
+		return
+	if event is InputEventMouseButton:
+		if event.is_pressed():
+			if event.button_index == BUTTON_WHEEL_UP:
+				if not $PoolList/Prev.disabled:
+					_on_Prev_pressed()
+			if event.button_index == BUTTON_WHEEL_DOWN:
+				if not $PoolList/Next.disabled:
+					_on_Next_pressed()
+
+
+func _on_ListOpen_pressed():
+	$DeckList.visible = true
+	$DeckList.set_deck(get_deck())
+
+
+func _on_DeckList_closed(deck):
+	set_deck(deck)

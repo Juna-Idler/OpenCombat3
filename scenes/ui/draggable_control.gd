@@ -65,3 +65,9 @@ func _on_timer_timeout():
 	emit_signal("held",self)
 	_timer.disconnect("timeout",self,"_on_timer_timeout")
 
+func cancel():
+	if _timer != null and not _timer.is_stopped():
+		_timer.stop()
+		_timer.disconnect("timeout",self,"_on_timer_timeout")
+	_dragging = false
+	_holding = false
