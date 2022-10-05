@@ -4,7 +4,7 @@ const RawCard := preload( "../card/raw_card.tscn")
 const DeckItem := preload("control_in_deck.tscn")
 const PoolItem := preload("small_card.tscn")
 
-onready var deck_container := $ScrollContainer/HBoxContainer
+onready var deck_container := $ScrollContainer/HTweenBoxContainer
 const deck_item_width := 144
 const deck_item_height := 216
 const deck_item_space := 8
@@ -71,7 +71,7 @@ func set_deck(deck : Array):
 		deck_container.remove_child(c)
 		c.queue_free()
 	for i in range(deck.size()):
-		var c := DeckItem.instance()
+		var c := DeckItem.instance() as Control
 		c.connect("dragged",self,"_on_DeckItem_dragged")
 		c.connect("dragging",self,"_on_DeckItem_dragging")
 		c.connect("dropped",self,"_on_DeckItem_dropped")
@@ -81,35 +81,44 @@ func set_deck(deck : Array):
 		var cd := Global.card_catalog.get_card_data(deck[i])
 		c.get_node("CardFront").initialize_card(cd)
 		deck_cost += cd.level
+	deck_container.layout()
 		
 	$Header/Infomation.text = "デッキ枚数：%s    総コスト：%s" % [deck_cards_count,deck_cost]
 
 
-func add_card(id : int,index : int):
+func add_card(id : int,g_position : Vector2):
 	var sc = $ScrollContainer
 	var rate = sc.scroll_horizontal / (deck_container.rect_size.x - sc.rect_size.x)
+	g_position -= sc.rect_global_position + deck_container.rect_position
+
+	var index : int = (g_position.x + deck_item_width/2) / (deck_item_width + deck_item_space)
+	index = max(min(index,deck_container.get_child_count()),0)
 	
-	var c := DeckItem.instance()
+	var c := DeckItem.instance() as Control
 	c.connect("dragged",self,"_on_DeckItem_dragged")
 	c.connect("dragging",self,"_on_DeckItem_dragging")
 	c.connect("dropped",self,"_on_DeckItem_dropped")
 	c.connect("held",self,"_on_DeckItem_held")
 	c._timer = $Timer
+	c.rect_position = g_position - Vector2(deck_item_width,deck_item_height)/2
 	deck_container.add_child(c)
 	deck_container.move_child(c,index)
+	deck_container.layout_tween()
 	var cd := Global.card_catalog.get_card_data(id)
 	c.get_node("CardFront").initialize_card(cd)
 	deck_cards_count += 1
 	deck_cost += cd.level
-	$Panel/Infomation.text = "デッキ枚数：%s    総コスト：%s" % [deck_cards_count,deck_cost]
+	$Header/Infomation.text = "デッキ枚数：%s    総コスト：%s" % [deck_cards_count,deck_cost]
 	
-	yield(get_tree(),"idle_frame")
-	sc.scroll_horizontal = (deck_container.rect_size.x - sc.rect_size.x) * rate
+	$Tween.interpolate_property(sc,"scroll_horizontal",null,(deck_container.rect_min_size.x - sc.rect_size.x) * rate,
+			0.5,Tween.TRANS_LINEAR,Tween.EASE_OUT)
+#	yield(get_tree(),"idle_frame")
+#	sc.scroll_horizontal = (deck_container.rect_min_size.x - sc.rect_size.x) * rate
 
 func remove_card(cd : CardData):
 	deck_cost -= cd.level
 	deck_cards_count -= 1
-	$Panel/Infomation.text = "デッキ枚数：%s    総コスト：%s" % [deck_cards_count,deck_cost]
+	$Header/Infomation.text = "デッキ枚数：%s    総コスト：%s" % [deck_cards_count,deck_cost]
 
 
 func get_deck() -> Array:
@@ -142,9 +151,12 @@ func _on_DeckItem_dropped(_self,relative_pos,start_pos):
 			var new_index : int = old_index + skip
 			if new_index >= 0 and new_index < deck_cards_count:
 				var v = deck_container.move_child(_self,new_index)
+				_self.rect_position += relative_pos
+				deck_container.layout_tween()
 	else:
 		var cd : CardData = _self.get_node("CardFront").data
 		deck_container.remove_child(_self)
+		deck_container.layout_tween()
 		_self.queue_free()
 		remove_card(cd)
 	
@@ -170,13 +182,9 @@ func _on_PoolItem_dragging(_self,relative_pos,start_pos):
 	mover.rect_global_position = gp + relative_pos + diff
 
 func _on_PoolItem_dropped(_self,relative_pos,start_pos):
-	var g_drop_pos = _self.rect_global_position + relative_pos + start_pos
+	var g_drop_pos = _self.rect_global_position + relative_pos + Vector2(pool_item_width,pool_item_height)/2
 	if deck_area.has_point(g_drop_pos):
-		var pos : Vector2 = deck_container.rect_position
-		g_drop_pos -= pos
-		var index : int = g_drop_pos.x / (deck_item_width + deck_item_space)
-		index = max(min(index,deck_cards_count),0)
-		add_card(_self.get_node("CardFront").data.id,index)
+		add_card(_self.get_node("CardFront").data.id,g_drop_pos)
 	_self.modulate.a = 1
 	mover.visible = false
 	

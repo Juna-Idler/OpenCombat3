@@ -1,10 +1,11 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://scenes/deck_scene/build_scene.gd" type="Script" id=1]
 [ext_resource path="res://scenes/card/raw_card.tscn" type="PackedScene" id=2]
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=3]
 [ext_resource path="res://scenes/card/large_card_view.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scenes/deck_scene/deck_list.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/ui/h_tween_box_container.tscn" type="PackedScene" id=6]
 
 [sub_resource type="DynamicFont" id=6]
 size = 24
@@ -88,12 +89,14 @@ theme = SubResource( 2 )
 custom_styles/bg = SubResource( 5 )
 scroll_vertical_enabled = false
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer"]
+[node name="HTweenBoxContainer" parent="ScrollContainer" instance=ExtResource( 6 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
 margin_left = 8.0
 margin_top = 8.0
 margin_right = 8.0
 margin_bottom = 8.0
-custom_constants/separation = 12
+tween_path = NodePath("../../Tween")
 
 [node name="PoolList" type="Panel" parent="."]
 anchor_right = 1.0
@@ -134,6 +137,8 @@ visible = false
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.5
+
+[node name="Tween" type="Tween" parent="."]
 
 [node name="DeckList" parent="." instance=ExtResource( 5 )]
 visible = false
