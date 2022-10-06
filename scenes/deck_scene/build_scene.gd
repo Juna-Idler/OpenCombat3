@@ -4,7 +4,7 @@ const RawCard := preload( "../card/raw_card.tscn")
 const DeckItem := preload("control_in_deck.tscn")
 const PoolItem := preload("small_card.tscn")
 
-onready var deck_container := $ScrollContainer/HTweenBoxContainer
+onready var deck_container : HTweenBoxContainer = $ScrollContainer/HTweenBoxContainer
 const deck_item_width := 144
 const deck_item_height := 216
 const deck_item_space := 8
@@ -88,7 +88,7 @@ func set_deck(deck : Array):
 
 func add_card(id : int,g_position : Vector2):
 	var sc = $ScrollContainer
-	var rate = sc.scroll_horizontal / (deck_container.rect_size.x - sc.rect_size.x)
+	var rate : float = sc.scroll_horizontal / (deck_container.rect_size.x - sc.rect_size.x)
 	g_position -= sc.rect_global_position + deck_container.rect_position
 
 	var index : int = (g_position.x + deck_item_width/2) / (deck_item_width + deck_item_space)
@@ -109,9 +109,16 @@ func add_card(id : int,g_position : Vector2):
 	deck_cards_count += 1
 	deck_cost += cd.level
 	$Header/Infomation.text = "デッキ枚数：%s    総コスト：%s" % [deck_cards_count,deck_cost]
-	
-	$Tween.interpolate_property(sc,"scroll_horizontal",null,(deck_container.rect_min_size.x - sc.rect_size.x) * rate,
-			0.5,Tween.TRANS_LINEAR,Tween.EASE_OUT)
+
+	var tween := create_tween()
+	var target : int = (deck_container.rect_min_size.x - sc.rect_size.x) * rate
+ # intを明示しないと型違いでtween_propertyが失敗する
+	var t: = tween.tween_property(sc,"scroll_horizontal",target,0.5)
+	t.set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_OUT)
+
+ # こっちのTweenならintとfloatの型の違いを吸収してくれる？
+#	$Tween.interpolate_property(sc,"scroll_horizontal",null,(deck_container.rect_min_size.x - sc.rect_size.x) * rate,
+#			0.5,Tween.TRANS_LINEAR,Tween.EASE_OUT)
 #	yield(get_tree(),"idle_frame")
 #	sc.scroll_horizontal = (deck_container.rect_min_size.x - sc.rect_size.x) * rate
 

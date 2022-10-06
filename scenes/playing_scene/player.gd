@@ -114,3 +114,12 @@ func recover(hand_select : int,new_hand : Array,draw_indexes : Array,tween : Sce
 		tween.tween_property(playing_card,"global_position",discard_pos,1)
 	draw(draw_indexes)
 
+func update_affected(updates : Array):#of IGameServer.UpdateData.Affected
+	for a_ in updates:
+		var a := a_ as IGameServer.UpdateData.Affected
+		var c := deck_list[a.id] as Card
+		c.affected.power = a.power
+		c.affected.hit = a.hit
+		c.affected.damage = a.damage
+		c.affected.rush = a.rush
+	

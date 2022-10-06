@@ -1,5 +1,7 @@
 extends Control
 
+class_name HTweenBoxContainer
+
 
 export var left_margin : int = 8
 export var right_margin : int = 8
@@ -31,9 +33,6 @@ enum EaseType {
 }
 export(EaseType) var ease_type : int = EaseType.EASE_OUT
 
-export var tween_path: NodePath
-onready var tween : Tween = get_node(tween_path)
-
 func _ready():
 	pass
 
@@ -49,14 +48,15 @@ func layout():
 		rect_min_size.x = size_x - space + right_margin
 
 func layout_tween():
-	tween.remove_all()
+	var tween := create_tween()
+	tween.set_ease(ease_type)
+	tween.set_trans(trans_type)
 	var size_x := left_margin
 	for c in get_children():
 		if c is Control:
-			tween.interpolate_property(c,"rect_position",null,Vector2(size_x,top_margin),
-					duration,trans_type,ease_type)
+			tween.parallel()
+			tween.tween_property(c,"rect_position",Vector2(size_x,top_margin),duration)
 			size_x += c.rect_size.x + space
-	tween.start()
 	if size_x == left_margin:
 		rect_min_size.x = left_margin + right_margin
 	else:

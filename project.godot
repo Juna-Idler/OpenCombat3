@@ -44,6 +44,11 @@ _global_script_classes=[ {
 "language": "NativeScript",
 "path": "res://addons/godot-git-plugin/git_api.gdns"
 }, {
+"base": "Control",
+"class": "HTweenBoxContainer",
+"language": "GDScript",
+"path": "res://scenes/ui/h_tween_box_container.gd"
+}, {
 "base": "Reference",
 "class": "ICpuCommander",
 "language": "GDScript",
@@ -132,6 +137,7 @@ _global_script_class_icons={
 "CustomResFormatSaver": "",
 "GameProcessor": "",
 "GitAPI": "",
+"HTweenBoxContainer": "",
 "ICpuCommander": "",
 "IGameServer": "",
 "JSONResource": "",

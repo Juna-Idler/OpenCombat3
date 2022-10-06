@@ -96,7 +96,6 @@ margin_left = 8.0
 margin_top = 8.0
 margin_right = 8.0
 margin_bottom = 8.0
-tween_path = NodePath("../../Tween")
 
 [node name="PoolList" type="Panel" parent="."]
 anchor_right = 1.0
@@ -137,8 +136,6 @@ visible = false
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.5
-
-[node name="Tween" type="Tween" parent="."]
 
 [node name="DeckList" parent="." instance=ExtResource( 5 )]
 visible = false

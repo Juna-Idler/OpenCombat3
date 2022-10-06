@@ -103,6 +103,7 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData,_situatio
 	myself.play(data.myself.hand_select,data.myself.hand_indexes,tween)
 	rival.play(data.rival.hand_select,data.rival.hand_indexes,tween)
 
+	var my_total_power := my_playing_card.affected.power
 
  # 戦闘時のスキル効果を再現するの大変そう
 
@@ -112,6 +113,11 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData,_situatio
 	tween.chain()
 	myself.play_end(data.myself.draw_indexes,tween)
 	rival.play_end(data.rival.draw_indexes,tween)
+
+	myself.update_affected(data.myself.cards_update)
+	rival.update_affected(data.rival.cards_update)
+	$TopUILayer/Control/MyTotalPower.text = str(my_playing_card.get_card_data().power + my_playing_card.affected.power)
+	$TopUILayer/Control/RivalTotalPower.text = str(rival_playing_card.get_card_data().power + rival_playing_card.affected.power)
 	
 	round_count = data.round_count
 	phase = data.next_phase
