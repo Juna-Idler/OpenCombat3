@@ -114,10 +114,30 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData,_situatio
 	myself.play_end(data.myself.draw_indexes,tween)
 	rival.play_end(data.rival.draw_indexes,tween)
 
+
 	myself.update_affected(data.myself.cards_update)
 	rival.update_affected(data.rival.cards_update)
-	$TopUILayer/Control/MyTotalPower.text = str(my_playing_card.get_card_data().power + my_playing_card.affected.power)
-	$TopUILayer/Control/RivalTotalPower.text = str(rival_playing_card.get_card_data().power + rival_playing_card.affected.power)
+	
+	$CombatLayer/Panel/MyControl/MyTotalPower.text = str(my_playing_card.get_card_data().power + my_playing_card.affected.power)
+	$CombatLayer/Panel/RivalControl/RivalTotalPower.text = str(rival_playing_card.get_card_data().power + rival_playing_card.affected.power)
+	myself.next_effect.power = data.myself.next_effect.power
+	myself.next_effect.hit = data.myself.next_effect.hit
+	myself.next_effect.rush = data.myself.next_effect.rush
+	myself.next_effect.damage = data.myself.next_effect.damage
+	
+	rival.next_effect.power = data.rival.next_effect.power
+	rival.next_effect.hit = data.rival.next_effect.hit
+	rival.next_effect.rush = data.rival.next_effect.rush
+	rival.next_effect.damage = data.rival.next_effect.damage
+	
+	if myself.next_effect.power != 0:
+		$TopUILayer/Control/MyNextBuf.text = "力+" + str(myself.next_effect.power)
+	else:
+		$TopUILayer/Control/MyNextBuf.text = ""
+	if rival.next_effect.power != 0:
+		$TopUILayer/Control/RivalNextBuf.text = "力+" + str(rival.next_effect.power)
+	else:
+		$TopUILayer/Control/RivalNextBuf.text = ""
 	
 	round_count = data.round_count
 	phase = data.next_phase

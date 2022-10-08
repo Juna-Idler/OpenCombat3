@@ -1,0 +1,205 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=1]
+[ext_resource path="res://scenes/card/card.tscn" type="PackedScene" id=2]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.527344, 0.527344, 0.527344, 0.752941 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0, 0, 0, 1 )
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="DynamicFont" id=3]
+size = 64
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 40
+font_data = ExtResource( 1 )
+
+[node name="Control" type="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/panel = SubResource( 1 )
+
+[node name="ColorRect" type="Panel" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 144.0
+margin_top = -48.0
+margin_right = 240.0
+margin_bottom = 48.0
+custom_styles/panel = SubResource( 2 )
+
+[node name="Label" type="Label" parent="ColorRect"]
+margin_left = 8.0
+margin_right = 88.0
+margin_bottom = 96.0
+custom_fonts/font = SubResource( 3 )
+text = "9"
+align = 1
+valign = 1
+
+[node name="ColorRect3" type="Panel" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -240.0
+margin_top = -48.0
+margin_right = -144.0
+margin_bottom = 48.0
+custom_styles/panel = SubResource( 2 )
+
+[node name="Label" type="Label" parent="ColorRect3"]
+margin_left = 8.0
+margin_right = 88.0
+margin_bottom = 96.0
+custom_fonts/font = SubResource( 3 )
+text = "9"
+align = 1
+valign = 1
+
+[node name="ColorRect14" type="Panel" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 176.0
+margin_top = 56.0
+margin_right = 240.0
+margin_bottom = 120.0
+custom_styles/panel = SubResource( 2 )
+
+[node name="Label" type="Label" parent="ColorRect14"]
+margin_left = 8.0
+margin_right = 56.0
+margin_bottom = 64.0
+custom_fonts/font = SubResource( 4 )
+text = "9"
+align = 1
+valign = 1
+
+[node name="ColorRect15" type="Panel" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -240.0
+margin_top = -120.0
+margin_right = -176.0
+margin_bottom = -56.0
+custom_styles/panel = SubResource( 2 )
+
+[node name="Label" type="Label" parent="ColorRect15"]
+margin_left = 8.0
+margin_right = 56.0
+margin_bottom = 64.0
+custom_fonts/font = SubResource( 4 )
+text = "9"
+align = 1
+valign = 1
+
+[node name="ColorRect4" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 896.0
+margin_top = 224.0
+margin_right = -192.0
+margin_bottom = -224.0
+
+[node name="ColorRect13" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 192.0
+margin_top = 224.0
+margin_right = -896.0
+margin_bottom = -224.0
+
+[node name="ColorRect5" type="ColorRect" parent="."]
+margin_left = 1152.0
+margin_top = 304.0
+margin_right = 1280.0
+margin_bottom = 496.0
+
+[node name="ColorRect6" type="ColorRect" parent="."]
+margin_top = 224.0
+margin_right = 128.0
+margin_bottom = 416.0
+
+[node name="ColorRect7" type="ColorRect" parent="."]
+margin_left = 696.0
+margin_top = 512.0
+margin_right = 888.0
+margin_bottom = 680.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="ColorRect8" type="ColorRect" parent="."]
+margin_left = 392.0
+margin_top = 40.0
+margin_right = 584.0
+margin_bottom = 208.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+margin_left = 896.0
+margin_top = 512.0
+margin_right = 1216.0
+margin_bottom = 680.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="ColorRect" type="ColorRect" parent="ColorRect2"]
+margin_top = 8.0
+margin_right = 320.0
+margin_bottom = 40.0
+
+[node name="ColorRect2" type="ColorRect" parent="ColorRect2"]
+margin_top = 48.0
+margin_right = 320.0
+margin_bottom = 80.0
+
+[node name="ColorRect3" type="ColorRect" parent="ColorRect2"]
+margin_top = 88.0
+margin_right = 320.0
+margin_bottom = 120.0
+
+[node name="ColorRect4" type="ColorRect" parent="ColorRect2"]
+margin_top = 128.0
+margin_right = 320.0
+margin_bottom = 160.0
+
+[node name="ColorRect12" type="ColorRect" parent="."]
+margin_left = 64.0
+margin_top = 40.0
+margin_right = 384.0
+margin_bottom = 208.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="ColorRect" type="ColorRect" parent="ColorRect12"]
+margin_top = 8.0
+margin_right = 320.0
+margin_bottom = 40.0
+
+[node name="ColorRect2" type="ColorRect" parent="ColorRect12"]
+margin_top = 48.0
+margin_right = 320.0
+margin_bottom = 80.0
+
+[node name="ColorRect3" type="ColorRect" parent="ColorRect12"]
+margin_top = 88.0
+margin_right = 320.0
+margin_bottom = 120.0
+
+[node name="ColorRect4" type="ColorRect" parent="ColorRect12"]
+margin_top = 128.0
+margin_right = 320.0
+margin_bottom = 160.0
+
+[node name="Card" parent="." instance=ExtResource( 2 )]
+position = Vector2( 688, 376 )
