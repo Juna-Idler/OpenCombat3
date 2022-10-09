@@ -36,11 +36,11 @@ func initialize_card(cd : CardData,rotate := false) -> RawCard:
 		if skill is SkillData.NormalSkill:
 			var n := skill as SkillData.NormalSkill
 			condition = n.condition
-			skill_text = _get_normal_skill_string(n)
+			skill_text = Global.card_catalog.get_normal_skill_string(n)
 		elif skill is SkillData.NamedSkill:
 			var n := skill as SkillData.NamedSkill
 			condition = n.condition
-			skill_text = n.name + " (" + _get_parameter_string(n.param_type,n.parameter) + ")"
+			skill_text = n.name + " (" + Global.card_catalog.get_parameter_string(n.param_type,n.parameter) + ")"
 		line.left_color = SkillLine.Color3.NOCOLOR
 		line.right_color = SkillLine.Color3.NOCOLOR
 		var align : int
@@ -90,36 +90,3 @@ func _ready():
 #	pass
 
 
-static func _get_parameter_string(param_type : int,parameter) -> String:
-	match param_type:
-		SkillData.NamedSkill.ParamType.INTEGER:
-			return String(parameter)
-		SkillData.NamedSkill.ParamType.EFFECTS:
-			var result : PoolStringArray = []
-			for e_ in (parameter as NormalSkillEffects).effects:
-				var e := e_ as NormalSkillEffects.Effect
-				var attribute_string = Global.card_catalog.get_effect_attribute_string(e.attribute)
-				result.append(attribute_string + "%+d" % e.parameter)
-			return result.join(" ")
-		SkillData.NamedSkill.ParamType.VOID:
-			pass
-	return ""
-
-static func _get_normal_skill_string(skill:SkillData.NormalSkill) -> String:
-	var string : String = ""
-	string += ["","","後","優","劣","互","終"][skill.timing]
-	for t_ in skill.targets:
-		string += " "
-		var t := t_ as SkillData.NormalSkill.Target
-		string += ["","","敵","両"][t.target_player]
-		string += ["","","次","一","全"][t.target_card]
-		string += ["","赤","緑","青"][t.target_color]
-		
-		var effects : PoolStringArray = []
-		for e_ in t.effects.effects:
-			var e := e_ as NormalSkillEffects.Effect
-			var attribute_string = Global.card_catalog.get_effect_attribute_string(e.attribute)
-			effects.append(attribute_string + "%+d" % e.parameter)
-		string += "[" + effects.join(" ") + "]"
-	return string
-	

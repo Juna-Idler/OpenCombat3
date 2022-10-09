@@ -38,6 +38,11 @@ func initialize_card(id:int,cd : CardData,rotate := false) -> Card:
 func get_card_data() -> CardData:
 	return front.data
 
+func get_current_power() -> int:
+	return front.data.power + affected.power
+	
+func get_current_hit() -> int:
+	return front.data.hit + affected.hit
 
 func _ready():
 	pass # Replace with function body.

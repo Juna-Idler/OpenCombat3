@@ -85,6 +85,7 @@ margin_top = 32.0
 margin_right = 488.0
 margin_bottom = 688.0
 texture = SubResource( 9 )
+expand = true
 stretch_mode = 7
 
 [node name="Name" type="Panel" parent="."]

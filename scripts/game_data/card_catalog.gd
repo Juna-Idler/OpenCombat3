@@ -35,6 +35,68 @@ func set_card_data(card : CardData, id : int):
 	CardData.copy(card,get_card_data(id))
 
 
+func get_parameter_string(param_type : int,parameter) -> String:
+	match param_type:
+		SkillData.NamedSkill.ParamType.INTEGER:
+			return str(parameter as int)
+		SkillData.NamedSkill.ParamType.EFFECTS:
+			var result : PoolStringArray = []
+			for e_ in (parameter as NormalSkillEffects).effects:
+				var e := e_ as NormalSkillEffects.Effect
+				var attribute_string = get_effect_attribute_string(e.attribute)
+				result.append(attribute_string + "%+d" % e.parameter)
+			return result.join(" ")
+		SkillData.NamedSkill.ParamType.VOID:
+			pass
+	return ""
+
+func get_normal_skill_string(skill:SkillData.NormalSkill) -> String:
+	var string : String = ""
+	string += ["","","後","優","劣","互","終"][skill.timing]
+	for t_ in skill.targets:
+		string += " "
+		var t := t_ as SkillData.NormalSkill.Target
+		string += ["","","敵","両"][t.target_player]
+		string += ["","","次","一","全"][t.target_card]
+		string += ["","赤","緑","青"][t.target_color]
+		
+		var effects : PoolStringArray = []
+		for e_ in t.effects.effects:
+			var e := e_ as NormalSkillEffects.Effect
+			var attribute_string = get_effect_attribute_string(e.attribute)
+			effects.append(attribute_string + "%+d" % e.parameter)
+		string += "[" + effects.join(" ") + "]"
+	return string
+	
+
+func get_condition_detailed_string(condition : int) -> String:
+	return ["","","","","","赤と対決 ","緑と対決 ","青と対決 ","","赤と連携 ","緑と連携 ","青と連携 "][condition]
+
+func get_normal_skill_detailed_string(skill:SkillData.NormalSkill) -> String:
+	var string : String = ""
+	string += ["","判定前","判定後","優勢後","劣勢後","互角後","終了時"][skill.timing]
+	for t_ in skill.targets:
+		string += " "
+		var t := t_ as SkillData.NormalSkill.Target
+		if (t.target_player == SkillData.TargetPlayer.MYSELF and
+				t.target_card == SkillData.TargetCard.PLAYED_CARD):
+			string += "このカードに"
+		else:
+			string += ["","自分の","相手の","両者の"][t.target_player]
+			string += ["","赤の","緑の","青の"][t.target_color]
+			string += ["","戦闘カードに","次に出すカードに","手札一枚に","手札全てに"][t.target_card]
+		
+		var effects : PoolStringArray = []
+		for e_ in t.effects.effects:
+			var e := e_ as NormalSkillEffects.Effect
+			var attribute_string = Global.card_catalog.get_effect_attribute_string(e.attribute)
+			effects.append(attribute_string + "%+d" % e.parameter)
+		string += "[" + effects.join(" ") + "]"
+	return string
+
+
+
+
 func _load_skill_data():
 	var namedskill_resource := preload("res://card_data/named_skill_catalog.txt")
 	var namedskills = namedskill_resource.text.split("\n")

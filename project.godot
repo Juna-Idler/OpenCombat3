@@ -24,6 +24,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/game_data/card_data.gd"
 }, {
+"base": "Control",
+"class": "CombatSkillLine",
+"language": "GDScript",
+"path": "res://scenes/playing_scene/combat_skill_line.gd"
+}, {
 "base": "ResourceFormatLoader",
 "class": "CustomResFormatLoader",
 "language": "GDScript",
@@ -100,9 +105,9 @@ _global_script_classes=[ {
 "path": "res://addons/custom_resource/plain_text_resource.gd"
 }, {
 "base": "Reference",
-"class": "Player",
+"class": "PlayingPlayer",
 "language": "GDScript",
-"path": "res://scenes/playing_scene/player.gd"
+"path": "res://scenes/playing_scene/playing_player.gd"
 }, {
 "base": "Reference",
 "class": "ProcessorData",
@@ -133,6 +138,7 @@ _global_script_class_icons={
 "Card": "",
 "CardCatalog": "",
 "CardData": "",
+"CombatSkillLine": "",
 "CustomResFormatLoader": "",
 "CustomResFormatSaver": "",
 "GameProcessor": "",
@@ -148,7 +154,7 @@ _global_script_class_icons={
 "NormalSkillProcessor": "",
 "OfflineServer": "",
 "PlainTextResource": "",
-"Player": "",
+"PlayingPlayer": "",
 "ProcessorData": "",
 "RawCard": "",
 "SkillData": "",

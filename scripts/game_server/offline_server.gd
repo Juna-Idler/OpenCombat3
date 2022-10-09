@@ -22,7 +22,9 @@ func initialize(name:String,card_catalog):
 	_player_name = name;
 
 func standby_single(deck:Array,enemy_id:int) -> bool:
-	var edeck := [1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9]
+	var edeck := []
+	for i in 27:
+		edeck.append(i + 1)
 	_commander = ZeroCommander.new()
 	_processor.standby(deck,4,true,edeck,1,false)
 	return true
@@ -75,7 +77,7 @@ func _send_combat_select(round_count:int,index:int,hands_order:Array = []):
 	p2update.myself = p2
 	p2update.rival = p1
 	_processor.reset_select()
-	
+
 	if phase == Phase.COMBAT:
 		_result = _commander._combat_select(p2update);
 	elif phase == Phase.RECOVERY:

@@ -1,16 +1,19 @@
 
 class_name SkillData
 
-enum CardColors {NOCOLOR = 0,RED,GREEN,BLUE}
+enum CardColors {NOCOLOR = 0,RED = 1,GREEN = 2,BLUE = 3}
 
 enum ColorCondition {
 	NOCONDITION = 0,
-	VS_RED,
-	VS_GREEN,
-	VS_BLUE,
-	LINK_RED,
-	LINK_GREEN,
-	LINK_BLUE,
+	COLOR_BITS = 3,
+	VS_FLAG = 4,
+	VS_RED = 5,
+	VS_GREEN = 6,
+	VS_BLUE = 7,
+	LINK_FLAG = 8,
+	LINK_RED = 9,
+	LINK_GREEN = 10,
+	LINK_BLUE = 11,
 }
 enum Timing {
 	BEFORE_JUDGMENT = 1,

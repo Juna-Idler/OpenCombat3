@@ -12,5 +12,3 @@ script = ExtResource( 1 )
 layer = 0
 
 [node name="CardLayer" type="CanvasLayer" parent="."]
-
-[connection signal="held_card" from="UILayer" to="." method="_on_UILayer_held_card"]

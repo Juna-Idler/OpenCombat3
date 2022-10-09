@@ -1,6 +1,6 @@
 extends Reference
 
-class_name Player
+class_name PlayingPlayer
 
 
 var deck_list : Array# of Card
@@ -13,8 +13,7 @@ var life : int = 0
 
 var next_effect := Card.Affected.new()
 
-#var damage : int = 0
-#var playing_card : int = -1
+var playing_card_id : int = -1
 
 var player_name : String
 
@@ -51,10 +50,10 @@ func _init(dl:Array,
 	stack_count_label.text = str(stack_count)
 	life_label.text = str(life)
 
-func draw(cards_indexes:Array):
-	stack_count -= cards_indexes.size()
+func draw(draw_indexes:Array):
+	stack_count -= draw_indexes.size()
 	stack_count_label.text = str(stack_count)
-	hand.append_array(cards_indexes)
+	hand.append_array(draw_indexes)
 	set_hand(hand)
 
 func set_hand(new_hand_indexes:Array):
@@ -69,13 +68,12 @@ func set_hand(new_hand_indexes:Array):
 	hand_area.set_hand_card(cards)
 	hand_area.move_card(1)
 
-var _playing_id
 
 func play(hand_select : int,new_hand : Array,tween : SceneTreeTween):
 	hand = new_hand
-	_playing_id = hand[hand_select]
+	playing_card_id = hand[hand_select]
 	hand.remove(hand_select)
-	var playing_card := deck_list[_playing_id] as Card
+	var playing_card := deck_list[playing_card_id] as Card
 	life -= playing_card.get_card_data().level
 	life_label.text = str(life)
 	tween.parallel()
@@ -83,8 +81,8 @@ func play(hand_select : int,new_hand : Array,tween : SceneTreeTween):
 	tween.tween_property(playing_card,"global_position",combat_pos,0.5)
 
 func play_end(draw_indexes : Array,tween : SceneTreeTween):
-	played.append(_playing_id)
-	var playing_card := deck_list[_playing_id] as Card
+	played.append(playing_card_id)
+	var playing_card := deck_list[playing_card_id] as Card
 	playing_card.z_index = played.size()
 	playing_card.place = Card.Place.PLAYED
 	tween.parallel()
@@ -92,7 +90,6 @@ func play_end(draw_indexes : Array,tween : SceneTreeTween):
 	tween.tween_property(playing_card,"global_position",played_pos,0.5)
 	tween.parallel()
 	tween.tween_property(playing_card,"rotation",PI/2,0.5)
-	
 	draw(draw_indexes)
 	life_label.text = str(life)
 	
@@ -116,7 +113,7 @@ func recover(hand_select : int,new_hand : Array,draw_indexes : Array,tween : Sce
 
 func update_affected(updates : Array):#of IGameServer.UpdateData.Affected
 	for a_ in updates:
-		var a := a_ as IGameServer.UpdateData.Affected
+		var a = a_# as IGameServer.UpdateData.Affected
 		var c := deck_list[a.id] as Card
 		c.affected.power = a.power
 		c.affected.hit = a.hit

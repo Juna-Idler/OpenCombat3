@@ -19,15 +19,19 @@ onready var rival_stack_count := $TopUILayer/Control/RivalStackCount
 onready var my_life := $TopUILayer/Control/MyLife
 onready var rival_life := $TopUILayer/Control/RivalLife
 
+onready var combat_overlay := $CombatLayer/CombatOverlay
+
 var game_server : IGameServer = null
 var commander : ICpuCommander = null
 
 var round_count = 0
 var phase : int = IGameServer.Phase.COMBAT
-var myself : Player
-var rival : Player
+var myself : PlayingPlayer
+var rival : PlayingPlayer
 
 func _ready():
+	$CombatLayer/CombatOverlay.visible = false
+	
 	var cc := Global.card_catalog
 	
 #	if game_server == null:
@@ -63,14 +67,14 @@ func _ready():
 		c.visible = false
 		$CardLayer.add_child(c)	
 	
-	myself = Player.new(cdeck,pd.my_name,
+	myself = PlayingPlayer.new(cdeck,pd.my_name,
 			$UILayer/MyField/HandArea,
 			my_combat_pos,
 			my_played_pos,
 			my_discard_pos,
 			my_stack_count,
 			my_life)
-	rival = Player.new(rcdeck,pd.rival_name,
+	rival = PlayingPlayer.new(rcdeck,pd.rival_name,
 			$UILayer/RivalField/HandArea,
 			rival_combat_pos,
 			rival_played_pos,
@@ -102,24 +106,17 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData,_situatio
 	var tween := create_tween()
 	myself.play(data.myself.hand_select,data.myself.hand_indexes,tween)
 	rival.play(data.rival.hand_select,data.rival.hand_indexes,tween)
+	yield(tween,"finished")
 
-	var my_total_power := my_playing_card.affected.power
+	yield(combat_overlay.perform(myself,rival),"completed")
 
- # 戦闘時のスキル効果を再現するの大変そう
-
-	tween.chain()
-	tween.tween_interval(1)
-	tween.tween_interval(0)
-	tween.chain()
+	tween = create_tween()
 	myself.play_end(data.myself.draw_indexes,tween)
 	rival.play_end(data.rival.draw_indexes,tween)
-
 
 	myself.update_affected(data.myself.cards_update)
 	rival.update_affected(data.rival.cards_update)
 	
-	$CombatLayer/Panel/MyControl/MyTotalPower.text = str(my_playing_card.get_card_data().power + my_playing_card.affected.power)
-	$CombatLayer/Panel/RivalControl/RivalTotalPower.text = str(rival_playing_card.get_card_data().power + rival_playing_card.affected.power)
 	myself.next_effect.power = data.myself.next_effect.power
 	myself.next_effect.hit = data.myself.next_effect.hit
 	myself.next_effect.rush = data.myself.next_effect.rush
