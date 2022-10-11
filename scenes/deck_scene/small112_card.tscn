@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://scenes/ui/draggable_control.gd" type="Script" id=1]
-[ext_resource path="res://scenes/card/raw_card.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/card/card_front.tscn" type="PackedScene" id=2]
 
 [node name="Control" type="Control"]
 margin_right = 112.0

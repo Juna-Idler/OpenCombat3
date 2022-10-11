@@ -26,7 +26,7 @@ custom_styles/panel = SubResource( 3 )
 script = ExtResource( 2 )
 
 [node name="Highlight" type="Panel" parent="."]
-modulate = Color( 1, 0, 0, 1 )
+modulate = Color( 0, 0.0666667, 1, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2

@@ -1,9 +1,10 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=1]
 [ext_resource path="res://images/triangle.png" type="Texture" id=2]
 [ext_resource path="res://scenes/playing_scene/combat_skill_line.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/playing_scene/combat_overlay.gd" type="Script" id=4]
+[ext_resource path="res://scenes/card/card_frame.png" type="Texture" id=6]
 
 [sub_resource type="Gradient" id=14]
 interpolation_mode = 2
@@ -18,6 +19,12 @@ fill_from = Vector2( 1, 1 )
 texture = SubResource( 15 )
 region_rect = Rect2( 0, 0, 64, 64 )
 
+[sub_resource type="DynamicFont" id=1]
+size = 10
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 1 )
+
 [sub_resource type="DynamicFont" id=13]
 size = 30
 font_data = ExtResource( 1 )
@@ -26,14 +33,24 @@ font_data = ExtResource( 1 )
 content_margin_left = 4.0
 bg_color = Color( 0, 0, 0, 0.752941 )
 
+[sub_resource type="StyleBoxFlat" id=19]
+bg_color = Color( 0, 0, 0, 0.498039 )
+
 [sub_resource type="DynamicFont" id=11]
-size = 40
+size = 36
 outline_size = 2
 outline_color = Color( 0, 0, 0, 1 )
+extra_spacing_top = -1
 font_data = ExtResource( 1 )
 
 [sub_resource type="StyleBoxFlat" id=12]
 bg_color = Color( 1, 1, 1, 1 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 0, 0, 0, 1 )
+border_blend = true
 corner_radius_top_left = 16
 corner_radius_top_right = 16
 corner_radius_bottom_right = 16
@@ -49,9 +66,6 @@ font_data = ExtResource( 1 )
 [sub_resource type="StyleBoxTexture" id=25]
 texture = ExtResource( 2 )
 region_rect = Rect2( 0, 0, 512, 443 )
-
-[sub_resource type="StyleBoxFlat" id=19]
-bg_color = Color( 0, 0, 0, 0.498039 )
 
 [sub_resource type="StyleBoxFlat" id=23]
 content_margin_left = 8.0
@@ -92,6 +106,51 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 mouse_filter = 2
 
+[node name="CardFront" type="Control" parent="MyControl"]
+margin_left = 72.0
+margin_top = -108.0
+margin_right = 216.0
+margin_bottom = 108.0
+rect_min_size = Vector2( 144, 216 )
+rect_pivot_offset = Vector2( 72, 108 )
+rect_clip_content = true
+mouse_filter = 2
+
+[node name="Picture" type="TextureRect" parent="MyControl/CardFront"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 7.0
+margin_top = 8.0
+margin_right = -7.0
+margin_bottom = -24.0
+mouse_filter = 2
+expand = true
+stretch_mode = 7
+
+[node name="Frame" type="TextureRect" parent="MyControl/CardFront"]
+self_modulate = Color( 1, 0, 0, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource( 6 )
+stretch_mode = 6
+
+[node name="Name" type="Label" parent="MyControl/CardFront"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 7.0
+margin_top = -24.0
+margin_right = -7.0
+margin_bottom = -8.0
+rect_pivot_offset = Vector2( 65, 8 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "Card Name"
+align = 1
+valign = 1
+max_lines_visible = 1
+
 [node name="NextBuf" type="Label" parent="MyControl"]
 anchor_left = 0.5
 anchor_top = 0.5
@@ -107,28 +166,29 @@ text = "力+2 "
 valign = 1
 clip_text = true
 
-[node name="Picture" type="TextureRect" parent="MyControl"]
+[node name="StatePanel" type="Panel" parent="MyControl"]
+visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 margin_left = 72.0
-margin_top = -108.0
-margin_right = 224.0
-margin_bottom = 108.0
+margin_top = 16.0
+margin_right = 216.0
+margin_bottom = 104.0
 mouse_filter = 2
-expand = true
-stretch_mode = 7
+custom_styles/panel = SubResource( 19 )
 
 [node name="TotalPower" type="Label" parent="MyControl"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = 4.0
-margin_top = -32.0
-margin_right = 68.0
-margin_bottom = 32.0
+margin_left = 8.0
+margin_top = -104.0
+margin_right = 72.0
+margin_bottom = -40.0
+rect_pivot_offset = Vector2( 32, 32 )
 custom_fonts/font = SubResource( 11 )
 custom_styles/normal = SubResource( 12 )
 text = "3"
@@ -141,26 +201,14 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 margin_left = 24.0
-margin_top = 40.0
+margin_top = -40.0
 margin_right = 64.0
-margin_bottom = 80.0
+rect_pivot_offset = Vector2( 20, 20 )
 custom_fonts/font = SubResource( 17 )
 custom_styles/normal = SubResource( 25 )
 text = "1"
 align = 1
 valign = 1
-
-[node name="StatePanel" type="Panel" parent="MyControl"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = 72.0
-margin_top = 16.0
-margin_right = 224.0
-margin_bottom = 104.0
-mouse_filter = 2
-custom_styles/panel = SubResource( 19 )
 
 [node name="SkillContainer" type="PanelContainer" parent="MyControl"]
 margin_left = 72.0
@@ -173,7 +221,7 @@ custom_styles/panel = SubResource( 23 )
 margin_left = 8.0
 margin_top = 8.0
 margin_right = 312.0
-margin_bottom = 40.0
+margin_bottom = 160.0
 mouse_filter = 2
 theme = SubResource( 21 )
 custom_constants/separation = 8
@@ -181,12 +229,74 @@ custom_constants/separation = 8
 [node name="CombatSkillLine" parent="MyControl/SkillContainer/SkillList" instance=ExtResource( 3 )]
 margin_right = 304.0
 
+[node name="CombatSkillLine2" parent="MyControl/SkillContainer/SkillList" instance=ExtResource( 3 )]
+margin_top = 40.0
+margin_right = 304.0
+margin_bottom = 72.0
+
+[node name="CombatSkillLine3" parent="MyControl/SkillContainer/SkillList" instance=ExtResource( 3 )]
+margin_top = 80.0
+margin_right = 304.0
+margin_bottom = 112.0
+
+[node name="CombatSkillLine4" parent="MyControl/SkillContainer/SkillList" instance=ExtResource( 3 )]
+margin_top = 120.0
+margin_right = 304.0
+margin_bottom = 152.0
+
 [node name="RivalControl" type="Control" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 mouse_filter = 2
+
+[node name="CardFront" type="Control" parent="RivalControl"]
+margin_left = -216.0
+margin_top = -108.0
+margin_right = -72.0
+margin_bottom = 108.0
+rect_min_size = Vector2( 144, 216 )
+rect_rotation = 180.0
+rect_pivot_offset = Vector2( 72, 108 )
+rect_clip_content = true
+mouse_filter = 2
+
+[node name="Picture" type="TextureRect" parent="RivalControl/CardFront"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 7.0
+margin_top = 8.0
+margin_right = -7.0
+margin_bottom = -24.0
+mouse_filter = 2
+expand = true
+stretch_mode = 7
+
+[node name="Frame" type="TextureRect" parent="RivalControl/CardFront"]
+self_modulate = Color( 1, 0, 0, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource( 6 )
+stretch_mode = 6
+
+[node name="Name" type="Label" parent="RivalControl/CardFront"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 7.0
+margin_top = -24.0
+margin_right = -7.0
+margin_bottom = -8.0
+rect_rotation = 180.0
+rect_pivot_offset = Vector2( 65, 8 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "Card Name"
+align = 1
+valign = 1
+max_lines_visible = 1
 
 [node name="NextBuf" type="Label" parent="RivalControl"]
 anchor_left = 0.5
@@ -202,18 +312,18 @@ text = "力+2 "
 align = 2
 valign = 1
 
-[node name="Picture" type="TextureRect" parent="RivalControl"]
+[node name="StatePanel" type="Panel" parent="RivalControl"]
+visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -224.0
-margin_top = -108.0
+margin_left = -216.0
+margin_top = -104.0
 margin_right = -72.0
-margin_bottom = 108.0
+margin_bottom = -16.0
 mouse_filter = 2
-expand = true
-stretch_mode = 7
+custom_styles/panel = SubResource( 19 )
 
 [node name="TotalHit" type="Label" parent="RivalControl"]
 anchor_left = 0.5
@@ -221,9 +331,8 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 margin_left = -64.0
-margin_top = -80.0
 margin_right = -24.0
-margin_bottom = -40.0
+margin_bottom = 40.0
 custom_fonts/font = SubResource( 26 )
 custom_styles/normal = SubResource( 27 )
 text = "1"
@@ -235,27 +344,16 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -68.0
-margin_top = -32.0
-margin_right = -4.0
-margin_bottom = 32.0
+margin_left = -72.0
+margin_top = 40.0
+margin_right = -8.0
+margin_bottom = 104.0
+rect_pivot_offset = Vector2( 32, 32 )
 custom_fonts/font = SubResource( 11 )
 custom_styles/normal = SubResource( 12 )
 text = "3"
 align = 1
 valign = 1
-
-[node name="StatePanel2" type="Panel" parent="RivalControl"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -224.0
-margin_top = -104.0
-margin_right = -72.0
-margin_bottom = -16.0
-mouse_filter = 2
-custom_styles/panel = SubResource( 19 )
 
 [node name="SkillContainer" type="PanelContainer" parent="RivalControl"]
 margin_left = -392.0
@@ -270,10 +368,25 @@ custom_styles/panel = SubResource( 23 )
 margin_left = 8.0
 margin_top = 8.0
 margin_right = 312.0
-margin_bottom = 40.0
+margin_bottom = 160.0
 mouse_filter = 2
 theme = SubResource( 21 )
 custom_constants/separation = 8
 
 [node name="CombatSkillLine" parent="RivalControl/SkillContainer/SkillList" instance=ExtResource( 3 )]
 margin_right = 304.0
+
+[node name="CombatSkillLine2" parent="RivalControl/SkillContainer/SkillList" instance=ExtResource( 3 )]
+margin_top = 40.0
+margin_right = 304.0
+margin_bottom = 72.0
+
+[node name="CombatSkillLine3" parent="RivalControl/SkillContainer/SkillList" instance=ExtResource( 3 )]
+margin_top = 80.0
+margin_right = 304.0
+margin_bottom = 112.0
+
+[node name="CombatSkillLine4" parent="RivalControl/SkillContainer/SkillList" instance=ExtResource( 3 )]
+margin_top = 120.0
+margin_right = 304.0
+margin_bottom = 152.0

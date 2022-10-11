@@ -13,7 +13,7 @@ enum Place{
 var id_in_deck:int
 var place : int
 
-var front : RawCard = null
+var front : CardFront = null
 
 var affected := Affected.new()
 class Affected:
@@ -22,11 +22,6 @@ class Affected:
 	var damage : int = 0
 	var rush : int = 0
 
-
-const skillline = preload("skill_line.tscn")
-
-const format_pattern := ["  %s","[center]%s[/center]","[right]%s    [/right]"]
-const rotate_format_pattern := ["[right]%s   [/right]","[center]%s[/center]","   %s"]
 
 func initialize_card(id:int,cd : CardData,rotate := false) -> Card:
 	id_in_deck = id

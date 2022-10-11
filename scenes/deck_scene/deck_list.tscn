@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://scenes/deck_scene/deck_list.gd" type="Script" id=1]
-[ext_resource path="res://scenes/card/raw_card.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/card/card_front.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/card/large_card_view.tscn" type="PackedScene" id=3]
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=4]
 

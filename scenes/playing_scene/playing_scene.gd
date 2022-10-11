@@ -29,8 +29,9 @@ var phase : int = IGameServer.Phase.COMBAT
 var myself : PlayingPlayer
 var rival : PlayingPlayer
 
+var combat_director : CombatDirector = CombatDirector.new()
+
 func _ready():
-	$CombatLayer/CombatOverlay.visible = false
 	
 	var cc := Global.card_catalog
 	
@@ -82,6 +83,9 @@ func _ready():
 			rival_stack_count,
 			rival_life)
 	
+	combat_director.initialize(myself,rival,$CombatLayer/CombatOverlay,$BGLayer/PowerBalance)
+	$CombatLayer/CombatOverlay.visible = false
+	
 	game_server._send_ready()
 	
 
@@ -108,7 +112,7 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData,_situatio
 	rival.play(data.rival.hand_select,data.rival.hand_indexes,tween)
 	yield(tween,"finished")
 
-	yield(combat_overlay.perform(myself,rival),"completed")
+	yield(combat_director.perform(self),"completed")
 
 	tween = create_tween()
 	myself.play_end(data.myself.draw_indexes,tween)

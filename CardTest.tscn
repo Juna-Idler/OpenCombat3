@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://scenes/playing_scene/combat_skill_line.tscn" type="PackedScene" id=1]
 [ext_resource path="res://CardTest.gd" type="Script" id=2]
+[ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=3]
 
 [sub_resource type="StyleBoxFlat" id=1]
 draw_center = false
@@ -22,6 +23,20 @@ content_margin_right = 8.0
 content_margin_top = 8.0
 content_margin_bottom = 8.0
 bg_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 32
+font_data = ExtResource( 3 )
+
+[sub_resource type="StyleBoxFlat" id=4]
+content_margin_left = 8.0
+content_margin_right = 8.0
+bg_color = Color( 1, 0, 0, 0.462745 )
+
+[sub_resource type="StyleBoxFlat" id=5]
+content_margin_left = 8.0
+content_margin_right = 8.0
+bg_color = Color( 0, 0, 1, 0.45098 )
 
 [node name="Node" type="Node"]
 script = ExtResource( 2 )
@@ -80,3 +95,70 @@ margin_bottom = 112.0
 rect_min_size = Vector2( 0, 32 )
 
 [node name="CombatSkillLine" parent="MarginContainer/VBoxContainer" instance=ExtResource( 1 )]
+margin_top = 120.0
+margin_bottom = 152.0
+
+[node name="HSplitContainer" type="HSplitContainer" parent="."]
+margin_left = 104.0
+margin_top = 336.0
+margin_right = 248.0
+margin_bottom = 386.0
+custom_constants/separation = 8
+dragger_visibility = 2
+
+[node name="ColorRect" type="Label" parent="HSplitContainer"]
+margin_right = 72.0
+margin_bottom = 50.0
+size_flags_horizontal = 3
+size_flags_vertical = 5
+custom_fonts/font = SubResource( 3 )
+custom_styles/normal = SubResource( 4 )
+text = "3"
+valign = 1
+max_lines_visible = 1
+
+[node name="ColorRect2" type="Label" parent="HSplitContainer"]
+margin_left = 72.0
+margin_right = 144.0
+margin_bottom = 50.0
+size_flags_horizontal = 3
+size_flags_vertical = 5
+custom_fonts/font = SubResource( 3 )
+custom_styles/normal = SubResource( 5 )
+text = "3"
+align = 2
+valign = 1
+max_lines_visible = 1
+
+[node name="ColorRect3" type="ColorRect" parent="."]
+margin_left = 92.0
+margin_top = 336.0
+margin_right = 100.0
+margin_bottom = 392.0
+rect_min_size = Vector2( 8, 0 )
+color = Color( 0, 0, 0, 1 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_left = 296.0
+margin_top = 280.0
+margin_right = 440.0
+margin_bottom = 392.0
+custom_constants/separation = 0
+alignment = 1
+
+[node name="ColorRect" type="ColorRect" parent="HBoxContainer"]
+margin_right = 72.0
+margin_bottom = 112.0
+rect_min_size = Vector2( 50.5, 0 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color( 1, 0.333333, 0.333333, 1 )
+
+[node name="ColorRect2" type="ColorRect" parent="HBoxContainer"]
+margin_left = 72.0
+margin_right = 144.0
+margin_bottom = 112.0
+rect_min_size = Vector2( 50, 0 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color( 0.454902, 0, 1, 1 )

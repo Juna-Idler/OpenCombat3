@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scenes/card/card.gd" type="Script" id=1]
-[ext_resource path="res://scenes/card/raw_card.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/card/card_front.tscn" type="PackedScene" id=2]
 
 [sub_resource type="StyleBoxFlat" id=1]
 draw_center = false

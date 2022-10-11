@@ -1,7 +1,9 @@
 extends Control
 
+class_name CombatOverlay
 
 const CombatSkill = preload("./combat_skill_line.tscn")
+const RGB = [Color(0,0,0,0),Color(1,0,0),Color(0,0.7,0),Color(0,0,1)]
 
 onready var my_skills_list := $MyControl/SkillContainer/SkillList
 onready var rival_skills_list := $RivalControl/SkillContainer/SkillList
@@ -10,70 +12,50 @@ func _ready():
 	$RivalControl/SkillContainer/SkillList.rect_rotation = 180
 	pass
 
-
-func perform(myself : PlayingPlayer,rival : PlayingPlayer):
+func initialize(myself : PlayingPlayer,rival : PlayingPlayer):
 	var my_card := myself.deck_list[myself.playing_card_id] as Card
 	var rival_card := rival.deck_list[rival.playing_card_id] as Card
 	$MyControl/TotalPower.text = str(my_card.get_current_power())
 	$MyControl/TotalHit.text = str(my_card.get_current_hit())
-	$MyControl/Picture.texture = load("res://card_images/"+ my_card.front.data.image +".png")
-	
+	$MyControl/CardFront/Picture.texture = load("res://card_images/"+ my_card.front.data.image +".png")
+	$MyControl/CardFront/Name.text = my_card.front.data.name
+	$MyControl/CardFront/Frame.self_modulate = RGB[my_card.front.data.color]
+
 	$RivalControl/TotalPower.text = str(rival_card.get_current_power())
 	$RivalControl/TotalHit.text = str(rival_card.get_current_hit())
-	$RivalControl/Picture.texture = load("res://card_images/"+ rival_card.front.data.image +".png")
-	
+	$RivalControl/CardFront/Picture.texture = load("res://card_images/"+ rival_card.front.data.image +".png")
+	$RivalControl/CardFront/Name.text = rival_card.front.data.name
+	$RivalControl/CardFront/Frame.self_modulate = RGB[rival_card.front.data.color]
 
-	for c in my_skills_list.get_children():
-		my_skills_list.remove_child(c)
-		c.queue_free()
+	$MyControl/NextBuf.text = "力+" + str(myself.next_effect.power) if myself.next_effect.power != 0 else ""
+	$RivalControl/NextBuf.text = "力+" + str(rival.next_effect.power) if rival.next_effect.power != 0 else ""
 
-	
+	$MyControl/TotalPower.rect_scale = Vector2(1.0,1.0)
+	$RivalControl/TotalPower.rect_scale = Vector2(1.0,1.0)
+
+
 	if my_card.front.data.skills.empty():
 		$MyControl/SkillContainer.visible = false
 	else:
 		$MyControl/SkillContainer.visible = true
-		for s in my_card.front.data.skills:
-			var cs = CombatSkill.instance()
-			cs.initialize(s,false)
-			my_skills_list.add_child(cs)
+		for i in my_card.front.data.skills.size():
+			var cs := my_skills_list.get_children()[i] as CombatSkillLine
+			cs.initialize(my_card.front.data.skills[i],false)
+			cs.show()
+		for i in range(my_card.front.data.skills.size(),4):
+			var cs := my_skills_list.get_children()[i] as CombatSkillLine
+			cs.hide()
 	
-	for c in rival_skills_list.get_children():
-		rival_skills_list.remove_child(c)
-		c.queue_free()
-
 	if rival_card.front.data.skills.empty():
 		$RivalControl/SkillContainer.visible = false
 	else:
 		$RivalControl/SkillContainer.visible = true
-		for s in rival_card.front.data.skills:
-			var cs = CombatSkill.instance()
-			cs.initialize(s,true)
-			rival_skills_list.add_child(cs)
-	
-	
-	modulate = Color(1,1,1,0)
-	visible = true
-	var tween := create_tween()
-	tween.chain()
-	tween.tween_property(self,"modulate:a",1.0,0.5)
-	
-	
-	for i in my_card.front.data.skills.size():
-		my_card.front.data.skills[i]
-		var csl := my_skills_list.get_children()[i] as CombatSkillLine
-		tween.tween_callback(csl,"highlight_flash")
+		for i in rival_card.front.data.skills.size():
+			var cs = rival_skills_list.get_children()[i] as CombatSkillLine
+			cs.initialize(rival_card.front.data.skills[i],true)
+			cs.show()
+		for i in range(rival_card.front.data.skills.size(),4):
+			var cs := rival_skills_list.get_children()[i] as CombatSkillLine
+			cs.hide()
 
-	for i in rival_card.front.data.skills.size():
-		rival_card.front.data.skills[i]
-		var csl := rival_skills_list.get_children()[i] as CombatSkillLine
-		tween.tween_callback(csl,"highlight_flash")
-
-#	tween.tween_callback()
-	
-	tween.tween_interval(1)
-	tween.tween_property(self,"modulate:a",0.0,0.5)
-
-	yield(tween,"finished")
-	
-	visible = false
 
