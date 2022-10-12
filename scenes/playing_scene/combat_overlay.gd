@@ -58,4 +58,12 @@ func initialize(myself : PlayingPlayer,rival : PlayingPlayer):
 			var cs := rival_skills_list.get_children()[i] as CombatSkillLine
 			cs.hide()
 
+func set_label_text(node : Label,text : String):
+	node.text =  text
+
+
+func clear_next_buf():
+	$MyControl/NextBuf.text =  ""
+	$RivalControl/NextBuf.text = ""
+	
 

@@ -100,7 +100,7 @@ class PlayerData:
 	func get_life() -> int:
 		return _life
 		
-	func play_combat_card(i : int) -> PlayerCard:
+	func combat_start(i : int) -> PlayerCard:
 		select = i
 		draw_indexes.clear()
 		for c in deck_list:
@@ -110,10 +110,12 @@ class PlayerData:
 		select_card.affected.add_other(next_effect)
 		next_effect.reset()
 		return select_card
-
-	func combat_end() -> void:
+		
+	func combat_fix_damage() -> void:
 		var damage := battle_damage + select_card.affected.damage
 		battle_damage = 0 if damage < 0 else damage
+
+	func combat_end() -> void:
 		played_indexes.push_back(select_card.id_in_deck)
 
 		

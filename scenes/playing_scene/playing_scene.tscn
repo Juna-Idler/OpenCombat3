@@ -268,7 +268,6 @@ max_lines_visible = 1
 [node name="CombatLayer" type="CanvasLayer" parent="."]
 
 [node name="CombatOverlay" parent="CombatLayer" instance=ExtResource( 4 )]
-visible = false
 
 [node name="ListLayer" type="CanvasLayer" parent="."]
 

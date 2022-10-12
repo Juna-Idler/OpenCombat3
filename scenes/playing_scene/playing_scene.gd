@@ -83,7 +83,10 @@ func _ready():
 			rival_stack_count,
 			rival_life)
 	
-	combat_director.initialize(myself,rival,$CombatLayer/CombatOverlay,$BGLayer/PowerBalance)
+	combat_director.initialize(myself,rival,
+			combat_overlay.my_skills_list,
+			combat_overlay.rival_skills_list,
+			$CombatLayer/CombatOverlay,$BGLayer/PowerBalance)
 	$CombatLayer/CombatOverlay.visible = false
 	
 	game_server._send_ready()
@@ -108,8 +111,8 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData,_situatio
 	var rival_playing_card := rival.deck_list[rival_select_id] as Card
 
 	var tween := create_tween()
-	myself.play(data.myself.hand_select,data.myself.hand_indexes,tween)
-	rival.play(data.rival.hand_select,data.rival.hand_indexes,tween)
+	myself.play(data.myself.hand_select,data.myself.hand_indexes,data.myself.damage,tween)
+	rival.play(data.rival.hand_select,data.rival.hand_indexes,data.rival.damage,tween)
 	yield(tween,"finished")
 
 	yield(combat_director.perform(self),"completed")

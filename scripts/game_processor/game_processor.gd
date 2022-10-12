@@ -54,8 +54,8 @@ func combat(index1 : int,index2 : int) -> void:
 	var link2 = player2.get_lastplayed_card()
 	var link1color = 0 if link1 == null else link1.data.color
 	var link2color = 0 if link2 == null else link2.data.color
-	var combatant1 = player1.play_combat_card(index1)
-	var combatant2 = player2.play_combat_card(index2)
+	var combatant1 = player1.combat_start(index1)
+	var combatant2 = player2.combat_start(index2)
 
 	_skill_processor.process_before(combatant1.data.skills,
 			combatant2.data.color,link1color,player1,player2)
@@ -78,16 +78,21 @@ func combat(index1 : int,index2 : int) -> void:
 	_skill_processor.process_after(combatant2.data.skills,
 			combatant1.data.color,link2color,-situation,player2,player1)
 
-	player1.combat_end()
-	player2.combat_end()
+	player1.combat_fix_damage()
+	player2.combat_fix_damage()
+
+	if player1.is_fatal() or player2.is_fatal():
+		phase = -phase
+		return
 
 	_skill_processor.process_end(combatant1.data.skills,
 			combatant2.data.color,link1color,situation,player1,player2)
 	_skill_processor.process_end(combatant2.data.skills,
 			combatant1.data.color,link2color,-situation,player2,player1)
 
-	if player1.is_fatal() or player2.is_fatal():
-		phase = -phase
+	player1.combat_end()
+	player2.combat_end()
+
 
 	player1.supply()
 	player2.supply()

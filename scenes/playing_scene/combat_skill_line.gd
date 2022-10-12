@@ -9,13 +9,14 @@ const RGB = [Color(0,0,0,0),Color(0.9,0,0),Color(0,0.7,0),Color(0,0,1)]
 func _ready():
 	pass
 
-func highlight_flash():
+func highlight_flash(color : Color,in_time : float,duration : float,end_time : float):
+	$Highlight.modulate = color
 	var tween := create_tween()
 	tween.set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
-	tween.tween_property($Highlight,"modulate:a",1.0,0.1)
-	tween.chain()
+	tween.tween_property($Highlight,"modulate:a",1.0,in_time)
+	tween.tween_interval(duration)
 	tween.set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN)
-	tween.tween_property($Highlight,"modulate:a",0.0,0.5)
+	tween.tween_property($Highlight,"modulate:a",0.0,end_time)
 
 func initialize(skill,rotate:bool):
 	$Highlight.modulate.a = 0

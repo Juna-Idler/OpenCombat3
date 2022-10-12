@@ -14,6 +14,7 @@ var life : int = 0
 var next_effect := Card.Affected.new()
 
 var playing_card_id : int = -1
+var damage : int = 0
 
 var player_name : String
 
@@ -24,6 +25,10 @@ var played_pos : Vector2
 var discard_pos : Vector2
 var stack_count_label : Label
 var life_label : Label
+
+func get_playing_card() -> Card:
+	return deck_list[playing_card_id]
+
 
 func _init(dl:Array,
 		name : String,
@@ -69,13 +74,14 @@ func set_hand(new_hand_indexes:Array):
 	hand_area.move_card(1)
 
 
-func play(hand_select : int,new_hand : Array,tween : SceneTreeTween):
+func play(hand_select : int,new_hand : Array,d : int,tween : SceneTreeTween):
 	hand = new_hand
 	playing_card_id = hand[hand_select]
 	hand.remove(hand_select)
 	var playing_card := deck_list[playing_card_id] as Card
 	life -= playing_card.get_card_data().level
 	life_label.text = str(life)
+	damage = d
 	tween.parallel()
 	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 	tween.tween_property(playing_card,"global_position",combat_pos,0.5)

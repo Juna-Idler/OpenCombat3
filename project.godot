@@ -49,6 +49,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scenes/playing_scene/combat_power_balance.gd"
 }, {
+"base": "Reference",
+"class": "CombatSkillEffect",
+"language": "GDScript",
+"path": "res://scenes/playing_scene/combat_skill_effect.gd"
+}, {
 "base": "Control",
 "class": "CombatSkillLine",
 "language": "GDScript",
@@ -105,6 +110,11 @@ _global_script_classes=[ {
 "path": "res://addons/custom_resource/json_resource_saver.gd"
 }, {
 "base": "Reference",
+"class": "NamedSkillPerformer",
+"language": "GDScript",
+"path": "res://scenes/playing_scene/combat_named_skill_performer.gd"
+}, {
+"base": "Reference",
 "class": "NamedSkillProcessor",
 "language": "GDScript",
 "path": "res://scripts/game_processor/named_skill_processor.gd"
@@ -113,6 +123,11 @@ _global_script_classes=[ {
 "class": "NormalSkillEffects",
 "language": "GDScript",
 "path": "res://scripts/game_data/skill_effects.gd"
+}, {
+"base": "Reference",
+"class": "NormalSkillPerformer",
+"language": "GDScript",
+"path": "res://scenes/playing_scene/combat_normal_skill_performer.gd"
 }, {
 "base": "Object",
 "class": "NormalSkillProcessor",
@@ -158,6 +173,7 @@ _global_script_class_icons={
 "CombatDirector": "",
 "CombatOverlay": "",
 "CombatPowerBalance": "",
+"CombatSkillEffect": "",
 "CombatSkillLine": "",
 "CustomResFormatLoader": "",
 "CustomResFormatSaver": "",
@@ -169,8 +185,10 @@ _global_script_class_icons={
 "JSONResource": "",
 "JSONResourceLoader": "",
 "JsonResourceSaver": "",
+"NamedSkillPerformer": "",
 "NamedSkillProcessor": "",
 "NormalSkillEffects": "",
+"NormalSkillPerformer": "",
 "NormalSkillProcessor": "",
 "OfflineServer": "",
 "PlainTextResource": "",

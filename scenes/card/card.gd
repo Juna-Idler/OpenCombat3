@@ -21,6 +21,12 @@ class Affected:
 	var hit : int = 0
 	var damage : int = 0
 	var rush : int = 0
+	
+	func add(other : Affected):
+		power += other.power
+		hit += other.hit
+		damage += other.damage
+		rush += other.rush
 
 
 func initialize_card(id:int,cd : CardData,rotate := false) -> Card:
