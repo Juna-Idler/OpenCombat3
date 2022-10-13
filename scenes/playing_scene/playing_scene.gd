@@ -84,10 +84,9 @@ func _ready():
 			rival_life)
 	
 	combat_director.initialize(myself,rival,
-			combat_overlay.my_skills_list,
-			combat_overlay.rival_skills_list,
-			$CombatLayer/CombatOverlay,$BGLayer/PowerBalance)
-	$CombatLayer/CombatOverlay.visible = false
+			combat_overlay,$BGLayer/PowerBalance,
+			$"%MyNextBuf",$"%RivalNextBuf")
+	combat_overlay.visible = false
 	
 	game_server._send_ready()
 	
@@ -135,13 +134,13 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData,_situatio
 	rival.next_effect.damage = data.rival.next_effect.damage
 	
 	if myself.next_effect.power != 0:
-		$TopUILayer/Control/MyNextBuf.text = "力+" + str(myself.next_effect.power)
+		$"%MyNextBuf".text = "力+" + str(myself.next_effect.power)
 	else:
-		$TopUILayer/Control/MyNextBuf.text = ""
+		$"%MyNextBuf".text = ""
 	if rival.next_effect.power != 0:
-		$TopUILayer/Control/RivalNextBuf.text = "力+" + str(rival.next_effect.power)
+		$"%RivalNextBuf".text = "力+" + str(rival.next_effect.power)
 	else:
-		$TopUILayer/Control/RivalNextBuf.text = ""
+		$"%RivalNextBuf".text = ""
 	
 	round_count = data.round_count
 	phase = data.next_phase

@@ -29,8 +29,10 @@ func move_center(in_time : float,duration : float,end_time : float):
 	tween.tween_property(self,"rect_global_position:y",360.0-16.0,in_time)\
 			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
 	tween.tween_interval(duration)
-	tween.tween_property(self,"rect_global_position:y",origin_y,end_time)\
-			.set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN)
+	tween.tween_property(self,"modulate:a",0.0,end_time)
+	tween.tween_property(self,"rect_global_position:y",origin_y,0)
+	tween.tween_property(self,"modulate:a",1.0,0.5)
+	
 
 func initialize(skill,vs_color:int,link_color:int,rotate:bool):
 	$Highlight.modulate.a = 0

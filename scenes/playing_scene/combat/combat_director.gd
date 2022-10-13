@@ -10,15 +10,24 @@ var power_balance : CombatPowerBalance
 var p1_skills_list : Node 
 var p2_skills_list : Node
 
+var p1_next_buf_label : Label
+var p2_next_buf_label : Label
+
+func set_next_buf_label(p1_text : String,p2_text : String):
+	p1_next_buf_label.text = p1_text
+	p2_next_buf_label.text = p2_text
+
 func initialize(p1 : PlayingPlayer,p2 : PlayingPlayer,
-		p1_slist,p2_slist,
-		ol : CombatOverlay,pb : CombatPowerBalance):
+		ol : CombatOverlay,pb : CombatPowerBalance,
+		p1_nbl : Label,p2_nbl : Label):
 	player1 = p1
 	player2 = p2
-	p1_skills_list = p1_slist
-	p2_skills_list = p2_slist
 	overlay = ol
 	power_balance = pb
+	p1_skills_list = overlay.get_node("MyControl/SkillContainer")
+	p2_skills_list = overlay.get_node("RivalControl/SkillContainer")
+	p1_next_buf_label = p1_nbl
+	p2_next_buf_label = p2_nbl
 
 
 func perform(node : Node):
@@ -54,7 +63,7 @@ func perform(node : Node):
 				[overlay.get_node("RivalControl/TotalPower"),str(p2_card.get_current_power())])
 		power_balance.set_power_tween(p1_card.get_current_power(),p2_card.get_current_power(),tween,0.3)
 
-	tween.tween_callback(overlay,"clear_next_buf")
+	tween.tween_callback(self,"set_next_buf_label",["",""])
 
  # 判定前タイミング
 	before_skills_effect(tween,p1_card.front.data.skills,

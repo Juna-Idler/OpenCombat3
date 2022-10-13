@@ -26,9 +26,6 @@ func initialize(myself : PlayingPlayer,rival : PlayingPlayer):
 	$RivalControl/CardFront/Name.text = rival_card.front.data.name
 	$RivalControl/CardFront/Frame.self_modulate = RGB[rival_card.front.data.color]
 
-	$MyControl/NextBuf.text = "力+" + str(myself.next_effect.power) if myself.next_effect.power != 0 else ""
-	$RivalControl/NextBuf.text = "力+" + str(rival.next_effect.power) if rival.next_effect.power != 0 else ""
-
 	$MyControl/TotalPower.rect_scale = Vector2(1.0,1.0)
 	$RivalControl/TotalPower.rect_scale = Vector2(1.0,1.0)
 
@@ -64,9 +61,4 @@ func initialize(myself : PlayingPlayer,rival : PlayingPlayer):
 func set_label_text(node : Label,text : String):
 	node.text =  text
 
-
-func clear_next_buf():
-	$MyControl/NextBuf.text =  ""
-	$RivalControl/NextBuf.text = ""
-	
 
