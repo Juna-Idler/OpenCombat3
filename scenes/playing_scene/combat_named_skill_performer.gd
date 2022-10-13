@@ -64,6 +64,7 @@ class Rush extends Skill:
 			var stability = skill.parameter + playing_card.affected.rush
 			if stability < rival.get_playing_card().get_current_hit():
 				return
+		tween.tween_interval(1.0)
 		var damage := int(playing_card.get_current_hit() + 1) / 2;
 #		rival.add_damage(damage)
 
@@ -91,6 +92,7 @@ class Charge extends Skill:
 #						myself.next_effect.damage += e.parameter
 #					NormalSkillEffects.Attribute.RUSH:
 #						myself.next_effect.rush += e.parameter
+			tween.tween_interval(1.0)
 			return
 		return
 

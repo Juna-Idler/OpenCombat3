@@ -4,6 +4,11 @@ class_name CombatSkillLine
 
 const RGB = [Color(0,0,0,0),Color(0.9,0,0),Color(0,0.7,0),Color(0,0,1)]
 
+const left_margin_left = 8
+const left_margin_right = 288
+
+const right_margin_left = 284
+const right_margin_right = 4
 
 
 func _ready():
@@ -17,6 +22,15 @@ func highlight_flash(color : Color,in_time : float,duration : float,end_time : f
 	tween.tween_interval(duration)
 	tween.set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN)
 	tween.tween_property($Highlight,"modulate:a",0.0,end_time)
+
+func move_center(in_time : float,duration : float,end_time : float):
+	var origin_y = rect_global_position.y
+	var tween := create_tween()
+	tween.tween_property(self,"rect_global_position:y",360.0-16.0,in_time)\
+			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_interval(duration)
+	tween.tween_property(self,"rect_global_position:y",origin_y,end_time)\
+			.set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN)
 
 func initialize(skill,rotate:bool):
 	$Highlight.modulate.a = 0
@@ -46,6 +60,16 @@ func initialize(skill,rotate:bool):
 		$Label.align = Label.ALIGN_CENTER
 		
 	if rotate:
-		$Label.rect_rotation = 180
+		$ColorRectLeft.margin_left = left_margin_right
+		$ColorRectLeft.margin_right = -left_margin_left
+		$ColorRectRight.margin_left = right_margin_right
+		$ColorRectRight.margin_right = -right_margin_left
+	else:
+		$ColorRectLeft.margin_left = left_margin_left
+		$ColorRectLeft.margin_right = -left_margin_right
+		$ColorRectRight.margin_left = right_margin_left
+		$ColorRectRight.margin_right = -right_margin_right
+
+
 
 

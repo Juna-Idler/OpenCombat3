@@ -5,11 +5,10 @@ class_name CombatOverlay
 const CombatSkill = preload("./combat_skill_line.tscn")
 const RGB = [Color(0,0,0,0),Color(1,0,0),Color(0,0.7,0),Color(0,0,1)]
 
-onready var my_skills_list := $MyControl/SkillContainer/SkillList
-onready var rival_skills_list := $RivalControl/SkillContainer/SkillList
+onready var my_skills_list := $MyControl/SkillContainer
+onready var rival_skills_list := $RivalControl/SkillContainer
 
 func _ready():
-	$RivalControl/SkillContainer/SkillList.rect_rotation = 180
 	pass
 
 func initialize(myself : PlayingPlayer,rival : PlayingPlayer):
@@ -35,9 +34,9 @@ func initialize(myself : PlayingPlayer,rival : PlayingPlayer):
 
 
 	if my_card.front.data.skills.empty():
-		$MyControl/SkillContainer.visible = false
+		my_skills_list.visible = false
 	else:
-		$MyControl/SkillContainer.visible = true
+		my_skills_list.visible = true
 		for i in my_card.front.data.skills.size():
 			var cs := my_skills_list.get_children()[i] as CombatSkillLine
 			cs.initialize(my_card.front.data.skills[i],false)
@@ -45,11 +44,12 @@ func initialize(myself : PlayingPlayer,rival : PlayingPlayer):
 		for i in range(my_card.front.data.skills.size(),4):
 			var cs := my_skills_list.get_children()[i] as CombatSkillLine
 			cs.hide()
+		my_skills_list.layout()
 	
 	if rival_card.front.data.skills.empty():
-		$RivalControl/SkillContainer.visible = false
+		rival_skills_list.visible = false
 	else:
-		$RivalControl/SkillContainer.visible = true
+		rival_skills_list.visible = true
 		for i in rival_card.front.data.skills.size():
 			var cs = rival_skills_list.get_children()[i] as CombatSkillLine
 			cs.initialize(rival_card.front.data.skills[i],true)
@@ -57,6 +57,7 @@ func initialize(myself : PlayingPlayer,rival : PlayingPlayer):
 		for i in range(rival_card.front.data.skills.size(),4):
 			var cs := rival_skills_list.get_children()[i] as CombatSkillLine
 			cs.hide()
+		rival_skills_list.layout()
 
 func set_label_text(node : Label,text : String):
 	node.text =  text

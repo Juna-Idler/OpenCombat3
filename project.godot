@@ -163,6 +163,11 @@ _global_script_classes=[ {
 "class": "SkillProcessor",
 "language": "GDScript",
 "path": "res://scripts/game_processor/skill_processor.gd"
+}, {
+"base": "Control",
+"class": "VBoxLayout",
+"language": "GDScript",
+"path": "res://scenes/ui/v_box_layout.gd"
 } ]
 _global_script_class_icons={
 "Card": "",
@@ -195,7 +200,8 @@ _global_script_class_icons={
 "PlayingPlayer": "",
 "ProcessorData": "",
 "SkillData": "",
-"SkillProcessor": ""
+"SkillProcessor": "",
+"VBoxLayout": ""
 }
 
 [application]

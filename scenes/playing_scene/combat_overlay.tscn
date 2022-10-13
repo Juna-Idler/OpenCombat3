@@ -1,9 +1,10 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=1]
 [ext_resource path="res://images/triangle.png" type="Texture" id=2]
 [ext_resource path="res://scenes/playing_scene/combat_skill_line.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/playing_scene/combat_overlay.gd" type="Script" id=4]
+[ext_resource path="res://scenes/ui/v_box_layout.gd" type="Script" id=5]
 [ext_resource path="res://scenes/card/card_frame.png" type="Texture" id=6]
 
 [sub_resource type="Gradient" id=14]
@@ -73,13 +74,6 @@ content_margin_right = 8.0
 content_margin_top = 8.0
 content_margin_bottom = 8.0
 bg_color = Color( 0, 0, 0, 0.752941 )
-
-[sub_resource type="DynamicFont" id=20]
-size = 20
-font_data = ExtResource( 1 )
-
-[sub_resource type="Theme" id=21]
-default_font = SubResource( 20 )
 
 [sub_resource type="DynamicFont" id=26]
 size = 24
@@ -210,39 +204,33 @@ text = "1"
 align = 1
 valign = 1
 
-[node name="SkillContainer" type="PanelContainer" parent="MyControl"]
+[node name="SkillContainer" type="Panel" parent="MyControl"]
 margin_left = 72.0
 margin_top = 120.0
 margin_right = 392.0
-margin_bottom = 136.0
+margin_bottom = 168.0
 custom_styles/panel = SubResource( 23 )
+script = ExtResource( 5 )
 
-[node name="SkillList" type="VBoxContainer" parent="MyControl/SkillContainer"]
+[node name="CombatSkillLine" parent="MyControl/SkillContainer" instance=ExtResource( 3 )]
 margin_left = 8.0
 margin_top = 8.0
-margin_right = 312.0
+margin_bottom = 40.0
+
+[node name="CombatSkillLine2" parent="MyControl/SkillContainer" instance=ExtResource( 3 )]
+margin_left = 8.0
+margin_top = 48.0
+margin_bottom = 80.0
+
+[node name="CombatSkillLine3" parent="MyControl/SkillContainer" instance=ExtResource( 3 )]
+margin_left = 8.0
+margin_top = 88.0
+margin_bottom = 120.0
+
+[node name="CombatSkillLine4" parent="MyControl/SkillContainer" instance=ExtResource( 3 )]
+margin_left = 8.0
+margin_top = 128.0
 margin_bottom = 160.0
-mouse_filter = 2
-theme = SubResource( 21 )
-custom_constants/separation = 8
-
-[node name="CombatSkillLine" parent="MyControl/SkillContainer/SkillList" instance=ExtResource( 3 )]
-margin_right = 304.0
-
-[node name="CombatSkillLine2" parent="MyControl/SkillContainer/SkillList" instance=ExtResource( 3 )]
-margin_top = 40.0
-margin_right = 304.0
-margin_bottom = 72.0
-
-[node name="CombatSkillLine3" parent="MyControl/SkillContainer/SkillList" instance=ExtResource( 3 )]
-margin_top = 80.0
-margin_right = 304.0
-margin_bottom = 112.0
-
-[node name="CombatSkillLine4" parent="MyControl/SkillContainer/SkillList" instance=ExtResource( 3 )]
-margin_top = 120.0
-margin_right = 304.0
-margin_bottom = 152.0
 
 [node name="RivalControl" type="Control" parent="."]
 anchor_left = 0.5
@@ -355,38 +343,32 @@ text = "3"
 align = 1
 valign = 1
 
-[node name="SkillContainer" type="PanelContainer" parent="RivalControl"]
+[node name="SkillContainer" type="Panel" parent="RivalControl"]
 margin_left = -392.0
 margin_top = -168.0
 margin_right = -72.0
 margin_bottom = -120.0
-rect_rotation = 180.0
-rect_pivot_offset = Vector2( 160, 24 )
+grow_vertical = 0
 custom_styles/panel = SubResource( 23 )
+script = ExtResource( 5 )
+reverse = true
 
-[node name="SkillList" type="VBoxContainer" parent="RivalControl/SkillContainer"]
+[node name="CombatSkillLine" parent="RivalControl/SkillContainer" instance=ExtResource( 3 )]
+margin_left = 8.0
+margin_top = -112.0
+margin_bottom = -80.0
+
+[node name="CombatSkillLine2" parent="RivalControl/SkillContainer" instance=ExtResource( 3 )]
+margin_left = 8.0
+margin_top = -72.0
+margin_bottom = -40.0
+
+[node name="CombatSkillLine3" parent="RivalControl/SkillContainer" instance=ExtResource( 3 )]
+margin_left = 8.0
+margin_top = -32.0
+margin_bottom = 0.0
+
+[node name="CombatSkillLine4" parent="RivalControl/SkillContainer" instance=ExtResource( 3 )]
 margin_left = 8.0
 margin_top = 8.0
-margin_right = 312.0
-margin_bottom = 160.0
-mouse_filter = 2
-theme = SubResource( 21 )
-custom_constants/separation = 8
-
-[node name="CombatSkillLine" parent="RivalControl/SkillContainer/SkillList" instance=ExtResource( 3 )]
-margin_right = 304.0
-
-[node name="CombatSkillLine2" parent="RivalControl/SkillContainer/SkillList" instance=ExtResource( 3 )]
-margin_top = 40.0
-margin_right = 304.0
-margin_bottom = 72.0
-
-[node name="CombatSkillLine3" parent="RivalControl/SkillContainer/SkillList" instance=ExtResource( 3 )]
-margin_top = 80.0
-margin_right = 304.0
-margin_bottom = 112.0
-
-[node name="CombatSkillLine4" parent="RivalControl/SkillContainer/SkillList" instance=ExtResource( 3 )]
-margin_top = 120.0
-margin_right = 304.0
-margin_bottom = 152.0
+margin_bottom = 40.0
