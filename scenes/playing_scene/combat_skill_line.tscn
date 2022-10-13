@@ -77,3 +77,9 @@ rect_min_size = Vector2( 24, 16 )
 rect_pivot_offset = Vector2( -128, 8 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
+
+[node name="Invalid" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.501961 )

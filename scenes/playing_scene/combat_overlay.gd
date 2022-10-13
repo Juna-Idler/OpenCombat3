@@ -39,7 +39,8 @@ func initialize(myself : PlayingPlayer,rival : PlayingPlayer):
 		my_skills_list.visible = true
 		for i in my_card.front.data.skills.size():
 			var cs := my_skills_list.get_children()[i] as CombatSkillLine
-			cs.initialize(my_card.front.data.skills[i],false)
+			cs.initialize(my_card.front.data.skills[i],
+					rival_card.front.data.color,myself.get_link_color(),false)
 			cs.show()
 		for i in range(my_card.front.data.skills.size(),4):
 			var cs := my_skills_list.get_children()[i] as CombatSkillLine
@@ -52,7 +53,8 @@ func initialize(myself : PlayingPlayer,rival : PlayingPlayer):
 		rival_skills_list.visible = true
 		for i in rival_card.front.data.skills.size():
 			var cs = rival_skills_list.get_children()[i] as CombatSkillLine
-			cs.initialize(rival_card.front.data.skills[i],true)
+			cs.initialize(rival_card.front.data.skills[i],
+					my_card.front.data.color,rival.get_link_color(),true)
 			cs.show()
 		for i in range(rival_card.front.data.skills.size(),4):
 			var cs := rival_skills_list.get_children()[i] as CombatSkillLine

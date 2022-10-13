@@ -32,7 +32,7 @@ func move_center(in_time : float,duration : float,end_time : float):
 	tween.tween_property(self,"rect_global_position:y",origin_y,end_time)\
 			.set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN)
 
-func initialize(skill,rotate:bool):
+func initialize(skill,vs_color:int,link_color:int,rotate:bool):
 	$Highlight.modulate.a = 0
 	var condition : int = 0
 	if skill is SkillData.NormalSkill:
@@ -47,17 +47,22 @@ func initialize(skill,rotate:bool):
 	if condition & SkillData.ColorCondition.VS_FLAG:
 		$ColorRectRight.visible = false
 		$ColorRectLeft.visible = true
-		$ColorRectLeft.color = RGB[condition & SkillData.ColorCondition.COLOR_BITS]
+		var color : int = condition & SkillData.ColorCondition.COLOR_BITS
+		$ColorRectLeft.color = RGB[color]
 		$Label.align = Label.ALIGN_RIGHT if rotate else Label.ALIGN_LEFT
+		$Invalid.visible = (color != vs_color)
 	elif condition & SkillData.ColorCondition.LINK_FLAG:
 		$ColorRectLeft.visible = false
 		$ColorRectRight.visible = true
-		$ColorRectRight.color = RGB[condition & SkillData.ColorCondition.COLOR_BITS]
+		var color : int = condition & SkillData.ColorCondition.COLOR_BITS
+		$ColorRectRight.color = RGB[color]
 		$Label.align = Label.ALIGN_LEFT if rotate else Label.ALIGN_RIGHT
+		$Invalid.visible = (color != link_color)
 	else:
 		$ColorRectLeft.visible = false
 		$ColorRectRight.visible = false
 		$Label.align = Label.ALIGN_CENTER
+		$Invalid.visible = false
 		
 	if rotate:
 		$ColorRectLeft.margin_left = left_margin_right

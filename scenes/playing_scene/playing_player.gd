@@ -28,6 +28,11 @@ var life_label : Label
 
 func get_playing_card() -> Card:
 	return deck_list[playing_card_id]
+	
+func get_link_color() -> int:
+	if played.empty():
+		return 0
+	return (deck_list[played.back()] as Card).front.data.color
 
 
 func _init(dl:Array,
