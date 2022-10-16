@@ -1,10 +1,10 @@
 
-class_name NormalSkillEffects
+class_name SkillEffects
 
 enum Attribute {
 	POWER = 1,
 	HIT,
-	DAMAGE,
+	BLOCK,
 	RUSH,
 }
 
@@ -20,8 +20,8 @@ class Effect:
 			attribute = Attribute.POWER
 		if text.find("打点") == 0:
 			attribute = Attribute.HIT
-		if text.find("損傷") == 0:
-			attribute = Attribute.DAMAGE
+		if text.find("防壁") == 0:
+			attribute = Attribute.BLOCK
 		if text.find("突撃") == 0:
 			attribute = Attribute.RUSH
 		parameter = int(text.substr(param_index))

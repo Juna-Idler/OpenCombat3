@@ -123,15 +123,8 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData,_situatio
 	myself.update_affected(data.myself.cards_update)
 	rival.update_affected(data.rival.cards_update)
 	
-	myself.next_effect.power = data.myself.next_effect.power
-	myself.next_effect.hit = data.myself.next_effect.hit
-	myself.next_effect.rush = data.myself.next_effect.rush
-	myself.next_effect.damage = data.myself.next_effect.damage
-	
-	rival.next_effect.power = data.rival.next_effect.power
-	rival.next_effect.hit = data.rival.next_effect.hit
-	rival.next_effect.rush = data.rival.next_effect.rush
-	rival.next_effect.damage = data.rival.next_effect.damage
+	myself.set_next_effect(data.myself.next_effect)
+	rival.set_next_effect(data.rival.next_effect)
 	
 	if myself.next_effect.power != 0:
 		$"%MyNextBuf".text = "力+" + str(myself.next_effect.power)

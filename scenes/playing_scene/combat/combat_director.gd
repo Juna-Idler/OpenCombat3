@@ -112,33 +112,18 @@ func before_skills_effect(tween : SceneTreeTween,skills : Array,
 		vs_color : int,link_color : int,
 		myself : PlayingPlayer,rival : PlayingPlayer):
 	for i in skills.size():
-		var s = skills[i]
+		var s := skills[i] as SkillData.NamedSkill
 		var csl := my_control.get_node("SkillContainer").get_children()[i] as CombatSkillLine
-		if s is SkillData.NormalSkill:
-			var p1 = myself.get_playing_card().get_current_power()
-			var p2 = rival.get_playing_card().get_current_power()
-			if NormalSkillPerformer.before(tween,s,vs_color,link_color,myself,rival):
-				tween.tween_callback(csl,"highlight_flash",[Color.blue,0.1,0.3,0.3])
-				tween.tween_callback(csl,"move_center",[0.3,0.3,0.3])
-				var np1 = myself.get_playing_card().get_current_power()
-				var np2 = rival.get_playing_card().get_current_power()
-				if p1 != np1 or p2 != np2:
-					var my_tp = my_control.get_node("TotalPower")
-					var rival_tp = rival_control.get_node("TotalPower")
-					tween.tween_callback(overlay,"set_label_text",[my_tp,str(myself.get_playing_card().get_current_power())])
-					tween.tween_callback(overlay,"set_label_text",[rival_tp,str(rival.get_playing_card().get_current_power())])
-				tween.tween_interval(1.0)
-		elif s is SkillData.NamedSkill:
-			var skill := named_skills.get_skill(s.id)
-			var time := skill._test_before(s,vs_color,link_color,myself,rival)
-			if time > 0.0:
-				tween.tween_callback(csl,"highlight_flash",[Color.blue,0.1,time - 0.4,0.3])
-				tween.tween_callback(csl,"move_center",[0.1,time - 0.4,0.3])
-				skill._before(tween,s,vs_color,link_color,myself,rival)
-			elif time < 0.0:
-				time = 0.3 if -time < 0.3 else -time
-				tween.tween_callback(csl,"highlight_flash",[Color.red,0.1,time - 0.2,0.1])
-				tween.tween_interval(time)
+		var skill := named_skills.get_skill(s.data.id)
+		var time := skill._test_before(s,vs_color,link_color,myself,rival)
+		if time > 0.0:
+			tween.tween_callback(csl,"highlight_flash",[Color.blue,0.1,time - 0.4,0.3])
+			tween.tween_callback(csl,"move_center",[0.1,time - 0.4,0.3])
+			skill._before(tween,s,vs_color,link_color,myself,rival)
+		elif time < 0.0:
+			time = 0.3 if -time < 0.3 else -time
+			tween.tween_callback(csl,"highlight_flash",[Color.red,0.1,time - 0.2,0.1])
+			tween.tween_interval(time)
 			
 
 
@@ -147,24 +132,18 @@ func after_skills_effect(tween : SceneTreeTween,skills : Array,
 		vs_color : int,link_color : int,situation : int,
 		myself : PlayingPlayer,rival : PlayingPlayer):
 	for i in skills.size():
-		var s = skills[i]
+		var s := skills[i] as SkillData.NamedSkill
 		var csl := my_control.get_node("SkillContainer").get_children()[i] as CombatSkillLine
-		if s is SkillData.NormalSkill:
-			if NormalSkillPerformer.after(tween,s,vs_color,link_color,situation,myself,rival):
-				tween.tween_callback(csl,"highlight_flash",[Color.blue,0.1,0.6,0.3])
-				tween.tween_callback(csl,"move_center",[0.3,0.3,0.3])
-				tween.tween_interval(1.0)
-		elif s is SkillData.NamedSkill:
-			var skill := named_skills.get_skill(s.id)
-			var time := skill._test_after(s,vs_color,link_color,situation,myself,rival)
-			if time > 0.0:
-				tween.tween_callback(csl,"highlight_flash",[Color.blue,0.1,time - 0.4,0.3])
-				tween.tween_callback(csl,"move_center",[0.3,time - 0.6,0.3])
-				skill._after(tween,s,vs_color,link_color,situation,myself,rival)
-			elif time < 0.0:
-				time = 0.3 if -time < 0.3 else -time
-				tween.tween_callback(csl,"highlight_flash",[Color.red,0.1,time - 0.2,0.1])
-				tween.tween_interval(time)
+		var skill := named_skills.get_skill(s.data.id)
+		var time := skill._test_after(s,vs_color,link_color,situation,myself,rival)
+		if time > 0.0:
+			tween.tween_callback(csl,"highlight_flash",[Color.blue,0.1,time - 0.4,0.3])
+			tween.tween_callback(csl,"move_center",[0.3,time - 0.6,0.3])
+			skill._after(tween,s,vs_color,link_color,situation,myself,rival)
+		elif time < 0.0:
+			time = 0.3 if -time < 0.3 else -time
+			tween.tween_callback(csl,"highlight_flash",[Color.red,0.1,time - 0.2,0.1])
+			tween.tween_interval(time)
 
 
 func end_skills_effect(tween : SceneTreeTween,skills : Array,
@@ -172,22 +151,16 @@ func end_skills_effect(tween : SceneTreeTween,skills : Array,
 		vs_color : int,link_color : int,situation : int,
 		myself : PlayingPlayer,rival : PlayingPlayer):
 	for i in skills.size():
-		var s = skills[i]
+		var s := skills[i] as SkillData.NamedSkill
 		var csl := my_control.get_node("SkillContainer").get_children()[i] as CombatSkillLine
-		if s is SkillData.NormalSkill:
-			if NormalSkillPerformer.end(tween,s,vs_color,link_color,myself,rival):
-				tween.tween_callback(csl,"highlight_flash",[Color.blue,0.1,0.6,0.3])
-				tween.tween_callback(csl,"move_center",[0.3,0.3,0.3])
-				tween.tween_interval(1.0)
-		elif s is SkillData.NamedSkill:
-			var skill := named_skills.get_skill(s.id)
-			var time := skill._test_end(s,vs_color,link_color,situation,myself,rival)
-			if time > 0.0:
-				tween.tween_callback(csl,"highlight_flash",[Color.blue,0.1,time - 0.4,0.3])
-				tween.tween_callback(csl,"move_center",[0.3,time - 0.6,0.3])
-				skill._end(tween,s,vs_color,link_color,situation,myself,rival)
-			elif time < 0.0:
-				time = 0.3 if -time < 0.3 else -time
-				tween.tween_callback(csl,"highlight_flash",[Color.red,0.1,time - 0.2,0.1])
-				tween.tween_interval(time)
+		var skill := named_skills.get_skill(s.data.id)
+		var time := skill._test_end(s,vs_color,link_color,situation,myself,rival)
+		if time > 0.0:
+			tween.tween_callback(csl,"highlight_flash",[Color.blue,0.1,time - 0.4,0.3])
+			tween.tween_callback(csl,"move_center",[0.3,time - 0.6,0.3])
+			skill._end(tween,s,vs_color,link_color,situation,myself,rival)
+		elif time < 0.0:
+			time = 0.3 if -time < 0.3 else -time
+			tween.tween_callback(csl,"highlight_flash",[Color.red,0.1,time - 0.2,0.1])
+			tween.tween_interval(time)
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://scenes/card/large_card_view.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/ui/clickable_control.gd" type="Script" id=2]
@@ -48,6 +48,11 @@ font_data = ExtResource( 3 )
 
 [sub_resource type="Theme" id=10]
 Label/fonts/font = SubResource( 9 )
+
+[sub_resource type="DynamicFont" id=15]
+size = 40
+outline_size = 1
+font_data = ExtResource( 3 )
 
 [node name="PlayingScene" type="Node"]
 script = ExtResource( 5 )
@@ -250,6 +255,36 @@ margin_top = -232.0
 margin_right = -16.0
 margin_bottom = -172.0
 text = "27"
+align = 1
+valign = 1
+max_lines_visible = 1
+
+[node name="MyDamage" type="Label" parent="TopUILayer/Control"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -128.0
+margin_top = -328.0
+margin_right = -68.0
+margin_bottom = -268.0
+custom_colors/font_color = Color( 1, 0, 0, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 15 )
+text = "3"
+align = 1
+valign = 1
+max_lines_visible = 1
+
+[node name="RivalDamage" type="Label" parent="TopUILayer/Control"]
+margin_left = 68.0
+margin_top = 260.0
+margin_right = 128.0
+margin_bottom = 320.0
+custom_colors/font_color = Color( 1, 0, 0, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 15 )
+text = "3"
 align = 1
 valign = 1
 max_lines_visible = 1

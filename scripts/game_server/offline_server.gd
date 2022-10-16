@@ -143,7 +143,7 @@ static func _create_update_playerData(player : ProcessorData.PlayerData) -> Upda
 			ua.id = (c as ProcessorData.PlayerCard).id_in_deck
 			ua.power = a.power
 			ua.hit = a.hit
-			ua.damage = a.damage
+			ua.block = a.block
 			ua.rush = a.rush
 			affecteds.append(ua)
 	var n := player.next_effect
@@ -151,7 +151,7 @@ static func _create_update_playerData(player : ProcessorData.PlayerData) -> Upda
 	next.id = 0
 	next.power = n.power
 	next.hit = n.hit
-	next.damage = n.damage
+	next.block = n.block
 	next.rush = n.rush
 	var p = IGameServer.UpdateData.PlayerData.new()
 	p.hand_indexes = player.hand_indexes.duplicate()
@@ -161,6 +161,6 @@ static func _create_update_playerData(player : ProcessorData.PlayerData) -> Upda
 	p.cards_update = affecteds
 	p.next_effect = next
 	p.draw_indexes = player.draw_indexes
-	p.damage = player.battle_damage
+	p.damage = player.combat_damage
 	p.life = player.get_life()
 	return p;

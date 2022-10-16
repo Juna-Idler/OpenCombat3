@@ -34,29 +34,21 @@ func move_center(in_time : float,duration : float,end_time : float):
 	tween.tween_property(self,"modulate:a",1.0,0.5)
 	
 
-func initialize(skill,vs_color:int,link_color:int,rotate:bool):
+func initialize(skill : SkillData.NamedSkill,vs_color:int,link_color:int,rotate:bool):
 	$Highlight.modulate.a = 0
-	var condition : int = 0
-	if skill is SkillData.NormalSkill:
-		var n := skill as SkillData.NormalSkill
-		condition = n.condition
-		$Label.text = Global.card_catalog.get_normal_skill_string(n)
-	elif skill is SkillData.NamedSkill:
-		var n := skill as SkillData.NamedSkill
-		condition = n.condition
-		$Label.text = n.name + " (" + Global.card_catalog.get_parameter_string(n.param_type,n.parameter) + ")"
+	$Label.text = skill.data.name + " (" + Global.card_catalog.get_parameter_string(skill) + ")"
 
-	if condition & SkillData.ColorCondition.VS_FLAG:
+	if skill.condition & SkillData.ColorCondition.VS_FLAG:
 		$ColorRectRight.visible = false
 		$ColorRectLeft.visible = true
-		var color : int = condition & SkillData.ColorCondition.COLOR_BITS
+		var color : int = skill.condition & SkillData.ColorCondition.COLOR_BITS
 		$ColorRectLeft.color = RGB[color]
 		$Label.align = Label.ALIGN_RIGHT if rotate else Label.ALIGN_LEFT
 		$Invalid.visible = (color != vs_color)
-	elif condition & SkillData.ColorCondition.LINK_FLAG:
+	elif skill.condition & SkillData.ColorCondition.LINK_FLAG:
 		$ColorRectLeft.visible = false
 		$ColorRectRight.visible = true
-		var color : int = condition & SkillData.ColorCondition.COLOR_BITS
+		var color : int = skill.condition & SkillData.ColorCondition.COLOR_BITS
 		$ColorRectRight.color = RGB[color]
 		$Label.align = Label.ALIGN_LEFT if rotate else Label.ALIGN_RIGHT
 		$Invalid.visible = (color != link_color)

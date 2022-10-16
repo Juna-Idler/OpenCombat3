@@ -67,9 +67,9 @@ func combat(index1 : int,index2 : int) -> void:
 	
 	situation = current_power1 - current_power2;
 	if (situation > 0):
-		player2.add_damage(combatant1.get_current_hit())
+		player2.combat_damage = combatant1.get_current_hit() - combatant2.get_current_block()
 	elif (situation < 0):
-		player1.add_damage(combatant2.get_current_hit())
+		player1.combat_damage = combatant2.get_current_hit() - combatant1.get_current_block()
 	else:
 		pass
 
@@ -96,7 +96,7 @@ func combat(index1 : int,index2 : int) -> void:
 
 	player1.supply()
 	player2.supply()
-	if player1.battle_damage == 0 and player2.battle_damage == 0:
+	if player1.combat_damage == 0 and player2.combat_damage == 0:
 		phase += 1
 	phase += 1
 

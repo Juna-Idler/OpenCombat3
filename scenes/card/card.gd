@@ -19,13 +19,13 @@ var affected := Affected.new()
 class Affected:
 	var power : int = 0
 	var hit : int = 0
-	var damage : int = 0
+	var block : int = 0
 	var rush : int = 0
 	
 	func add(other : Affected):
 		power += other.power
 		hit += other.hit
-		damage += other.damage
+		block += other.block
 		rush += other.rush
 
 
@@ -44,6 +44,9 @@ func get_current_power() -> int:
 	
 func get_current_hit() -> int:
 	return front.data.hit + affected.hit
+	
+func get_current_block() -> int:
+	return front.data.block + affected.block
 
 func _ready():
 	pass # Replace with function body.

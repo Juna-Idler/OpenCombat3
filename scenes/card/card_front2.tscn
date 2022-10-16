@@ -74,7 +74,7 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 7.0
-margin_top = -132.0
+margin_top = -116.0
 margin_right = -7.0
 margin_bottom = -24.0
 mouse_filter = 2
@@ -134,7 +134,7 @@ valign = 1
 margin_left = 8.0
 margin_top = 36.0
 margin_right = 32.0
-margin_bottom = 64.0
+margin_bottom = 63.0
 rect_pivot_offset = Vector2( 12, 14 )
 mouse_filter = 2
 texture = ExtResource( 3 )
@@ -151,6 +151,30 @@ custom_fonts/font = SubResource( 4 )
 text = "1"
 align = 1
 valign = 1
+
+[node name="Block" type="TextureRect" parent="."]
+margin_left = 8.0
+margin_top = 64.0
+margin_right = 32.0
+margin_bottom = 91.0
+rect_pivot_offset = Vector2( 12, 14 )
+mouse_filter = 2
+texture = ExtResource( 3 )
+expand = true
+flip_v = true
+
+[node name="Label" type="Label" parent="Block"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -5.0
+margin_bottom = -2.0
+rect_pivot_offset = Vector2( 12, 15 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "0"
+align = 1
+valign = 1
+max_lines_visible = 1
 
 [node name="Level" type="Panel" parent="."]
 anchor_left = 1.0

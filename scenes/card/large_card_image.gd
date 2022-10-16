@@ -24,18 +24,15 @@ func initialize_card(cd : CardData):
 	for n in skill_node.get_children():
 		skill_node.remove_child(n)
 		n.queue_free()
-	for skill in cd.skills:
+	for s_ in cd.skills:
 		var line = SkillText.instance()
 		var skill_text : String = ""
-		if skill is SkillData.NormalSkill:
-			var n := skill as SkillData.NormalSkill
-			skill_text = Global.card_catalog.get_condition_detailed_string(n.condition)
-			skill_text += Global.card_catalog.get_normal_skill_detailed_string(n)
-		elif skill is SkillData.NamedSkill:
-			var n := skill as SkillData.NamedSkill
-			skill_text = Global.card_catalog.get_condition_detailed_string(n.condition)
-			skill_text += n.name + " (" + Global.card_catalog.get_parameter_string(n.param_type,n.parameter) + ")"
-			skill_text += ":" + n.text
+		
+		var s := s_ as SkillData.NamedSkill
+		skill_text = Global.card_catalog.get_condition_detailed_string(s.condition)
+		skill_text += s.name + " (" + Global.card_catalog.get_parameter_string(s) + ")"
+		skill_text += ":" + s.text
+		
 		var richlabel = line.get_node("RichTextLabel")
 		richlabel.rect_min_size.x = skill_node.rect_size.x
 		var bbc_text := skill_text.replace("{","[color=red]").replace("}","[/color]")

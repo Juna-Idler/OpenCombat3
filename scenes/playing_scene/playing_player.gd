@@ -128,6 +128,11 @@ func update_affected(updates : Array):#of IGameServer.UpdateData.Affected
 		var c := deck_list[a.id] as Card
 		c.affected.power = a.power
 		c.affected.hit = a.hit
-		c.affected.damage = a.damage
+		c.affected.block = a.block
 		c.affected.rush = a.rush
-	
+
+func set_next_effect(e):# : IGameServer.UpdateData.Affected):
+	next_effect.power = e.power
+	next_effect.hit = e.hit
+	next_effect.block = e.block
+	next_effect.rush = e.rush

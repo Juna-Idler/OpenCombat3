@@ -5,7 +5,7 @@ class Affected:
 	var updated : bool = false
 	var power : int = 0 setget set_p
 	var hit : int = 0 setget set_h
-	var damage : int = 0 setget set_d
+	var block : int = 0 setget set_b
 	var rush : int = 0 setget set_r
 
 	func set_p(v):
@@ -14,28 +14,28 @@ class Affected:
 	func set_h(v):
 		hit = v
 		updated = true
-	func set_d(v):
-		damage = v
+	func set_b(v):
+		block = v
 		updated = true
 	func set_r(v):
 		rush = v
 		updated = true
 
-	func add(p:int,h:int,d:int,r:int):
+	func add(p:int,h:int,b:int,r:int):
 		power += p
 		hit += h
-		damage += d
+		block += b
 		rush += r
 		updated = true;
 	func add_other(v : Affected):
-		add(v.power,v.hit,v.damage,v.rush)
+		add(v.power,v.hit,v.block,v.rush)
 		
 	func reset_update():
 		updated = false;
 	func reset():
 		power = 0
 		hit = 0
-		damage = 0
+		block = 0
 		rush = 0
 		updated = true;
 
@@ -59,6 +59,8 @@ class PlayerCard:
 		return data.power + affected.power if (data.power + affected.power) > 0 else 0;
 	func get_current_hit() -> int:
 		return data.hit + affected.hit if (data.hit + affected.hit) > 0 else 0;
+	func get_current_block() -> int:
+		return data.block + affected.block if (data.block + affected.block) > 0 else 0;
 
 
 class PlayerData:
@@ -73,7 +75,8 @@ class PlayerData:
 	var next_effect := Affected.new()
 	
 	var select : int = -1
-	var battle_damage : int = 0
+	var combat_damage : int = 0
+	var additional_damage : int = 0
 	var draw_indexes : Array = []
 	var select_card : PlayerCard = null
 
@@ -112,25 +115,26 @@ class PlayerData:
 		return select_card
 		
 	func combat_fix_damage() -> void:
-		var damage := battle_damage + select_card.affected.damage
-		battle_damage = 0 if damage < 0 else damage
+		var damage := combat_damage + additional_damage
+		additional_damage = 0
+		combat_damage = 0 if damage < 0 else damage
 
 	func combat_end() -> void:
 		played_indexes.push_back(select_card.id_in_deck)
-
 		
-	func add_damage(damage : int):
-		battle_damage += damage
+
+	func add_damage(d: int):
+		additional_damage += d
 		
 	func is_fatal() -> bool:
-		if _life <= battle_damage:
+		if _life <= combat_damage:
 			return true
 		return false
 		
 	func supply() -> void:
 # warning-ignore:return_value_discarded
 		_draw_card()
-		if battle_damage > 0:
+		if combat_damage > 0:
 # warning-ignore:return_value_discarded
 			_draw_card()
 		
@@ -140,10 +144,10 @@ class PlayerData:
 		select_card = deck_list[hand_indexes[index]]
 		var id := _discard_card(index)
 		var card := deck_list[id] as PlayerCard
-		if battle_damage <= card.data.level:
-			battle_damage = 0
+		if combat_damage <= card.data.level:
+			combat_damage = 0
 			return
-		battle_damage -= card.data.level
+		combat_damage -= card.data.level
 		# warning-ignore:return_value_discarded
 		_draw_card()
 	
@@ -152,7 +156,7 @@ class PlayerData:
 		draw_indexes.clear()
 		
 	func is_recovery() -> bool:
-		return battle_damage == 0
+		return combat_damage == 0
 
 	func change_order(new_indexies : Array) -> bool:
 		if new_indexies.size() != hand_indexes.size():

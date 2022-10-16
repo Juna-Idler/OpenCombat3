@@ -48,7 +48,7 @@ class UpdateData:
 		var id : int
 		var power : int = 0
 		var hit : int = 0
-		var damage : int = 0
+		var block : int = 0
 		var rush : int = 0
 	
 	class PlayerData:
@@ -59,7 +59,7 @@ class UpdateData:
 		var draw_indexes:Array# of int
 		var damage : int
 		var life : int
-	
+
 	var myself:PlayerData
 	var rival:PlayerData
 

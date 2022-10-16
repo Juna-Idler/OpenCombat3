@@ -11,13 +11,14 @@ var color : int
 var level : int
 var power : int
 var hit : int
+var block : int
 var skills : Array
 var text : String
 var image : String 
 
 
 func _init(i : int,n : String,
-		c : int,l : int,p : int,h : int,
+		c : int,l : int,p : int,h : int,b : int,
 		s : Array,t : String,im : String):
 	id = i
 	name = n
@@ -25,6 +26,8 @@ func _init(i : int,n : String,
 	level = l
 	power = p
 	hit = h
+	block = b
+	
 	skills = s
 	text = t
 	image = im
@@ -37,6 +40,7 @@ static func copy(dest : CardData, src : CardData):
 	dest.level = src.level
 	dest.power = src.power
 	dest.hit = src.hit
+	dest.block = src.block
 	dest.skills = src.skills
 	dest.text = src.text
 	dest.image = src.image

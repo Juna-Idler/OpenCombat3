@@ -2,6 +2,7 @@
 class_name NamedSkillPerformer
 
 var skills : Array = [
+	Reinforce.new(),
 	Rush.new(),
 	Charge.new(),
 ]
@@ -39,6 +40,29 @@ class Skill:
 			_vs_color : int,_link_color : int,_situation : int,
 			_myself : PlayingPlayer,_rival : PlayingPlayer) -> void:
 		return
+
+class Reinforce extends Skill:
+	func _test_before(_skill : SkillData.NamedSkill,
+			_vs_color : int,_link_color : int,
+			_myself : PlayingPlayer,_rival : PlayingPlayer) -> float:
+		return 1.0
+		
+	func _before(tween : SceneTreeTween,skill : SkillData.NamedSkill,
+			_vs_color : int,_link_color : int,
+			myself : PlayingPlayer,_rival : PlayingPlayer) -> void:
+		var playing_card := myself.get_playing_card()
+		for p in (skill.parameter as SkillEffects).effects:
+			var e := p as SkillEffects.Effect
+			match e.attribute:
+				SkillEffects.Attribute.POWER:
+					playing_card.affected.power += e.parameter
+				SkillEffects.Attribute.HIT:
+					playing_card.affected.hit += e.parameter
+				SkillEffects.Attribute.BLOCK:
+					playing_card.affected.block += e.parameter
+				SkillEffects.Attribute.RUSH:
+					playing_card.affected.rush += e.parameter
+		tween.tween_interval(1.0)
 
 
 class Rush extends Skill:
@@ -81,7 +105,7 @@ class Charge extends Skill:
 			_vs_color : int,_link_color : int,_situation : int,
 			myself : PlayingPlayer,_rival : PlayingPlayer) -> void:
 		if myself.damage == 0:
-			for p in (skill.parameter as NormalSkillEffects).effects:
+			for p in (skill.parameter as SkillEffects).effects:
 #				var e := p as NormalSkillEffects.Effect
 #				match e.attribute:
 #					NormalSkillEffects.Attribute.POWER:
