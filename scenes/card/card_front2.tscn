@@ -78,6 +78,7 @@ margin_top = -116.0
 margin_right = -7.0
 margin_bottom = -24.0
 mouse_filter = 2
+custom_constants/separation = 4
 alignment = 2
 
 [node name="Frame" type="TextureRect" parent="."]

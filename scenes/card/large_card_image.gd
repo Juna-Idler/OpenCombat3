@@ -30,7 +30,7 @@ func initialize_card(cd : CardData):
 		
 		var s := s_ as SkillData.NamedSkill
 		skill_text = Global.card_catalog.get_condition_detailed_string(s.condition)
-		skill_text += s.name + " (" + Global.card_catalog.get_parameter_string(s) + ")"
+		skill_text += s.data.name + " (" + Global.card_catalog.get_parameter_string(s) + ")"
 		skill_text += ":" + s.text
 		
 		var richlabel = line.get_node("RichTextLabel")

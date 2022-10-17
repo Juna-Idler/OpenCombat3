@@ -17,7 +17,7 @@ func initial_tween(my_power : int,rival_power : int,tween : SceneTreeTween,durat
 
 
 func set_power_tween(my_power : int,rival_power : int,tween : SceneTreeTween,duration : float):
-	var rate := rival_power / float(my_power + rival_power)
+	var rate := (rival_power + 1) / float(my_power + rival_power + 2)
 	var rpoint := (rect_size.x - ZERO_OFFSET * 2) * rate
 	var ppoint := (rect_size.x - ZERO_OFFSET * 2) - rpoint
 	

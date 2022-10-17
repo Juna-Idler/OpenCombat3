@@ -32,7 +32,7 @@ class NamedSkillData:
 		id = i
 		name = n
 		_set_param_type(pt,p)
-		text = t
+		text = t.replace("\\n","\n")
 	
 	func _set_param_type(pt : String,p : String):
 		match pt:
@@ -60,14 +60,14 @@ class NamedSkill:
 			parameter = null
 			text = sd.text
 		else:
-			_translate_param(sd,p)
+			_translate_param(p)
 		condition = kanji2condition(c)
 
 	func test_condition(rival_color : int,link_color : int) -> bool :
 		if condition & ColorCondition.VS_FLAG:
-			return bool(condition & rival_color)
+			return (condition & ColorCondition.COLOR_BITS) == rival_color
 		if condition & ColorCondition.LINK_FLAG:
-			return bool(condition & link_color)
+			return (condition & ColorCondition.COLOR_BITS) == link_color
 		if condition == ColorCondition.NOCONDITION:
 			return true
 		return false
@@ -80,7 +80,7 @@ class NamedSkill:
 		if c.find("対緑") >= 0:
 			return ColorCondition.VS_GREEN
 		if c.find("対青") >= 0:
-			return ColorCondition.VS_GREEN
+			return ColorCondition.VS_BLUE
 		if c.find("連赤") >= 0:
 			return ColorCondition.LINK_RED
 		if c.find("連緑") >= 0:
@@ -90,19 +90,19 @@ class NamedSkill:
 		return ColorCondition.NOCONDITION
 		
 	
-	func _translate_param(sd : NamedSkillData,p:String):
-		match sd.param_type:
+	func _translate_param(p:String):
+		match data.param_type:
 			ParamType.INTEGER:
 				parameter = int(p)
-				var param_string : String = "{" + sd.parameter + "}"
-				text = sd.text.replace(param_string,"{" + p + "}")
+				var param_string : String = "{" + data.parameter + "}"
+				text = data.text.replace(param_string,"{" + p + "}")
 			ParamType.EFFECTS:
 				parameter = SkillEffects.new(p)
-				var param_string : String = "{" + sd.parameter + "}"
-				text = sd.text.replace(param_string,"{" + p + "}")
+				var param_string : String = "{" + data.parameter + "}"
+				text = data.text.replace(param_string,"{" + p + "}")
 			_:
 				parameter = null
-				text = ""
+				text = data.text
 			
 
 

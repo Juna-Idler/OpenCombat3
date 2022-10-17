@@ -113,6 +113,8 @@ func before_skills_effect(tween : SceneTreeTween,skills : Array,
 		myself : PlayingPlayer,rival : PlayingPlayer):
 	for i in skills.size():
 		var s := skills[i] as SkillData.NamedSkill
+		if not s.test_condition(vs_color,link_color):
+			continue
 		var csl := my_control.get_node("SkillContainer").get_children()[i] as CombatSkillLine
 		var skill := named_skills.get_skill(s.data.id)
 		var time := skill._test_before(s,vs_color,link_color,myself,rival)
@@ -133,6 +135,8 @@ func after_skills_effect(tween : SceneTreeTween,skills : Array,
 		myself : PlayingPlayer,rival : PlayingPlayer):
 	for i in skills.size():
 		var s := skills[i] as SkillData.NamedSkill
+		if not s.test_condition(vs_color,link_color):
+			continue
 		var csl := my_control.get_node("SkillContainer").get_children()[i] as CombatSkillLine
 		var skill := named_skills.get_skill(s.data.id)
 		var time := skill._test_after(s,vs_color,link_color,situation,myself,rival)
@@ -152,6 +156,8 @@ func end_skills_effect(tween : SceneTreeTween,skills : Array,
 		myself : PlayingPlayer,rival : PlayingPlayer):
 	for i in skills.size():
 		var s := skills[i] as SkillData.NamedSkill
+		if not s.test_condition(vs_color,link_color):
+			continue
 		var csl := my_control.get_node("SkillContainer").get_children()[i] as CombatSkillLine
 		var skill := named_skills.get_skill(s.data.id)
 		var time := skill._test_end(s,vs_color,link_color,situation,myself,rival)

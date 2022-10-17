@@ -13,7 +13,7 @@ func _init():
 	_load_card_data()
 
 
-const _effect_attribute_string_list = ["","力","打","傷","突"]
+const _effect_attribute_string_list = ["","力","打","防","突"]
 static func get_effect_attribute_string(attribute:int)->String:
 	return _effect_attribute_string_list[attribute]
 	
