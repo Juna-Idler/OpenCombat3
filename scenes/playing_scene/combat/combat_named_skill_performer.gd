@@ -65,6 +65,7 @@ class Reinforce extends Skill:
 					tween.tween_callback(myself,"change_col_block")
 				SkillEffects.Attribute.RUSH:
 					playing_card.affected.rush += e.parameter
+					tween.tween_callback(myself,"change_col_rush")
 		tween.tween_interval(1.0)
 
 

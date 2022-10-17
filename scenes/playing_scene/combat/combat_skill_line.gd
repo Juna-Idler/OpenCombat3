@@ -34,9 +34,12 @@ func move_center(in_time : float,duration : float,end_time : float):
 	tween.tween_property(self,"modulate:a",1.0,0.5)
 	
 
+func set_text(text : String):
+	$Label.text = text
+
 func initialize(skill : SkillData.NamedSkill,vs_color:int,link_color:int,rotate:bool):
 	$Highlight.modulate.a = 0
-	$Label.text = skill.data.name + " (" + Global.card_catalog.get_parameter_string(skill) + ")"
+	$Label.text = skill.data.name + "(" + Global.card_catalog.get_parameter_string(skill) + ")"
 
 	if skill.condition & SkillData.ColorCondition.VS_FLAG:
 		$ColorRectRight.visible = false

@@ -29,6 +29,7 @@ var life_label : Label
 var col_power : Label
 var col_hit : Label
 var col_block : Label
+var col_skill_list : VBoxLayout
 
 
 func get_playing_card() -> Card:
@@ -60,6 +61,7 @@ func _init(dl:Array,
 	col_power = col_control.get_node("Power")
 	col_hit = col_control.get_node("Hit")
 	col_block = col_control.get_node("Block")
+	col_skill_list = col_control.get_node("SkillContainer")
 	
 	stack_count = deck_list.size()
 	for i_ in deck_list:
@@ -155,3 +157,14 @@ func change_col_hit():
 func change_col_block():
 	var playing_card := deck_list[playing_card_id] as Card
 	col_block.text = str(playing_card.get_current_block())
+
+func change_col_rush():
+	var playing_card := deck_list[playing_card_id] as Card
+	for i in playing_card.front.data.skills.size():
+		var s := playing_card.front.data.skills[i] as SkillData.NamedSkill
+		if s.data.id == 2:
+			var r : int = s.parameter + playing_card.affected.rush
+			var l = col_skill_list.get_child(i) as CombatSkillLine
+			l.set_text(s.data.name + "(" + str(r) + ")")
+			break
+		
