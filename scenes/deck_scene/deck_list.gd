@@ -3,7 +3,7 @@ extends Control
 signal closed(deck)
 #_on_DeckList_closed(deck : Array)
 
-const RawCard := preload( "../card/raw_card.tscn")
+const RawCard := preload( "../card/card_front.tscn")
 const DeckItem := preload("small112_card.tscn")
 
 onready var deck_container := $DeckContainer

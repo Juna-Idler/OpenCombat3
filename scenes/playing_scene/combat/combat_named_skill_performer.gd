@@ -56,10 +56,13 @@ class Reinforce extends Skill:
 			match e.attribute:
 				SkillEffects.Attribute.POWER:
 					playing_card.affected.power += e.parameter
+					tween.tween_callback(myself,"change_col_power")
 				SkillEffects.Attribute.HIT:
 					playing_card.affected.hit += e.parameter
+					tween.tween_callback(myself,"change_col_hit")
 				SkillEffects.Attribute.BLOCK:
 					playing_card.affected.block += e.parameter
+					tween.tween_callback(myself,"change_col_block")
 				SkillEffects.Attribute.RUSH:
 					playing_card.affected.rush += e.parameter
 		tween.tween_interval(1.0)
@@ -70,7 +73,7 @@ class Rush extends Skill:
 			_vs_color : int,_link_color : int,situation : int,
 			myself : PlayingPlayer,rival : PlayingPlayer) -> float:
 		if situation > 0:
-			return 0.0
+			return 1.0
 		var playing_card = myself.get_playing_card()
 		if situation < 0:
 			var stability = skill.parameter + playing_card.affected.rush
@@ -82,6 +85,7 @@ class Rush extends Skill:
 			_vs_color : int,_link_color : int,situation : int,
 			myself : PlayingPlayer,rival : PlayingPlayer) -> void:
 		if situation > 0:
+			tween.tween_interval(1.0)
 			return
 		var playing_card = myself.get_playing_card()
 		if situation < 0:

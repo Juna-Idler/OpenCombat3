@@ -68,10 +68,13 @@ func combat(index1 : int,index2 : int) -> void:
 	situation = current_power1 - current_power2;
 	if (situation > 0):
 		player2.combat_damage = combatant1.get_current_hit() - combatant2.get_current_block()
+		player1.combat_damage = -combatant1.get_current_block()
 	elif (situation < 0):
 		player1.combat_damage = combatant2.get_current_hit() - combatant1.get_current_block()
+		player2.combat_damage = -combatant2.get_current_block()
 	else:
-		pass
+		player1.combat_damage = -combatant1.get_current_block()
+		player2.combat_damage = -combatant2.get_current_block()
 
 	_skill_processor.process_after(combatant1.data.skills,
 			combatant2.data.color,link1color,situation,player1,player2)

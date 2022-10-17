@@ -1,6 +1,6 @@
 extends Control
 
-const RawCard := preload( "../card/raw_card.tscn")
+const RawCard := preload( "../card/card_front.tscn")
 const DeckItem := preload("control_in_deck.tscn")
 const PoolItem := preload("small_card.tscn")
 

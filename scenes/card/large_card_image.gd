@@ -13,11 +13,13 @@ func initialize_card(cd : CardData):
 	self_modulate = color
 	$Power.self_modulate = color.darkened(0.2)
 	$Hit.self_modulate = color.lightened(0.4)
+	$Block.self_modulate = color.lightened(0.4)
 	$Level.self_modulate = color.lightened(0.6)
 
 	$Power/Label.text = str(cd.power)
 	$Level/Label.text = str(cd.level)
 	$Hit/Label.text = str(cd.hit)
+	$Block/Label.text = str(cd.block)
 	$Picture.texture = load("res://card_images/"+ cd.image +".png")
 	
 	var skill_node = $Skills

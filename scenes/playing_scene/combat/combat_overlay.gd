@@ -14,20 +14,22 @@ func _ready():
 func initialize(myself : PlayingPlayer,rival : PlayingPlayer):
 	var my_card := myself.deck_list[myself.playing_card_id] as Card
 	var rival_card := rival.deck_list[rival.playing_card_id] as Card
-	$MyControl/TotalPower.text = str(my_card.get_current_power())
-	$MyControl/TotalHit.text = str(my_card.get_current_hit())
+	$MyControl/Power.text = str(my_card.get_current_power())
+	$MyControl/Hit.text = str(my_card.get_current_hit())
+	$MyControl/Block.text = str(my_card.get_current_block())
 	$MyControl/CardFront/Picture.texture = load("res://card_images/"+ my_card.front.data.image +".png")
 	$MyControl/CardFront/Name.text = my_card.front.data.name
 	$MyControl/CardFront/Frame.self_modulate = RGB[my_card.front.data.color]
 
-	$RivalControl/TotalPower.text = str(rival_card.get_current_power())
-	$RivalControl/TotalHit.text = str(rival_card.get_current_hit())
+	$RivalControl/Power.text = str(rival_card.get_current_power())
+	$RivalControl/Hit.text = str(rival_card.get_current_hit())
+	$RivalControl/Block.text = str(rival_card.get_current_block())
 	$RivalControl/CardFront/Picture.texture = load("res://card_images/"+ rival_card.front.data.image +".png")
 	$RivalControl/CardFront/Name.text = rival_card.front.data.name
 	$RivalControl/CardFront/Frame.self_modulate = RGB[rival_card.front.data.color]
 
-	$MyControl/TotalPower.rect_scale = Vector2(1.0,1.0)
-	$RivalControl/TotalPower.rect_scale = Vector2(1.0,1.0)
+#	$MyControl/Power.rect_scale = Vector2(1.0,1.0)
+#	$RivalControl/Power.rect_scale = Vector2(1.0,1.0)
 
 
 	if my_card.front.data.skills.empty():
@@ -58,7 +60,5 @@ func initialize(myself : PlayingPlayer,rival : PlayingPlayer):
 			cs.hide()
 		rival_skills_list.layout()
 
-func set_label_text(node : Label,text : String):
-	node.text =  text
 
 

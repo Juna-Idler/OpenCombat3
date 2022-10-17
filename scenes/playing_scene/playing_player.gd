@@ -26,6 +26,11 @@ var discard_pos : Vector2
 var stack_count_label : Label
 var life_label : Label
 
+var col_power : Label
+var col_hit : Label
+var col_block : Label
+
+
 func get_playing_card() -> Card:
 	return deck_list[playing_card_id]
 	
@@ -42,7 +47,8 @@ func _init(dl:Array,
 		p_pos : Vector2,
 		d_pos : Vector2,
 		sc_label : Label,
-		l_label : Label):
+		l_label : Label,
+		col_control : Control):
 	player_name = name
 	deck_list = dl
 	hand_area = hand_area_node
@@ -51,6 +57,9 @@ func _init(dl:Array,
 	discard_pos = d_pos
 	stack_count_label = sc_label
 	life_label = l_label
+	col_power = col_control.get_node("Power")
+	col_hit = col_control.get_node("Hit")
+	col_block = col_control.get_node("Block")
 	
 	stack_count = deck_list.size()
 	for i_ in deck_list:
@@ -136,3 +145,13 @@ func set_next_effect(e):# : IGameServer.UpdateData.Affected):
 	next_effect.hit = e.hit
 	next_effect.block = e.block
 	next_effect.rush = e.rush
+
+func change_col_power():
+	var playing_card := deck_list[playing_card_id] as Card
+	col_power.text = str(playing_card.get_current_power())
+func change_col_hit():
+	var playing_card := deck_list[playing_card_id] as Card
+	col_hit.text = str(playing_card.get_current_hit())
+func change_col_block():
+	var playing_card := deck_list[playing_card_id] as Card
+	col_block.text = str(playing_card.get_current_block())

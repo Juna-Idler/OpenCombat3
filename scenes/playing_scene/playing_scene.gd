@@ -74,14 +74,16 @@ func _ready():
 			my_played_pos,
 			my_discard_pos,
 			my_stack_count,
-			my_life)
+			my_life,
+			$CombatLayer/CombatOverlay/MyControl)
 	rival = PlayingPlayer.new(rcdeck,pd.rival_name,
 			$UILayer/RivalField/HandArea,
 			rival_combat_pos,
 			rival_played_pos,
 			rival_discard_pos,
 			rival_stack_count,
-			rival_life)
+			rival_life,
+			$CombatLayer/CombatOverlay/RivalControl)
 	
 	combat_director.initialize(myself,rival,
 			combat_overlay,$BGLayer/PowerBalance,

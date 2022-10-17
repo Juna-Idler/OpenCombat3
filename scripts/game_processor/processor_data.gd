@@ -53,14 +53,15 @@ class PlayerCard:
 #	var addtional_changes : Dictionary = {}
 
 
-		
+	static func int_max(a : int, b : int) -> int:
+		return a if a > b else b
 
 	func get_current_power() -> int:
-		return data.power + affected.power if (data.power + affected.power) > 0 else 0;
+		return int_max(data.power + affected.power,0)
 	func get_current_hit() -> int:
-		return data.hit + affected.hit if (data.hit + affected.hit) > 0 else 0;
+		return int_max(data.hit + affected.hit,0)
 	func get_current_block() -> int:
-		return data.block + affected.block if (data.block + affected.block) > 0 else 0;
+		return int_max(data.block + affected.block,0)
 
 
 class PlayerData:

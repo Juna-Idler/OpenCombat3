@@ -57,10 +57,8 @@ func perform(node : Node):
 	if player1.next_effect.power != 0 or player2.next_effect.power != 0:
 		p1_card.affected.add(player1.next_effect)
 		p2_card.affected.add(player2.next_effect)
-		tween.tween_callback(overlay,"set_label_text",
-				[overlay.get_node("MyControl/TotalPower"),str(p1_card.get_current_power())])
-		tween.tween_callback(overlay,"set_label_text",
-				[overlay.get_node("RivalControl/TotalPower"),str(p2_card.get_current_power())])
+		tween.tween_callback(player1,"change_col_power")
+		tween.tween_callback(player2,"change_col_power")
 		power_balance.set_power_tween(p1_card.get_current_power(),p2_card.get_current_power(),tween,0.3)
 
 	tween.tween_callback(self,"set_next_buf_label",["",""])
@@ -84,7 +82,7 @@ func perform(node : Node):
 			p2_card.front.data.color,p1_link_color,situation,player1,player2)
 	after_skills_effect(tween,p2_card.front.data.skills,
 			overlay.get_node("RivalControl"),overlay.get_node("MyControl"),
-			p1_card.front.data.color,p2_link_color,situation,player2,player1)
+			p1_card.front.data.color,p2_link_color,-situation,player2,player1)
 	
  # 終了時タイミング
 	end_skills_effect(tween,p1_card.front.data.skills,
@@ -92,7 +90,7 @@ func perform(node : Node):
 			p2_card.front.data.color,p1_link_color,situation,player1,player2)
 	end_skills_effect(tween,p2_card.front.data.skills,
 			overlay.get_node("RivalControl"),overlay.get_node("MyControl"),
-			p1_card.front.data.color,p2_link_color,situation,player2,player1)
+			p1_card.front.data.color,p2_link_color,-situation,player2,player1)
 
 	
 	tween.tween_property(overlay,"modulate:a",0.0,0.5)
