@@ -2,8 +2,9 @@ extends Control
 
 class_name CombatPowerBalance
 
-const ZERO_OFFSET := 320
-const BAR_ALPHA := 0.75
+const MAGNIFICATION := 128
+const BAR_ALPHA := 0.5
+const CENTER_WIDTH2 := 4
 
 func _ready():
 	pass
@@ -13,20 +14,37 @@ func initial_tween(my_power : int,rival_power : int,tween : SceneTreeTween,durat
 	$MyPower.color = Color(0.5,0.5,0.5,BAR_ALPHA)
 	$RivalPower.margin_right = 0
 	$RivalPower.color = Color(0.5,0.5,0.5,BAR_ALPHA)
+	$Center.rect_position.x = 640 - CENTER_WIDTH2
+	$Center.self_modulate.a = 0.0
+	tween.tween_property($Center,"self_modulate:a",1.0,duration)\
+			.set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_IN)
+	tween.parallel()
 	set_power_tween(my_power,rival_power,tween,duration)
 
 
 func set_power_tween(my_power : int,rival_power : int,tween : SceneTreeTween,duration : float):
-	var rate := (rival_power + 1) / float(my_power + rival_power + 2)
-	var rpoint := (rect_size.x - ZERO_OFFSET * 2) * rate
-	var ppoint := (rect_size.x - ZERO_OFFSET * 2) - rpoint
+	var sub : float = my_power - rival_power
+	sub = sqrt(abs(sub)) * sign(sub)
+	var my_color : Color
+	var rival_color : Color
+	if sub > 0:
+		my_color = Color(1,1,1,BAR_ALPHA)
+		rival_color = Color(0,0,0,BAR_ALPHA)
+	elif sub < 0:
+		my_color = Color(0,0,0,BAR_ALPHA)
+		rival_color = Color(1,1,1,BAR_ALPHA)
+	else:
+		my_color = Color(0.5,0.5,0.5,BAR_ALPHA)
+		rival_color = Color(0.5,0.5,0.5,BAR_ALPHA)
 	
-	tween.tween_property($MyPower,"margin_left",-ZERO_OFFSET - ppoint,duration)
+	tween.tween_property($MyPower,"margin_left",-640 - sub * MAGNIFICATION,duration)
 	tween.parallel()
-	tween.tween_property($RivalPower,"margin_right",ZERO_OFFSET + rpoint,duration)
+	tween.tween_property($RivalPower,"margin_right",640 - sub * MAGNIFICATION,duration)
 	tween.parallel()
-	tween.tween_property($MyPower,"color",Color(1 - rate,1 - rate,1 - rate,BAR_ALPHA),duration)
+	tween.tween_property($MyPower,"color",my_color,duration)
 	tween.parallel()
-	tween.tween_property($RivalPower,"color",Color(rate,rate,rate,BAR_ALPHA),duration)
+	tween.tween_property($RivalPower,"color",rival_color,duration)
+	tween.parallel()
+	tween.tween_property($Center,"rect_position:x",640 - CENTER_WIDTH2 - sub * MAGNIFICATION,duration)
 
 
