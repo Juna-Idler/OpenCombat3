@@ -29,6 +29,7 @@ script = ExtResource( 1 )
 [node name="LargeCard" parent="." instance=ExtResource( 2 )]
 margin_left = 128.0
 margin_right = 640.0
+mouse_filter = 2
 
 [node name="Flavor" type="Label" parent="."]
 margin_left = 640.0

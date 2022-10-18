@@ -89,6 +89,7 @@ func _ready():
 			combat_overlay,$BGLayer/PowerBalance,
 			$"%MyNextBuf",$"%RivalNextBuf")
 	combat_overlay.visible = false
+	$ListLayer/CardList.large_card_view = $LargeCardLayer/LargeCardView
 	
 	game_server._send_ready()
 	
@@ -202,7 +203,8 @@ func _on_held_card(card:Card):
 		$LargeCardLayer/LargeCardView.show_layer(card.get_card_data())
 
 func _on_MyPlayed_clicked():
-	pass # Replace with function body.
+	if not myself.played.empty():
+		$ListLayer/CardList.set_card_list(myself.played,myself.deck_list)
 
 
 func _on_MyPlayed_held():
@@ -210,7 +212,8 @@ func _on_MyPlayed_held():
 		$LargeCardLayer/LargeCardView.show_layer(myself.deck_list[myself.played.back()].get_card_data())
 
 func _on_RivalPlayed_clicked():
-	pass # Replace with function body.
+	if not rival.played.empty():
+		$ListLayer/CardList.set_card_list(rival.played,rival.deck_list)
 
 
 func _on_RivalPlayed_held():
@@ -231,8 +234,11 @@ func _on_RivalStack_clicked():
 
 
 func _on_MyDiscard_clicked():
-	pass # Replace with function body.
+	if not myself.discard.empty():
+		$ListLayer/CardList.set_card_list(myself.discard,myself.deck_list)
 
 
 func _on_RivalDiscard_clicked():
-	pass # Replace with function body.
+	if not rival.discard.empty():
+		$ListLayer/CardList.set_card_list(rival.discard,rival.deck_list)
+
