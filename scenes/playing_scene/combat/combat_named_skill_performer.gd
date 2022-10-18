@@ -50,7 +50,7 @@ class Reinforce extends Skill:
 	func _before(tween : SceneTreeTween,skill : SkillData.NamedSkill,
 			_vs_color : int,_link_color : int,
 			myself : PlayingPlayer,_rival : PlayingPlayer) -> void:
-		var playing_card := myself.get_playing_card()
+		var playing_card := myself.playing_card
 		for p in (skill.parameter as SkillEffects).effects:
 			var e := p as SkillEffects.Effect
 			match e.attribute:
@@ -75,10 +75,10 @@ class Rush extends Skill:
 			myself : PlayingPlayer,rival : PlayingPlayer) -> float:
 		if situation > 0:
 			return 1.0
-		var playing_card = myself.get_playing_card()
+		var playing_card = myself.playing_card
 		if situation < 0:
 			var stability = skill.parameter + playing_card.affected.rush
-			if stability < rival.get_playing_card().get_current_hit():
+			if stability < rival.playing_card.get_current_hit():
 				return -0.5
 		return 1.0
 		
@@ -87,13 +87,15 @@ class Rush extends Skill:
 			myself : PlayingPlayer,rival : PlayingPlayer) -> void:
 		if situation > 0:
 			tween.tween_interval(1.0)
+			tween.tween_callback(rival,"add_damage",[(rival.playing_card.get_current_block() + 1) / 2])
 			return
-		var playing_card = myself.get_playing_card()
+		var playing_card = myself.playing_card
 		if situation < 0:
 			var stability = skill.parameter + playing_card.affected.rush
-			if stability < rival.get_playing_card().get_current_hit():
+			if stability < rival.playing_card.get_current_hit():
 				return
 		tween.tween_interval(1.0)
+		tween.tween_callback(rival,"add_damage",[(myself.playing_card.get_current_hit() + 1) / 2])
 #		var damage := int((playing_card.get_current_hit() + 1) / 2);
 #		rival.add_damage(damage)
 

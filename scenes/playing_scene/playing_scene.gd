@@ -75,7 +75,8 @@ func _ready():
 			my_discard_pos,
 			my_stack_count,
 			my_life,
-			$CombatLayer/CombatOverlay/MyControl)
+			$CombatLayer/CombatOverlay/MyControl,
+			$TopUILayer/Control/MyDamage)
 	rival = PlayingPlayer.new(rcdeck,pd.rival_name,
 			$UILayer/RivalField/HandArea,
 			rival_combat_pos,
@@ -83,7 +84,8 @@ func _ready():
 			rival_discard_pos,
 			rival_stack_count,
 			rival_life,
-			$CombatLayer/CombatOverlay/RivalControl)
+			$CombatLayer/CombatOverlay/RivalControl,
+			$TopUILayer/Control/RivalDamage)
 	
 	combat_director.initialize(myself,rival,
 			combat_overlay,$BGLayer/PowerBalance,
@@ -155,8 +157,13 @@ func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
 	var rival_select_id : int = -1
 	
 	var tween := create_tween()
+	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
+	tween.parallel()
 	myself.recover(data.myself.hand_select,data.myself.hand_indexes,data.myself.draw_indexes,tween)
+	tween.parallel()
 	rival.recover(data.rival.hand_select,data.rival.hand_indexes,data.rival.draw_indexes,tween)
+	tween.tween_callback(myself,"change_damage",[true])
+	tween.tween_callback(rival,"change_damage",[true])
 
 #
 	round_count = data.round_count

@@ -60,5 +60,8 @@ func initialize(myself : PlayingPlayer,rival : PlayingPlayer):
 			cs.hide()
 		rival_skills_list.layout()
 
-
+enum CombatTiming {NoTiming,Before,Engagement,After,Damage,End,}
+const _timing_name := ["","Before","Engagement","After","Damage","End"]
+func change_timing_label(timing : int):
+	$TimingLabel.text = _timing_name[timing]
 

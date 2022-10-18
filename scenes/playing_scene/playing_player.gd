@@ -10,11 +10,13 @@ var played : Array = []# of int
 var discard : Array = []# of int
 var stack_count : int
 var life : int = 0
+var damage : int = 0
 
 var next_effect := Card.Affected.new()
 
 var playing_card_id : int = -1
-var damage : int = 0
+var playing_card : Card = null
+var combat_damage : int = 0
 
 var player_name : String
 
@@ -31,10 +33,9 @@ var col_hit : Label
 var col_block : Label
 var col_skill_list : VBoxLayout
 
+var damage_label : Label
 
-func get_playing_card() -> Card:
-	return deck_list[playing_card_id]
-	
+
 func get_link_color() -> int:
 	if played.empty():
 		return 0
@@ -49,7 +50,8 @@ func _init(dl:Array,
 		d_pos : Vector2,
 		sc_label : Label,
 		l_label : Label,
-		col_control : Control):
+		col_control : Control,
+		d_label : Label):
 	player_name = name
 	deck_list = dl
 	hand_area = hand_area_node
@@ -62,6 +64,7 @@ func _init(dl:Array,
 	col_hit = col_control.get_node("Hit")
 	col_block = col_control.get_node("Block")
 	col_skill_list = col_control.get_node("SkillContainer")
+	damage_label = d_label
 	
 	stack_count = deck_list.size()
 	for i_ in deck_list:
@@ -70,6 +73,7 @@ func _init(dl:Array,
 		i.place = Card.Place.STACK
 	stack_count_label.text = str(stack_count)
 	life_label.text = str(life)
+	damage_label.text = ""
 
 func draw(draw_indexes:Array):
 	stack_count -= draw_indexes.size()
@@ -92,19 +96,19 @@ func set_hand(new_hand_indexes:Array):
 
 func play(hand_select : int,new_hand : Array,d : int,tween : SceneTreeTween):
 	hand = new_hand
+	damage = d
+	combat_damage = 0
 	playing_card_id = hand[hand_select]
+	playing_card = deck_list[playing_card_id]
 	hand.remove(hand_select)
-	var playing_card := deck_list[playing_card_id] as Card
 	life -= playing_card.get_card_data().level
 	life_label.text = str(life)
-	damage = d
 	tween.parallel()
 	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 	tween.tween_property(playing_card,"global_position",combat_pos,0.5)
 
 func play_end(draw_indexes : Array,tween : SceneTreeTween):
 	played.append(playing_card_id)
-	var playing_card := deck_list[playing_card_id] as Card
 	playing_card.z_index = played.size() + 0
 	playing_card.place = Card.Place.PLAYED
 	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
@@ -114,6 +118,10 @@ func play_end(draw_indexes : Array,tween : SceneTreeTween):
 	tween.tween_property(playing_card,"rotation",PI/2,0.5)
 	draw(draw_indexes)
 	life_label.text = str(life)
+	damage_label.text = str(damage) if damage > 0 else ""
+
+	playing_card_id = -1
+	playing_card = null
 	
 
 func recover(hand_select : int,new_hand : Array,draw_indexes : Array,tween : SceneTreeTween):
@@ -121,16 +129,15 @@ func recover(hand_select : int,new_hand : Array,draw_indexes : Array,tween : Sce
 	if hand_select >= 0:
 		var select_id = hand[hand_select]
 		hand.remove(hand_select)
-		var playing_card := deck_list[select_id] as Card
-		life -= playing_card.get_card_data().level
+		var recovery_card := deck_list[select_id] as Card
+		life -= recovery_card.get_card_data().level
+		damage -= recovery_card.front.data.level
+		damage_label.text = str(damage) if damage > 0 else ""
 		life_label.text = str(life)
-		playing_card.z_index = discard.size() + 200
-		playing_card.place = Card.Place.DISCARD
+		recovery_card.z_index = discard.size() + 200
+		recovery_card.place = Card.Place.DISCARD
 		discard.append(select_id)
-		
-		tween.parallel()
-		tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
-		tween.tween_property(playing_card,"global_position",discard_pos,1)
+		tween.tween_property(recovery_card,"global_position",discard_pos,1)
 	draw(draw_indexes)
 
 func update_affected(updates : Array):#of IGameServer.UpdateData.Affected
@@ -149,17 +156,13 @@ func set_next_effect(e):# : IGameServer.UpdateData.Affected):
 	next_effect.rush = e.rush
 
 func change_col_power():
-	var playing_card := deck_list[playing_card_id] as Card
 	col_power.text = str(playing_card.get_current_power())
 func change_col_hit():
-	var playing_card := deck_list[playing_card_id] as Card
 	col_hit.text = str(playing_card.get_current_hit())
 func change_col_block():
-	var playing_card := deck_list[playing_card_id] as Card
 	col_block.text = str(playing_card.get_current_block())
 
 func change_col_rush():
-	var playing_card := deck_list[playing_card_id] as Card
 	for i in playing_card.front.data.skills.size():
 		var s := playing_card.front.data.skills[i] as SkillData.NamedSkill
 		if s.data.id == 2:
@@ -167,4 +170,10 @@ func change_col_rush():
 			var l = col_skill_list.get_child(i) as CombatSkillLine
 			l.set_text(s.data.name + "(" + str(r) + ")")
 			break
-		
+
+
+func add_damage(add_d : int):
+	combat_damage += add_d
+	var block = playing_card.get_current_block()
+	var d = combat_damage - block
+	damage_label.text = str(d if d > 0 else 0)
