@@ -1,0 +1,74 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=1]
+[ext_resource path="res://scenes/settings scene.gd" type="Script" id=2]
+
+[sub_resource type="DynamicFont" id=1]
+size = 24
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 32
+font_data = ExtResource( 1 )
+
+[sub_resource type="Theme" id=3]
+Button/fonts/font = SubResource( 1 )
+Label/fonts/font = SubResource( 2 )
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0, 0, 0, 0.752941 )
+
+[node name="SettingsScene" type="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = SubResource( 3 )
+custom_styles/panel = SubResource( 4 )
+script = ExtResource( 2 )
+
+[node name="BackButton" type="Button" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -120.0
+margin_top = 16.0
+margin_right = -16.0
+margin_bottom = 64.0
+text = "Back"
+
+[node name="HSlider" type="HSlider" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 384.0
+margin_top = -272.0
+margin_right = -256.0
+margin_bottom = -208.0
+grow_horizontal = 2
+grow_vertical = 2
+step = 5.0
+value = 50.0
+tick_count = 11
+ticks_on_borders = true
+
+[node name="HSlider2" type="Label" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 128.0
+margin_top = -272.0
+margin_right = -912.0
+margin_bottom = -208.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "テスト"
+align = 2
+valign = 1
+
+[node name="SurrenderButton" type="Button" parent="."]
+margin_left = 16.0
+margin_top = 16.0
+margin_right = 208.0
+margin_bottom = 64.0
+text = "Surrender"
+
+[connection signal="pressed" from="BackButton" to="." method="_on_BackButton_pressed"]
+[connection signal="pressed" from="SurrenderButton" to="." method="_on_SurrenderButton_pressed"]

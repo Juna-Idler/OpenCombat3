@@ -11,13 +11,23 @@ class SceneChanger extends ISceneChanger:
 		node = n
 		fade = f
 		current_scene = c
-	
-	func _goto_playing_scene(server : IGameServer):
+		
+	func fade_out(duration : float):
 		fade.color.a = 0.0
 		fade.show()
 		var tween := node.create_tween()
-		tween.tween_property(fade,"color:a",1.0,1.0)
+		tween.tween_property(fade,"color:a",1.0,duration)
 		yield(tween,"finished")
+		
+	func fade_in(duration : float):
+		var tween = node.create_tween()
+		tween.tween_property(fade,"color:a",0.0,duration)
+		yield(tween,"finished")
+		fade.hide()
+	
+	
+	func _goto_playing_scene(server : IGameServer):
+		yield(fade_out(1.0),"completed")
 
 		if current_scene != null:
 			node.remove_child(current_scene)
@@ -27,10 +37,20 @@ class SceneChanger extends ISceneChanger:
 		current_scene.initialize(server,self)
 		node.add_child(current_scene)
 		
-		tween = node.create_tween()
-		tween.tween_property(fade,"color:a",0.0,1.0)
-		yield(tween,"finished")
-		fade.hide()
+		yield(fade_in(1.0),"completed")
+
+	func _goto_title_scene():
+		yield(fade_out(1.0),"completed")
+
+		if current_scene != null:
+			node.remove_child(current_scene)
+			current_scene.free()
+		var Scene := load("res://scenes/title_scene.tscn") as PackedScene
+		current_scene = Scene.instance() as TitleScene
+		current_scene.initialize(self)
+		node.add_child(current_scene)
+		
+		yield(fade_in(1.0),"completed")
 
 
 var scene_changer : SceneChanger

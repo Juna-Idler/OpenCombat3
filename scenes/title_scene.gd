@@ -1,5 +1,7 @@
 extends Node
 
+class_name TitleScene
+
 var scene_changer : ISceneChanger
 
 func _ready():

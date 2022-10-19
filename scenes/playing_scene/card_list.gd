@@ -77,7 +77,7 @@ func restore_card():
 		ci.o_parent_node.add_child(c)
 		tween.tween_property(c,"rotation",ci.o_rotation,0.5)
 		tween.tween_property(c,"global_position",ci.o_position,0.5)
-		
+
 	tween.set_parallel(false)
 	for ci in container.get_children():
 		if not ci.visible:

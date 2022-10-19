@@ -1,3 +1,5 @@
+# warning-ignore-all:return_value_discarded
+
 extends Node
 
 class_name PlayingScene
@@ -41,11 +43,9 @@ func _ready():
 		var deck = []
 		for i in range(27):
 			deck.append(i+1)
-# warning-ignore:return_value_discarded
 		offline.standby_single(deck,0)
 		initialize(offline,null)
 
-# warning-ignore:unused_variable
 	var pd := game_server._get_primary_data()
 	var my_deck := []
 	for i in pd.my_deck_list.size():
@@ -85,7 +85,8 @@ func _ready():
 			combat_overlay,$BGLayer/PowerBalance,
 			$"%MyNextBuf",$"%RivalNextBuf")
 	combat_overlay.visible = false
-	$ListLayer/CardList.large_card_view = $LargeCardLayer/LargeCardView
+	$"%CardList".large_card_view = $"%LargeCardView"
+	$"%ResultOverlap".hide()
 	
 	game_server._send_ready()
 	
@@ -95,13 +96,10 @@ func initialize(server : IGameServer,changer : ISceneChanger):
 	scene_changer = changer
 
 	game_server = server
-# warning-ignore:return_value_discarded
 	game_server.connect("recieved_first_data",self,"_on_GameServer_recieved_first_data")
-# warning-ignore:return_value_discarded
 	game_server.connect("recieved_combat_result",self,"_on_GameServer_recieved_combat_result")
-# warning-ignore:return_value_discarded
 	game_server.connect("recieved_recovery_result",self,"_on_GameServer_recieved_recovery_result")
-
+	game_server.connect("recieved_abort",self,"_on_GameServer_recieved_abort")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -111,6 +109,22 @@ func initialize(server : IGameServer,changer : ISceneChanger):
 
 
 
+func _on_GameServer_recieved_abort(winlose:int,message:String)->void:
+	if winlose > 0:
+		$TopUILayer/ResultOverlap/RivalVeil.self_modulate = Color.black
+		$TopUILayer/ResultOverlap/MyVeil.self_modulate = Color.white
+		$TopUILayer/ResultOverlap/ResultLabel.text = "Win"
+	elif winlose < 0:
+		$TopUILayer/ResultOverlap/RivalVeil.self_modulate = Color.white
+		$TopUILayer/ResultOverlap/MyVeil.self_modulate = Color.black
+		$TopUILayer/ResultOverlap/ResultLabel.text = "Lose"
+	else:
+		$TopUILayer/ResultOverlap/RivalVeil.self_modulate = Color.gray
+		$TopUILayer/ResultOverlap/MyVeil.self_modulate = Color.gray
+		$TopUILayer/ResultOverlap/ResultLabel.text = "Draw"
+	$"%ResultOverlap".show()
+	$TopUILayer/Control/SettingButton.disabled = true
+	return
 
 func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
 	phase = IGameServer.Phase.COMBAT
@@ -120,10 +134,6 @@ func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
 
 
 func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData,_situation:int):
-	var my_select_id : int = data.myself.hand_indexes[data.myself.hand_select]
-	var rival_select_id : int = data.rival.hand_indexes[data.rival.hand_select]
-	var my_playing_card := myself.deck_list[my_select_id] as Card
-	var rival_playing_card := rival.deck_list[rival_select_id] as Card
 
 	var tween := create_tween()
 	myself.play(data.myself.hand_select,data.myself.hand_indexes,data.myself.damage,tween)
@@ -131,6 +141,28 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData,_situatio
 	yield(tween,"finished")
 
 	yield(combat_director.perform(self),"completed")
+
+	if data.next_phase == IGameServer.Phase.GAMEFINISH:
+		round_count = data.round_count
+		phase = data.next_phase
+		
+		var mlife = data.myself.life - data.myself.damage
+		var rlife = data.rival.life - data.rival.damage
+		if mlife > rlife:
+			$TopUILayer/ResultOverlap/RivalVeil.self_modulate = Color.black
+			$TopUILayer/ResultOverlap/MyVeil.self_modulate = Color.white
+			$TopUILayer/ResultOverlap/ResultLabel.text = "Win"
+		elif mlife < rlife:
+			$TopUILayer/ResultOverlap/RivalVeil.self_modulate = Color.white
+			$TopUILayer/ResultOverlap/MyVeil.self_modulate = Color.black
+			$TopUILayer/ResultOverlap/ResultLabel.text = "Lose"
+		else:
+			$TopUILayer/ResultOverlap/RivalVeil.self_modulate = Color.gray
+			$TopUILayer/ResultOverlap/MyVeil.self_modulate = Color.gray
+			$TopUILayer/ResultOverlap/ResultLabel.text = "Draw"
+		$"%ResultOverlap".show()
+		$TopUILayer/Control/SettingButton.disabled = true
+		return
 
 	tween = create_tween()
 	myself.play_end(data.myself.draw_indexes,tween)
@@ -164,8 +196,6 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData,_situatio
 
 
 func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
-	var my_select_id : int = -1
-	var rival_select_id : int = -1
 	
 	var tween := create_tween()
 	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
@@ -210,33 +240,33 @@ func _on_RivalHandArea_clicked_card(_index:int,_card:Card):
 
 func _on_MyHandArea_held_card(_index:int,card:Card):
 	if card != null:
-		$LargeCardLayer/LargeCardView.show_layer(card.get_card_data())
+		$"%LargeCardView".show_layer(card.get_card_data())
 
 func _on_RivalHandArea_held_card(_index:int,card:Card):
 	if card != null:
-		$LargeCardLayer/LargeCardView.show_layer(card.get_card_data())
+		$"%LargeCardView".show_layer(card.get_card_data())
 
 func _on_held_card(card:Card):
 	if card != null:
-		$LargeCardLayer/LargeCardView.show_layer(card.get_card_data())
+		$"%LargeCardView".show_layer(card.get_card_data())
 
 func _on_MyPlayed_clicked():
 	if not myself.played.empty():
-		$ListLayer/CardList.set_card_list(myself.played,myself.deck_list)
+		$"%CardList".set_card_list(myself.played,myself.deck_list)
 
 
 func _on_MyPlayed_held():
 	if not myself.played.empty():
-		$LargeCardLayer/LargeCardView.show_layer(myself.deck_list[myself.played.back()].get_card_data())
+		$"%LargeCardView".show_layer(myself.deck_list[myself.played.back()].get_card_data())
 
 func _on_RivalPlayed_clicked():
 	if not rival.played.empty():
-		$ListLayer/CardList.set_card_list(rival.played,rival.deck_list)
+		$"%CardList".set_card_list(rival.played,rival.deck_list)
 
 
 func _on_RivalPlayed_held():
 	if not rival.played.empty():
-		$LargeCardLayer/LargeCardView.show_layer(rival.deck_list[rival.played.back()].get_card_data())
+		$"%LargeCardView".show_layer(rival.deck_list[rival.played.back()].get_card_data())
 
 
 func _on_RivalPlayed_clicked_card(_card):
@@ -253,10 +283,22 @@ func _on_RivalStack_clicked():
 
 func _on_MyDiscard_clicked():
 	if not myself.discard.empty():
-		$ListLayer/CardList.set_card_list(myself.discard,myself.deck_list)
+		$"%CardList".set_card_list(myself.discard,myself.deck_list)
 
 
 func _on_RivalDiscard_clicked():
 	if not rival.discard.empty():
-		$ListLayer/CardList.set_card_list(rival.discard,rival.deck_list)
+		$"%CardList".set_card_list(rival.discard,rival.deck_list)
 
+
+
+func _on_SettingButton_pressed():
+	$"%SettingsScene".show()
+
+
+func _on_SettingsScene_pressed_surrender():
+	game_server._send_surrender()
+
+
+func _on_ReturnButton_pressed():
+	scene_changer._goto_title_scene()
