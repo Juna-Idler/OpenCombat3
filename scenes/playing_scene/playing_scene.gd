@@ -1,5 +1,9 @@
 extends Node
 
+class_name PlayingScene
+
+var scene_changer : ISceneChanger
+
 const Card = preload("../card/card.tscn")
 
 onready var my_combat_pos : Vector2 = $UILayer/MyField/Playing.rect_global_position + $UILayer/MyField/Playing.rect_size / 2
@@ -32,43 +36,33 @@ var rival : PlayingPlayer
 var combat_director : CombatDirector = CombatDirector.new()
 
 func _ready():
-	
-	var cc := Global.card_catalog
-	
-#	if game_server == null:
-	var offline := OfflineServer.new("Tester",cc)
-	game_server = offline
+	if game_server == null:
+		var offline := OfflineServer.new("Tester",Global.card_catalog)
+		var deck = []
+		for i in range(27):
+			deck.append(i+1)
 # warning-ignore:return_value_discarded
-	game_server.connect("recieved_first_data",self,"_on_GameServer_recieved_first_data")
-# warning-ignore:return_value_discarded
-	game_server.connect("recieved_combat_result",self,"_on_GameServer_recieved_combat_result")
-# warning-ignore:return_value_discarded
-	game_server.connect("recieved_recovery_result",self,"_on_GameServer_recieved_recovery_result")
-
-	var deck = []
-	for i in range(27):
-		deck.append(i+1)
-# warning-ignore:return_value_discarded
-	offline.standby_single(deck,0)
+		offline.standby_single(deck,0)
+		initialize(offline,null)
 
 # warning-ignore:unused_variable
 	var pd := game_server._get_primary_data()
-	var cdeck := []
+	var my_deck := []
 	for i in pd.my_deck_list.size():
-		var c := Card.instance().initialize_card(i,cc.get_card_data(pd.my_deck_list[i])) as Card
-		cdeck.append(c)
+		var c := Card.instance().initialize_card(i,Global.card_catalog.get_card_data(pd.my_deck_list[i])) as Card
+		my_deck.append(c)
 		c.position = my_stack_pos
 		c.visible = false
 		$CardLayer.add_child(c)
-	var rcdeck := []
+	var rival_deck := []
 	for i in pd.rival_deck_list.size():
-		var c := Card.instance().initialize_card(i,cc.get_card_data(pd.rival_deck_list[i]),true) as Card
-		rcdeck.append(c)
+		var c := Card.instance().initialize_card(i,Global.card_catalog.get_card_data(pd.rival_deck_list[i]),true) as Card
+		rival_deck.append(c)
 		c.position = rival_stack_pos
 		c.visible = false
 		$CardLayer.add_child(c)	
 	
-	myself = PlayingPlayer.new(cdeck,pd.my_name,
+	myself = PlayingPlayer.new(my_deck,pd.my_name,
 			$UILayer/MyField/HandArea,
 			my_combat_pos,
 			my_played_pos,
@@ -77,7 +71,7 @@ func _ready():
 			my_life,
 			$CombatLayer/CombatOverlay/MyControl,
 			$TopUILayer/Control/MyDamage)
-	rival = PlayingPlayer.new(rcdeck,pd.rival_name,
+	rival = PlayingPlayer.new(rival_deck,pd.rival_name,
 			$UILayer/RivalField/HandArea,
 			rival_combat_pos,
 			rival_played_pos,
@@ -96,9 +90,26 @@ func _ready():
 	game_server._send_ready()
 	
 
+func initialize(server : IGameServer,changer : ISceneChanger):
+	
+	scene_changer = changer
+
+	game_server = server
+# warning-ignore:return_value_discarded
+	game_server.connect("recieved_first_data",self,"_on_GameServer_recieved_first_data")
+# warning-ignore:return_value_discarded
+	game_server.connect("recieved_combat_result",self,"_on_GameServer_recieved_combat_result")
+# warning-ignore:return_value_discarded
+	game_server.connect("recieved_recovery_result",self,"_on_GameServer_recieved_recovery_result")
+
+
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
+
+
+
 
 
 func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
