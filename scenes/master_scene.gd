@@ -12,6 +12,9 @@ class SceneChanger extends ISceneChanger:
 		fade = f
 		current_scene = c
 		
+		randomize()
+		
+		
 	func fade_out(duration : float):
 		fade.color.a = 0.0
 		fade.show()
