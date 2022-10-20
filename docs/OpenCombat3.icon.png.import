@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/OpenCombat3.png-b1787883ee1df1a882b4661786e52900.stex"
+path="res://.import/OpenCombat3.icon.png-1c8b94e52fead498ff3ddf5e4f1e9c3f.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://export/OpenCombat3.png"
-dest_files=[ "res://.import/OpenCombat3.png-b1787883ee1df1a882b4661786e52900.stex" ]
+source_file="res://docs/OpenCombat3.icon.png"
+dest_files=[ "res://.import/OpenCombat3.icon.png-1c8b94e52fead498ff3ddf5e4f1e9c3f.stex" ]
 
 [params]
 

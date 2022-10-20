@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/OpenCombat3.icon.png-8e8361b2629d2424b122ee892720c41c.stex"
+path="res://.import/OpenCombat3.apple-touch-icon.png-7bf382c79a93d0d9ec37763f337d8232.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://export/OpenCombat3.icon.png"
-dest_files=[ "res://.import/OpenCombat3.icon.png-8e8361b2629d2424b122ee892720c41c.stex" ]
+source_file="res://docs/OpenCombat3.apple-touch-icon.png"
+dest_files=[ "res://.import/OpenCombat3.apple-touch-icon.png-7bf382c79a93d0d9ec37763f337d8232.stex" ]
 
 [params]
 
