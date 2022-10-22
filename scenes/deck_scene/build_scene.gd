@@ -64,7 +64,7 @@ func _ready():
 	var deck := []
 	for i in 27:
 		deck.append(i+1)
-	var data = DeckData.new(deck,"名前はない",[-1,-1,-1])
+	var data = DeckData.new(deck,"名前はない",[])
 	initialize(data)
 
 
@@ -168,10 +168,9 @@ func _on_DeckItem_dragging(_self,relative_pos,start_pos):
 func _on_DeckItem_dropped(_self,relative_pos,start_pos):
 	var g_drop_pos = _self.rect_global_position + relative_pos + start_pos
 	if banner_mode:
-		if $Container/BannerEditor.get_global_rect().has_point(g_drop_pos):
-			var cd : CardData = _self.get_node("CardFront").data
+		if $"%BannerEditor".get_global_rect().has_point(g_drop_pos):
 			var index : int = deck_container.get_children().find(_self)
-			$"%BannerEditor".drop_card(g_drop_pos,cd,index)
+			$"%BannerEditor".drop_card(index)
 	else:
 		if deck_area.has_point(g_drop_pos):
 			var skip : int = relative_pos.x / (deck_item_width + deck_item_space)

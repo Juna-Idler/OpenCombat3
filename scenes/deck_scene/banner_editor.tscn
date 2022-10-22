@@ -1,19 +1,8 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://scenes/deck_scene/banner_editor.gd" type="Script" id=1]
 [ext_resource path="res://scenes/deck_scene/deck_banner.tscn" type="PackedScene" id=2]
-[ext_resource path="res://scenes/card/card_front.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/deck_scene/banner_editor.gd" type="Script" id=3]
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=4]
-[ext_resource path="res://scenes/ui/draggable_control.gd" type="Script" id=5]
-[ext_resource path="res://scenes/ui/h_tween_box_container.gd" type="Script" id=6]
-
-[sub_resource type="StyleBoxFlat" id=4]
-bg_color = Color( 0, 0, 0, 1 )
-border_color = Color( 1, 1, 1, 1 )
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
 
 [sub_resource type="DynamicFont" id=12]
 size = 24
@@ -22,79 +11,26 @@ font_data = ExtResource( 4 )
 [node name="BannerEditor" type="Panel"]
 anchor_right = 1.0
 margin_bottom = 320.0
-script = ExtResource( 1 )
+script = ExtResource( 3 )
 
 [node name="Banner" parent="." instance=ExtResource( 2 )]
-margin_left = 568.0
-margin_top = 92.0
-margin_right = -8.0
-margin_bottom = -12.0
-rect_min_size = Vector2( 704, 216 )
-custom_styles/panel = SubResource( 4 )
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+margin_left = -360.0
+margin_top = -232.0
+margin_right = 360.0
+margin_bottom = -16.0
 
 [node name="NameEdit" type="LineEdit" parent="."]
-margin_left = 160.0
-margin_top = 17.0
-margin_right = 576.0
-margin_bottom = 73.0
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -360.0
+margin_top = 16.0
+margin_right = 360.0
+margin_bottom = 72.0
 custom_fonts/font = SubResource( 12 )
 text = "デフォルトデッキ名がはいってるんじゃないの"
 
-[node name="HTweenBox" type="Control" parent="."]
-anchor_bottom = 1.0
-margin_right = 560.0
-script = ExtResource( 6 )
-left_margin = 32
-right_margin = 32
-space = 24
-top_margin = 80
-
-[node name="Card1" type="Control" parent="HTweenBox"]
-unique_name_in_owner = true
-margin_left = 64.0
-margin_top = 94.0
-margin_right = 208.0
-margin_bottom = 310.0
-script = ExtResource( 5 )
-
-[node name="CardFront1" parent="HTweenBox/Card1" instance=ExtResource( 3 )]
-unique_name_in_owner = true
-margin_right = 136.0
-margin_bottom = 216.0
-
-[node name="Card2" type="Control" parent="HTweenBox"]
-unique_name_in_owner = true
-margin_left = 226.0
-margin_top = 94.0
-margin_right = 370.0
-margin_bottom = 310.0
-script = ExtResource( 5 )
-
-[node name="CardFront2" parent="HTweenBox/Card2" instance=ExtResource( 3 )]
-unique_name_in_owner = true
-margin_right = 142.0
-margin_bottom = 216.0
-
-[node name="Card3" type="Control" parent="HTweenBox"]
-unique_name_in_owner = true
-margin_left = 390.0
-margin_top = 94.0
-margin_right = 534.0
-margin_bottom = 310.0
-script = ExtResource( 5 )
-
-[node name="CardFront3" parent="HTweenBox/Card3" instance=ExtResource( 3 )]
-unique_name_in_owner = true
-margin_right = 146.0
-margin_bottom = 216.0
-
+[connection signal="card_clicked" from="Banner" to="." method="_on_Banner_card_clicked"]
 [connection signal="text_changed" from="NameEdit" to="." method="_on_NameEdit_text_changed"]
-[connection signal="dragged" from="HTweenBox/Card1" to="." method="_on_Card_dragged"]
-[connection signal="dragging" from="HTweenBox/Card1" to="." method="_on_Card_dragging"]
-[connection signal="dropped" from="HTweenBox/Card1" to="." method="_on_Card_dropped"]
-[connection signal="dragged" from="HTweenBox/Card2" to="." method="_on_Card_dragged"]
-[connection signal="dragging" from="HTweenBox/Card2" to="." method="_on_Card_dragging"]
-[connection signal="dropped" from="HTweenBox/Card2" to="." method="_on_Card_dropped"]
-[connection signal="dragged" from="HTweenBox/Card3" to="." method="_on_Card_dragged"]
-[connection signal="dragging" from="HTweenBox/Card3" to="." method="_on_Card_dragging"]
-[connection signal="dropped" from="HTweenBox/Card3" to="." method="_on_Card_dropped"]

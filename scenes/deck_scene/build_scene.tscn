@@ -198,6 +198,7 @@ visible = false
 [connection signal="gui_input" from="Container/PoolList" to="." method="_on_PoolList_gui_input"]
 [connection signal="pressed" from="Container/PoolList/Prev" to="." method="_on_Prev_pressed"]
 [connection signal="pressed" from="Container/PoolList/Next" to="." method="_on_Next_pressed"]
+[connection signal="name_changed" from="Container/BannerEditor" to="." method="_on_BannerEditor_name_changed"]
 [connection signal="pressed" from="Header/ListOpen" to="." method="_on_ListOpen_pressed"]
 [connection signal="clicked" from="Header/DeckName" to="." method="_on_DeckName_clicked"]
 [connection signal="closed" from="DeckList" to="." method="_on_DeckList_closed"]
