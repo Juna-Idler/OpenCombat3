@@ -1,0 +1,166 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=1]
+[ext_resource path="res://scenes/card/card_frame.png" type="Texture" id=2]
+[ext_resource path="res://scenes/deck_scene/deck_banner.gd" type="Script" id=3]
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0, 0, 0, 1 )
+border_color = Color( 1, 1, 1, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="DynamicFont" id=1]
+size = 32
+outline_size = 4
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 1 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0, 0, 0, 0.752941 )
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="DynamicFont" id=3]
+size = 22
+font_data = ExtResource( 1 )
+
+[sub_resource type="StyleBoxFlat" id=5]
+bg_color = Color( 0, 0, 0, 0 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 1, 1, 1, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="DeckBanner" type="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -576.0
+margin_bottom = -504.0
+rect_min_size = Vector2( 640, 216 )
+custom_styles/panel = SubResource( 4 )
+script = ExtResource( 3 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_right = 448.0
+margin_bottom = 216.0
+alignment = 1
+
+[node name="CardFront1" type="Control" parent="HBoxContainer"]
+margin_left = 4.0
+margin_right = 148.0
+margin_bottom = 216.0
+rect_min_size = Vector2( 144, 216 )
+rect_pivot_offset = Vector2( 72, 108 )
+rect_clip_content = true
+mouse_filter = 2
+
+[node name="Picture" type="TextureRect" parent="HBoxContainer/CardFront1"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 7.0
+margin_top = 8.0
+margin_right = -7.0
+margin_bottom = -24.0
+mouse_filter = 2
+expand = true
+stretch_mode = 7
+
+[node name="Frame" type="TextureRect" parent="HBoxContainer/CardFront1"]
+self_modulate = Color( 1, 0, 0, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource( 2 )
+stretch_mode = 6
+
+[node name="CardFront2" type="Control" parent="HBoxContainer"]
+margin_left = 152.0
+margin_right = 296.0
+margin_bottom = 216.0
+rect_min_size = Vector2( 144, 216 )
+rect_pivot_offset = Vector2( 72, 108 )
+rect_clip_content = true
+mouse_filter = 2
+
+[node name="Picture" type="TextureRect" parent="HBoxContainer/CardFront2"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 7.0
+margin_top = 8.0
+margin_right = -7.0
+margin_bottom = -24.0
+mouse_filter = 2
+expand = true
+stretch_mode = 7
+
+[node name="Frame" type="TextureRect" parent="HBoxContainer/CardFront2"]
+self_modulate = Color( 1, 0, 0, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource( 2 )
+stretch_mode = 6
+
+[node name="CardFront3" type="Control" parent="HBoxContainer"]
+margin_left = 300.0
+margin_right = 444.0
+margin_bottom = 216.0
+rect_min_size = Vector2( 144, 216 )
+rect_pivot_offset = Vector2( 72, 108 )
+rect_clip_content = true
+mouse_filter = 2
+
+[node name="Picture" type="TextureRect" parent="HBoxContainer/CardFront3"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 7.0
+margin_top = 8.0
+margin_right = -7.0
+margin_bottom = -24.0
+mouse_filter = 2
+expand = true
+stretch_mode = 7
+
+[node name="Frame" type="TextureRect" parent="HBoxContainer/CardFront3"]
+self_modulate = Color( 1, 0, 0, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource( 2 )
+stretch_mode = 6
+
+[node name="Name" type="Label" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -64.0
+custom_fonts/font = SubResource( 1 )
+custom_styles/normal = SubResource( 2 )
+text = "なにかしらデッキ名的なものをここ"
+align = 1
+valign = 1
+
+[node name="Information" type="Label" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 448.0
+margin_bottom = -63.0
+custom_fonts/font = SubResource( 3 )
+text = " 30枚/コスト30
+ 赤緑青
+ レベル123
+ ４行目"
+valign = 1
+
+[node name="Panel" type="Panel" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/panel = SubResource( 5 )

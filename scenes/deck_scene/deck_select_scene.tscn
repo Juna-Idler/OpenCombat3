@@ -1,0 +1,72 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scenes/deck_scene/deck_banner.tscn" type="PackedScene" id=1]
+
+[sub_resource type="StyleBoxFlat" id=1]
+
+[sub_resource type="StyleBoxFlat" id=2]
+
+[node name="SelectScene" type="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="LeftPanel" type="Panel" parent="HBoxContainer"]
+margin_right = 256.0
+margin_bottom = 720.0
+rect_min_size = Vector2( 256, 0 )
+size_flags_horizontal = 3
+custom_styles/panel = SubResource( 1 )
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer"]
+margin_left = 260.0
+margin_right = 920.0
+margin_bottom = 720.0
+rect_min_size = Vector2( 660, 720 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ScrollContainer"]
+margin_right = 640.0
+margin_bottom = 876.0
+
+[node name="Control" parent="HBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource( 1 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 0.0
+margin_top = 0.0
+margin_right = 640.0
+margin_bottom = 216.0
+
+[node name="Control2" parent="HBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource( 1 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 0.0
+margin_top = 220.0
+margin_right = 640.0
+margin_bottom = 436.0
+
+[node name="Control3" parent="HBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource( 1 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 0.0
+margin_top = 440.0
+margin_right = 640.0
+margin_bottom = 656.0
+
+[node name="Control4" parent="HBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource( 1 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 0.0
+margin_top = 660.0
+margin_right = 640.0
+margin_bottom = 876.0
+
+[node name="Panel" type="Panel" parent="HBoxContainer"]
+margin_left = 924.0
+margin_right = 1244.0
+margin_bottom = 720.0
+rect_min_size = Vector2( 320, 0 )
+size_flags_horizontal = 15
+custom_styles/panel = SubResource( 2 )

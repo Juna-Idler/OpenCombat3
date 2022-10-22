@@ -4,7 +4,7 @@ const RawCard := preload( "../card/card_front.tscn")
 const DeckItem := preload("control_in_deck.tscn")
 const PoolItem := preload("small_card.tscn")
 
-onready var deck_container : HTweenBoxContainer = $ScrollContainer/HTweenBoxContainer
+onready var deck_container : HTweenBoxContainer = $"%HTweenBoxContainer"
 const deck_item_width := 144
 const deck_item_height := 216
 const deck_item_space := 8
@@ -17,8 +17,10 @@ const pool_item_x_count := 9
 const pool_item_x_step := pool_item_width + pool_item_space
 const pool_item_y_step := pool_item_height + pool_item_space
 
-onready var deck_area : Rect2 = $ScrollContainer.get_global_rect()
+onready var deck_area : Rect2 = $"%ScrollContainer".get_global_rect()
 
+const slide_duration := 0.5
+var banner_mode := false
 
 var pool_controls :Array
 
@@ -26,6 +28,14 @@ var pool_start_id : int = 1
 
 var deck_cards_count : int
 var deck_cost : int = 0
+
+var key_cards : Array
+
+func initialize(deck : DeckData):
+	key_cards = deck.key_card_indexes
+	set_deck(deck.cards)
+	$Header/DeckName.text = deck.name
+
 
 func _ready():
 	pool_controls = [[],[]]
@@ -44,13 +54,19 @@ func _ready():
 			p._timer = $Timer
 			p.connect("mouse_entered",self,"_on_PoolItem_mouse_entered",[p])
 			p.connect("mouse_exited",self,"_on_PoolItem_mouse_exited",[p])
-			$PoolList.add_child(p)
+			$"%PoolList".add_child(p)
 			
-	$PoolList.move_child(zoomer,$PoolList.get_child_count()-1)
+	$"%PoolList".move_child($"%Zoom",$"%PoolList".get_child_count()-2)
+	$"%PoolList".move_child($"%Invalid",$"%PoolList".get_child_count()-1)
+	$"%Zoom".hide()
+	$"%Invalid".hide()
+
 	var deck := []
 	for i in 27:
 		deck.append(i+1)
-	set_deck(deck)
+	var data = DeckData.new(deck,"名前はない",[-1,-1,-1])
+	initialize(data)
+
 
 func set_pool(start_id : int):
 	pool_start_id = start_id
@@ -87,7 +103,7 @@ func set_deck(deck : Array):
 
 
 func add_card(id : int,g_position : Vector2):
-	var sc = $ScrollContainer
+	var sc = $"%ScrollContainer"
 	var rate : float = sc.scroll_horizontal / (deck_container.rect_size.x - sc.rect_size.x)
 	g_position -= sc.rect_global_position + deck_container.rect_position
 
@@ -151,21 +167,27 @@ func _on_DeckItem_dragging(_self,relative_pos,start_pos):
 
 func _on_DeckItem_dropped(_self,relative_pos,start_pos):
 	var g_drop_pos = _self.rect_global_position + relative_pos + start_pos
-	if deck_area.has_point(g_drop_pos):
-		var skip : int = relative_pos.x / (deck_item_width + deck_item_space)
-		if skip != 0:
-			var old_index : int = deck_container.get_children().find(_self)
-			var new_index : int = old_index + skip
-			if new_index >= 0 and new_index < deck_cards_count:
-				var v = deck_container.move_child(_self,new_index)
-				_self.rect_position += relative_pos
-				deck_container.layout_tween()
+	if banner_mode:
+		if $Container/BannerEditor.get_global_rect().has_point(g_drop_pos):
+			var cd : CardData = _self.get_node("CardFront").data
+			var index : int = deck_container.get_children().find(_self)
+			$"%BannerEditor".drop_card(g_drop_pos,cd,index)
 	else:
-		var cd : CardData = _self.get_node("CardFront").data
-		deck_container.remove_child(_self)
-		deck_container.layout_tween()
-		_self.queue_free()
-		remove_card(cd)
+		if deck_area.has_point(g_drop_pos):
+			var skip : int = relative_pos.x / (deck_item_width + deck_item_space)
+			if skip != 0:
+				var old_index : int = deck_container.get_children().find(_self)
+				var new_index : int = old_index + skip
+				if new_index >= 0 and new_index < deck_cards_count:
+					var v = deck_container.move_child(_self,new_index)
+					_self.rect_position += relative_pos
+					deck_container.layout_tween()
+		else:
+			var cd : CardData = _self.get_node("CardFront").data
+			deck_container.remove_child(_self)
+			deck_container.layout_tween()
+			_self.queue_free()
+			remove_card(cd)
 	
 	_self.modulate.a = 1
 	mover.visible = false
@@ -181,7 +203,7 @@ func _on_PoolItem_dragged(_self,pos):
 	var diff : Vector2 = (_self.rect_size - Vector2(144,216)) / 2
 	mover.rect_global_position = gp + diff
 	mover.visible = true
-	zoomer.visible = false
+	$"%Zoom".visible = false
 	
 func _on_PoolItem_dragging(_self,relative_pos,start_pos):
 	var gp = _self.rect_global_position
@@ -198,35 +220,34 @@ func _on_PoolItem_dropped(_self,relative_pos,start_pos):
 func _on_PoolItem_held(_self):
 	$LargeCardView.show_layer(_self.get_node("CardFront").data)
 
-onready var zoomer := $PoolList/Zoom
 
 func _on_PoolItem_mouse_entered(pool_item):
-	zoomer.initialize_card(pool_item.get_node("CardFront").data)
+	$"%Zoom".initialize_card(pool_item.get_node("CardFront").data)
 	var gp = pool_item.rect_global_position
 	var diff : Vector2 = (pool_item.rect_size - Vector2(144,216)) / 2
-	zoomer.rect_global_position = gp + diff
-	zoomer.visible = true
+	$"%Zoom".rect_global_position = gp + diff
+	$"%Zoom".visible = true
 	
 func _on_PoolItem_mouse_exited(pool_item):
-	zoomer.visible = false
+	$"%Zoom".visible = false
 
 
 func _on_Next_pressed():
 	pool_start_id += 18
 	set_pool(pool_start_id)
 	if pool_start_id + 18 > Global.card_catalog.get_max_card_id():
-		$PoolList/Next.disabled = true
-	$PoolList/Prev.disabled = false
-	zoomer.visible = false
+		$"%Next".disabled = true
+	$"%Prev".disabled = false
+	$"%Zoom".visible = false
 
 
 func _on_Prev_pressed():
 	pool_start_id -= 18
 	set_pool(pool_start_id)
 	if pool_start_id <= 1:
-		$PoolList/Prev.disabled = true
-	$PoolList/Next.disabled = false
-	zoomer.visible = false
+		$"%Prev".disabled = true
+	$"%Next".disabled = false
+	$"%Zoom".visible = false
 	
 
 func _on_PoolList_gui_input(event):
@@ -235,10 +256,10 @@ func _on_PoolList_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.is_pressed():
 			if event.button_index == BUTTON_WHEEL_UP:
-				if not $PoolList/Prev.disabled:
+				if not $"%Prev".disabled:
 					_on_Prev_pressed()
 			if event.button_index == BUTTON_WHEEL_DOWN:
-				if not $PoolList/Next.disabled:
+				if not $"%Next".disabled:
 					_on_Next_pressed()
 
 
@@ -249,3 +270,21 @@ func _on_ListOpen_pressed():
 
 func _on_DeckList_closed(deck):
 	set_deck(deck)
+
+
+func _on_DeckName_clicked():
+	var pos: float = 56 if banner_mode else 56 + 320
+	banner_mode = not banner_mode
+	if banner_mode:
+		var deck_data := DeckData.new(get_deck(),$Header/DeckName.text,key_cards)
+		$"%BannerEditor".initialize(deck_data)
+	else:
+		key_cards = $"%BannerEditor".get_deck_data().key_card_indexes
+	$"%Invalid".visible = banner_mode
+	var tween := create_tween()
+	tween.tween_property($Container,"rect_position:y",pos,slide_duration)
+
+
+
+func _on_BannerEditor_name_changed(new_name):
+	$Header/DeckName.text = new_name
