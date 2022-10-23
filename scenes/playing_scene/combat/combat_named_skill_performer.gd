@@ -63,9 +63,6 @@ class Reinforce extends Skill:
 				SkillEffects.Attribute.BLOCK:
 					playing_card.affected.block += e.parameter
 					tween.tween_callback(myself,"change_col_block")
-				SkillEffects.Attribute.RUSH:
-					playing_card.affected.rush += e.parameter
-					tween.tween_callback(myself,"change_col_rush")
 		tween.tween_interval(1.0)
 
 
@@ -75,12 +72,7 @@ class Rush extends Skill:
 			myself : PlayingPlayer,rival : PlayingPlayer) -> float:
 		if situation > 0:
 			return 1.0
-		var playing_card = myself.playing_card
-		if situation < 0:
-			var stability = skill.parameter + playing_card.affected.rush
-			if stability < rival.playing_card.get_current_hit():
-				return -0.5
-		return 1.0
+		return -0.5
 		
 	func _after(tween : SceneTreeTween,skill : SkillData.NamedSkill,
 			_vs_color : int,_link_color : int,situation : int,
@@ -89,15 +81,6 @@ class Rush extends Skill:
 			tween.tween_interval(1.0)
 			tween.tween_callback(rival,"add_damage",[(rival.playing_card.get_current_block() + 1) / 2])
 			return
-		var playing_card = myself.playing_card
-		if situation < 0:
-			var stability = skill.parameter + playing_card.affected.rush
-			if stability < rival.playing_card.get_current_hit():
-				return
-		tween.tween_interval(1.0)
-		tween.tween_callback(rival,"add_damage",[(myself.playing_card.get_current_hit() + 1) / 2])
-#		var damage := int((playing_card.get_current_hit() + 1) / 2);
-#		rival.add_damage(damage)
 
 
 class Charge extends Skill:
@@ -121,8 +104,6 @@ class Charge extends Skill:
 #						myself.next_effect.hit += e.parameter
 #					NormalSkillEffects.Attribute.DAMAGE:
 #						myself.next_effect.damage += e.parameter
-#					NormalSkillEffects.Attribute.RUSH:
-#						myself.next_effect.rush += e.parameter
 				pass
 			tween.tween_interval(1.0)
 			return

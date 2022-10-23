@@ -147,13 +147,11 @@ func update_affected(updates : Array):#of IGameServer.UpdateData.Affected
 		c.affected.power = a.power
 		c.affected.hit = a.hit
 		c.affected.block = a.block
-		c.affected.rush = a.rush
 
 func set_next_effect(e):# : IGameServer.UpdateData.Affected):
 	next_effect.power = e.power
 	next_effect.hit = e.hit
 	next_effect.block = e.block
-	next_effect.rush = e.rush
 
 func change_col_power():
 	col_power.text = str(playing_card.get_current_power())
@@ -161,15 +159,6 @@ func change_col_hit():
 	col_hit.text = str(playing_card.get_current_hit())
 func change_col_block():
 	col_block.text = str(playing_card.get_current_block())
-
-func change_col_rush():
-	for i in playing_card.front.data.skills.size():
-		var s := playing_card.front.data.skills[i] as SkillData.NamedSkill
-		if s.data.id == 2:
-			var r : int = s.parameter + playing_card.affected.rush
-			var l = col_skill_list.get_child(i) as CombatSkillLine
-			l.set_text(s.data.name + "(" + str(r) + ")")
-			break
 
 
 func add_damage(add_d : int):

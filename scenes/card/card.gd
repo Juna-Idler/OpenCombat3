@@ -20,13 +20,11 @@ class Affected:
 	var power : int = 0
 	var hit : int = 0
 	var block : int = 0
-	var rush : int = 0
 	
 	func add(other : Affected):
 		power += other.power
 		hit += other.hit
 		block += other.block
-		rush += other.rush
 
 
 func initialize_card(id:int,cd : CardData,rotate := false) -> Card:

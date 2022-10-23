@@ -6,7 +6,6 @@ class Affected:
 	var power : int = 0 setget set_p
 	var hit : int = 0 setget set_h
 	var block : int = 0 setget set_b
-	var rush : int = 0 setget set_r
 
 	func set_p(v):
 		power = v
@@ -17,18 +16,14 @@ class Affected:
 	func set_b(v):
 		block = v
 		updated = true
-	func set_r(v):
-		rush = v
-		updated = true
 
-	func add(p:int,h:int,b:int,r:int):
+	func add(p:int,h:int,b:int):
 		power += p
 		hit += h
 		block += b
-		rush += r
 		updated = true;
 	func add_other(v : Affected):
-		add(v.power,v.hit,v.block,v.rush)
+		add(v.power,v.hit,v.block)
 		
 	func reset_update():
 		updated = false;
@@ -36,7 +31,6 @@ class Affected:
 		power = 0
 		hit = 0
 		block = 0
-		rush = 0
 		updated = true;
 
 

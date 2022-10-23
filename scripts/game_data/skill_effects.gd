@@ -5,7 +5,6 @@ enum Attribute {
 	POWER = 1,
 	HIT,
 	BLOCK,
-	RUSH,
 }
 
 var effects : Array
@@ -22,8 +21,6 @@ class Effect:
 			attribute = Attribute.HIT
 		if text.find("防壁") == 0:
 			attribute = Attribute.BLOCK
-		if text.find("突撃") == 0:
-			attribute = Attribute.RUSH
 		parameter = int(text.substr(param_index))
 
 func _init(text : String):

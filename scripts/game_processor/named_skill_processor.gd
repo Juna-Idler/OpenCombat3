@@ -38,8 +38,6 @@ class Reinforce extends Skill:
 					affected.hit += e.parameter
 				SkillEffects.Attribute.BLOCK:
 					affected.block += e.parameter
-				SkillEffects.Attribute.RUSH:
-					affected.rush += e.parameter
 
 
 class Rush extends Skill:
@@ -47,14 +45,7 @@ class Rush extends Skill:
 			myself : ProcessorData.PlayerData,rival : ProcessorData.PlayerData) -> void:
 		if situation > 0:
 			rival.add_damage((rival.select_card.get_current_block() + 1) / 2)
-			return
-		var playing_card = myself.select_card
-		if situation < 0:
-			var stability = skill.parameter + playing_card.affected.rush
-			if stability < myself.combat_damage:
-				return
-		var damage := int((playing_card.get_current_hit() + 1) / 2);
-		rival.add_damage(damage)
+
 
 class Charge extends Skill:
 	func _process_end(skill : SkillData.NamedSkill,_situation : int,
@@ -70,8 +61,6 @@ class Charge extends Skill:
 						affected.hit += e.parameter
 					SkillEffects.Attribute.BLOCK:
 						affected.block += e.parameter
-					SkillEffects.Attribute.RUSH:
-						affected.rush += e.parameter
 					
 
 	

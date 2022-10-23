@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scenes/ui/clickable_control.gd" type="Script" id=1]
-[ext_resource path="res://scenes/deck_scene/deck_banner.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/deck_scene/banner.tscn" type="PackedScene" id=2]
 
 [sub_resource type="StyleBoxFlat" id=4]
 bg_color = Color( 0, 0, 0, 1 )

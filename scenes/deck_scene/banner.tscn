@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=1]
-[ext_resource path="res://scenes/deck_scene/deck_banner.gd" type="Script" id=3]
+[ext_resource path="res://scenes/deck_scene/banner.gd" type="Script" id=2]
 
 [sub_resource type="StyleBoxFlat" id=4]
 bg_color = Color( 0, 0, 0, 1 )
@@ -45,7 +45,7 @@ margin_right = -560.0
 margin_bottom = -504.0
 rect_min_size = Vector2( 720, 216 )
 custom_styles/panel = SubResource( 4 )
-script = ExtResource( 3 )
+script = ExtResource( 2 )
 
 [node name="Container" type="HBoxContainer" parent="."]
 margin_right = 448.0

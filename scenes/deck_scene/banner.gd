@@ -5,7 +5,7 @@ class_name DeckBanner
 
 signal card_clicked(dbcard)
 
-const DeckBannerCard = preload("./deck_banner_card.tscn")
+const DeckBannerCard = preload("./banner_card.tscn")
 
 var deck_name : String
 var deck_cards : PoolIntArray

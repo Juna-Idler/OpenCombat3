@@ -67,7 +67,7 @@ _global_script_classes=[ {
 "base": "Control",
 "class": "DeckBanner",
 "language": "GDScript",
-"path": "res://scenes/deck_scene/deck_banner.gd"
+"path": "res://scenes/deck_scene/banner.gd"
 }, {
 "base": "Reference",
 "class": "DeckData",
@@ -78,11 +78,6 @@ _global_script_classes=[ {
 "class": "DeckList",
 "language": "GDScript",
 "path": "res://scripts/game_data/deck_list.gd"
-}, {
-"base": "Control",
-"class": "DeckSelectScene",
-"language": "GDScript",
-"path": "res://scenes/deck_scene/deck_select_scene.gd"
 }, {
 "base": "Reference",
 "class": "GameProcessor",
@@ -169,6 +164,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/game_processor/processor_data.gd"
 }, {
+"base": "Control",
+"class": "SelectEditDeckScene",
+"language": "GDScript",
+"path": "res://scenes/deck_scene/select_edit_scene.gd"
+}, {
+"base": "Control",
+"class": "SelectUseDeckScene",
+"language": "GDScript",
+"path": "res://scenes/deck_scene/select_use_scene.gd"
+}, {
 "base": "Reference",
 "class": "SkillData",
 "language": "GDScript",
@@ -209,7 +214,6 @@ _global_script_class_icons={
 "DeckBanner": "",
 "DeckData": "",
 "DeckList": "",
-"DeckSelectScene": "",
 "GameProcessor": "",
 "GitAPI": "",
 "HTweenBoxContainer": "",
@@ -227,6 +231,8 @@ _global_script_class_icons={
 "PlayingPlayer": "",
 "PlayingScene": "",
 "ProcessorData": "",
+"SelectEditDeckScene": "",
+"SelectUseDeckScene": "",
 "SkillData": "",
 "SkillEffects": "",
 "SkillProcessor": "",

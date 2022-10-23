@@ -49,7 +49,6 @@ class UpdateData:
 		var power : int = 0
 		var hit : int = 0
 		var block : int = 0
-		var rush : int = 0
 	
 	class PlayerData:
 		var hand_indexes : Array# of int

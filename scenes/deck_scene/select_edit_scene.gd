@@ -1,17 +1,15 @@
 extends Control
 
-class_name DeckSelectScene
+class_name SelectEditDeckScene
 
 const Banner = preload("clickable_banner.tscn")
 
 var scene_changer : ISceneChanger
 
-var deck_list = null
 var select : Control
 
 func initialize(changer : ISceneChanger):
 	scene_changer = changer
-	deck_list = Global.deck_list.list
 	var selected = Global.deck_list.selected
 	
 	var s := Global.deck_list.list.size()
@@ -30,11 +28,12 @@ func initialize(changer : ISceneChanger):
 
 
 func _ready():
-	if deck_list == null:
+#	pass
+	if scene_changer == null:
 		initialize(null)
 
 func save_deck_list():
-	deck_list = []
+	var deck_list = []
 	for c in $"%BannerContainer".get_children():
 		var dd = c.get_node("DeckBanner").get_deck_data()
 		deck_list.append(dd)
@@ -42,11 +41,13 @@ func save_deck_list():
 	Global.deck_list.save_deck_list()
 
 func _on_Banner_clicked(click_db : DeckBanner):
-	for c in $"%BannerContainer".get_children():
+	for i in $"%BannerContainer".get_child_count():
+		var c = $"%BannerContainer".get_child(i)
 		var db = c.get_node("DeckBanner")
 		if db == click_db:
 			click_db.set_frame_color(Color.red)
 			select = c
+			Global.deck_list.selected = i
 		else:
 			db.set_frame_color(Color.white)
 

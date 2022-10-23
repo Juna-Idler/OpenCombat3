@@ -4,7 +4,7 @@ extends Control
 signal pressed_save_button(deck_data)
 
 const RawCard := preload( "../card/card_front.tscn")
-const DeckItem := preload("control_in_deck.tscn")
+const DeckItem := preload("deck_card.tscn")
 const PoolItem := preload("small_card.tscn")
 
 onready var deck_container : HTweenBoxContainer = $"%HTweenBoxContainer"

@@ -1,21 +1,21 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://scenes/deck_scene/deck_list.gd" type="Script" id=1]
-[ext_resource path="res://scenes/card/card_front.tscn" type="PackedScene" id=2]
-[ext_resource path="res://scenes/card/large_card_view.tscn" type="PackedScene" id=3]
-[ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=4]
+[ext_resource path="res://scenes/card/card_front.tscn" type="PackedScene" id=1]
+[ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=2]
+[ext_resource path="res://scenes/deck_scene/list_view.gd" type="Script" id=3]
+[ext_resource path="res://scenes/card/large_card_view.tscn" type="PackedScene" id=4]
 
 [sub_resource type="StyleBoxFlat" id=2]
 bg_color = Color( 0, 0, 0, 0.847059 )
 
 [sub_resource type="DynamicFont" id=3]
 size = 24
-font_data = ExtResource( 4 )
+font_data = ExtResource( 2 )
 
 [node name="DeckList" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = ExtResource( 1 )
+script = ExtResource( 3 )
 
 [node name="DeckContainer" type="Panel" parent="."]
 anchor_right = 1.0
@@ -34,11 +34,11 @@ margin_top = -48.0
 custom_fonts/font = SubResource( 3 )
 text = "戻る"
 
-[node name="DragMover" parent="." instance=ExtResource( 2 )]
+[node name="DragMover" parent="." instance=ExtResource( 1 )]
 unique_name_in_owner = true
 visible = false
 
-[node name="LargeCardView" parent="." instance=ExtResource( 3 )]
+[node name="LargeCardView" parent="." instance=ExtResource( 4 )]
 visible = false
 
 [node name="Timer" type="Timer" parent="."]

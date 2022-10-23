@@ -61,8 +61,8 @@ class SceneChanger extends ISceneChanger:
 		if current_scene != null:
 			node.remove_child(current_scene)
 			current_scene.free()
-		var Scene := load("res://scenes/deck_scene/deck_select_scene.tscn") as PackedScene
-		current_scene = Scene.instance() as DeckSelectScene
+		var Scene := load("res://scenes/deck_scene/select_edit_scene.tscn") as PackedScene
+		current_scene = Scene.instance() as SelectEditDeckScene
 		current_scene.initialize(self)
 		node.add_child(current_scene)
 		
