@@ -4,22 +4,26 @@ class_name DeckSelectScene
 
 const Banner = preload("clickable_banner.tscn")
 
+var scene_changer : ISceneChanger
+
 var deck_list = null
 var select : Control
 
-func initialize(select_index : int):
+func initialize(changer : ISceneChanger):
+	scene_changer = changer
 	deck_list = Global.deck_list.list
+	var selected = Global.deck_list.selected
 	
-	var cc := Global.deck_list.list.size()
-	select_index = 0 if select_index < 0 else select_index
-	select_index = cc - 1 if select_index >= cc else select_index
+	var s := Global.deck_list.list.size()
+	selected = 0 if selected < 0 else selected
+	selected = s - 1 if selected >= s else selected
 	
 	for i in Global.deck_list.list.size():
 		var b = Banner.instance()
 		var db = b.get_node("DeckBanner").initialize(Global.deck_list.list[i])
 		b.connect("clicked",self,"_on_Banner_clicked",[db])
 		$"%BannerContainer".add_child(b)
-		if i == select_index:
+		if i == selected:
 			select = b
 			db.set_frame_color(Color.red)
 			b.grab_focus()
@@ -27,7 +31,7 @@ func initialize(select_index : int):
 
 func _ready():
 	if deck_list == null:
-		initialize(0)
+		initialize(null)
 
 func save_deck_list():
 	deck_list = []
@@ -109,3 +113,7 @@ func _on_ButtonOK_pressed():
 
 func _on_ButtonCancel_pressed():
 	$PopupDialog.hide()
+
+
+func _on_ReturnButton_pressed():
+	scene_changer._goto_title_scene()

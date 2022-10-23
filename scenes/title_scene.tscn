@@ -51,12 +51,26 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = -448.0
-margin_top = -208.0
-margin_right = -192.0
-margin_bottom = -144.0
+margin_left = -512.0
+margin_top = -264.0
+margin_right = -256.0
+margin_bottom = -200.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "VS CPU"
 
+[node name="BuildButton" type="Button" parent="Panel"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = 320.0
+margin_top = -264.0
+margin_right = 576.0
+margin_bottom = -200.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Deck Build"
+
 [connection signal="pressed" from="Panel/CpuButton" to="." method="_on_CpuButton_pressed"]
+[connection signal="pressed" from="Panel/BuildButton" to="." method="_on_BuildButton_pressed"]

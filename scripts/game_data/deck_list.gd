@@ -3,7 +3,7 @@ class_name DeckList
 
 
 var list : Array
-
+var selected : int
 
 func _init():
 	load_deck_list()

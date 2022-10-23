@@ -44,7 +44,7 @@ rect_min_size = Vector2( 256, 0 )
 size_flags_horizontal = 3
 custom_styles/panel = SubResource( 1 )
 
-[node name="Button" type="Button" parent="Panel"]
+[node name="ReturnButton" type="Button" parent="Panel"]
 margin_left = 16.0
 margin_top = 16.0
 margin_right = 208.0
@@ -132,6 +132,7 @@ margin_top = -108.0
 margin_right = 360.0
 margin_bottom = 108.0
 
+[connection signal="pressed" from="Panel/ReturnButton" to="." method="_on_ReturnButton_pressed"]
 [connection signal="pressed" from="Panel/ButtonDelete" to="." method="_on_ButtonDelete_pressed"]
 [connection signal="pressed" from="Panel/ButtonCopy" to="." method="_on_ButtonCopy_pressed"]
 [connection signal="pressed" from="Panel/ButtonNew" to="." method="_on_ButtonNew_pressed"]

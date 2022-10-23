@@ -20,4 +20,7 @@ func _on_CpuButton_pressed():
 	offline.standby_single(deck,0)
 	
 	scene_changer._goto_playing_scene(offline)
-	pass # Replace with function body.
+
+
+func _on_BuildButton_pressed():
+	scene_changer._goto_build_scene()

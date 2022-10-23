@@ -55,6 +55,18 @@ class SceneChanger extends ISceneChanger:
 		
 		yield(fade_in(1.0),"completed")
 
+	func _goto_build_scene():
+		yield(fade_out(1.0),"completed")
+
+		if current_scene != null:
+			node.remove_child(current_scene)
+			current_scene.free()
+		var Scene := load("res://scenes/deck_scene/deck_select_scene.tscn") as PackedScene
+		current_scene = Scene.instance() as DeckSelectScene
+		current_scene.initialize(self)
+		node.add_child(current_scene)
+		
+		yield(fade_in(1.0),"completed")
 
 var scene_changer : SceneChanger
 
