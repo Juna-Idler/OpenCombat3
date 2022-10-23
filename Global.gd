@@ -3,6 +3,8 @@ extends Node
 
 var card_catalog := CardCatalog.new()
 
+var deck_list := DeckList.new()
+
 func _ready():
 	pause_mode = Node.PAUSE_MODE_PROCESS
 

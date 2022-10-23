@@ -4,7 +4,7 @@ signal closed(deck)
 #_on_DeckList_closed(deck : Array)
 
 const RawCard := preload( "../card/card_front.tscn")
-const DeckItem := preload("small112_card.tscn")
+const DeckItem := preload("small_card.tscn")
 
 onready var deck_container := $DeckContainer
 onready var mover = $"%DragMover"
@@ -54,7 +54,7 @@ func set_deck(deck : Array):
 		c.connect("mouse_exited",self,"_on_DeckItem_mouse_exited",[c])
 		c.rect_position = Vector2(x,y)
 		deck_container.add_child(c)
-		var cd := Global.card_catalog.get_card_data(deck[i])
+		var cd = Global.card_catalog.get_card_data(deck[i])
 		c.get_node("CardFront").initialize_card(cd)
 
 

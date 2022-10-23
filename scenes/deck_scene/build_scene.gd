@@ -1,5 +1,8 @@
 extends Control
 
+
+signal pressed_save_button(deck_data)
+
 const RawCard := preload( "../card/card_front.tscn")
 const DeckItem := preload("control_in_deck.tscn")
 const PoolItem := preload("small_card.tscn")
@@ -9,15 +12,14 @@ const deck_item_width := 144
 const deck_item_height := 216
 const deck_item_space := 8
 
-const pool_item_start := Vector2(68,16)
-const pool_item_width := 120
-const pool_item_height := 180
-const pool_item_space := 8
+const pool_item_start := Vector2(72,24)
+const pool_item_width := 112
+const pool_item_height := 168
+const pool_item_space := 16
 const pool_item_x_count := 9
 const pool_item_x_step := pool_item_width + pool_item_space
 const pool_item_y_step := pool_item_height + pool_item_space
 
-onready var deck_area : Rect2 = $"%ScrollContainer".get_global_rect()
 
 const slide_duration := 0.5
 var banner_mode := false
@@ -29,10 +31,10 @@ var pool_start_id : int = 1
 var deck_cards_count : int
 var deck_cost : int = 0
 
-var key_cards : Array
+var key_cards : PoolIntArray
 
 func initialize(deck : DeckData):
-	key_cards = deck.key_card_indexes
+	key_cards = deck.key_cards
 	set_deck(deck.cards)
 	$Header/DeckName.text = deck.name
 
@@ -56,7 +58,7 @@ func _ready():
 			p.connect("mouse_exited",self,"_on_PoolItem_mouse_exited",[p])
 			$"%PoolList".add_child(p)
 			
-	$"%PoolList".move_child($"%Zoom",$"%PoolList".get_child_count()-2)
+	$"%PoolList".move_child($"%Zoom",$"%PoolList".get_child_count()-1)
 	$"%PoolList".move_child($"%Invalid",$"%PoolList".get_child_count()-1)
 	$"%Zoom".hide()
 	$"%Invalid".hide()
@@ -64,7 +66,7 @@ func _ready():
 	var deck := []
 	for i in 27:
 		deck.append(i+1)
-	var data = DeckData.new(deck,"名前はない",[])
+	var data = DeckData.new("名前はない",deck,[])
 	initialize(data)
 
 
@@ -169,10 +171,10 @@ func _on_DeckItem_dropped(_self,relative_pos,start_pos):
 	var g_drop_pos = _self.rect_global_position + relative_pos + start_pos
 	if banner_mode:
 		if $"%BannerEditor".get_global_rect().has_point(g_drop_pos):
-			var index : int = deck_container.get_children().find(_self)
-			$"%BannerEditor".drop_card(index)
+			var cd : CardData = _self.get_node("CardFront").data
+			$"%BannerEditor".drop_card(cd.id)
 	else:
-		if deck_area.has_point(g_drop_pos):
+		if $"%ScrollContainer".get_global_rect().has_point(g_drop_pos):
 			var skip : int = relative_pos.x / (deck_item_width + deck_item_space)
 			if skip != 0:
 				var old_index : int = deck_container.get_children().find(_self)
@@ -211,7 +213,7 @@ func _on_PoolItem_dragging(_self,relative_pos,start_pos):
 
 func _on_PoolItem_dropped(_self,relative_pos,start_pos):
 	var g_drop_pos = _self.rect_global_position + relative_pos + Vector2(pool_item_width,pool_item_height)/2
-	if deck_area.has_point(g_drop_pos):
+	if $"%ScrollContainer".get_global_rect().has_point(g_drop_pos):
 		add_card(_self.get_node("CardFront").data.id,g_drop_pos)
 	_self.modulate.a = 1
 	mover.visible = false
@@ -275,10 +277,10 @@ func _on_DeckName_clicked():
 	var pos: float = 56 if banner_mode else 56 + 320
 	banner_mode = not banner_mode
 	if banner_mode:
-		var deck_data := DeckData.new(get_deck(),$Header/DeckName.text,key_cards)
+		var deck_data := DeckData.new($Header/DeckName.text,get_deck(),key_cards)
 		$"%BannerEditor".initialize(deck_data)
 	else:
-		key_cards = $"%BannerEditor".get_deck_data().key_card_indexes
+		key_cards = $"%BannerEditor".get_deck_data().key_cards
 	$"%Invalid".visible = banner_mode
 	var tween := create_tween()
 	tween.tween_property($Container,"rect_position:y",pos,slide_duration)
@@ -287,3 +289,14 @@ func _on_DeckName_clicked():
 
 func _on_BannerEditor_name_changed(new_name):
 	$Header/DeckName.text = new_name
+
+
+func _on_ReturnButton_pressed():
+	hide()
+
+
+func _on_SaveButton_pressed():
+	if banner_mode:
+		emit_signal("pressed_save_button",$"%BannerEditor".get_deck_data())
+	else:
+		emit_signal("pressed_save_button",DeckData.new($Header/DeckName.text,get_deck(),key_cards))

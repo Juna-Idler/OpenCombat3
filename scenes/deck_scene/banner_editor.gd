@@ -9,16 +9,18 @@ var drop_rects : Array = []
 func initialize(data : DeckData):
 	$Banner.initialize(data,true)
 	$Banner.reset_visual()
-	$NameEdit.text = $Banner.data.name
+	$NameEdit.text = $Banner.deck_name
 
 func _ready():
 	pass
 
 func get_deck_data() -> DeckData:
-	return $Banner.data
+	return $Banner.get_deck_data()
 
-func drop_card(index : int):
-	$Banner.data.key_card_indexes.append(index)
+func drop_card(id : int):
+	var tmp = $Banner.deck_key_cards
+	tmp.append(id)
+	$Banner.set_key_cards(tmp)
 	$Banner.reset_visual()
 
 

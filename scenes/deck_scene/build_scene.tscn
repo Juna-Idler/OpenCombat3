@@ -130,7 +130,7 @@ margin_bottom = 0.0
 margin_right = 1280.0
 margin_bottom = 56.0
 
-[node name="Button" type="Button" parent="Header"]
+[node name="ReturnButton" type="Button" parent="Header"]
 margin_left = 4.0
 margin_top = 4.0
 margin_right = 148.0
@@ -138,7 +138,7 @@ margin_bottom = 52.0
 custom_fonts/font = SubResource( 6 )
 text = "戻る"
 
-[node name="Button2" type="Button" parent="Header"]
+[node name="SaveButton" type="Button" parent="Header"]
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -144.0
@@ -199,6 +199,8 @@ visible = false
 [connection signal="pressed" from="Container/PoolList/Prev" to="." method="_on_Prev_pressed"]
 [connection signal="pressed" from="Container/PoolList/Next" to="." method="_on_Next_pressed"]
 [connection signal="name_changed" from="Container/BannerEditor" to="." method="_on_BannerEditor_name_changed"]
+[connection signal="pressed" from="Header/ReturnButton" to="." method="_on_ReturnButton_pressed"]
+[connection signal="pressed" from="Header/SaveButton" to="." method="_on_SaveButton_pressed"]
 [connection signal="pressed" from="Header/ListOpen" to="." method="_on_ListOpen_pressed"]
 [connection signal="clicked" from="Header/DeckName" to="." method="_on_DeckName_clicked"]
 [connection signal="closed" from="DeckList" to="." method="_on_DeckList_closed"]
