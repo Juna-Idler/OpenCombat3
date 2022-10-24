@@ -49,35 +49,35 @@ margin_left = 16.0
 margin_top = 16.0
 margin_right = 208.0
 margin_bottom = 80.0
-text = "戻る"
+text = "BACK"
 
 [node name="ButtonDelete" type="Button" parent="Panel"]
 margin_left = 1056.0
 margin_top = 24.0
 margin_right = 1248.0
 margin_bottom = 88.0
-text = "削除"
+text = "DELETE"
 
 [node name="ButtonCopy" type="Button" parent="Panel"]
 margin_left = 1056.0
 margin_top = 120.0
 margin_right = 1248.0
 margin_bottom = 184.0
-text = "複製"
+text = "COPY"
 
 [node name="ButtonNew" type="Button" parent="Panel"]
 margin_left = 1056.0
 margin_top = 216.0
 margin_right = 1248.0
 margin_bottom = 280.0
-text = "新規"
+text = "NEW"
 
 [node name="ButtonEdit" type="Button" parent="Panel"]
 margin_left = 1056.0
 margin_top = 576.0
 margin_right = 1248.0
 margin_bottom = 640.0
-text = "編集"
+text = "EDIT"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 margin_left = 264.0
@@ -137,6 +137,5 @@ margin_bottom = 108.0
 [connection signal="pressed" from="Panel/ButtonCopy" to="." method="_on_ButtonCopy_pressed"]
 [connection signal="pressed" from="Panel/ButtonNew" to="." method="_on_ButtonNew_pressed"]
 [connection signal="pressed" from="Panel/ButtonEdit" to="." method="_on_ButtonEdit_pressed"]
-[connection signal="pressed_save_button" from="BuildScene" to="." method="_on_BuildScene_pressed_save_button"]
 [connection signal="pressed" from="PopupDialog/ButtonOK" to="." method="_on_ButtonOK_pressed"]
 [connection signal="pressed" from="PopupDialog/ButtonCancel" to="." method="_on_ButtonCancel_pressed"]

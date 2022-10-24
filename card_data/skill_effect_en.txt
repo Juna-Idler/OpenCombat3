@@ -1,0 +1,3 @@
+1	Power	P	
+2	Hit	H	
+3	Block	B	

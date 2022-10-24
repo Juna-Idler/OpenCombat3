@@ -136,7 +136,7 @@ margin_top = 4.0
 margin_right = 148.0
 margin_bottom = 52.0
 custom_fonts/font = SubResource( 6 )
-text = "戻る"
+text = "BACK"
 
 [node name="SaveButton" type="Button" parent="Header"]
 anchor_left = 1.0
@@ -145,7 +145,7 @@ margin_left = -144.0
 margin_top = 4.0
 margin_bottom = 52.0
 custom_fonts/font = SubResource( 6 )
-text = "保存"
+text = "SAVE"
 
 [node name="ListOpen" type="Button" parent="Header"]
 anchor_left = 1.0
@@ -155,7 +155,7 @@ margin_top = 4.0
 margin_right = -160.0
 margin_bottom = 52.0
 custom_fonts/font = SubResource( 6 )
-text = "一覧"
+text = "LIST_OPEN"
 
 [node name="Infomation" type="Label" parent="Header"]
 anchor_left = 1.0

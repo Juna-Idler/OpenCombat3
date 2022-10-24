@@ -20,8 +20,6 @@ onready var rival_played_pos : Vector2 = $UILayer/RivalField/Played.rect_global_
 onready var my_discard_pos : Vector2 = $UILayer/MyField/Discard.rect_global_position + $UILayer/MyField/Discard.rect_size / 2
 onready var rival_discard_pos : Vector2 = $UILayer/RivalField/Discard.rect_global_position + $UILayer/RivalField/Discard.rect_size / 2
 
-onready var my_stack_count := $TopUILayer/Control/MyStackCount
-onready var rival_stack_count := $TopUILayer/Control/RivalStackCount
 onready var my_life := $TopUILayer/Control/MyLife
 onready var rival_life := $TopUILayer/Control/RivalLife
 
@@ -67,7 +65,7 @@ func _ready():
 			my_combat_pos,
 			my_played_pos,
 			my_discard_pos,
-			my_stack_count,
+			$TopUILayer/Control/MyName,
 			my_life,
 			$CombatLayer/CombatOverlay/MyControl,
 			$TopUILayer/Control/MyDamage)
@@ -76,7 +74,7 @@ func _ready():
 			rival_combat_pos,
 			rival_played_pos,
 			rival_discard_pos,
-			rival_stack_count,
+			$TopUILayer/Control/RivalName,
 			rival_life,
 			$CombatLayer/CombatOverlay/RivalControl,
 			$TopUILayer/Control/RivalDamage)

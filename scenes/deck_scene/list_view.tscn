@@ -31,8 +31,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -64.0
 margin_top = -48.0
+grow_horizontal = 0
+grow_vertical = 0
 custom_fonts/font = SubResource( 3 )
-text = "戻る"
+text = "BACK"
 
 [node name="DragMover" parent="." instance=ExtResource( 1 )]
 unique_name_in_owner = true

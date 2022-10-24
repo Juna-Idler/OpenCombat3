@@ -14,11 +14,18 @@ enum EffectAttribute {
 var card_version : int
 var skill_version : int
 
+var translation : String
+
 func _init():
+	translation = TranslationServer.get_locale()
+	
+	load_catalog()
+
+func load_catalog():
 	_load_effect_data()
 	_load_skill_data()
 	_load_card_data()
-
+	
 
 func get_effect_string(id:int)->String:
 	return _effect_catalog[id]
@@ -61,7 +68,7 @@ func get_skill_string(skill : SkillData.NamedSkill) -> String:
 			var param : PoolStringArray = []
 			for e_ in skill.parameter as Array:
 				var e := e_ as EffectData.SkillEffect
-				param.append(e.data.name + "%+d" % e.parameter)
+				param.append(e.data.short_name + "%+d" % e.parameter)
 			return skill.data.name + "(" + param.join(" ") + ")"
 		SkillData.ParamType.VOID:
 			pass
@@ -81,6 +88,7 @@ func get_skill_short_string(skill : SkillData.NamedSkill) -> String:
 			pass
 	return skill.data.short_name
 
+
 func _load_effect_data():
 	var effect_resource = preload("res://card_data/skill_effect_catalog.txt")
 	var effects = effect_resource.text.split("\n")
@@ -91,6 +99,20 @@ func _load_effect_data():
 		var id := int(csv[0])
 		_effect_catalog[id] = EffectData.SkillEffectData.new(id,csv[1],csv[2],csv[3],csv[1])
 
+	if translation.find("ja") != 0:
+		var trans_res = load("res://card_data/skill_effect_" + translation + ".txt")
+		if not trans_res:
+			trans_res = load("res://card_data/skill_effect_en.txt")
+		var trans = trans_res.text.split("\n")
+		for i in trans.size():
+			var tsv = trans[i].split("\t")
+			var id := int(tsv[0])
+			var data = _effect_catalog[id] as EffectData.SkillEffectData
+			data.name = tsv[1]
+			data.short_name = tsv[2]
+			data.text = tsv[3]
+
+
 func _load_skill_data():
 	var namedskill_resource := preload("res://card_data/named_skill_catalog.txt")
 	var namedskills = namedskill_resource.text.split("\n")
@@ -99,6 +121,19 @@ func _load_skill_data():
 		var id := int(csv[0])
 		_skill_catalog[id] = SkillData.NamedSkillData.new(id,csv[1],csv[2],csv[3],csv[4],csv[5])
 	skill_version = int((_skill_catalog[0] as SkillData.NamedSkillData).text)
+
+	if translation.find("ja") != 0:
+		var trans_res = load("res://card_data/named_skill_" + translation + ".txt")
+		if not trans_res:
+			trans_res = load("res://card_data/named_skill_en.txt")
+		var trans = trans_res.text.split("\n")
+		for i in trans.size():
+			var tsv = trans[i].split("\t")
+			var id := int(tsv[0])
+			var data = _skill_catalog[id] as SkillData.NamedSkillData
+			data.name = tsv[1]
+			data.short_name = tsv[2]
+			data.text = tsv[3]
 
 func _load_card_data():
 	var carddata_resource := preload("res://card_data/card_data_catalog.txt")
@@ -120,5 +155,18 @@ func _load_card_data():
 				int(csv[3]),int(csv[4]),int(csv[5]),int(csv[6]),int(csv[7]),
 				skills,csv[9],csv[10])
 	card_version = int((_card_catalog[0] as CardData).name)
+
+	if translation.find("ja") != 0:
+		var trans_res = load("res://card_data/card_data_" + translation + ".txt")
+		if not trans_res:
+			trans_res = load("res://card_data/card_data_en.txt")
+		var trans = trans_res.text.split("\n")
+		for i in trans.size():
+			var tsv = trans[i].split("\t")
+			var id := int(tsv[0])
+			var data = _card_catalog[id] as CardData
+			data.name = tsv[1]
+			data.short_name = tsv[2]
+			data.text = tsv[3]
 
 

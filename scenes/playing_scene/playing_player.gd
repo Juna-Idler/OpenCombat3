@@ -25,7 +25,8 @@ var hand_area
 var combat_pos : Vector2
 var played_pos : Vector2
 var discard_pos : Vector2
-var stack_count_label : Label
+
+var name_lable : Label
 var life_label : Label
 
 var col_power : Label
@@ -48,7 +49,7 @@ func _init(dl:Array,
 		c_pos : Vector2,
 		p_pos : Vector2,
 		d_pos : Vector2,
-		sc_label : Label,
+		n_label : Label,
 		l_label : Label,
 		col_control : Control,
 		d_label : Label):
@@ -58,7 +59,7 @@ func _init(dl:Array,
 	combat_pos = c_pos
 	played_pos = p_pos
 	discard_pos = d_pos
-	stack_count_label = sc_label
+	name_lable = n_label
 	life_label = l_label
 	col_power = col_control.get_node("Power")
 	col_hit = col_control.get_node("Hit")
@@ -71,13 +72,15 @@ func _init(dl:Array,
 		var i := i_ as Card
 		life += i.get_card_data().level
 		i.place = Card.Place.STACK
-	stack_count_label.text = str(stack_count)
-	life_label.text = str(life)
+	name_lable.set_message_translation(false)
+	name_lable.notification(Node.NOTIFICATION_TRANSLATION_CHANGED)
+	name_lable.text = player_name
+	life_label.text = "%d / %d" % [life,stack_count]
 	damage_label.text = ""
 
 func draw(draw_indexes:Array):
 	stack_count -= draw_indexes.size()
-	stack_count_label.text = str(stack_count)
+	life_label.text = "%d / %d" % [life,stack_count]
 	hand.append_array(draw_indexes)
 	set_hand(hand)
 
@@ -102,7 +105,7 @@ func play(hand_select : int,new_hand : Array,d : int,tween : SceneTreeTween):
 	playing_card = deck_list[playing_card_id]
 	hand.remove(hand_select)
 	life -= playing_card.get_card_data().level
-	life_label.text = str(life)
+	life_label.text = "%d / %d" % [life,stack_count]
 	tween.parallel()
 	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 	tween.tween_property(playing_card,"global_position",combat_pos,0.5)
@@ -117,7 +120,7 @@ func play_end(draw_indexes : Array,tween : SceneTreeTween):
 	tween.parallel()
 	tween.tween_property(playing_card,"rotation",PI/2,0.5)
 	draw(draw_indexes)
-	life_label.text = str(life)
+	life_label.text = "%d / %d" % [life,stack_count]
 	damage_label.text = str(damage) if damage > 0 else ""
 
 	playing_card_id = -1
@@ -133,7 +136,7 @@ func recover(hand_select : int,new_hand : Array,draw_indexes : Array,tween : Sce
 		life -= recovery_card.get_card_data().level
 		damage -= recovery_card.front.data.level
 		damage_label.text = str(damage) if damage > 0 else ""
-		life_label.text = str(life)
+		life_label.text = "%d / %d" % [life,stack_count]
 		recovery_card.z_index = discard.size() + 200
 		recovery_card.place = Card.Place.DISCARD
 		discard.append(select_id)

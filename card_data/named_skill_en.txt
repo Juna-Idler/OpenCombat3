@@ -1,0 +1,3 @@
+1	Reinforce	Reinforce	before  Add {E} effect to this card
+2	Rush	Rush	after  When superior,Inflict damage equal to half (rounded up) of the opponent's block.
+3	Charge	Charge	end  If you haven't taken damage this phase, add {E} to the next card you play

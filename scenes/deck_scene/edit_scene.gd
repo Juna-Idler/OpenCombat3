@@ -101,7 +101,7 @@ func set_deck(deck : Array):
 		deck_cost += cd.level
 	deck_container.layout()
 		
-	$Header/Infomation.text = "デッキ枚数：%s    総コスト：%s" % [deck_cards_count,deck_cost]
+	$Header/Infomation.text = tr("CARDS:%s COST:%s") % [deck_cards_count,deck_cost]
 
 
 func add_card(id : int,g_position : Vector2):
@@ -126,7 +126,7 @@ func add_card(id : int,g_position : Vector2):
 	c.get_node("CardFront").initialize_card(cd)
 	deck_cards_count += 1
 	deck_cost += cd.level
-	$Header/Infomation.text = "デッキ枚数：%s    総コスト：%s" % [deck_cards_count,deck_cost]
+	$Header/Infomation.text = tr("CARDS:%s COST:%s") % [deck_cards_count,deck_cost]
 
 	var tween := create_tween()
 	var target : int = (deck_container.rect_min_size.x - sc.rect_size.x) * rate
@@ -143,7 +143,7 @@ func add_card(id : int,g_position : Vector2):
 func remove_card(cd : CardData):
 	deck_cost -= cd.level
 	deck_cards_count -= 1
-	$Header/Infomation.text = "デッキ枚数：%s    総コスト：%s" % [deck_cards_count,deck_cost]
+	$Header/Infomation.text = tr("CARDS:%s COST:%s") % [deck_cards_count,deck_cost]
 
 
 func get_deck() -> Array:

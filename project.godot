@@ -266,6 +266,13 @@ version_control_plugin_name="GitAPI"
 
 singletons=[  ]
 
+[locale]
+
+translations=PoolStringArray( "res://translation/translation.ja.translation", "res://translation/translation.en.translation" )
+translation_remaps={
+}
+locale_filter=[ 0, [ "en", "ja", "ja_JP" ] ]
+
 [physics]
 
 common/enable_pause_aware_picking=true

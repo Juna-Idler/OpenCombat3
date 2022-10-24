@@ -1,0 +1,27 @@
+1	Shot		Sharp Shooting
+2	Shot		Sharp Shooting
+3	Shot		Sharp Shooting
+4	Guard		Accumulate power while protecting
+5	Guard		Accumulate power while protecting
+6	Guard		Accumulate power while protecting
+7	Rush		Desperate Assault
+8	Rush		Desperate Assault
+9	Rush		Desperate Assault
+10	Shot (Counter)		Shooting against specific colors
+11	Shot (Counter)		Shooting against specific colors
+12	Shot (Counter)		Shooting against specific colors
+13	Guard (Counter)		Defense against specific colors
+14	Guard (Counter)		Defense against specific colors
+15	Guard (Counter)		Defense against specific colors
+16	Rush (Counter)		Assault against specific color
+17	Rush (Counter)		Assault against specific color
+18	Rush (Counter)		Assault against specific color
+19	Shot (Combo)		Shooting assuming color cooperation
+20	Shot (Combo)		Shooting assuming color cooperation
+21	Shot (Combo)		Shooting assuming color cooperation
+22	Guard (Combo)		Defense based on color cooperation
+23	Guard (Combo)		Defense based on color cooperation
+24	Guard (Combo)		Defense based on color cooperation
+25	Rush (Combo)		Assault on the premise of color cooperation
+26	Rush (Combo)		Assault on the premise of color cooperation
+27	Rush (Combo)		Assault on the premise of color cooperation

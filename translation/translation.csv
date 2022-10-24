@@ -1,0 +1,15 @@
+keys,ja,en
+SETTINGS,設定,Settings
+VS_CPU,VS CPU,VS CPU
+DECK_BUILD,デッキ構築,Deck Build
+BACK,戻る,Back
+SURRENDER,負けを認める,Surrender
+DELETE,削除,Delete
+COPY,複製,Copy
+NEW,新規,New
+EDIT,編集,Edit
+SAVE,保存,Save
+LIST_OPEN,一覧,List
+CARDS:%s COST:%s,カード:%s コスト:%s,Cards:%s Cost:%s
+RED:%s GREEN:%s BLUE:%s,[color=red]赤:[/color]%s [color=green]緑:[/color]%s [color=blue]青:[/color]%s,[color=red]R:[/color]%s [color=green]G:[/color]%s [color=blue]B:[/color]%s
+L1:%s L2:%s L3:%s,Lv1:%s Lv2:%s Lv3:%s,Lv1:%s Lv2:%s Lv3:%s

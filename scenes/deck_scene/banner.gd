@@ -20,6 +20,11 @@ func initialize(d : DeckData,e_mode = false):
 	editor_mode = e_mode
 	return self
 
+func _ready():
+	$Name.set_message_translation(false)
+	$Name.notification(Node.NOTIFICATION_TRANSLATION_CHANGED)
+	reset_visual()
+
 func get_deck_data() -> DeckData:
 	return DeckData.new(deck_name,deck_cards,deck_key_cards)
 
@@ -64,8 +69,10 @@ func reset_visual():
 		level[c.level] += 1
 		cost += c.level
 
-	$Information.text = "%s枚/コスト%s\n赤%s枚 緑%s枚 青%s枚\nL1:%s枚 L2:%s枚 L3:%s枚" %\
-			[deck_cards.size(),cost,rgb[1],rgb[2],rgb[3],level[1],level[2],level[3]]
+	$Information.bbcode_text = (
+		tr("CARDS:%s COST:%s") % [deck_cards.size(),cost] + "\n" +
+		tr("RED:%s GREEN:%s BLUE:%s") % [rgb[1],rgb[2],rgb[3]] + "\n" +
+		tr("L1:%s L2:%s L3:%s") % [level[1],level[2],level[3]])
 
 	for c in $Container.get_children():
 		$Container.remove_child(c)
@@ -84,5 +91,3 @@ func reset_visual():
 func _on_Card_clicked(dbcard):
 	emit_signal("card_clicked",dbcard)
 
-func _ready():
-	reset_visual()
