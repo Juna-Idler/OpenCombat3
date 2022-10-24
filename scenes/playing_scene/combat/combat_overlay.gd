@@ -17,17 +17,12 @@ func initialize(myself : PlayingPlayer,rival : PlayingPlayer):
 	$MyControl/Power.text = str(my_card.get_current_power())
 	$MyControl/Hit.text = str(my_card.get_current_hit())
 	$MyControl/Block.text = str(my_card.get_current_block())
-	$MyControl/CardFront/Picture.texture = load("res://card_images/"+ my_card.front.data.image +".png")
-	$MyControl/CardFront/Name.text = my_card.front.data.name
-	$MyControl/CardFront/Frame.self_modulate = RGB[my_card.front.data.color]
+	$Node2D/MyCombatAvatar.initialize(my_card.front.data)
 
 	$RivalControl/Power.text = str(rival_card.get_current_power())
 	$RivalControl/Hit.text = str(rival_card.get_current_hit())
 	$RivalControl/Block.text = str(rival_card.get_current_block())
-	$RivalControl/CardFront/Picture.texture = load("res://card_images/"+ rival_card.front.data.image +".png")
-	$RivalControl/CardFront/Name.text = rival_card.front.data.name
-	$RivalControl/CardFront/Frame.self_modulate = RGB[rival_card.front.data.color]
-
+	$Node2D/RivalCombatAvatar.initialize(rival_card.front.data)
 #	$MyControl/Power.rect_scale = Vector2(1.0,1.0)
 #	$RivalControl/Power.rect_scale = Vector2(1.0,1.0)
 

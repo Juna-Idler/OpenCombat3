@@ -3,6 +3,8 @@ class_name CardData
 
 enum CardColors {NOCOLOR = 0,RED,GREEN,BLUE}
 
+const RGB = [Color(0,0,0,0),Color(1,0,0),Color(0,0.7,0),Color(0,0,1)]
+
 
 var id : int
 var name : String

@@ -1,11 +1,11 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://scenes/playing_scene/combat/combat_overlay.gd" type="Script" id=1]
 [ext_resource path="res://scenes/playing_scene/combat/combat_skill_line.tscn" type="PackedScene" id=2]
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=3]
 [ext_resource path="res://images/triangle.png" type="Texture" id=4]
 [ext_resource path="res://scenes/ui/v_box_layout.gd" type="Script" id=5]
-[ext_resource path="res://scenes/card/card_frame.png" type="Texture" id=6]
+[ext_resource path="res://scenes/playing_scene/combat/combat_avatar.tscn" type="PackedScene" id=6]
 
 [sub_resource type="Gradient" id=14]
 interpolation_mode = 2
@@ -19,12 +19,6 @@ fill_from = Vector2( 1, 1 )
 [sub_resource type="StyleBoxTexture" id=16]
 texture = SubResource( 15 )
 region_rect = Rect2( 0, 0, 64, 64 )
-
-[sub_resource type="DynamicFont" id=1]
-size = 10
-outline_size = 1
-outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 3 )
 
 [sub_resource type="StyleBoxFlat" id=19]
 bg_color = Color( 0, 0, 0, 0.498039 )
@@ -118,51 +112,6 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 mouse_filter = 2
-
-[node name="CardFront" type="Control" parent="MyControl"]
-margin_left = 72.0
-margin_top = -108.0
-margin_right = 216.0
-margin_bottom = 108.0
-rect_min_size = Vector2( 144, 216 )
-rect_pivot_offset = Vector2( 72, 108 )
-rect_clip_content = true
-mouse_filter = 2
-
-[node name="Picture" type="TextureRect" parent="MyControl/CardFront"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 7.0
-margin_top = 8.0
-margin_right = -7.0
-margin_bottom = -24.0
-mouse_filter = 2
-expand = true
-stretch_mode = 7
-
-[node name="Frame" type="TextureRect" parent="MyControl/CardFront"]
-self_modulate = Color( 1, 0, 0, 1 )
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-texture = ExtResource( 6 )
-stretch_mode = 6
-
-[node name="Name" type="Label" parent="MyControl/CardFront"]
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 7.0
-margin_top = -24.0
-margin_right = -7.0
-margin_bottom = -8.0
-rect_pivot_offset = Vector2( 65, 8 )
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_fonts/font = SubResource( 1 )
-text = "Card Name"
-align = 1
-valign = 1
-max_lines_visible = 1
 
 [node name="StatePanel" type="Panel" parent="MyControl"]
 visible = false
@@ -263,53 +212,6 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 mouse_filter = 2
-
-[node name="CardFront" type="Control" parent="RivalControl"]
-margin_left = -216.0
-margin_top = -108.0
-margin_right = -72.0
-margin_bottom = 108.0
-rect_min_size = Vector2( 144, 216 )
-rect_rotation = 180.0
-rect_pivot_offset = Vector2( 72, 108 )
-rect_clip_content = true
-mouse_filter = 2
-
-[node name="Picture" type="TextureRect" parent="RivalControl/CardFront"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 7.0
-margin_top = 8.0
-margin_right = -7.0
-margin_bottom = -24.0
-mouse_filter = 2
-expand = true
-stretch_mode = 7
-
-[node name="Frame" type="TextureRect" parent="RivalControl/CardFront"]
-self_modulate = Color( 1, 0, 0, 1 )
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-texture = ExtResource( 6 )
-stretch_mode = 6
-
-[node name="Name" type="Label" parent="RivalControl/CardFront"]
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 7.0
-margin_top = -24.0
-margin_right = -7.0
-margin_bottom = -8.0
-rect_rotation = 180.0
-rect_pivot_offset = Vector2( 65, 8 )
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_fonts/font = SubResource( 1 )
-text = "Card Name"
-align = 1
-valign = 1
-max_lines_visible = 1
 
 [node name="StatePanel" type="Panel" parent="RivalControl"]
 visible = false
@@ -415,3 +317,15 @@ custom_fonts/font = SubResource( 32 )
 text = "Timing"
 align = 1
 valign = 1
+
+[node name="Node2D" type="Node2D" parent="."]
+position = Vector2( 640, 360 )
+
+[node name="MyCombatAvatar" parent="Node2D" instance=ExtResource( 6 )]
+unique_name_in_owner = true
+position = Vector2( 144, 0 )
+
+[node name="RivalCombatAvatar" parent="Node2D" instance=ExtResource( 6 )]
+unique_name_in_owner = true
+position = Vector2( -144, 0 )
+rotation = 3.14159

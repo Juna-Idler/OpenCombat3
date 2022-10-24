@@ -68,7 +68,8 @@ func _ready():
 			$TopUILayer/Control/MyName,
 			my_life,
 			$CombatLayer/CombatOverlay/MyControl,
-			$TopUILayer/Control/MyDamage)
+			$TopUILayer/Control/MyDamage,
+			$CombatLayer/CombatOverlay.get_node("Node2D/MyCombatAvatar"))
 	rival = PlayingPlayer.new(rival_deck,pd.rival_name,
 			$UILayer/RivalField/HandArea,
 			rival_combat_pos,
@@ -77,7 +78,8 @@ func _ready():
 			$TopUILayer/Control/RivalName,
 			rival_life,
 			$CombatLayer/CombatOverlay/RivalControl,
-			$TopUILayer/Control/RivalDamage)
+			$TopUILayer/Control/RivalDamage,
+			$CombatLayer/CombatOverlay.get_node("Node2D/RivalCombatAvatar"))
 	
 	combat_director.initialize(myself,rival,
 			combat_overlay,$BGLayer/PowerBalance,

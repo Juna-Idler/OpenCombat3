@@ -36,6 +36,8 @@ var col_skill_list : VBoxLayout
 
 var damage_label : Label
 
+var combat_avatar : Node2D
+
 
 func get_link_color() -> int:
 	if played.empty():
@@ -52,7 +54,8 @@ func _init(dl:Array,
 		n_label : Label,
 		l_label : Label,
 		col_control : Control,
-		d_label : Label):
+		d_label : Label,
+		avatar : Node2D):
 	player_name = name
 	deck_list = dl
 	hand_area = hand_area_node
@@ -66,6 +69,7 @@ func _init(dl:Array,
 	col_block = col_control.get_node("Block")
 	col_skill_list = col_control.get_node("SkillContainer")
 	damage_label = d_label
+	combat_avatar = avatar
 	
 	stack_count = deck_list.size()
 	for i_ in deck_list:
