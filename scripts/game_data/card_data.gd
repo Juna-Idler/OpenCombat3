@@ -6,6 +6,7 @@ enum CardColors {NOCOLOR = 0,RED,GREEN,BLUE}
 
 var id : int
 var name : String
+var short_name : String
 
 var color : int
 var level : int
@@ -17,11 +18,12 @@ var text : String
 var image : String 
 
 
-func _init(i : int,n : String,
+func _init(i : int,n : String,sn : String,
 		c : int,l : int,p : int,h : int,b : int,
 		s : Array,t : String,im : String):
 	id = i
 	name = n
+	short_name = sn
 	color = c
 	level = l
 	power = p
@@ -36,6 +38,7 @@ func _init(i : int,n : String,
 static func copy(dest : CardData, src : CardData):
 	dest.id = src.id
 	dest.name = src.name
+	dest.short_name = src.short_name
 	dest.color = src.color
 	dest.level = src.level
 	dest.power = src.power
@@ -44,13 +47,3 @@ static func copy(dest : CardData, src : CardData):
 	dest.skills = src.skills
 	dest.text = src.text
 	dest.image = src.image
-
-static func kanji2color(k : String) -> int:
-	match k:
-		"赤":
-			return CardColors.RED
-		"緑":
-			return CardColors.GREEN
-		"青":
-			return CardColors.BLUE
-	return CardColors.NOCOLOR

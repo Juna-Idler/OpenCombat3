@@ -51,16 +51,16 @@ class Reinforce extends Skill:
 			_vs_color : int,_link_color : int,
 			myself : PlayingPlayer,_rival : PlayingPlayer) -> void:
 		var playing_card := myself.playing_card
-		for p in (skill.parameter as SkillEffects).effects:
-			var e := p as SkillEffects.Effect
-			match e.attribute:
-				SkillEffects.Attribute.POWER:
+		for p in skill.parameter as Array:
+			var e := p as EffectData.SkillEffect
+			match e.data.id:
+				EffectData.Attribute.POWER:
 					playing_card.affected.power += e.parameter
 					tween.tween_callback(myself,"change_col_power")
-				SkillEffects.Attribute.HIT:
+				EffectData.Attribute.HIT:
 					playing_card.affected.hit += e.parameter
 					tween.tween_callback(myself,"change_col_hit")
-				SkillEffects.Attribute.BLOCK:
+				EffectData.Attribute.BLOCK:
 					playing_card.affected.block += e.parameter
 					tween.tween_callback(myself,"change_col_block")
 		tween.tween_interval(1.0)
@@ -95,15 +95,15 @@ class Charge extends Skill:
 			_vs_color : int,_link_color : int,_situation : int,
 			myself : PlayingPlayer,_rival : PlayingPlayer) -> void:
 		if myself.damage == 0:
-			for p in (skill.parameter as SkillEffects).effects:
-#				var e := p as NormalSkillEffects.Effect
-#				match e.attribute:
-#					NormalSkillEffects.Attribute.POWER:
-#						myself.next_effect.power += e.parameter
-#					NormalSkillEffects.Attribute.HIT:
-#						myself.next_effect.hit += e.parameter
-#					NormalSkillEffects.Attribute.DAMAGE:
-#						myself.next_effect.damage += e.parameter
+			for p in skill.parameter as Array:
+				var e := p as EffectData.SkillEffect
+				match e.data.id:
+					EffectData.Attribute.POWER:
+						pass
+					EffectData.Attribute.HIT:
+						pass
+					EffectData.Attribute.BLOCK:
+						pass
 				pass
 			tween.tween_interval(1.0)
 			return

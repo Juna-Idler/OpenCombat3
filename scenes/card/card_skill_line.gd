@@ -10,7 +10,7 @@ func _ready():
 	pass
 
 func initialize(skill : SkillData.NamedSkill,rotate:bool):
-	$Label.text = skill.data.name + "(" + Global.card_catalog.get_parameter_string(skill) + ")"
+	$Label.text = Global.card_catalog.get_skill_string(skill)
 
 	if skill.condition & SkillData.ColorCondition.VS_FLAG:
 		$ColorRectRight.visible = false

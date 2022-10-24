@@ -3,20 +3,39 @@ class_name CardCatalog
 var _card_catalog : Dictionary = {}
 var _skill_catalog : Dictionary = {}
 
+var _effect_catalog : Array = []
 
+enum EffectAttribute {
+	POWER = 1,
+	HIT,
+	BLOCK,
+}
 
 var card_version : int
 var skill_version : int
 
 func _init():
+	_load_effect_data()
 	_load_skill_data()
 	_load_card_data()
 
 
-const _effect_attribute_string_list = ["","力","打","防","突"]
-static func get_effect_attribute_string(attribute:int)->String:
-	return _effect_attribute_string_list[attribute]
-	
+func get_effect_string(id:int)->String:
+	return _effect_catalog[id]
+
+func get_skill_param(param_type : int,param : String):
+	match param_type:
+		SkillData.ParamType.INTEGER:
+			return int(param)
+		SkillData.ParamType.EFFECTS:
+			var effects = []
+			for e in param.split(" "):
+				effects.append(EffectData.create_effect(e,_effect_catalog))
+			return effects
+		SkillData.ParamType.VOID:
+			return null
+	return null
+
 
 func get_skill_data(id : int) -> SkillData.NamedSkillData:
 	return _skill_catalog[id]
@@ -29,32 +48,48 @@ func get_card_data(id : int) -> CardData:
 
 func new_card_data(id : int) -> CardData:
 	var c := _card_catalog[id] as CardData
-	return CardData.new(c.id,c.name,c.color,c.level,c.power,c.hit,c.block,c.skills,c.text,c.image)
+	return CardData.new(c.id,c.name,c.short_name,c.color,c.level,c.power,c.hit,c.block,c.skills,c.text,c.image)
 	
 func set_card_data(card : CardData, id : int):
 	CardData.copy(card,get_card_data(id))
 
-
-func get_parameter_string(skill : SkillData.NamedSkill) -> String:
+func get_skill_string(skill : SkillData.NamedSkill) -> String:
 	match skill.data.param_type:
 		SkillData.ParamType.INTEGER:
-			return str(skill.parameter as int)
+			return skill.data.name + "(" + str(skill.parameter as int) + ")"
 		SkillData.ParamType.EFFECTS:
-			var result : PoolStringArray = []
-			for e_ in (skill.parameter as SkillEffects).effects:
-				var e := e_ as SkillEffects.Effect
-				var attribute_string = get_effect_attribute_string(e.attribute)
-				result.append(attribute_string + "%+d" % e.parameter)
-			return result.join(" ")
+			var param : PoolStringArray = []
+			for e_ in skill.parameter as Array:
+				var e := e_ as EffectData.SkillEffect
+				param.append(e.data.name + "%+d" % e.parameter)
+			return skill.data.name + "(" + param.join(" ") + ")"
 		SkillData.ParamType.VOID:
 			pass
-	return ""
-	
+	return skill.data.name
 
-func get_condition_detailed_string(condition : int) -> String:
-	return ["","","","","","赤と対決 ","緑と対決 ","青と対決 ","","赤と連携 ","緑と連携 ","青と連携 "][condition]
+func get_skill_short_string(skill : SkillData.NamedSkill) -> String:
+	match skill.data.param_type:
+		SkillData.ParamType.INTEGER:
+			return skill.data.short_name + "(" + str(skill.parameter as int) + ")"
+		SkillData.ParamType.EFFECTS:
+			var param : PoolStringArray = []
+			for e_ in skill.parameter as Array:
+				var e := e_ as EffectData.SkillEffect
+				param.append(e.data.short_name + "%+d" % e.parameter)
+			return skill.data.short_name + "(" + param.join(" ") + ")"
+		SkillData.ParamType.VOID:
+			pass
+	return skill.data.short_name
 
-
+func _load_effect_data():
+	var effect_resource = preload("res://card_data/skill_effect_catalog.txt")
+	var effects = effect_resource.text.split("\n")
+	_effect_catalog.resize(effects.size())
+	_effect_catalog[0] = EffectData.SkillEffectData.new(0,"","","","")
+	for s in effects:
+		var csv = s.split("\t")
+		var id := int(csv[0])
+		_effect_catalog[id] = EffectData.SkillEffectData.new(id,csv[1],csv[2],csv[3],csv[1])
 
 func _load_skill_data():
 	var namedskill_resource := preload("res://card_data/named_skill_catalog.txt")
@@ -62,7 +97,7 @@ func _load_skill_data():
 	for s in namedskills:
 		var csv = s.split("\t")
 		var id := int(csv[0])
-		_skill_catalog[id] = SkillData.NamedSkillData.new(id,csv[1],csv[2],csv[3],csv[4])
+		_skill_catalog[id] = SkillData.NamedSkillData.new(id,csv[1],csv[2],csv[3],csv[4],csv[5])
 	skill_version = int((_skill_catalog[0] as SkillData.NamedSkillData).text)
 
 func _load_card_data():
@@ -71,19 +106,19 @@ func _load_card_data():
 	for c in cards:
 		var csv = c.split("\t")
 		var skills = []
-		var skill_texts = csv[7].split(";")
+		var skill_texts = csv[8].split(";")
 		if skill_texts.size() == 1 and skill_texts[0] == "":
 			skill_texts.resize(0)
 		for s in skill_texts:
 			var skill_line = s.split(":");
 			var condition : String = skill_line[0]
-			var skill_id : String = skill_line[1]
-			var skill_param : String = skill_line[2]
-			var base_data := get_skill_data(int(skill_id))
-			skills.append(SkillData.NamedSkill.new(base_data,condition,skill_param))
+			var base_data := get_skill_data(int(skill_line[1]))
+			var param = get_skill_param(base_data.param_type,skill_line[2])
+			skills.append(SkillData.NamedSkill.new(base_data,condition,param))
 		var id := int(csv[0])
-		_card_catalog[id] = CardData.new(id,csv[1],CardData.kanji2color(csv[2]),
-				int(csv[3]),int(csv[4]),int(csv[5]),int(csv[6]),skills,csv[8],csv[9])
+		_card_catalog[id] = CardData.new(id,csv[1],csv[2],
+				int(csv[3]),int(csv[4]),int(csv[5]),int(csv[6]),int(csv[7]),
+				skills,csv[9],csv[10])
 	card_version = int((_card_catalog[0] as CardData).name)
 
 

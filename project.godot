@@ -80,6 +80,11 @@ _global_script_classes=[ {
 "path": "res://scripts/game_data/deck_list.gd"
 }, {
 "base": "Reference",
+"class": "EffectData",
+"language": "GDScript",
+"path": "res://scripts/game_data/effect_data.gd"
+}, {
+"base": "Reference",
 "class": "GameProcessor",
 "language": "GDScript",
 "path": "res://scripts/game_processor/game_processor.gd"
@@ -180,11 +185,6 @@ _global_script_classes=[ {
 "path": "res://scripts/game_data/skill_data.gd"
 }, {
 "base": "Reference",
-"class": "SkillEffects",
-"language": "GDScript",
-"path": "res://scripts/game_data/skill_effects.gd"
-}, {
-"base": "Reference",
 "class": "SkillProcessor",
 "language": "GDScript",
 "path": "res://scripts/game_processor/skill_processor.gd"
@@ -214,6 +214,7 @@ _global_script_class_icons={
 "DeckBanner": "",
 "DeckData": "",
 "DeckList": "",
+"EffectData": "",
 "GameProcessor": "",
 "GitAPI": "",
 "HTweenBoxContainer": "",
@@ -234,7 +235,6 @@ _global_script_class_icons={
 "SelectEditDeckScene": "",
 "SelectUseDeckScene": "",
 "SkillData": "",
-"SkillEffects": "",
 "SkillProcessor": "",
 "TitleScene": "",
 "VBoxLayout": ""

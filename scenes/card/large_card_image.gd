@@ -31,20 +31,33 @@ func initialize_card(cd : CardData):
 		var skill_text : String = ""
 		
 		var s := s_ as SkillData.NamedSkill
-		skill_text = Global.card_catalog.get_condition_detailed_string(s.condition)
-		skill_text += s.data.name + " (" + Global.card_catalog.get_parameter_string(s) + ")"
-		skill_text += ":" + s.text
+		skill_text = Global.card_catalog.get_skill_string(s) + ":" + s.text
 		
 		var richlabel = line.get_node("RichTextLabel")
-		richlabel.rect_min_size.x = skill_node.rect_size.x
+		richlabel.rect_min_size.x = skill_node.rect_size.x - 32
 		var bbc_text := skill_text.replace("{","[color=red]").replace("}","[/color]")
 		richlabel.bbcode_text = bbc_text
 		var label = line.get_node("Label")
 		label.text = skill_text
-		label.rect_min_size.x = skill_node.rect_size.x
+		label.rect_min_size.x = skill_node.rect_size.x - 32
 #		label.text = richlabel.text
 		var minsize = label.get_minimum_size()
 		line.rect_min_size = minsize
+		var left = line.get_node("Left")
+		var right = line.get_node("Right")
+		
+		if s.condition & SkillData.ColorCondition.VS_FLAG:
+			right.visible = false
+			left.visible = true
+			left.self_modulate = RGB[s.condition & SkillData.ColorCondition.COLOR_BITS]
+		elif s.condition & SkillData.ColorCondition.LINK_FLAG:
+			left.visible = false
+			right.visible = true
+			right.self_modulate = RGB[s.condition & SkillData.ColorCondition.COLOR_BITS]
+		else:
+			left.visible = false
+			right.visible = false
+		
 		skill_node.add_child(line)
 	return self
 

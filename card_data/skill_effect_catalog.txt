@@ -1,0 +1,4 @@
+0	EffectVersion		1666570640393
+1	勢力	力	Powerを増減する
+2	打点	打	Hitを増減する
+3	防壁	防	Blockを増減する

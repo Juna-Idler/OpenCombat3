@@ -29,14 +29,14 @@ class Reinforce extends Skill:
 	func _process_before(skill : SkillData.NamedSkill,
 			myself : ProcessorData.PlayerData,_rival : ProcessorData.PlayerData) -> void:
 		var affected := myself.select_card.affected
-		for p in (skill.parameter as SkillEffects).effects:
-			var e := p as SkillEffects.Effect
-			match e.attribute:
-				SkillEffects.Attribute.POWER:
+		for p in skill.parameter as Array:
+			var e := p as EffectData.SkillEffect
+			match e.data.id:
+				EffectData.Attribute.POWER:
 					affected.power += e.parameter
-				SkillEffects.Attribute.HIT:
+				EffectData.Attribute.HIT:
 					affected.hit += e.parameter
-				SkillEffects.Attribute.BLOCK:
+				EffectData.Attribute.BLOCK:
 					affected.block += e.parameter
 
 
@@ -52,14 +52,14 @@ class Charge extends Skill:
 			myself : ProcessorData.PlayerData,_rival : ProcessorData.PlayerData) -> void:
 		if myself.combat_damage == 0:
 			var affected := myself.next_effect
-			for p in (skill.parameter as SkillEffects).effects:
-				var e := p as SkillEffects.Effect
-				match e.attribute:
-					SkillEffects.Attribute.POWER:
+			for p in skill.parameter as Array:
+				var e := p as EffectData.SkillEffect
+				match e.data.id:
+					EffectData.Attribute.POWER:
 						affected.power += e.parameter
-					SkillEffects.Attribute.HIT:
+					EffectData.Attribute.HIT:
 						affected.hit += e.parameter
-					SkillEffects.Attribute.BLOCK:
+					EffectData.Attribute.BLOCK:
 						affected.block += e.parameter
 					
 

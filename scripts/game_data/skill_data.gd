@@ -24,13 +24,15 @@ enum ParamType {
 class NamedSkillData:
 	var id : int
 	var name : String
+	var short_name : String
 	var param_type : int
 	var parameter
 	var text : String
 	
-	func _init(i:int,n:String,pt:String,p:String,t:String):
+	func _init(i:int,n:String,sn:String,pt:String,p:String,t:String):
 		id = i
 		name = n
+		short_name = sn
 		_set_param_type(pt,p)
 		text = t.replace("\\n","\n")
 	
@@ -54,14 +56,24 @@ class NamedSkill:
 	var parameter
 	var text : String
 	
-	func _init(sd:NamedSkillData,c:String,p:String):
+	func _init(sd:NamedSkillData,c:String,p):
 		data = sd
-		if sd.param_type == ParamType.VOID:
-			parameter = null
-			text = sd.text
-		else:
-			_translate_param(p)
 		condition = kanji2condition(c)
+		parameter = p
+		
+		match data.param_type:
+			ParamType.INTEGER:
+				var param_string : String = "{" + data.parameter + "}"
+				text = data.text.replace(param_string,"{" + parameter + "}")
+			ParamType.EFFECTS:
+				var param_string : String = "{" + data.parameter + "}"
+				var replace_string : PoolStringArray = []
+				for e_ in parameter:
+					var e := e_ as EffectData.SkillEffect
+					replace_string.append(e.data.short_name + "%+d" % e.parameter)
+				text = data.text.replace(param_string,"{" + replace_string.join(" ") + "}")
+			_:
+				text = data.text
 
 	func test_condition(rival_color : int,link_color : int) -> bool :
 		if condition & ColorCondition.VS_FLAG:
@@ -90,19 +102,5 @@ class NamedSkill:
 		return ColorCondition.NOCONDITION
 		
 	
-	func _translate_param(p:String):
-		match data.param_type:
-			ParamType.INTEGER:
-				parameter = int(p)
-				var param_string : String = "{" + data.parameter + "}"
-				text = data.text.replace(param_string,"{" + p + "}")
-			ParamType.EFFECTS:
-				parameter = SkillEffects.new(p)
-				var param_string : String = "{" + data.parameter + "}"
-				text = data.text.replace(param_string,"{" + p + "}")
-			_:
-				parameter = null
-				text = data.text
-			
 
 
