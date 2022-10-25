@@ -8,3 +8,13 @@ func initialize(cd : CardData):
 
 func _ready():
 	pass
+
+func attack(rival : PlayingPlayer,tween : SceneTreeTween):
+	var original_x = position.x
+	tween.tween_property(self,"position:x",0.0,0.1)\
+			.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	tween.tween_callback(rival,"add_damage",[1])
+	tween.tween_property(self,"position:x",original_x,0.3)\
+			.set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)	
+	
+	

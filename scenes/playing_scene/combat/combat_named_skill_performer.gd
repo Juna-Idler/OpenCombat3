@@ -51,19 +51,16 @@ class Reinforce extends Skill:
 			_vs_color : int,_link_color : int,
 			myself : PlayingPlayer,_rival : PlayingPlayer) -> void:
 		var playing_card := myself.playing_card
+#		tween.tween_interval(1.0)
 		for p in skill.parameter as Array:
 			var e := p as EffectData.SkillEffect
 			match e.data.id:
 				EffectData.Attribute.POWER:
-					playing_card.affected.power += e.parameter
-					tween.tween_callback(myself,"change_col_power")
+					tween.tween_callback(myself,"change_col_power",[e.parameter])
 				EffectData.Attribute.HIT:
-					playing_card.affected.hit += e.parameter
-					tween.tween_callback(myself,"change_col_hit")
+					tween.tween_callback(myself,"change_col_hit",[e.parameter])
 				EffectData.Attribute.BLOCK:
-					playing_card.affected.block += e.parameter
-					tween.tween_callback(myself,"change_col_block")
-		tween.tween_interval(1.0)
+					tween.tween_callback(myself,"change_col_block",[e.parameter])
 
 
 class Rush extends Skill:
@@ -71,15 +68,17 @@ class Rush extends Skill:
 			_vs_color : int,_link_color : int,situation : int,
 			myself : PlayingPlayer,rival : PlayingPlayer) -> float:
 		if situation > 0:
-			return 1.0
+			if (rival.playing_card.get_current_block() + 1) / 2 > 0:
+				return 1.0
+			return 0.0
 		return -0.5
 		
 	func _after(tween : SceneTreeTween,skill : SkillData.NamedSkill,
 			_vs_color : int,_link_color : int,situation : int,
 			myself : PlayingPlayer,rival : PlayingPlayer) -> void:
 		if situation > 0:
-			tween.tween_interval(1.0)
-			tween.tween_callback(rival,"add_damage",[(rival.playing_card.get_current_block() + 1) / 2])
+			for i in (rival.playing_card.get_current_block() + 1) / 2:
+				myself.combat_avatar.attack(rival,tween)
 			return
 
 

@@ -57,16 +57,18 @@ func perform(node : Node):
 	tween.tween_property(power_balance,"modulate:a",1.0,0.5)
 	
 
-	tween.parallel()
+#	tween.parallel()
 	power_balance.initial_tween(p1_card.get_current_power(),p2_card.get_current_power(),tween,0.5)
 
-	if player1.next_effect.power != 0 or player2.next_effect.power != 0:
-		p1_card.affected.add(player1.next_effect)
-		tween.tween_callback(player1,"change_col_power")
-		power_balance.set_power_tween_step_by_step(p1_card.get_current_power(),p2_card.get_current_power(),tween,0.3)
-		p2_card.affected.add(player2.next_effect)
-		tween.tween_callback(player2,"change_col_power")
-		power_balance.set_power_tween_step_by_step(p1_card.get_current_power(),p2_card.get_current_power(),tween,0.3)
+
+	tween.tween_callback(player1,"change_col_power",[player1.next_effect.power])
+	tween.tween_callback(player1,"change_col_hit",[player1.next_effect.hit])
+	tween.tween_callback(player1,"change_col_block",[player1.next_effect.block])
+	power_balance.set_power_tween_step_by_step(p1_card.get_current_power(),p2_card.get_current_power(),tween,0.3)
+	tween.tween_callback(player2,"change_col_power",[player2.next_effect.power])
+	tween.tween_callback(player2,"change_col_hit",[player2.next_effect.hit])
+	tween.tween_callback(player2,"change_col_block",[player2.next_effect.block])
+	power_balance.set_power_tween_step_by_step(p1_card.get_current_power(),p2_card.get_current_power(),tween,0.3)
 
 	tween.tween_callback(self,"set_next_buf_label",["",""])
 
@@ -79,31 +81,26 @@ func perform(node : Node):
 			overlay.get_node("RivalControl"),overlay.get_node("MyControl"),
 			p1_card.front.data.color,p2_link_color,player2,player1,pb_interface2)
 
+	yield(tween,"finished")
+	tween = node.create_tween()
+
  # 交戦タイミング
 	tween.tween_callback(overlay,"change_timing_label",[CombatOverlay.CombatTiming.Engagement])
 	var situation := (player1.playing_card.get_current_power()
 			- player2.playing_card.get_current_power())
 			
-#	tween.tween_interval(1)
 	if situation > 0:
 		var hit = player1.playing_card.get_current_hit()
 		for i in hit:
-			var original_x = player1.combat_avatar.position.x
-			tween.tween_property(player1.combat_avatar,"position:x",0.0,0.1)\
-					.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
-			tween.tween_callback(player2,"add_damage",[1])
-			tween.tween_property(player1.combat_avatar,"position:x",original_x,0.3)\
-					.set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
+			player1.combat_avatar.attack(player2,tween)
 	elif situation < 0:
 		var hit = player2.playing_card.get_current_hit()
 		for i in hit:
-			var original_x = player2.combat_avatar.position.x
-			tween.tween_property(player2.combat_avatar,"position:x",0.0,0.1)\
-					.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
-			tween.tween_callback(player1,"add_damage",[1])
-			tween.tween_property(player2.combat_avatar,"position:x",original_x,0.3)\
-					.set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
+			player2.combat_avatar.attack(player1,tween)
 	
+#	tween.tween_interval(0.5)
+#	yield(tween,"finished")
+#	tween = node.create_tween()
 
  # 交戦後タイミング
 	tween.tween_callback(overlay,"change_timing_label",[CombatOverlay.CombatTiming.After])
@@ -153,6 +150,7 @@ func before_skills_effect(tween : SceneTreeTween,skills : Array,
 		if time > 0.0:
 			tween.tween_callback(csl,"highlight_flash",[Color.blue,0.3,time - 0.6,0.3])
 			tween.tween_callback(csl,"move_center",[0.3,time - 0.6,0.3])
+			tween.tween_interval(0.3)
 			skill._before(tween,s,vs_color,link_color,myself,rival)
 			pb_interface.set_power_tween_step_by_step(myself.playing_card.get_current_power(),
 					rival.playing_card.get_current_power(),tween,0.3)
@@ -177,6 +175,7 @@ func after_skills_effect(tween : SceneTreeTween,skills : Array,
 		if time > 0.0:
 			tween.tween_callback(csl,"highlight_flash",[Color.blue,0.3,time - 0.6,0.3])
 			tween.tween_callback(csl,"move_center",[0.3,time - 0.6,0.3])
+			tween.tween_interval(0.3)
 			skill._after(tween,s,vs_color,link_color,situation,myself,rival)
 		elif time < 0.0:
 			time = 0.3 if -time < 0.3 else -time
@@ -198,6 +197,7 @@ func end_skills_effect(tween : SceneTreeTween,skills : Array,
 		if time > 0.0:
 			tween.tween_callback(csl,"highlight_flash",[Color.blue,0.3,time - 0.6,0.3])
 			tween.tween_callback(csl,"move_center",[0.3,time - 0.6,0.3])
+			tween.tween_interval(0.3)
 			skill._end(tween,s,vs_color,link_color,situation,myself,rival)
 		elif time < 0.0:
 			time = 0.3 if -time < 0.3 else -time

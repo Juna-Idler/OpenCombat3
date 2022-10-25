@@ -160,11 +160,14 @@ func set_next_effect(e):# : IGameServer.UpdateData.Affected):
 	next_effect.hit = e.hit
 	next_effect.block = e.block
 
-func change_col_power():
+func change_col_power(additional :int):
+	playing_card.affected.power += additional
 	col_power.text = str(playing_card.get_current_power())
-func change_col_hit():
+func change_col_hit(additional :int):
+	playing_card.affected.hit += additional
 	col_hit.text = str(playing_card.get_current_hit())
-func change_col_block():
+func change_col_block(additional :int):
+	playing_card.affected.block += additional
 	col_block.text = str(playing_card.get_current_block())
 
 
