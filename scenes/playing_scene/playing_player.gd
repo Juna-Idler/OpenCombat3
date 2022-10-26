@@ -16,7 +16,6 @@ var next_effect := Card.Affected.new()
 
 var playing_card_id : int = -1
 var playing_card : Card = null
-var combat_damage : int = 0
 
 var player_name : String
 
@@ -29,14 +28,9 @@ var discard_pos : Vector2
 var name_lable : Label
 var life_label : Label
 
-var col_power : Label
-var col_hit : Label
-var col_block : Label
-var col_skills : Array
+var combat_avatar : CombatAvatar
 
 var damage_label : Label
-
-var combat_avatar : Node2D
 
 var power_balance : CombatPowerBalance.Interface
 
@@ -54,7 +48,7 @@ func _init(dl:Array,
 		d_pos : Vector2,
 		n_label : Label,
 		l_label : Label,
-		col_objects : CombatObjects,
+		avatar : CombatAvatar,
 		d_label : Label,
 		pb_interface : CombatPowerBalance.Interface):
 	player_name = name
@@ -65,12 +59,8 @@ func _init(dl:Array,
 	discard_pos = d_pos
 	name_lable = n_label
 	life_label = l_label
-	col_power = col_objects.power
-	col_hit = col_objects.hit
-	col_block = col_objects.block
-	col_skills = col_objects.skills
+	combat_avatar = avatar
 	damage_label = d_label
-	combat_avatar = col_objects.avatar
 	power_balance = pb_interface
 	
 	stack_count = deck_list.size()
@@ -106,7 +96,6 @@ func set_hand(new_hand_indexes:Array):
 func play(hand_select : int,new_hand : Array,d : int,tween : SceneTreeTween):
 	hand = new_hand
 	damage = d
-	combat_damage = 0
 	playing_card_id = hand[hand_select]
 	playing_card = deck_list[playing_card_id]
 	hand.remove(hand_select)
@@ -162,21 +151,16 @@ func set_next_effect(e):# : IGameServer.UpdateData.Affected):
 	next_effect.hit = e.hit
 	next_effect.block = e.block
 
-func change_col_power(additional :int):
+func change_power(additional :int):
 	playing_card.affected.power += additional
-	col_power.text = str(playing_card.get_current_power())
+	combat_avatar.set_power(playing_card.get_current_power())
 	power_balance.set_my_power_tween_step_by_step(playing_card.get_current_power(),0.5)
 
-func change_col_hit(additional :int):
+func change_hit(additional :int):
 	playing_card.affected.hit += additional
-	col_hit.text = str(playing_card.get_current_hit())
-func change_col_block(additional :int):
+	combat_avatar.set_hit(playing_card.get_current_hit())
+	
+func change_block(additional :int):
 	playing_card.affected.block += additional
-	col_block.text = str(playing_card.get_current_block())
+	combat_avatar.set_block(playing_card.get_current_block())
 
-
-func add_damage(add_d : int):
-	combat_damage += add_d
-	var block = playing_card.get_current_block()
-	var d = combat_damage - block
-	damage_label.text = str(d if d > 0 else 0)

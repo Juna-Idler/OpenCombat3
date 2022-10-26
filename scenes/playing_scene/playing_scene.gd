@@ -67,7 +67,7 @@ func _ready():
 			my_discard_pos,
 			$TopUILayer/Control/MyName,
 			my_life,
-			combat_overlay.my_objects,
+			combat_overlay.p1_avatar,
 			$TopUILayer/Control/MyDamage,
 			CombatPowerBalance.Interface.new($BGLayer/PowerBalance,false))
 	rival = PlayingPlayer.new(rival_deck,pd.rival_name,
@@ -77,7 +77,7 @@ func _ready():
 			rival_discard_pos,
 			$TopUILayer/Control/RivalName,
 			rival_life,
-			combat_overlay.rival_objects,
+			combat_overlay.p2_avatar,
 			$TopUILayer/Control/RivalDamage,
 			CombatPowerBalance.Interface.new($BGLayer/PowerBalance,true))
 	

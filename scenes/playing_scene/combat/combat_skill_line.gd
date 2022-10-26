@@ -1,3 +1,4 @@
+tool
 extends Node2D
 
 class_name CombatSkillLine
@@ -85,20 +86,20 @@ func set_opponent_layout(value):
 		right.margin_right = long_margin + long_size
 		right.margin_bottom = short_margin + short_size
 	else:
-		left.anchor_left = 0
-		left.anchor_right = 0
-		left.anchor_top = 0
-		left.anchor_bottom = 0
-		right.margin_left = short_margin
-		right.margin_top = long_margin
-		right.margin_right = short_margin + short_size
-		right.margin_bottom = long_margin + long_size
+		left.anchor_left = 0.0
+		left.anchor_right = 0.0
+		left.anchor_top = 0.0
+		left.anchor_bottom = 0.0
+		left.margin_left = short_margin
+		left.margin_top = long_margin
+		left.margin_right = short_margin + short_size
+		left.margin_bottom = long_margin + long_size
 
 		right.anchor_left = 1.0
 		right.anchor_right = 1.0
 		right.anchor_top = 1.0
 		right.anchor_bottom = 1.0
-		left.margin_left = -(long_margin + long_size)
-		left.margin_top = -(short_margin + short_size)
-		left.margin_right = -long_margin
-		left.margin_bottom = -short_margin
+		right.margin_left = -(long_margin + long_size)
+		right.margin_top = -(short_margin + short_size)
+		right.margin_right = -long_margin
+		right.margin_bottom = -short_margin

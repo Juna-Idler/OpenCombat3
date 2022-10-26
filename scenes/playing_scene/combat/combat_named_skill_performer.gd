@@ -57,11 +57,11 @@ class Reinforce extends Skill:
 			var e := p as EffectData.SkillEffect
 			match e.data.id:
 				EffectData.Attribute.POWER:
-					tween.tween_callback(myself,"change_col_power",[e.parameter])
+					tween.tween_callback(myself,"change_power",[e.parameter])
 				EffectData.Attribute.HIT:
-					tween.tween_callback(myself,"change_col_hit",[e.parameter])
+					tween.tween_callback(myself,"change_hit",[e.parameter])
 				EffectData.Attribute.BLOCK:
-					tween.tween_callback(myself,"change_col_block",[e.parameter])
+					tween.tween_callback(myself,"change_block",[e.parameter])
 		tween.chain()
 		tween.tween_interval(1.0)
 		tween.chain()
@@ -81,9 +81,7 @@ class Rush extends Skill:
 			_vs_color : int,_link_color : int,situation : int,
 			myself : PlayingPlayer,rival : PlayingPlayer) -> void:
 		if situation > 0:
-			for i in (rival.playing_card.get_current_block() + 1) / 2:
-				myself.combat_avatar.attack(rival,tween)
-			tween.tween_interval(0.1)
+			myself.combat_avatar.attack((rival.playing_card.get_current_block() + 1) / 2,rival.combat_avatar,tween)
 			return
 
 
