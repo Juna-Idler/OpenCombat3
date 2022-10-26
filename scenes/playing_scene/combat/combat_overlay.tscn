@@ -1,11 +1,11 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://scenes/playing_scene/combat/combat_overlay.gd" type="Script" id=1]
-[ext_resource path="res://scenes/playing_scene/combat/combat_skill_line.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/playing_scene/combat/combat_objects.gd" type="Script" id=2]
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=3]
 [ext_resource path="res://images/triangle.png" type="Texture" id=4]
-[ext_resource path="res://scenes/ui/v_box_layout.gd" type="Script" id=5]
 [ext_resource path="res://scenes/playing_scene/combat/combat_avatar.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scenes/playing_scene/combat/combat_skill_line2.tscn" type="PackedScene" id=7]
 
 [sub_resource type="Gradient" id=14]
 interpolation_mode = 2
@@ -19,6 +19,11 @@ fill_from = Vector2( 1, 1 )
 [sub_resource type="StyleBoxTexture" id=16]
 texture = SubResource( 15 )
 region_rect = Rect2( 0, 0, 64, 64 )
+
+[sub_resource type="DynamicFont" id=32]
+size = 30
+outline_size = 1
+font_data = ExtResource( 3 )
 
 [sub_resource type="StyleBoxFlat" id=19]
 bg_color = Color( 0, 0, 0, 0.498039 )
@@ -65,13 +70,6 @@ font_data = ExtResource( 3 )
 texture = ExtResource( 4 )
 region_rect = Rect2( 0, 443, 512, -443 )
 
-[sub_resource type="StyleBoxFlat" id=23]
-content_margin_left = 8.0
-content_margin_right = 8.0
-content_margin_top = 8.0
-content_margin_bottom = 8.0
-bg_color = Color( 0, 0, 0, 0.752941 )
-
 [sub_resource type="DynamicFont" id=30]
 size = 24
 outline_size = 2
@@ -94,11 +92,6 @@ font_data = ExtResource( 3 )
 texture = ExtResource( 4 )
 region_rect = Rect2( 0, 443, 512, -443 )
 
-[sub_resource type="DynamicFont" id=32]
-size = 30
-outline_size = 1
-font_data = ExtResource( 3 )
-
 [node name="CombatOverlay" type="Panel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -106,14 +99,43 @@ rect_pivot_offset = Vector2( 640, 360 )
 custom_styles/panel = SubResource( 16 )
 script = ExtResource( 1 )
 
-[node name="MyControl" type="Control" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-mouse_filter = 2
+[node name="TimingLabel" type="Label" parent="."]
+margin_left = 448.0
+margin_right = 832.0
+margin_bottom = 48.0
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_outline_modulate = Color( 1, 0, 0, 1 )
+custom_fonts/font = SubResource( 32 )
+text = "Timing"
+align = 1
+valign = 1
 
-[node name="StatePanel" type="Panel" parent="MyControl"]
+[node name="MyObjects" type="Node2D" parent="."]
+position = Vector2( 640, 360 )
+script = ExtResource( 2 )
+
+[node name="Avatar" parent="MyObjects" instance=ExtResource( 6 )]
+position = Vector2( 144, 0 )
+
+[node name="SkillList" type="Node2D" parent="MyObjects"]
+position = Vector2( 240, 144 )
+
+[node name="Skill1" parent="MyObjects/SkillList" instance=ExtResource( 7 )]
+target_position = Vector2( 880, 360 )
+
+[node name="Skill2" parent="MyObjects/SkillList" instance=ExtResource( 7 )]
+position = Vector2( 0, 40 )
+target_position = Vector2( 880, 360 )
+
+[node name="Skill3" parent="MyObjects/SkillList" instance=ExtResource( 7 )]
+position = Vector2( 0, 80 )
+target_position = Vector2( 880, 360 )
+
+[node name="Skill4" parent="MyObjects/SkillList" instance=ExtResource( 7 )]
+position = Vector2( 0, 120 )
+target_position = Vector2( 880, 360 )
+
+[node name="StatePanel" type="Panel" parent="MyObjects"]
 visible = false
 anchor_left = 0.5
 anchor_top = 0.5
@@ -126,7 +148,7 @@ margin_bottom = 104.0
 mouse_filter = 2
 custom_styles/panel = SubResource( 19 )
 
-[node name="Power" type="Label" parent="MyControl"]
+[node name="Power" type="Label" parent="MyObjects"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -142,7 +164,7 @@ text = "3"
 align = 1
 valign = 1
 
-[node name="Hit" type="Label" parent="MyControl"]
+[node name="Hit" type="Label" parent="MyObjects"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -158,7 +180,7 @@ text = "1"
 align = 1
 valign = 1
 
-[node name="Block" type="Label" parent="MyControl"]
+[node name="Block" type="Label" parent="MyObjects"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -174,46 +196,37 @@ text = "1"
 align = 1
 valign = 1
 
-[node name="SkillContainer" type="Panel" parent="MyControl"]
-margin_left = 72.0
-margin_top = 120.0
-margin_right = 400.0
-margin_bottom = 168.0
-custom_styles/panel = SubResource( 23 )
-script = ExtResource( 5 )
+[node name="RivalObjects" type="Node2D" parent="."]
+position = Vector2( 640, 360 )
+script = ExtResource( 2 )
 
-[node name="CombatSkillLine" parent="MyControl/SkillContainer" instance=ExtResource( 2 )]
-margin_left = 8.0
-margin_top = 8.0
-margin_right = 320.0
-margin_bottom = 40.0
+[node name="Avatar" parent="RivalObjects" instance=ExtResource( 6 )]
+position = Vector2( -144, 0 )
+rotation = 3.14159
 
-[node name="CombatSkillLine2" parent="MyControl/SkillContainer" instance=ExtResource( 2 )]
-margin_left = 8.0
-margin_top = 48.0
-margin_right = 320.0
-margin_bottom = 80.0
+[node name="SkillList" type="Node2D" parent="RivalObjects"]
+position = Vector2( -240, -144 )
 
-[node name="CombatSkillLine3" parent="MyControl/SkillContainer" instance=ExtResource( 2 )]
-margin_left = 8.0
-margin_top = 88.0
-margin_right = 320.0
-margin_bottom = 120.0
+[node name="Skill1" parent="RivalObjects/SkillList" instance=ExtResource( 7 )]
+opponent_layout = true
+target_position = Vector2( 400, 360 )
 
-[node name="CombatSkillLine4" parent="MyControl/SkillContainer" instance=ExtResource( 2 )]
-margin_left = 8.0
-margin_top = 128.0
-margin_right = 320.0
-margin_bottom = 160.0
+[node name="Skill2" parent="RivalObjects/SkillList" instance=ExtResource( 7 )]
+position = Vector2( 0, -40 )
+opponent_layout = true
+target_position = Vector2( 400, 360 )
 
-[node name="RivalControl" type="Control" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-mouse_filter = 2
+[node name="Skill3" parent="RivalObjects/SkillList" instance=ExtResource( 7 )]
+position = Vector2( 0, -80 )
+opponent_layout = true
+target_position = Vector2( 400, 360 )
 
-[node name="StatePanel" type="Panel" parent="RivalControl"]
+[node name="Skill4" parent="RivalObjects/SkillList" instance=ExtResource( 7 )]
+position = Vector2( 0, -120 )
+opponent_layout = true
+target_position = Vector2( 400, 360 )
+
+[node name="StatePanel" type="Panel" parent="RivalObjects"]
 visible = false
 anchor_left = 0.5
 anchor_top = 0.5
@@ -226,7 +239,7 @@ margin_bottom = -16.0
 mouse_filter = 2
 custom_styles/panel = SubResource( 19 )
 
-[node name="Block" type="Label" parent="RivalControl"]
+[node name="Block" type="Label" parent="RivalObjects"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -242,7 +255,7 @@ text = "1"
 align = 1
 valign = 1
 
-[node name="Hit" type="Label" parent="RivalControl"]
+[node name="Hit" type="Label" parent="RivalObjects"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -257,7 +270,7 @@ text = "1"
 align = 1
 valign = 1
 
-[node name="Power" type="Label" parent="RivalControl"]
+[node name="Power" type="Label" parent="RivalObjects"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -272,60 +285,3 @@ custom_styles/normal = SubResource( 12 )
 text = "3"
 align = 1
 valign = 1
-
-[node name="SkillContainer" type="Panel" parent="RivalControl"]
-margin_left = -400.0
-margin_top = -168.0
-margin_right = -72.0
-margin_bottom = -120.0
-grow_vertical = 0
-custom_styles/panel = SubResource( 23 )
-script = ExtResource( 5 )
-reverse = true
-
-[node name="CombatSkillLine" parent="RivalControl/SkillContainer" instance=ExtResource( 2 )]
-margin_left = 8.0
-margin_top = -112.0
-margin_right = 320.0
-margin_bottom = -80.0
-
-[node name="CombatSkillLine2" parent="RivalControl/SkillContainer" instance=ExtResource( 2 )]
-margin_left = 8.0
-margin_top = -72.0
-margin_right = 320.0
-margin_bottom = -40.0
-
-[node name="CombatSkillLine3" parent="RivalControl/SkillContainer" instance=ExtResource( 2 )]
-margin_left = 8.0
-margin_top = -32.0
-margin_right = 320.0
-margin_bottom = 0.0
-
-[node name="CombatSkillLine4" parent="RivalControl/SkillContainer" instance=ExtResource( 2 )]
-margin_left = 8.0
-margin_top = 8.0
-margin_right = 320.0
-margin_bottom = 40.0
-
-[node name="TimingLabel" type="Label" parent="."]
-margin_left = 448.0
-margin_right = 832.0
-margin_bottom = 48.0
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_colors/font_outline_modulate = Color( 1, 0, 0, 1 )
-custom_fonts/font = SubResource( 32 )
-text = "Timing"
-align = 1
-valign = 1
-
-[node name="Node2D" type="Node2D" parent="."]
-position = Vector2( 640, 360 )
-
-[node name="MyCombatAvatar" parent="Node2D" instance=ExtResource( 6 )]
-unique_name_in_owner = true
-position = Vector2( 144, 0 )
-
-[node name="RivalCombatAvatar" parent="Node2D" instance=ExtResource( 6 )]
-unique_name_in_owner = true
-position = Vector2( -144, 0 )
-rotation = 3.14159

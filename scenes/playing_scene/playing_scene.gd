@@ -67,9 +67,9 @@ func _ready():
 			my_discard_pos,
 			$TopUILayer/Control/MyName,
 			my_life,
-			$CombatLayer/CombatOverlay/MyControl,
+			combat_overlay.my_objects,
 			$TopUILayer/Control/MyDamage,
-			$CombatLayer/CombatOverlay.get_node("Node2D/MyCombatAvatar"))
+			CombatPowerBalance.Interface.new($BGLayer/PowerBalance,false))
 	rival = PlayingPlayer.new(rival_deck,pd.rival_name,
 			$UILayer/RivalField/HandArea,
 			rival_combat_pos,
@@ -77,9 +77,9 @@ func _ready():
 			rival_discard_pos,
 			$TopUILayer/Control/RivalName,
 			rival_life,
-			$CombatLayer/CombatOverlay/RivalControl,
+			combat_overlay.rival_objects,
 			$TopUILayer/Control/RivalDamage,
-			$CombatLayer/CombatOverlay.get_node("Node2D/RivalCombatAvatar"))
+			CombatPowerBalance.Interface.new($BGLayer/PowerBalance,true))
 	
 	combat_director.initialize(myself,rival,
 			combat_overlay,$BGLayer/PowerBalance,

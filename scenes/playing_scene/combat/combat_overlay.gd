@@ -2,11 +2,9 @@ extends Control
 
 class_name CombatOverlay
 
-const CombatSkill = preload("./combat_skill_line.tscn")
-const RGB = [Color(0,0,0,0),Color(1,0,0),Color(0,0.7,0),Color(0,0,1)]
+onready var my_objects := $MyObjects
+onready var rival_objects := $RivalObjects
 
-onready var my_skills_list := $MyControl/SkillContainer
-onready var rival_skills_list := $RivalControl/SkillContainer
 
 func _ready():
 	pass
@@ -14,46 +12,34 @@ func _ready():
 func initialize(myself : PlayingPlayer,rival : PlayingPlayer):
 	var my_card := myself.deck_list[myself.playing_card_id] as Card
 	var rival_card := rival.deck_list[rival.playing_card_id] as Card
-	$MyControl/Power.text = str(my_card.get_current_power())
-	$MyControl/Hit.text = str(my_card.get_current_hit())
-	$MyControl/Block.text = str(my_card.get_current_block())
-	$Node2D/MyCombatAvatar.initialize(my_card.front.data)
+	my_objects.power.text = str(my_card.get_current_power())
+	my_objects.hit.text = str(my_card.get_current_hit())
+	my_objects.block.text = str(my_card.get_current_block())
+	my_objects.avatar.initialize(my_card.front.data)
 
-	$RivalControl/Power.text = str(rival_card.get_current_power())
-	$RivalControl/Hit.text = str(rival_card.get_current_hit())
-	$RivalControl/Block.text = str(rival_card.get_current_block())
-	$Node2D/RivalCombatAvatar.initialize(rival_card.front.data)
-#	$MyControl/Power.rect_scale = Vector2(1.0,1.0)
-#	$RivalControl/Power.rect_scale = Vector2(1.0,1.0)
+	rival_objects.power.text = str(rival_card.get_current_power())
+	rival_objects.hit.text = str(rival_card.get_current_hit())
+	rival_objects.block.text = str(rival_card.get_current_block())
+	rival_objects.avatar.initialize(rival_card.front.data)
 
-
-	if my_card.front.data.skills.empty():
-		my_skills_list.visible = false
-	else:
-		my_skills_list.visible = true
-		for i in my_card.front.data.skills.size():
-			var cs := my_skills_list.get_children()[i] as CombatSkillLine
-			cs.initialize(my_card.front.data.skills[i],
-					rival_card.front.data.color,myself.get_link_color(),false)
-			cs.show()
-		for i in range(my_card.front.data.skills.size(),4):
-			var cs := my_skills_list.get_children()[i] as CombatSkillLine
-			cs.hide()
-		my_skills_list.layout()
+	for i in my_card.front.data.skills.size():
+		var csl := my_objects.skills[i] as CombatSkillLine2
+		csl.set_skill(my_card.front.data.skills[i],
+				rival_card.front.data.color,myself.get_link_color())
+		csl.show()
+	for i in range(my_card.front.data.skills.size(),4):
+		var csl := my_objects.skills[i] as CombatSkillLine2
+		csl.hide()
 	
-	if rival_card.front.data.skills.empty():
-		rival_skills_list.visible = false
-	else:
-		rival_skills_list.visible = true
-		for i in rival_card.front.data.skills.size():
-			var cs = rival_skills_list.get_children()[i] as CombatSkillLine
-			cs.initialize(rival_card.front.data.skills[i],
-					my_card.front.data.color,rival.get_link_color(),true)
-			cs.show()
-		for i in range(rival_card.front.data.skills.size(),4):
-			var cs := rival_skills_list.get_children()[i] as CombatSkillLine
-			cs.hide()
-		rival_skills_list.layout()
+	for i in rival_card.front.data.skills.size():
+		var csl = rival_objects.skills[i] as CombatSkillLine2
+		csl.set_skill(rival_card.front.data.skills[i],
+				my_card.front.data.color,rival.get_link_color())
+		csl.show()
+	for i in range(rival_card.front.data.skills.size(),4):
+		var csl := rival_objects.skills[i] as CombatSkillLine2
+		csl.hide()
+
 
 enum CombatTiming {NoTiming,Before,Engagement,After,Damage,End,}
 const _timing_name := ["","Before","Engagement","After","Damage","End"]

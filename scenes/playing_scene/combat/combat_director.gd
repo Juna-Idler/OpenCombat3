@@ -6,11 +6,9 @@ var player1 : PlayingPlayer
 var player2 : PlayingPlayer
 var overlay : CombatOverlay
 var power_balance : CombatPowerBalance
-var pb_interface1 : CombatPowerBalance.Interface
-var pb_interface2 : CombatPowerBalance.Interface
 
-var p1_skills_list : Node 
-var p2_skills_list : Node
+var p1_objects : CombatObjects 
+var p2_objects : CombatObjects
 
 var p1_next_buf_label : Label
 var p2_next_buf_label : Label
@@ -27,10 +25,8 @@ func initialize(p1 : PlayingPlayer,p2 : PlayingPlayer,
 	player2 = p2
 	overlay = ol
 	power_balance = pb
-	pb_interface1 = CombatPowerBalance.Interface.new(power_balance,false)
-	pb_interface2 = CombatPowerBalance.Interface.new(power_balance,true)
-	p1_skills_list = overlay.get_node("MyControl/SkillContainer")
-	p2_skills_list = overlay.get_node("RivalControl/SkillContainer")
+	p1_objects = overlay.my_objects
+	p2_objects = overlay.rival_objects
 	p1_next_buf_label = p1_nbl
 	p2_next_buf_label = p2_nbl
 	
@@ -55,32 +51,37 @@ func perform(node : Node):
 	tween.tween_property(overlay,"modulate:a",1.0,0.5)
 	tween.parallel()
 	tween.tween_property(power_balance,"modulate:a",1.0,0.5)
-	
-
-#	tween.parallel()
-	power_balance.initial_tween(p1_card.get_current_power(),p2_card.get_current_power(),tween,0.5)
+	tween.parallel()
+	tween.tween_callback(power_balance,"initial_tween",[p1_card.get_current_power(),p2_card.get_current_power(),0.5])
+	tween.tween_interval(0.5)
 
 
 	tween.tween_callback(player1,"change_col_power",[player1.next_effect.power])
 	tween.tween_callback(player1,"change_col_hit",[player1.next_effect.hit])
 	tween.tween_callback(player1,"change_col_block",[player1.next_effect.block])
-	power_balance.set_power_tween_step_by_step(p1_card.get_current_power(),p2_card.get_current_power(),tween,0.3)
+	if player1.next_effect.power != 0:
+		tween.tween_interval(0.5)
 	tween.tween_callback(player2,"change_col_power",[player2.next_effect.power])
 	tween.tween_callback(player2,"change_col_hit",[player2.next_effect.hit])
 	tween.tween_callback(player2,"change_col_block",[player2.next_effect.block])
-	power_balance.set_power_tween_step_by_step(p1_card.get_current_power(),p2_card.get_current_power(),tween,0.3)
-
+	if player2.next_effect.power != 0:
+		tween.tween_interval(0.5)
+	tween.tween_interval(0.5)
+	
 	tween.tween_callback(self,"set_next_buf_label",["",""])
+	
+
 
  # 交戦前タイミング
 	tween.tween_callback(overlay,"change_timing_label",[CombatOverlay.CombatTiming.Before])
 	before_skills_effect(tween,p1_card.front.data.skills,
-			overlay.get_node("MyControl"),overlay.get_node("RivalControl"),
-			p2_card.front.data.color,p1_link_color,player1,player2,pb_interface1)
+			overlay.my_objects,overlay.rival_objects,
+			p2_card.front.data.color,p1_link_color,player1,player2)
 	before_skills_effect(tween,p2_card.front.data.skills,
-			overlay.get_node("RivalControl"),overlay.get_node("MyControl"),
-			p1_card.front.data.color,p2_link_color,player2,player1,pb_interface2)
+			overlay.rival_objects,overlay.my_objects,
+			p1_card.front.data.color,p2_link_color,player2,player1)
 
+	tween.tween_interval(0.3)
 	yield(tween,"finished")
 	tween = node.create_tween()
 
@@ -98,28 +99,28 @@ func perform(node : Node):
 		for i in hit:
 			player2.combat_avatar.attack(player1,tween)
 	
-#	tween.tween_interval(0.5)
-#	yield(tween,"finished")
-#	tween = node.create_tween()
+	tween.tween_interval(0.3)
 
  # 交戦後タイミング
 	tween.tween_callback(overlay,"change_timing_label",[CombatOverlay.CombatTiming.After])
 	after_skills_effect(tween,p1_card.front.data.skills,
-			overlay.get_node("MyControl"),overlay.get_node("RivalControl"),
+			overlay.my_objects,overlay.rival_objects,
 			p2_card.front.data.color,p1_link_color,situation,player1,player2)
 	after_skills_effect(tween,p2_card.front.data.skills,
-			overlay.get_node("RivalControl"),overlay.get_node("MyControl"),
+			overlay.rival_objects,overlay.my_objects,
 			p1_card.front.data.color,p2_link_color,-situation,player2,player1)
+
+	tween.tween_interval(0.3)
 
  # ダメージ確定タイミング
 	
  # 終了時タイミング
 	tween.tween_callback(overlay,"change_timing_label",[CombatOverlay.CombatTiming.End])
 	end_skills_effect(tween,p1_card.front.data.skills,
-			overlay.get_node("MyControl"),overlay.get_node("RivalControl"),
+			overlay.my_objects,overlay.rival_objects,
 			p2_card.front.data.color,p1_link_color,situation,player1,player2)
 	end_skills_effect(tween,p2_card.front.data.skills,
-			overlay.get_node("RivalControl"),overlay.get_node("MyControl"),
+			overlay.rival_objects,overlay.my_objects,
 			p1_card.front.data.color,p2_link_color,-situation,player2,player1)
 
 	
@@ -129,78 +130,75 @@ func perform(node : Node):
 
 	yield(tween,"finished")
 	
-	overlay.visible = false
+	overlay.hide()
 	power_balance.hide()
 
 
 var named_skills := NamedSkillPerformer.new()
 
 func before_skills_effect(tween : SceneTreeTween,skills : Array,
-		my_control : Node,rival_control : Node,
+		my_objects : CombatObjects,rival_objects : CombatObjects,
 		vs_color : int,link_color : int,
-		myself : PlayingPlayer,rival : PlayingPlayer,
-		pb_interface : CombatPowerBalance.Interface):
+		myself : PlayingPlayer,rival : PlayingPlayer):
 	for i in skills.size():
 		var s := skills[i] as SkillData.NamedSkill
 		if not s.test_condition(vs_color,link_color):
 			continue
-		var csl := my_control.get_node("SkillContainer").get_children()[i] as CombatSkillLine
+		var csl := my_objects.skills[i] as CombatSkillLine2
 		var skill := named_skills.get_skill(s.data.id)
-		var time := skill._test_before(s,vs_color,link_color,myself,rival)
-		if time > 0.0:
-			tween.tween_callback(csl,"highlight_flash",[Color.blue,0.3,time - 0.6,0.3])
-			tween.tween_callback(csl,"move_center",[0.3,time - 0.6,0.3])
-			tween.tween_interval(0.3)
+		var result := skill._test_before(s,vs_color,link_color,myself,rival)
+		if result == NamedSkillPerformer.SkillTestResult.SUCCESSFUL:
+			tween.tween_callback(csl,"highlight_flash",[Color.blue,0.2,0.6,0.2])
+			var move_pos = Vector2(csl.global_position.x,360)
+			tween.tween_callback(csl,"move_and_remove",[0.3,0.5,0.2])
+			tween.tween_interval(0.4)
 			skill._before(tween,s,vs_color,link_color,myself,rival)
-			pb_interface.set_power_tween_step_by_step(myself.playing_card.get_current_power(),
-					rival.playing_card.get_current_power(),tween,0.3)
-		elif time < 0.0:
-			time = 0.3 if -time < 0.3 else -time
-			tween.tween_callback(csl,"highlight_flash",[Color.red,0.1,time - 0.2,0.1])
-			tween.tween_interval(time)
+		elif result == NamedSkillPerformer.SkillTestResult.FAILED:
+			tween.tween_callback(csl,"highlight_flash",[Color.red,0.2,0.6,0.2])
+			tween.tween_interval(0.3)
 			
 
 
 func after_skills_effect(tween : SceneTreeTween,skills : Array,
-		my_control : Node,rival_control : Node,
+		my_objects : CombatObjects,rival_objects : CombatObjects,
 		vs_color : int,link_color : int,situation : int,
 		myself : PlayingPlayer,rival : PlayingPlayer):
 	for i in skills.size():
 		var s := skills[i] as SkillData.NamedSkill
 		if not s.test_condition(vs_color,link_color):
 			continue
-		var csl := my_control.get_node("SkillContainer").get_children()[i] as CombatSkillLine
+		var csl := my_objects.skills[i] as CombatSkillLine2
 		var skill := named_skills.get_skill(s.data.id)
-		var time := skill._test_after(s,vs_color,link_color,situation,myself,rival)
-		if time > 0.0:
-			tween.tween_callback(csl,"highlight_flash",[Color.blue,0.3,time - 0.6,0.3])
-			tween.tween_callback(csl,"move_center",[0.3,time - 0.6,0.3])
-			tween.tween_interval(0.3)
+		var result := skill._test_after(s,vs_color,link_color,situation,myself,rival)
+		if result == NamedSkillPerformer.SkillTestResult.SUCCESSFUL:
+			tween.tween_callback(csl,"highlight_flash",[Color.blue,0.2,0.6,0.2])
+			var move_pos = Vector2(csl.global_position.x,360)
+			tween.tween_callback(csl,"move_and_remove",[0.3,0.5,0.2])
+			tween.tween_interval(0.4)
 			skill._after(tween,s,vs_color,link_color,situation,myself,rival)
-		elif time < 0.0:
-			time = 0.3 if -time < 0.3 else -time
-			tween.tween_callback(csl,"highlight_flash",[Color.red,0.1,time - 0.2,0.1])
-			tween.tween_interval(time)
+		elif result == NamedSkillPerformer.SkillTestResult.FAILED:
+			tween.tween_callback(csl,"highlight_flash",[Color.red,0.2,0.6,0.2])
+			tween.tween_interval(0.3)
 
 
 func end_skills_effect(tween : SceneTreeTween,skills : Array,
-		my_control : Node,rival_control : Node,
+		my_objects : CombatObjects,rival_objects : CombatObjects,
 		vs_color : int,link_color : int,situation : int,
 		myself : PlayingPlayer,rival : PlayingPlayer):
 	for i in skills.size():
 		var s := skills[i] as SkillData.NamedSkill
 		if not s.test_condition(vs_color,link_color):
 			continue
-		var csl := my_control.get_node("SkillContainer").get_children()[i] as CombatSkillLine
+		var csl := my_objects.skills[i] as CombatSkillLine2
 		var skill := named_skills.get_skill(s.data.id)
-		var time := skill._test_end(s,vs_color,link_color,situation,myself,rival)
-		if time > 0.0:
-			tween.tween_callback(csl,"highlight_flash",[Color.blue,0.3,time - 0.6,0.3])
-			tween.tween_callback(csl,"move_center",[0.3,time - 0.6,0.3])
-			tween.tween_interval(0.3)
+		var result := skill._test_end(s,vs_color,link_color,situation,myself,rival)
+		if result == NamedSkillPerformer.SkillTestResult.SUCCESSFUL:
+			tween.tween_callback(csl,"highlight_flash",[Color.blue,0.2,0.6,0.2])
+			var move_pos = Vector2(csl.global_position.x,360)
+			tween.tween_callback(csl,"move_and_remove",[0.3,0.5,0.2])
+			tween.tween_interval(0.4)
 			skill._end(tween,s,vs_color,link_color,situation,myself,rival)
-		elif time < 0.0:
-			time = 0.3 if -time < 0.3 else -time
-			tween.tween_callback(csl,"highlight_flash",[Color.red,0.1,time - 0.2,0.1])
-			tween.tween_interval(time)
+		elif result == NamedSkillPerformer.SkillTestResult.FAILED:
+			tween.tween_callback(csl,"highlight_flash",[Color.red,0.2,0.6,0.2])
+			tween.tween_interval(0.3)
 

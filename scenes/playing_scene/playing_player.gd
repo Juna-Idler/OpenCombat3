@@ -32,12 +32,13 @@ var life_label : Label
 var col_power : Label
 var col_hit : Label
 var col_block : Label
-var col_skill_list : VBoxLayout
+var col_skills : Array
 
 var damage_label : Label
 
 var combat_avatar : Node2D
 
+var power_balance : CombatPowerBalance.Interface
 
 func get_link_color() -> int:
 	if played.empty():
@@ -53,9 +54,9 @@ func _init(dl:Array,
 		d_pos : Vector2,
 		n_label : Label,
 		l_label : Label,
-		col_control : Control,
+		col_objects : CombatObjects,
 		d_label : Label,
-		avatar : Node2D):
+		pb_interface : CombatPowerBalance.Interface):
 	player_name = name
 	deck_list = dl
 	hand_area = hand_area_node
@@ -64,12 +65,13 @@ func _init(dl:Array,
 	discard_pos = d_pos
 	name_lable = n_label
 	life_label = l_label
-	col_power = col_control.get_node("Power")
-	col_hit = col_control.get_node("Hit")
-	col_block = col_control.get_node("Block")
-	col_skill_list = col_control.get_node("SkillContainer")
+	col_power = col_objects.power
+	col_hit = col_objects.hit
+	col_block = col_objects.block
+	col_skills = col_objects.skills
 	damage_label = d_label
-	combat_avatar = avatar
+	combat_avatar = col_objects.avatar
+	power_balance = pb_interface
 	
 	stack_count = deck_list.size()
 	for i_ in deck_list:
@@ -163,6 +165,8 @@ func set_next_effect(e):# : IGameServer.UpdateData.Affected):
 func change_col_power(additional :int):
 	playing_card.affected.power += additional
 	col_power.text = str(playing_card.get_current_power())
+	power_balance.set_my_power_tween_step_by_step(playing_card.get_current_power(),0.5)
+
 func change_col_hit(additional :int):
 	playing_card.affected.hit += additional
 	col_hit.text = str(playing_card.get_current_hit())
