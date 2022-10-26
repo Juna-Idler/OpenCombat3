@@ -59,15 +59,10 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scenes/playing_scene/combat/combat_power_balance.gd"
 }, {
-"base": "Control",
+"base": "Node2D",
 "class": "CombatSkillLine",
 "language": "GDScript",
 "path": "res://scenes/playing_scene/combat/combat_skill_line.gd"
-}, {
-"base": "Node2D",
-"class": "CombatSkillLine2",
-"language": "GDScript",
-"path": "res://scenes/playing_scene/combat/combat_skill_line2.gd"
 }, {
 "base": "ResourceFormatLoader",
 "class": "CustomResFormatLoader",
@@ -226,7 +221,6 @@ _global_script_class_icons={
 "CombatOverlay": "",
 "CombatPowerBalance": "",
 "CombatSkillLine": "",
-"CombatSkillLine2": "",
 "CustomResFormatLoader": "",
 "CustomResFormatSaver": "",
 "DeckBanner": "",

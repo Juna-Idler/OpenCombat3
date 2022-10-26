@@ -144,7 +144,7 @@ func before_skills_effect(tween : SceneTreeTween,skills : Array,
 		var s := skills[i] as SkillData.NamedSkill
 		if not s.test_condition(vs_color,link_color):
 			continue
-		var csl := my_objects.skills[i] as CombatSkillLine2
+		var csl := my_objects.skills[i] as CombatSkillLine
 		var skill := named_skills.get_skill(s.data.id)
 		var result := skill._test_before(s,vs_color,link_color,myself,rival)
 		if result == NamedSkillPerformer.SkillTestResult.SUCCESSFUL:
@@ -167,7 +167,7 @@ func after_skills_effect(tween : SceneTreeTween,skills : Array,
 		var s := skills[i] as SkillData.NamedSkill
 		if not s.test_condition(vs_color,link_color):
 			continue
-		var csl := my_objects.skills[i] as CombatSkillLine2
+		var csl := my_objects.skills[i] as CombatSkillLine
 		var skill := named_skills.get_skill(s.data.id)
 		var result := skill._test_after(s,vs_color,link_color,situation,myself,rival)
 		if result == NamedSkillPerformer.SkillTestResult.SUCCESSFUL:
@@ -189,7 +189,7 @@ func end_skills_effect(tween : SceneTreeTween,skills : Array,
 		var s := skills[i] as SkillData.NamedSkill
 		if not s.test_condition(vs_color,link_color):
 			continue
-		var csl := my_objects.skills[i] as CombatSkillLine2
+		var csl := my_objects.skills[i] as CombatSkillLine
 		var skill := named_skills.get_skill(s.data.id)
 		var result := skill._test_end(s,vs_color,link_color,situation,myself,rival)
 		if result == NamedSkillPerformer.SkillTestResult.SUCCESSFUL:

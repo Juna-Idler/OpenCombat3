@@ -1,77 +1,104 @@
-extends Control
+extends Node2D
 
 class_name CombatSkillLine
 
-const RGB = [Color(0,0,0,0),Color(0.9,0,0),Color(0,0.7,0),Color(0,0,1)]
 
-const left_margin_left = 148
-const left_margin_top = 12
+const long_margin = 4
+const short_margin = 8
 
-const right_margin_left = 128
-const right_margin_top = 8
+const long_size = 24
+const short_size = 16
 
+export(bool) onready var opponent_layout : bool = false setget set_opponent_layout
+
+export(Vector2) var target_position : Vector2 = Vector2(640,360)
 
 func _ready():
 	pass
 
 func highlight_flash(color : Color,in_time : float,duration : float,end_time : float):
-	$Highlight.modulate = color
 	var tween := create_tween()
 	tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	tween.tween_property($Highlight,"modulate:a",1.0,in_time)
+	tween.tween_property($Highlight,"modulate",color,in_time)
 	tween.tween_interval(duration)
 	tween.set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN)
-	tween.tween_property($Highlight,"modulate:a",0.0,end_time)
+	tween.tween_property($Highlight,"modulate",Color.black,end_time)
 
-func move_center(in_time : float,duration : float,end_time : float):
-	var origin_y = rect_global_position.y
+func move_and_remove(in_time : float,duration : float,end_time : float):
+	var origin = global_position
 	var tween := create_tween()
 	tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
-	tween.tween_property(self,"rect_global_position:y",360.0-16.0,in_time)
+	tween.tween_property(self,"global_position",target_position,in_time)
 	tween.tween_interval(duration)
 	tween.tween_property(self,"modulate:a",0.0,end_time)
-	tween.tween_property(self,"rect_global_position:y",origin_y,0)
+	tween.tween_property(self,"global_position",origin,0)
 	tween.tween_property(self,"modulate:a",1.0,0.5)
-	
 
-func set_text(text : String):
-	$Label.text = text
 
-func initialize(skill : SkillData.NamedSkill,vs_color:int,link_color:int,rotate:bool):
-	$Highlight.modulate.a = 0
-	$Label.text = Global.card_catalog.get_skill_short_string(skill)
+func set_skill(skill : SkillData.NamedSkill,vs_color:int,link_color:int):
+	$Highlight.modulate = Color.black
+	$Background/Label.text = Global.card_catalog.get_skill_short_string(skill)
 
+	var left = $Background/ColorRectLeft
+	var right = $Background/ColorRectRight
 	if skill.condition & SkillData.ColorCondition.VS_FLAG:
-		$ColorRectRight.visible = false
-		$ColorRectLeft.visible = true
+		$Background/ColorRectRight.visible = false
+		$Background/ColorRectLeft.visible = true
 		var color : int = skill.condition & SkillData.ColorCondition.COLOR_BITS
-		$ColorRectLeft.color = RGB[color]
-		$Label.align = Label.ALIGN_RIGHT if rotate else Label.ALIGN_LEFT
-		$Invalid.visible = (color != vs_color)
+		$Background/ColorRectLeft.color = CardData.RGB[color]
+		$Background/Label.align = Label.ALIGN_RIGHT if opponent_layout else Label.ALIGN_LEFT
+		$Background/Invalid.visible = (color != vs_color)
 	elif skill.condition & SkillData.ColorCondition.LINK_FLAG:
-		$ColorRectLeft.visible = false
-		$ColorRectRight.visible = true
+		$Background/ColorRectLeft.visible = false
+		$Background/ColorRectRight.visible = true
 		var color : int = skill.condition & SkillData.ColorCondition.COLOR_BITS
-		$ColorRectRight.color = RGB[color]
-		$Label.align = Label.ALIGN_LEFT if rotate else Label.ALIGN_RIGHT
-		$Invalid.visible = (color != link_color)
+		$Background/ColorRectRight.color = CardData.RGB[color]
+		$Background/Label.align = Label.ALIGN_LEFT if opponent_layout else Label.ALIGN_RIGHT
+		$Background/Invalid.visible = (color != link_color)
 	else:
-		$ColorRectLeft.visible = false
-		$ColorRectRight.visible = false
-		$Label.align = Label.ALIGN_CENTER
-		$Invalid.visible = false
-		
-	if rotate:
-		$ColorRectLeft.margin_left = left_margin_left - 16
-		$ColorRectLeft.margin_right = left_margin_left
-		$ColorRectRight.margin_left = -right_margin_left - 24
-		$ColorRectRight.margin_right = -right_margin_left
+		$Background/ColorRectLeft.visible = false
+		$Background/ColorRectRight.visible = false
+		$Background/Label.align = Label.ALIGN_CENTER
+		$Background/Invalid.visible = false
+
+
+func set_opponent_layout(value):
+	opponent_layout = value
+	var left = $Background/ColorRectLeft
+	var right = $Background/ColorRectRight
+	if opponent_layout:
+		left.anchor_left = 1.0
+		left.anchor_right = 1.0
+		left.anchor_top = 1.0
+		left.anchor_bottom = 1.0
+		left.margin_left = -(short_margin + short_size)
+		left.margin_top = -(long_margin + long_size)
+		left.margin_right = -short_margin
+		left.margin_bottom = -long_margin
+
+		right.anchor_left = 0
+		right.anchor_right = 0
+		right.anchor_top = 0
+		right.anchor_bottom = 0
+		right.margin_left = long_margin
+		right.margin_top = short_margin
+		right.margin_right = long_margin + long_size
+		right.margin_bottom = short_margin + short_size
 	else:
-		$ColorRectLeft.margin_left = -left_margin_left
-		$ColorRectLeft.margin_right = -left_margin_left + 16
-		$ColorRectRight.margin_left = right_margin_left
-		$ColorRectRight.margin_right = right_margin_left + 24
+		left.anchor_left = 0
+		left.anchor_right = 0
+		left.anchor_top = 0
+		left.anchor_bottom = 0
+		right.margin_left = short_margin
+		right.margin_top = long_margin
+		right.margin_right = short_margin + short_size
+		right.margin_bottom = long_margin + long_size
 
-
-
-
+		right.anchor_left = 1.0
+		right.anchor_right = 1.0
+		right.anchor_top = 1.0
+		right.anchor_bottom = 1.0
+		left.margin_left = -(long_margin + long_size)
+		left.margin_top = -(short_margin + short_size)
+		left.margin_right = -long_margin
+		left.margin_bottom = -short_margin

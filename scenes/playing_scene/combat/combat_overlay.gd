@@ -23,21 +23,21 @@ func initialize(myself : PlayingPlayer,rival : PlayingPlayer):
 	rival_objects.avatar.initialize(rival_card.front.data)
 
 	for i in my_card.front.data.skills.size():
-		var csl := my_objects.skills[i] as CombatSkillLine2
+		var csl := my_objects.skills[i] as CombatSkillLine
 		csl.set_skill(my_card.front.data.skills[i],
 				rival_card.front.data.color,myself.get_link_color())
 		csl.show()
 	for i in range(my_card.front.data.skills.size(),4):
-		var csl := my_objects.skills[i] as CombatSkillLine2
+		var csl := my_objects.skills[i] as CombatSkillLine
 		csl.hide()
 	
 	for i in rival_card.front.data.skills.size():
-		var csl = rival_objects.skills[i] as CombatSkillLine2
+		var csl = rival_objects.skills[i] as CombatSkillLine
 		csl.set_skill(rival_card.front.data.skills[i],
 				my_card.front.data.color,rival.get_link_color())
 		csl.show()
 	for i in range(rival_card.front.data.skills.size(),4):
-		var csl := rival_objects.skills[i] as CombatSkillLine2
+		var csl := rival_objects.skills[i] as CombatSkillLine
 		csl.hide()
 
 
