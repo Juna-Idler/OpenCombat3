@@ -39,6 +39,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scenes/playing_scene/combat/combat_avatar.gd"
 }, {
+"base": "RigidBody2D",
+"class": "CombatAvatarBullet",
+"language": "GDScript",
+"path": "res://scenes/playing_scene/combat/combat_avatar_bullet.gd"
+}, {
+"base": "Reference",
+"class": "CombatAvatarMagazine",
+"language": "GDScript",
+"path": "res://scenes/playing_scene/combat/combat_avatar_magazine.gd"
+}, {
 "base": "Reference",
 "class": "CombatDirector",
 "language": "GDScript",
@@ -211,6 +221,8 @@ _global_script_class_icons={
 "CardFront": "",
 "CardSkillLine": "",
 "CombatAvatar": "",
+"CombatAvatarBullet": "",
+"CombatAvatarMagazine": "",
 "CombatDirector": "",
 "CombatOverlay": "",
 "CombatPowerBalance": "",

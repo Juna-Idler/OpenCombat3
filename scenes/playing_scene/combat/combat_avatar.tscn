@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=1]
 [ext_resource path="res://scenes/card/card_frame.png" type="Texture" id=2]
@@ -37,6 +37,9 @@ size = 24
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 1 )
+
+[sub_resource type="RectangleShape2D" id=31]
+extents = Vector2( 72, 108 )
 
 [node name="Avatar" type="Node2D"]
 position = Vector2( 640, 360 )
@@ -215,3 +218,10 @@ position = Vector2( 0, 120 )
 target_position = Vector2( 880, 360 )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2( 144, 0 )
+shape = SubResource( 31 )

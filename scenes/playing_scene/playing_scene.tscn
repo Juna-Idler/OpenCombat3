@@ -422,7 +422,6 @@ valign = 1
 layer = 4
 
 [node name="CombatOverlay" parent="CombatLayer" instance=ExtResource( 4 )]
-visible = false
 
 [node name="ListLayer" type="CanvasLayer" parent="."]
 layer = 5

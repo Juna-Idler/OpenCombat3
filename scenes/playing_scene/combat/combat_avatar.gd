@@ -16,6 +16,8 @@ var hit : int
 var block : int
 var damage : int 
 
+var bullet_magazine := CombatAvatarMagazine.new(5)
+
 
 func set_opponent_layout(value):
 	opponent_layout = value
@@ -57,6 +59,7 @@ func initialize(cd : CardData):
 func _ready():
 	pass
 
+
 func set_power(p : int):
 	power = p
 	$Image/Power/Label.text = str(p)
@@ -68,39 +71,42 @@ func set_block(b : int):
 	$Image/Block/Label.text = str(b)
 
 
-func attack(count : int ,rival : CombatAvatar,tween : SceneTreeTween):
+func attack(count : int ,rival : CombatAvatar,tween : SceneTreeTween,shoot := true):
+	tween.set_parallel(true)
 	tween.tween_property($Image,"z_index",1,0)
 	tween.tween_property($Image/Block,"modulate:a",0.0,0.1)
-	tween.parallel()
 	tween.tween_property($Image/Power,"modulate:a",0.0,0.1)
-	tween.parallel()
 	tween.tween_property($Image/Hit/Polygon2D,"rotation_degrees",-90.0,0.1).as_relative()\
 			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	tween.parallel()
 	tween.tween_property(rival.get_node("Image/Power"),"modulate:a",0.0,0.1)
-	tween.parallel()
 	tween.tween_property(rival.get_node("Image/Hit"),"modulate:a",0.0,0.1)
-			
-	var original_x = avatar.position.x
-	for i in count:
-		tween.tween_callback(self,"play_sound")
-		tween.tween_property($Image,"position:x",0.0,0.1)\
-				.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
-		tween.tween_callback(rival,"add_damage",[1])
-		tween.tween_property($Image,"position:x",original_x,0.2)\
-				.set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)	
+	tween.set_parallel(false)
+
+	if shoot:
+		for i in count:
+			tween.tween_callback(bullet_magazine,"shot",[$Image,$Image/Hit.position,$Image/Hit/Polygon2D.global_rotation - PI,100.0])
+			tween.tween_interval(0.3)
+			tween.tween_callback(rival,"add_damage",[1])
+	else:
+		var original_x = avatar.position.x
+		for i in count:
+			tween.tween_callback(self,"play_sound")
+			tween.tween_property($Image,"position:x",0.0,0.1)\
+					.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+			tween.tween_callback(rival,"add_damage",[1])
+			tween.tween_property($Image,"position:x",original_x,0.2)\
+					.set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)	
 				
 	tween.tween_property($Image/Block,"modulate:a",1.0,0.1)
-	tween.parallel()
+	tween.set_parallel(true)
 	tween.tween_property($Image/Power,"modulate:a",1.0,0.1)
-	tween.parallel()
 	tween.tween_property($Image/Hit/Polygon2D,"rotation_degrees",90.0,0.1).as_relative()\
 			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	tween.parallel()
 	tween.tween_property(rival.get_node("Image/Power"),"modulate:a",1.0,0.1)
-	tween.parallel()
 	tween.tween_property(rival.get_node("Image/Hit"),"modulate:a",1.0,0.1)
 	tween.tween_property($Image,"z_index",0,0)
+	tween.set_parallel(false)
+
 
 func add_damage(add_d : int):
 	damage += add_d
