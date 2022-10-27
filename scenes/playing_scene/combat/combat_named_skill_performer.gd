@@ -62,6 +62,7 @@ class Reinforce extends Skill:
 					tween.tween_callback(myself,"change_hit",[e.parameter])
 				EffectData.Attribute.BLOCK:
 					tween.tween_callback(myself,"change_block",[e.parameter])
+		tween.tween_callback(myself.combat_avatar,"play_sound",["res://sound/ステータス上昇魔法2.mp3"])
 		tween.chain()
 		tween.tween_interval(1.0)
 		tween.chain()
@@ -107,6 +108,7 @@ class Charge extends Skill:
 					EffectData.Attribute.BLOCK:
 						pass
 				pass
+			tween.tween_callback(myself.combat_avatar,"play_sound",["res://sound/オーラ2.mp3"])
 			tween.tween_interval(1.0)
 			return
 		return

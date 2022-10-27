@@ -83,6 +83,7 @@ func attack(count : int ,rival : CombatAvatar,tween : SceneTreeTween):
 			
 	var original_x = avatar.position.x
 	for i in count:
+		tween.tween_callback(self,"play_sound")
 		tween.tween_property($Image,"position:x",0.0,0.1)\
 				.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 		tween.tween_callback(rival,"add_damage",[1])
@@ -104,7 +105,24 @@ func attack(count : int ,rival : CombatAvatar,tween : SceneTreeTween):
 func add_damage(add_d : int):
 	damage += add_d
 	if damage <= block:
+		$AudioStreamPlayer.stream = load("res://sound/剣で打ち合う4.mp3")
+		$AudioStreamPlayer.play()
 		$Image/BlockDamage/Label.text = str(-damage)
 	else:
+		$AudioStreamPlayer.stream = load("res://sound/小パンチ.mp3")
+		$AudioStreamPlayer.play()
 		$Image/BlockDamage/Label.text = str(-block) if block > 0 else ""
 		$Image/Damage/Label.text = str(damage - block)
+
+		var original_x = avatar.position.x
+		var tween = create_tween()
+		tween.tween_property($Image,"position:x",32.0,0.1).as_relative()\
+				.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		tween.tween_property($Image,"position:x",original_x,0.2)\
+				.set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)	
+
+
+func play_sound(stream):
+	$AudioStreamPlayer.stream = load(stream)
+	$AudioStreamPlayer.play()
+	

@@ -5,6 +5,7 @@ class_name CombatOverlay
 onready var p1_avatar := $Player1Avatar
 onready var p2_avatar := $Player2Avatar
 
+onready var sound_player := $AudioStreamPlayer
 
 func _ready():
 	pass

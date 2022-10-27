@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/ステータス上昇魔法2.mp3-c5bfeacd9768e2312ab451c4a9ca65b7.mp3str"
+
+[deps]
+
+source_file="res://sound/ステータス上昇魔法2.mp3"
+dest_files=[ "res://.import/ステータス上昇魔法2.mp3-c5bfeacd9768e2312ab451c4a9ca65b7.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

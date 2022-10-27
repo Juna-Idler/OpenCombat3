@@ -36,14 +36,16 @@ class Interface:
 
 func _ready():
 	pass
-
-func initial_tween(p1_power : int,p2_power : int,duration : float):
+	
+func initialize():
 	$MyPower.margin_left = 0
 	$MyPower.color = Color(0.5,0.5,0.5,BAR_ALPHA)
 	$RivalPower.margin_right = 0
 	$RivalPower.color = Color(0.5,0.5,0.5,BAR_ALPHA)
 	$Center.rect_position.x = 640 - CENTER_WIDTH2
 	$Center.self_modulate.a = 0.0
+
+func initial_tween(p1_power : int,p2_power : int,duration : float):
 	var tween = create_tween()
 	tween.tween_property($Center,"self_modulate:a",1.0,duration)\
 			.set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_IN)

@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/オーラ2.mp3-a136f000c685b82a211792bc4b0d550b.mp3str"
+
+[deps]
+
+source_file="res://sound/オーラ2.mp3"
+dest_files=[ "res://.import/オーラ2.mp3-a136f000c685b82a211792bc4b0d550b.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

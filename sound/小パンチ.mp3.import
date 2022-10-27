@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/小パンチ.mp3-ebf5e4c65bb834b0a760f4803ff2c856.mp3str"
+
+[deps]
+
+source_file="res://sound/小パンチ.mp3"
+dest_files=[ "res://.import/小パンチ.mp3-ebf5e4c65bb834b0a760f4803ff2c856.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

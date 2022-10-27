@@ -272,6 +272,13 @@ version_control_plugin_name="GitAPI"
 
 singletons=[  ]
 
+[importer_defaults]
+
+mp3={
+"loop": false,
+"loop_offset": 0
+}
+
 [locale]
 
 translations=PoolStringArray( "res://translation/translation.ja.translation", "res://translation/translation.en.translation" )

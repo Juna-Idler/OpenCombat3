@@ -31,6 +31,7 @@ func initialize(p1 : PlayingPlayer,p2 : PlayingPlayer,
 
 func perform(node : Node):
 	overlay.initialize(player1,player2)
+	power_balance.initialize()
 	var p1_card := player1.deck_list[player1.playing_card_id] as Card
 	var p2_card := player2.deck_list[player2.playing_card_id] as Card
 	var p1_link_color := 0 if player1.played.empty() else\
@@ -50,8 +51,11 @@ func perform(node : Node):
 	tween.parallel()
 	tween.tween_callback(power_balance,"initial_tween",[p1_card.get_current_power(),p2_card.get_current_power(),0.5])
 	tween.tween_interval(0.5)
-
-
+	yield(tween,"finished")
+	tween = node.create_tween()
+	p1_card.modulate.a = 0.0
+	p2_card.modulate.a = 0.0
+	
 	tween.tween_callback(player1,"change_power",[player1.next_effect.power])
 	tween.tween_callback(player1,"change_hit",[player1.next_effect.hit])
 	tween.tween_callback(player1,"change_block",[player1.next_effect.block])
@@ -113,6 +117,10 @@ func perform(node : Node):
 	end_skills_effect(tween,p2_card.front.data.skills,
 			p1_card.front.data.color,p2_link_color,-situation,player2,player1)
 
+	yield(tween,"finished")
+	tween = node.create_tween()
+	p1_card.modulate.a = 1
+	p2_card.modulate.a = 1
 	
 	tween.tween_property(overlay,"modulate:a",0.0,0.5)
 	tween.parallel()
