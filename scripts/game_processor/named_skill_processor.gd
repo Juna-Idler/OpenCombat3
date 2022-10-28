@@ -16,18 +16,31 @@ func get_skill(id : int) -> Skill:
 
 class Skill:
 	func _process_before(_skill : SkillData.NamedSkill,
-			_myself : ProcessorData.PlayerData,_rival : ProcessorData.PlayerData) -> void:
+			_myself : ProcessorPlayerData,_rival : ProcessorPlayerData) -> void:
 		pass
+		
+	func _get_moment_priority() -> int:
+		return 0
+	func _process_moment(_skill : SkillData.NamedSkill,
+			_myself : ProcessorPlayerData,_rival : ProcessorPlayerData,
+			_my_affected:ProcessorData.MomentAffected,_rival_affected:ProcessorData.MomentAffected) -> void:
+		pass
+	func _process_moment_change_situation(_skill : SkillData.NamedSkill,
+			_myself : ProcessorPlayerData,_rival : ProcessorPlayerData,
+			_my_affected:ProcessorData.MomentAffected,_rival_affected:ProcessorData.MomentAffected,
+			situation : int) -> int:
+		return situation
+				
 	func _process_after(_skill : SkillData.NamedSkill,_situation : int,
-			_myself : ProcessorData.PlayerData,_rival : ProcessorData.PlayerData) -> void:
+			_myself : ProcessorPlayerData,_rival : ProcessorPlayerData) -> void:
 		pass
 	func _process_end(_skill : SkillData.NamedSkill,_situation : int,
-			_myself : ProcessorData.PlayerData,_rival : ProcessorData.PlayerData) -> void:
+			_myself : ProcessorPlayerData,_rival : ProcessorPlayerData) -> void:
 		pass
 
 class Reinforce extends Skill:
 	func _process_before(skill : SkillData.NamedSkill,
-			myself : ProcessorData.PlayerData,_rival : ProcessorData.PlayerData) -> void:
+			myself : ProcessorPlayerData,_rival : ProcessorPlayerData) -> void:
 		var affected := myself.select_card.affected
 		for p in skill.parameter as Array:
 			var e := p as EffectData.SkillEffect
@@ -42,14 +55,14 @@ class Reinforce extends Skill:
 
 class Rush extends Skill:
 	func _process_after(skill : SkillData.NamedSkill,situation : int,
-			myself : ProcessorData.PlayerData,rival : ProcessorData.PlayerData) -> void:
+			myself : ProcessorPlayerData,rival : ProcessorPlayerData) -> void:
 		if situation > 0:
 			rival.add_damage((rival.select_card.get_current_block() + 1) / 2)
 
 
 class Charge extends Skill:
 	func _process_end(skill : SkillData.NamedSkill,_situation : int,
-			myself : ProcessorData.PlayerData,_rival : ProcessorData.PlayerData) -> void:
+			myself : ProcessorPlayerData,_rival : ProcessorPlayerData) -> void:
 		if myself.combat_damage == 0:
 			var affected := myself.next_effect
 			for p in skill.parameter as Array:

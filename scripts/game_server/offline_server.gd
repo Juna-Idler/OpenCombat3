@@ -135,7 +135,7 @@ func _terminalize():
 
 
 
-static func _create_update_playerData(player : ProcessorData.PlayerData) -> UpdateData.PlayerData:
+static func _create_update_playerData(player : ProcessorPlayerData) -> UpdateData.PlayerData:
 	var affecteds = []
 	for c in player.deck_list:
 		var a := (c as ProcessorData.PlayerCard).affected
