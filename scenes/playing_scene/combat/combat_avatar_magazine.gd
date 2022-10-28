@@ -3,23 +3,28 @@ class_name CombatAvatarMagazine
 
 const CABScene = preload("res://scenes/playing_scene/combat/combat_avatar_bullet.tscn")
 
+signal hit(bullet)
+
 var magazine : Array = []
-var count : int = 1
 
 func _init(magazine_size : int):
 	for i in magazine_size:
-		magazine.append(CABScene.instance())
-		magazine.back().connect("vanished",self,"_on_Bullet_vanished")
+		var bullet = CABScene.instance()
+		magazine.append(bullet)
+		bullet.connect("vanished",self,"_on_Bullet_vanished")
+		bullet.connect("hit",self,"_on_Bullet_hit")
+		
 
-func shot(parent : Node,pos : Vector2,angle : float,velocity : float) -> bool:
+func shoot(parent : Node,g_pos : Vector2,target : Vector2,duration : float) -> bool:
 	if magazine.empty():
 		return false
 	var bullet = magazine.pop_back()
-	bullet.shot(parent,pos,angle,velocity,3,count)
-	count += 1
+	bullet.shoot(parent,g_pos,target,duration)
 	return true
 	
-func _on_Bullet_vanished(_self):
-	magazine.push_back(_self)
+func _on_Bullet_vanished(bullet):
+	magazine.push_back(bullet)
 
+func _on_Bullet_hit(bullet):
+	emit_signal("hit",bullet)
 

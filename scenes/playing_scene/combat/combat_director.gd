@@ -50,12 +50,11 @@ func perform(node : Node):
 	tween.tween_property(power_balance,"modulate:a",1.0,0.5)
 	tween.parallel()
 	tween.tween_callback(power_balance,"initial_tween",[p1_card.get_current_power(),p2_card.get_current_power(),0.5])
-	tween.tween_interval(0.5)
-	yield(tween,"finished")
-	tween = node.create_tween()
-	p1_card.modulate.a = 0.0
-	p2_card.modulate.a = 0.0
-	
+	tween.parallel()
+	tween.tween_property(p1_card,"modulate:a",0.0,0.5)
+	tween.parallel()
+	tween.tween_property(p2_card,"modulate:a",0.0,0.5)
+
 	tween.tween_callback(player1,"change_power",[player1.next_effect.power])
 	tween.tween_callback(player1,"change_hit",[player1.next_effect.hit])
 	tween.tween_callback(player1,"change_block",[player1.next_effect.block])
@@ -71,7 +70,6 @@ func perform(node : Node):
 	tween.tween_callback(self,"set_next_buf_label",["",""])
 	
 
-
  # 交戦前タイミング
 	tween.tween_callback(overlay,"change_timing_label",[CombatOverlay.CombatTiming.Before])
 	before_skills_effect(tween,p1_card.front.data.skills,
@@ -79,15 +77,23 @@ func perform(node : Node):
 	before_skills_effect(tween,p2_card.front.data.skills,
 			p1_card.front.data.color,p2_link_color,player2,player1)
 
-	tween.tween_interval(0.3)
+	var p1_start_pos_x = overlay.p1_avatar.avatar.global_position.x
+	var p2_start_pos_x = overlay.p2_avatar.avatar.global_position.x
+	tween.tween_property(overlay.p1_avatar.avatar,"global_position:x",96.0,0.3).as_relative()
+	tween.parallel()
+	tween.tween_property(overlay.p2_avatar.avatar,"global_position:x",-96.0,0.3).as_relative()
+	
 	yield(tween,"finished")
 	tween = node.create_tween()
+	tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	
 
  # 交戦タイミング
 	tween.tween_callback(overlay,"change_timing_label",[CombatOverlay.CombatTiming.Engagement])
+	
 	var situation := (player1.playing_card.get_current_power()
 			- player2.playing_card.get_current_power())
-			
+	
 	if situation > 0:
 		var hit = player1.playing_card.get_current_hit()
 		if hit > 0:
@@ -98,6 +104,9 @@ func perform(node : Node):
 			player2.combat_avatar.attack(hit,player1.combat_avatar,tween)
 	
 	tween.tween_interval(0.3)
+	yield(tween,"finished")
+	tween = node.create_tween()
+	tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
  # 交戦後タイミング
 	tween.tween_callback(overlay,"change_timing_label",[CombatOverlay.CombatTiming.After])
@@ -117,11 +126,14 @@ func perform(node : Node):
 	end_skills_effect(tween,p2_card.front.data.skills,
 			p1_card.front.data.color,p2_link_color,-situation,player2,player1)
 
-	yield(tween,"finished")
-	tween = node.create_tween()
-	p1_card.modulate.a = 1
-	p2_card.modulate.a = 1
+	tween.tween_property(overlay.p1_avatar.avatar,"global_position:x",p1_start_pos_x,0.5)
+	tween.parallel()
+	tween.tween_property(overlay.p2_avatar.avatar,"global_position:x",p2_start_pos_x,0.5)
 	
+	tween.tween_property(p1_card,"modulate:a",1.0,0.5)
+	tween.parallel()
+	tween.tween_property(p2_card,"modulate:a",1.0,0.5)
+	tween.parallel()
 	tween.tween_property(overlay,"modulate:a",0.0,0.5)
 	tween.parallel()
 	tween.tween_property(power_balance,"modulate:a",0.0,0.5)

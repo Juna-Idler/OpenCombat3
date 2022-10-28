@@ -16,30 +16,12 @@ func initialize(p1 : PlayingPlayer,p2 : PlayingPlayer):
 	p1_avatar.set_power(p1_card.get_current_power())
 	p1_avatar.set_hit(p1_card.get_current_hit())
 	p1_avatar.set_block(p1_card.get_current_block())
-	p1_avatar.initialize(p1_card.front.data)
+	p1_avatar.initialize(p1_card.front.data,p2_card.front.data.color,p1.get_link_color())
 
 	p2_avatar.set_power(p2_card.get_current_power())
 	p2_avatar.set_hit(p2_card.get_current_hit())
 	p2_avatar.set_block(p2_card.get_current_block())
-	p2_avatar.initialize(p2_card.front.data)
-
-	for i in p1_card.front.data.skills.size():
-		var csl := p1_avatar.skills[i] as CombatSkillLine
-		csl.set_skill(p1_card.front.data.skills[i],
-				p2_card.front.data.color,p1.get_link_color())
-		csl.show()
-	for i in range(p1_card.front.data.skills.size(),4):
-		var csl := p1_avatar.skills[i] as CombatSkillLine
-		csl.hide()
-	
-	for i in p2_card.front.data.skills.size():
-		var csl = p2_avatar.skills[i] as CombatSkillLine
-		csl.set_skill(p2_card.front.data.skills[i],
-				p1_card.front.data.color,p2.get_link_color())
-		csl.show()
-	for i in range(p2_card.front.data.skills.size(),4):
-		var csl := p2_avatar.skills[i] as CombatSkillLine
-		csl.hide()
+	p2_avatar.initialize(p2_card.front.data,p1_card.front.data.color,p2.get_link_color())
 
 
 enum CombatTiming {NoTiming,Before,Engagement,After,Damage,End,}

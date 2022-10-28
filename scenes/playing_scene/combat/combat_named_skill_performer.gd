@@ -82,7 +82,7 @@ class Rush extends Skill:
 			_vs_color : int,_link_color : int,situation : int,
 			myself : PlayingPlayer,rival : PlayingPlayer) -> void:
 		if situation > 0:
-			myself.combat_avatar.attack((rival.playing_card.get_current_block() + 1) / 2,rival.combat_avatar,tween)
+			myself.combat_avatar.attack_close((rival.playing_card.get_current_block() + 1) / 2,rival.combat_avatar,tween)
 			return
 
 

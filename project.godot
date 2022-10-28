@@ -39,7 +39,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scenes/playing_scene/combat/combat_avatar.gd"
 }, {
-"base": "RigidBody2D",
+"base": "Area2D",
 "class": "CombatAvatarBullet",
 "language": "GDScript",
 "path": "res://scenes/playing_scene/combat/combat_avatar_bullet.gd"

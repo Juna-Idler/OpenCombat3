@@ -25,6 +25,7 @@ func standby_single(deck:Array,enemy_id:int) -> bool:
 	var edeck := []
 	for i in 27:
 		edeck.append(i + 1)
+	edeck.shuffle()
 	_commander = ZeroCommander.new()
 	_processor.standby(deck,4,true,edeck,1,false)
 	return true
