@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://scenes/card/large_card_view.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/ui/clickable_control.gd" type="Script" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://scenes/playing_scene/ui/my_hand_area.tscn" type="PackedScene" id=8]
 [ext_resource path="res://scenes/playing_scene/card_list.tscn" type="PackedScene" id=9]
 [ext_resource path="res://scenes/settings scene.tscn" type="PackedScene" id=10]
+[ext_resource path="res://scenes/playing_scene/next_effect.tscn" type="PackedScene" id=11]
 
 [sub_resource type="StyleBoxFlat" id=4]
 bg_color = Color( 1, 1, 1, 0.498039 )
@@ -34,13 +35,6 @@ corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
-
-[sub_resource type="DynamicFont" id=13]
-size = 30
-font_data = ExtResource( 3 )
-
-[sub_resource type="StyleBoxFlat" id=14]
-bg_color = Color( 0, 0, 0, 1 )
 
 [sub_resource type="DynamicFont" id=9]
 size = 40
@@ -240,37 +234,6 @@ visible = false
 margin_top = 128.0
 margin_bottom = -128.0
 
-[node name="MyNextBuf" type="Label" parent="BGLayer"]
-unique_name_in_owner = true
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = 232.0
-margin_top = -96.0
-margin_right = 448.0
-margin_bottom = -48.0
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_fonts/font = SubResource( 13 )
-custom_styles/normal = SubResource( 14 )
-valign = 1
-
-[node name="RivalNextBuf" type="Label" parent="BGLayer"]
-unique_name_in_owner = true
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -448.0
-margin_top = 48.0
-margin_right = -232.0
-margin_bottom = 96.0
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_fonts/font = SubResource( 13 )
-custom_styles/normal = SubResource( 14 )
-align = 2
-valign = 1
-
 [node name="CardLayer" type="CanvasLayer" parent="."]
 
 [node name="EffectLayer" type="CanvasLayer" parent="."]
@@ -376,21 +339,36 @@ grow_horizontal = 0
 custom_fonts/font = SubResource( 16 )
 text = "SETTINGS"
 
-[node name="ResultOverlap" type="Control" parent="TopUILayer"]
+[node name="MyNextEffect" parent="TopUILayer/Control" instance=ExtResource( 11 )]
+
+[node name="RivalNextEffect" parent="TopUILayer/Control" instance=ExtResource( 11 )]
+margin_left = -216.0
+margin_right = -80.0
+align = 2
+valign = 0
+opponent_layout = true
+
+[node name="CombatLayer" type="CanvasLayer" parent="."]
+layer = 4
+
+[node name="CombatOverlay" parent="CombatLayer" instance=ExtResource( 4 )]
+visible = false
+
+[node name="ResultOverlap" type="Control" parent="CombatLayer"]
 unique_name_in_owner = true
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 
-[node name="RivalVeil" type="TextureRect" parent="TopUILayer/ResultOverlap"]
+[node name="RivalVeil" type="TextureRect" parent="CombatLayer/ResultOverlap"]
 anchor_right = 1.0
 margin_bottom = 192.0
 mouse_filter = 2
 texture = SubResource( 18 )
 expand = true
 
-[node name="MyVeil" type="TextureRect" parent="TopUILayer/ResultOverlap"]
+[node name="MyVeil" type="TextureRect" parent="CombatLayer/ResultOverlap"]
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -399,7 +377,7 @@ mouse_filter = 2
 texture = SubResource( 20 )
 expand = true
 
-[node name="ReturnButton" type="Button" parent="TopUILayer/ResultOverlap"]
+[node name="ReturnButton" type="Button" parent="CombatLayer/ResultOverlap"]
 margin_left = 240.0
 margin_top = 576.0
 margin_right = 1040.0
@@ -407,7 +385,7 @@ margin_bottom = 701.0
 custom_fonts/font = SubResource( 21 )
 text = "Return Title"
 
-[node name="ResultLabel" type="Label" parent="TopUILayer/ResultOverlap"]
+[node name="ResultLabel" type="Label" parent="CombatLayer/ResultOverlap"]
 margin_left = 256.0
 margin_top = 32.0
 margin_right = 1024.0
@@ -417,11 +395,6 @@ custom_fonts/font = SubResource( 22 )
 text = "Win"
 align = 1
 valign = 1
-
-[node name="CombatLayer" type="CanvasLayer" parent="."]
-layer = 4
-
-[node name="CombatOverlay" parent="CombatLayer" instance=ExtResource( 4 )]
 
 [node name="ListLayer" type="CanvasLayer" parent="."]
 layer = 5
@@ -459,5 +432,5 @@ one_shot = true
 [connection signal="held" from="UILayer/RivalField/Played" to="." method="_on_RivalPlayed_held"]
 [connection signal="clicked" from="UILayer/RivalField/Discard" to="." method="_on_RivalDiscard_clicked"]
 [connection signal="pressed" from="TopUILayer/Control/SettingButton" to="." method="_on_SettingButton_pressed"]
-[connection signal="pressed" from="TopUILayer/ResultOverlap/ReturnButton" to="." method="_on_ReturnButton_pressed"]
+[connection signal="pressed" from="CombatLayer/ResultOverlap/ReturnButton" to="." method="_on_ReturnButton_pressed"]
 [connection signal="pressed_surrender" from="OverlayLayer/SettingsScene" to="." method="_on_SettingsScene_pressed_surrender"]

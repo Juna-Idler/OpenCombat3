@@ -119,10 +119,10 @@ class Isolate extends Skill:
 	
 	func _engaged_priority() -> int:
 		return 255
-	func _test_moment_change_situation(_skill : SkillData.NamedSkill,
+	func _test_engaged(_skill : SkillData.NamedSkill,
 			situation : int,_myself : PlayingPlayer,_rival : PlayingPlayer) -> bool:
 		return true
-	func _moment_change_situation(tween : SceneTreeTween,_skill : SkillData.NamedSkill,
+	func _engaged(tween : SceneTreeTween,_skill : SkillData.NamedSkill,
 			_situation : int,myself : PlayingPlayer,_rival : PlayingPlayer) -> int:
 		tween.tween_callback(myself.combat_avatar,"add_damage",[1])
 		return 0

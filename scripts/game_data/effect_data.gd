@@ -14,13 +14,13 @@ class SkillEffectData:
 	var text : String
 	var keyword : String
 
-
 	func _init(i : int, n : String, sn : String, t : String,k : String):
 		id = i
 		name = n
 		short_name = sn
 		text = t
 		keyword = k
+
 
 class SkillEffect:
 	var data : SkillEffectData

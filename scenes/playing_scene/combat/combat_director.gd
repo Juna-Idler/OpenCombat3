@@ -27,33 +27,23 @@ var player2 : PlayingPlayer
 var overlay : CombatOverlay
 var power_balance : CombatPowerBalance
 
-
-var p1_next_buf_label : Label
-var p2_next_buf_label : Label
-
-
 var named_skills := NamedSkillPerformer.new()
 
 
-func set_next_buf_label(p1_text : String,p2_text : String):
-	p1_next_buf_label.text = p1_text
-	p2_next_buf_label.text = p2_text
-	
-
 func initialize(p1 : PlayingPlayer,p2 : PlayingPlayer,
-		ol : CombatOverlay,pb : CombatPowerBalance,
-		p1_nbl : Label,p2_nbl : Label):
+		ol : CombatOverlay,pb : CombatPowerBalance):
 	player1 = p1
 	player2 = p2
 	overlay = ol
 	power_balance = pb
-	p1_next_buf_label = p1_nbl
-	p2_next_buf_label = p2_nbl
 	
 	overlay.change_timing_label(CombatOverlay.CombatTiming.NoTiming)
 
 
-func perform(node : Node):
+func perform(node : Node,lethal : bool):
+	if lethal:
+		Engine.time_scale = 0.75
+	
 	overlay.initialize(player1,player2)
 	power_balance.initialize()
 	var p1_card := player1.deck_list[player1.playing_card_id] as Card
@@ -74,6 +64,8 @@ func perform(node : Node):
 	tween.tween_callback(power_balance,"initial_tween",[p1_card.get_current_power(),p2_card.get_current_power(),0.5])
 	tween.tween_property(p1_card,"modulate:a",0.0,0.5)
 	tween.tween_property(p2_card,"modulate:a",0.0,0.5)
+	tween.tween_property(player1.next_effect_label,"modulate:a",0.0,0.5)
+	tween.tween_property(player2.next_effect_label,"modulate:a",0.0,0.5)
 	tween.set_parallel(false)
 
 	tween.tween_callback(player1,"add_attribute",
@@ -85,8 +77,6 @@ func perform(node : Node):
 	if player2.next_effect.power != 0:
 		tween.tween_interval(0.5)
 	tween.tween_interval(0.5)
-	
-	tween.tween_callback(self,"set_next_buf_label",["",""])
 	
 
  # 交戦前タイミング
@@ -129,10 +119,12 @@ func perform(node : Node):
 	tween.tween_callback(overlay,"change_timing_label",[CombatOverlay.CombatTiming.After])
 	_after_skills_effect(tween,situation)
 
-	tween.tween_interval(0.3)
+ # 勝敗判定
+	if lethal:
+		Engine.time_scale = 1.0
+		return
 
- # ダメージ確定タイミング
-	
+	tween.tween_interval(0.3)
 	yield(tween,"finished")
 	tween = node.create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 

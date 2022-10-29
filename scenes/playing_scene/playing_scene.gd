@@ -67,6 +67,7 @@ func _ready():
 			my_discard_pos,
 			$TopUILayer/Control/MyName,
 			my_life,
+			$"%MyNextEffect",
 			combat_overlay.p1_avatar,
 			$TopUILayer/Control/MyDamage,
 			CombatPowerBalance.Interface.new($BGLayer/PowerBalance,false))
@@ -77,13 +78,13 @@ func _ready():
 			rival_discard_pos,
 			$TopUILayer/Control/RivalName,
 			rival_life,
+			$"%RivalNextEffect",
 			combat_overlay.p2_avatar,
 			$TopUILayer/Control/RivalDamage,
 			CombatPowerBalance.Interface.new($BGLayer/PowerBalance,true))
-	
+
 	combat_director.initialize(myself,rival,
-			combat_overlay,$BGLayer/PowerBalance,
-			$"%MyNextBuf",$"%RivalNextBuf")
+			combat_overlay,$BGLayer/PowerBalance)
 	combat_overlay.visible = false
 	$"%CardList".large_card_view = $"%LargeCardView"
 	$"%ResultOverlap".hide()
@@ -111,17 +112,17 @@ func initialize(server : IGameServer,changer : ISceneChanger):
 
 func _on_GameServer_recieved_abort(winlose:int,message:String)->void:
 	if winlose > 0:
-		$TopUILayer/ResultOverlap/RivalVeil.self_modulate = Color.black
-		$TopUILayer/ResultOverlap/MyVeil.self_modulate = Color.white
-		$TopUILayer/ResultOverlap/ResultLabel.text = "Win"
+		$CombatLayer/ResultOverlap/RivalVeil.self_modulate = Color.black
+		$CombatLayer/ResultOverlap/MyVeil.self_modulate = Color.white
+		$CombatLayer/ResultOverlap/ResultLabel.text = "Win"
 	elif winlose < 0:
-		$TopUILayer/ResultOverlap/RivalVeil.self_modulate = Color.white
-		$TopUILayer/ResultOverlap/MyVeil.self_modulate = Color.black
-		$TopUILayer/ResultOverlap/ResultLabel.text = "Lose"
+		$CombatLayer/ResultOverlap/RivalVeil.self_modulate = Color.white
+		$CombatLayer/ResultOverlap/MyVeil.self_modulate = Color.black
+		$CombatLayer/ResultOverlap/ResultLabel.text = "Lose"
 	else:
-		$TopUILayer/ResultOverlap/RivalVeil.self_modulate = Color.gray
-		$TopUILayer/ResultOverlap/MyVeil.self_modulate = Color.gray
-		$TopUILayer/ResultOverlap/ResultLabel.text = "Draw"
+		$CombatLayer/ResultOverlap/RivalVeil.self_modulate = Color.gray
+		$CombatLayer/ResultOverlap/MyVeil.self_modulate = Color.gray
+		$CombatLayer/ResultOverlap/ResultLabel.text = "Draw"
 	$"%ResultOverlap".show()
 	$TopUILayer/Control/SettingButton.disabled = true
 	return
@@ -134,13 +135,12 @@ func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
 
 
 func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData,_situation:int):
-
 	var tween := create_tween()
 	myself.play(data.myself.hand_select,data.myself.hand_indexes,data.myself.damage,tween)
 	rival.play(data.rival.hand_select,data.rival.hand_indexes,data.rival.damage,tween)
 	yield(tween,"finished")
 
-	yield(combat_director.perform(self),"completed")
+	yield(combat_director.perform(self,data.next_phase == IGameServer.Phase.GAMEFINISH),"completed")
 
 	if data.next_phase == IGameServer.Phase.GAMEFINISH:
 		round_count = data.round_count
@@ -149,17 +149,17 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData,_situatio
 		var mlife = data.myself.life - data.myself.damage
 		var rlife = data.rival.life - data.rival.damage
 		if mlife > rlife:
-			$TopUILayer/ResultOverlap/RivalVeil.self_modulate = Color.black
-			$TopUILayer/ResultOverlap/MyVeil.self_modulate = Color.white
-			$TopUILayer/ResultOverlap/ResultLabel.text = "Win"
+			$CombatLayer/ResultOverlap/RivalVeil.self_modulate = Color.black
+			$CombatLayer/ResultOverlap/MyVeil.self_modulate = Color.white
+			$CombatLayer/ResultOverlap/ResultLabel.text = "Win"
 		elif mlife < rlife:
-			$TopUILayer/ResultOverlap/RivalVeil.self_modulate = Color.white
-			$TopUILayer/ResultOverlap/MyVeil.self_modulate = Color.black
-			$TopUILayer/ResultOverlap/ResultLabel.text = "Lose"
+			$CombatLayer/ResultOverlap/RivalVeil.self_modulate = Color.white
+			$CombatLayer/ResultOverlap/MyVeil.self_modulate = Color.black
+			$CombatLayer/ResultOverlap/ResultLabel.text = "Lose"
 		else:
-			$TopUILayer/ResultOverlap/RivalVeil.self_modulate = Color.gray
-			$TopUILayer/ResultOverlap/MyVeil.self_modulate = Color.gray
-			$TopUILayer/ResultOverlap/ResultLabel.text = "Draw"
+			$CombatLayer/ResultOverlap/RivalVeil.self_modulate = Color.gray
+			$CombatLayer/ResultOverlap/MyVeil.self_modulate = Color.gray
+			$CombatLayer/ResultOverlap/ResultLabel.text = "Draw"
 		$"%ResultOverlap".show()
 		$TopUILayer/Control/SettingButton.disabled = true
 		return
@@ -167,21 +167,16 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData,_situatio
 	tween = create_tween()
 	myself.play_end(data.myself.draw_indexes,tween)
 	rival.play_end(data.rival.draw_indexes,tween)
-
-	myself.update_affected(data.myself.cards_update)
-	rival.update_affected(data.rival.cards_update)
 	
 	myself.set_next_effect(data.myself.next_effect)
 	rival.set_next_effect(data.rival.next_effect)
-	
-	if myself.next_effect.power != 0:
-		$"%MyNextBuf".text = "力+" + str(myself.next_effect.power)
-	else:
-		$"%MyNextBuf".text = ""
-	if rival.next_effect.power != 0:
-		$"%RivalNextBuf".text = "力+" + str(rival.next_effect.power)
-	else:
-		$"%RivalNextBuf".text = ""
+	tween.parallel()
+	tween.tween_property(myself.next_effect_label,"modulate:a",1.0,0.5)
+	tween.parallel()
+	tween.tween_property(rival.next_effect_label,"modulate:a",1.0,0.5)
+
+	myself.update_affected(data.myself.cards_update)
+	rival.update_affected(data.rival.cards_update)
 	
 	round_count = data.round_count
 	phase = data.next_phase

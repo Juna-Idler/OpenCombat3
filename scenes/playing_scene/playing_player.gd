@@ -32,6 +32,7 @@ var discard_pos : Vector2
 
 var name_lable : Label
 var life_label : Label
+var next_effect_label: NextEffectLabel
 
 var combat_avatar : CombatAvatar
 
@@ -53,6 +54,7 @@ func _init(dl:Array,
 		d_pos : Vector2,
 		n_label : Label,
 		l_label : Label,
+		next_label : NextEffectLabel,
 		avatar : CombatAvatar,
 		d_label : Label,
 		pb_interface : CombatPowerBalance.Interface):
@@ -64,6 +66,7 @@ func _init(dl:Array,
 	discard_pos = d_pos
 	name_lable = n_label
 	life_label = l_label
+	next_effect_label = next_label
 	combat_avatar = avatar
 	damage_label = d_label
 	power_balance = pb_interface
@@ -107,8 +110,8 @@ func play(hand_select : int,new_hand : Array,d : int,tween : SceneTreeTween):
 	life -= playing_card.get_card_data().level
 	life_label.text = "%d / %d" % [life,stack_count]
 	tween.parallel()
-	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
-	tween.tween_property(playing_card,"global_position",combat_pos,0.5)
+	tween.tween_property(playing_card,"global_position",combat_pos,0.5)\
+			.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 	multiply_power = 1
 	multiply_hit = 1
 	multiply_block = 1
@@ -158,6 +161,8 @@ func set_next_effect(e : IGameServer.UpdateData.Affected):
 	next_effect.power = e.power
 	next_effect.hit = e.hit
 	next_effect.block = e.block
+
+	next_effect_label.set_effect(next_effect)
 
 
 func get_current_power() -> int:

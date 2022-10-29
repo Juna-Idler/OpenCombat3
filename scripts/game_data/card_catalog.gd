@@ -27,7 +27,7 @@ func load_catalog():
 	_load_card_data()
 	
 
-func get_effect_string(id:int)->String:
+func get_effect_data(id:int) -> EffectData.SkillEffectData:
 	return _effect_catalog[id]
 
 func get_skill_param(param_type : int,param : String):
