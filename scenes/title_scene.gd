@@ -16,7 +16,7 @@ func initialize(changer : ISceneChanger):
 func _on_CpuButton_pressed():
 	var offline := OfflineServer.new("Tester",Global.card_catalog)
 	var deck = []
-	for i in range(27):
+	for i in range(30):
 		deck.append(i+1)
 	offline.standby_single(deck,0)
 	

@@ -58,7 +58,3 @@ class PlayerCard:
 		return int_max(data.block + affected.block,0)
 
 
-class MomentAffected:
-	var power : float = 1.0
-	var hit : float = 1.0
-	var block : float = 1.0

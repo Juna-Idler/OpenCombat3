@@ -17,6 +17,11 @@ var additional_damage : int = 0
 var draw_indexes : Array = []
 var select_card : ProcessorData.PlayerCard = null
 
+var multiply_power : float = 1.0
+var multiply_hit : float = 1.0
+var multiply_block : float = 1.0
+
+
 func _init(deck : Array,hand_count : int,
 		card_catalog : CardCatalog,shuffle : bool = true) -> void:
 	for i in range(deck.size()):
@@ -40,7 +45,7 @@ func get_lastplayed_card() -> ProcessorData.PlayerCard:
 func get_life() -> int:
 	return _life
 	
-func combat_start(i : int) -> ProcessorData.PlayerCard:
+func combat_start(i : int):
 	select = i
 	draw_indexes.clear()
 	for c in deck_list:
@@ -49,8 +54,18 @@ func combat_start(i : int) -> ProcessorData.PlayerCard:
 	_life -= select_card.data.level
 	select_card.affected.add_other(next_effect)
 	next_effect.reset()
-	return select_card
+	multiply_power = 1.0
+	multiply_hit = 1.0
+	multiply_block = 1.0
+	return
 	
+func get_current_power() -> int:
+	return int(select_card.get_current_power() * multiply_power)
+func get_current_hit() -> int:
+	return int(select_card.get_current_hit() * multiply_hit)
+func get_current_block() -> int:
+	return int(select_card.get_current_block() * multiply_block)
+
 func combat_fix_damage() -> void:
 	var damage := combat_damage + additional_damage
 	additional_damage = 0

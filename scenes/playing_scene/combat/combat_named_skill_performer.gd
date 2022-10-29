@@ -5,9 +5,8 @@ var skills : Array = [
 	Reinforce.new(),
 	Rush.new(),
 	Charge.new(),
+	Isolate.new(),
 ]
-
-enum SkillTestResult {FAILED = -1,UNCONNECTED = 0,SUCCESSFUL = 1}
 
 func _init():
 	pass
@@ -16,52 +15,56 @@ func get_skill(id : int) -> Skill:
 	return skills[id-1]
 
 class Skill:
+	func _before_priority() -> int:
+		return 0
 	func _test_before(_skill : SkillData.NamedSkill,
-			_vs_color : int,_link_color : int,
-			_myself : PlayingPlayer,_rival : PlayingPlayer) -> int:
-		return SkillTestResult.UNCONNECTED
+			_myself : PlayingPlayer,_rival : PlayingPlayer) -> bool:
+		return true
 	func _before(_tween : SceneTreeTween,_skill : SkillData.NamedSkill,
-			_vs_color : int,_link_color : int,
 			_myself : PlayingPlayer,_rival : PlayingPlayer) -> void:
 		return
 		
+	func _engaged_priority() -> int:
+		return 0
+	func _test_engaged(_skill : SkillData.NamedSkill,
+			situation : int,_myself : PlayingPlayer,_rival : PlayingPlayer) -> bool:
+		return true
+	func _engaged(_tween : SceneTreeTween,_skill : SkillData.NamedSkill,
+			situation : int,_myself : PlayingPlayer,_rival : PlayingPlayer) -> int:
+		return situation
+		
+	func _after_priority() -> int:
+		return 0
 	func _test_after(_skill : SkillData.NamedSkill,
-			_vs_color : int,_link_color : int,_situation : int,
-			_myself : PlayingPlayer,_rival : PlayingPlayer) -> int:
-		return SkillTestResult.UNCONNECTED
+			_situation : int,_myself : PlayingPlayer,_rival : PlayingPlayer) -> bool:
+		return true
 	func _after(_tween : SceneTreeTween,_skill : SkillData.NamedSkill,
-			_vs_color : int,_link_color : int,_situation : int,
-			_myself : PlayingPlayer,_rival : PlayingPlayer) -> void:
+			_situation : int,_myself : PlayingPlayer,_rival : PlayingPlayer) -> void:
 		return
 		
+	func _end_priority() -> int:
+		return 0
 	func _test_end(_skill : SkillData.NamedSkill,
-			_vs_color : int,_link_color : int,_situation : int,
-			_myself : PlayingPlayer,_rival : PlayingPlayer) -> int:
-		return SkillTestResult.UNCONNECTED
+			_situation : int,_myself : PlayingPlayer,_rival : PlayingPlayer) -> bool:
+		return true
 	func _end(_tween : SceneTreeTween,_skill : SkillData.NamedSkill,
-			_vs_color : int,_link_color : int,_situation : int,
-			_myself : PlayingPlayer,_rival : PlayingPlayer) -> void:
+			_situation : int,_myself : PlayingPlayer,_rival : PlayingPlayer) -> void:
 		return
 
 class Reinforce extends Skill:
+	func _before_priority() -> int:
+		return 1
 	func _test_before(_skill : SkillData.NamedSkill,
-			_vs_color : int,_link_color : int,
-			_myself : PlayingPlayer,_rival : PlayingPlayer) -> int:
-		return SkillTestResult.SUCCESSFUL
-		
+			_myself : PlayingPlayer,_rival : PlayingPlayer) -> bool:
+		return true
 	func _before(tween : SceneTreeTween,skill : SkillData.NamedSkill,
-			_vs_color : int,_link_color : int,
 			myself : PlayingPlayer,rival : PlayingPlayer) -> void:
 		var playing_card := myself.playing_card
+		var a := [0,0,0]
 		for p in skill.parameter as Array:
 			var e := p as EffectData.SkillEffect
-			match e.data.id:
-				EffectData.Attribute.POWER:
-					tween.tween_callback(myself,"change_power",[e.parameter])
-				EffectData.Attribute.HIT:
-					tween.tween_callback(myself,"change_hit",[e.parameter])
-				EffectData.Attribute.BLOCK:
-					tween.tween_callback(myself,"change_block",[e.parameter])
+			a[e.data.id - 1] += e.parameter
+		tween.tween_callback(myself,"add_attribute",[a[0],a[1],a[2]])
 		tween.tween_callback(myself.combat_avatar,"play_sound",["res://sound/ステータス上昇魔法2.mp3"])
 		tween.chain()
 		tween.tween_interval(1.0)
@@ -69,34 +72,33 @@ class Reinforce extends Skill:
 
 
 class Rush extends Skill:
+	func _after_priority() -> int:
+		return 1
 	func _test_after(skill : SkillData.NamedSkill,
-			_vs_color : int,_link_color : int,situation : int,
-			myself : PlayingPlayer,rival : PlayingPlayer) -> int:
+			situation : int,myself : PlayingPlayer,rival : PlayingPlayer) -> bool:
 		if situation > 0:
-			if (rival.playing_card.get_current_block() + 1) / 2 > 0:
-				return SkillTestResult.SUCCESSFUL
-			return SkillTestResult.FAILED
-		return SkillTestResult.FAILED
+			if (rival.get_current_block() + 1) / 2 > 0:
+				return true
+		return false
 		
 	func _after(tween : SceneTreeTween,skill : SkillData.NamedSkill,
-			_vs_color : int,_link_color : int,situation : int,
-			myself : PlayingPlayer,rival : PlayingPlayer) -> void:
+			situation : int,myself : PlayingPlayer,rival : PlayingPlayer) -> void:
 		if situation > 0:
-			myself.combat_avatar.attack_close((rival.playing_card.get_current_block() + 1) / 2,rival.combat_avatar,tween)
+			myself.combat_avatar.attack_close((rival.get_current_block() + 1) / 2,rival.combat_avatar,tween)
 			return
 
 
 class Charge extends Skill:
+	func _end_priority() -> int:
+		return 1
 	func _test_end(_skill : SkillData.NamedSkill,
-			_vs_color : int,_link_color : int,_situation : int,
-			myself : PlayingPlayer,_rival : PlayingPlayer) -> int:
+			_situation : int,myself : PlayingPlayer,_rival : PlayingPlayer) -> bool:
 		if myself.damage == 0:
-			return SkillTestResult.SUCCESSFUL
-		return SkillTestResult.FAILED
+			return true
+		return false
 	
 	func _end(tween : SceneTreeTween,skill : SkillData.NamedSkill,
-			_vs_color : int,_link_color : int,_situation : int,
-			myself : PlayingPlayer,_rival : PlayingPlayer) -> void:
+			_situation : int,myself : PlayingPlayer,_rival : PlayingPlayer) -> void:
 		if myself.damage == 0:
 			for p in skill.parameter as Array:
 				var e := p as EffectData.SkillEffect
@@ -113,4 +115,16 @@ class Charge extends Skill:
 			return
 		return
 
+class Isolate extends Skill:
 	
+	func _engaged_priority() -> int:
+		return 255
+	func _test_moment_change_situation(_skill : SkillData.NamedSkill,
+			situation : int,_myself : PlayingPlayer,_rival : PlayingPlayer) -> bool:
+		return true
+	func _moment_change_situation(tween : SceneTreeTween,_skill : SkillData.NamedSkill,
+			_situation : int,myself : PlayingPlayer,_rival : PlayingPlayer) -> int:
+		tween.tween_callback(myself.combat_avatar,"add_damage",[1])
+		return 0
+
+

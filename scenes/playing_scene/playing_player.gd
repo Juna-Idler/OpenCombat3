@@ -14,6 +14,11 @@ var damage : int = 0
 
 var next_effect := Card.Affected.new()
 
+var multiply_power = 1
+var multiply_hit = 1
+var multiply_block = 1
+
+
 var playing_card_id : int = -1
 var playing_card : Card = null
 
@@ -104,6 +109,9 @@ func play(hand_select : int,new_hand : Array,d : int,tween : SceneTreeTween):
 	tween.parallel()
 	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 	tween.tween_property(playing_card,"global_position",combat_pos,0.5)
+	multiply_power = 1
+	multiply_hit = 1
+	multiply_block = 1
 
 func play_end(draw_indexes : Array,tween : SceneTreeTween):
 	played.append(playing_card_id)
@@ -140,27 +148,41 @@ func recover(hand_select : int,new_hand : Array,draw_indexes : Array,tween : Sce
 
 func update_affected(updates : Array):#of IGameServer.UpdateData.Affected
 	for a_ in updates:
-		var a = a_# as IGameServer.UpdateData.Affected
+		var a = a_ as IGameServer.UpdateData.Affected
 		var c := deck_list[a.id] as Card
 		c.affected.power = a.power
 		c.affected.hit = a.hit
 		c.affected.block = a.block
 
-func set_next_effect(e):# : IGameServer.UpdateData.Affected):
+func set_next_effect(e : IGameServer.UpdateData.Affected):
 	next_effect.power = e.power
 	next_effect.hit = e.hit
 	next_effect.block = e.block
 
-func change_power(additional :int):
-	playing_card.affected.power += additional
+
+func get_current_power() -> int:
+	return int(playing_card.get_current_power() * multiply_power)
+func get_current_hit() -> int:
+	return int(playing_card.get_current_hit() * multiply_hit)
+func get_current_block() -> int:
+	return int(playing_card.get_current_block() * multiply_block)
+
+func add_attribute(power :int,hit : int,block : int):
+	playing_card.affected.power += power
+	playing_card.affected.hit += hit
+	playing_card.affected.block += block
 	combat_avatar.set_power(playing_card.get_current_power())
-	power_balance.set_my_power_tween_step_by_step(playing_card.get_current_power(),0.5)
-
-func change_hit(additional :int):
-	playing_card.affected.hit += additional
 	combat_avatar.set_hit(playing_card.get_current_hit())
-	
-func change_block(additional :int):
-	playing_card.affected.block += additional
 	combat_avatar.set_block(playing_card.get_current_block())
+	if power != 0:
+		power_balance.set_my_power_tween_step_by_step(playing_card.get_current_power() * multiply_power,0.5)
 
+func multiply_attribute(power : float, hit : float, block : float):
+	multiply_power *= power
+	multiply_hit *= hit
+	multiply_block *= block
+	combat_avatar.set_power(int(playing_card.get_current_power() * multiply_power))
+	combat_avatar.set_hit(int(playing_card.get_current_hit() * multiply_hit))
+	combat_avatar.set_block(int(playing_card.get_current_block() * multiply_block))
+	if power != 1:
+		power_balance.set_my_power_tween_step_by_step(playing_card.get_current_power() * multiply_power,0.5)

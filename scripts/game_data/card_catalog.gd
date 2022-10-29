@@ -119,7 +119,8 @@ func _load_skill_data():
 	for s in namedskills:
 		var csv = s.split("\t")
 		var id := int(csv[0])
-		_skill_catalog[id] = SkillData.NamedSkillData.new(id,csv[1],csv[2],csv[3],csv[4],csv[5])
+		var text = csv[5].replace("\\n","\n")
+		_skill_catalog[id] = SkillData.NamedSkillData.new(id,csv[1],csv[2],csv[3],csv[4],text)
 	skill_version = int((_skill_catalog[0] as SkillData.NamedSkillData).text)
 
 	if translation.find("ja") != 0:
@@ -133,7 +134,7 @@ func _load_skill_data():
 			var data = _skill_catalog[id] as SkillData.NamedSkillData
 			data.name = tsv[1]
 			data.short_name = tsv[2]
-			data.text = tsv[3]
+			data.text = tsv[3].replace("\\n","\n")
 
 func _load_card_data():
 	var carddata_resource := preload("res://card_data/card_data_catalog.txt")
@@ -151,9 +152,10 @@ func _load_card_data():
 			var param = get_skill_param(base_data.param_type,skill_line[2])
 			skills.append(SkillData.NamedSkill.new(base_data,condition,param))
 		var id := int(csv[0])
+		var text = csv[9].replace("\\n","\n")
 		_card_catalog[id] = CardData.new(id,csv[1],csv[2],
 				int(csv[3]),int(csv[4]),int(csv[5]),int(csv[6]),int(csv[7]),
-				skills,csv[9],csv[10])
+				skills,text,csv[10])
 	card_version = int((_card_catalog[0] as CardData).name)
 
 	if translation.find("ja") != 0:
@@ -167,6 +169,6 @@ func _load_card_data():
 			var data = _card_catalog[id] as CardData
 			data.name = tsv[1]
 			data.short_name = tsv[2]
-			data.text = tsv[3]
+			data.text = tsv[3].replace("\\n","\n")
 
 

@@ -34,7 +34,7 @@ class NamedSkillData:
 		name = n
 		short_name = sn
 		_set_param_type(pt,p)
-		text = t.replace("\\n","\n")
+		text = t
 	
 	func _set_param_type(pt : String,p : String):
 		match pt:
