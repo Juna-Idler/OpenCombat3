@@ -7,79 +7,69 @@ signal card_clicked(dbcard)
 
 const DeckBannerCard = preload("./banner_card.tscn")
 
-var deck_name : String
-var deck_cards : PoolIntArray
-var deck_key_cards : PoolIntArray
+var deck_data : DeckData
 
 var editor_mode := false
 
 func initialize(d : DeckData,e_mode = false):
-	deck_name = d.name
-	deck_cards = d.cards
-	deck_key_cards = d.key_cards
+	deck_data = DeckData.new(d.name,d.cards,d.key_cards)
 	editor_mode = e_mode
 	return self
 
 func _ready():
 	$Name.set_message_translation(false)
 	$Name.notification(Node.NOTIFICATION_TRANSLATION_CHANGED)
-	reset_visual()
+	if deck_data:
+		reset_visual()
 
 func get_deck_data() -> DeckData:
-	return DeckData.new(deck_name,deck_cards,deck_key_cards)
+	return deck_data
 
 func set_deck_Data(d : DeckData):
-	deck_name = d.name
-	deck_cards = d.cards
-	deck_key_cards = d.key_cards
+	deck_data = DeckData.new(d.name,d.cards,d.key_cards)
 	reset_visual()
 
 func set_frame_color(color : Color):
 	$Panel.self_modulate = color
 
 func set_name(name : String):
-	deck_name = name
+	deck_data.name = name
 	$Name.text = name
 
 func set_cards(cards : PoolIntArray):
-	deck_cards = cards
+	deck_data.cards = cards
 	reset_visual()
 
 func set_key_cards(cards : PoolIntArray):
-	deck_key_cards = cards
+	deck_data.key_cards = cards
 	reset_visual()
 
 func remove_card(dbcard):
 	var index = $Container.get_children().find(dbcard)
-	deck_key_cards.remove(index)
+	var tmp = deck_data.key_cards
+	tmp.remove(index)
+	deck_data.key_cards = tmp
 	$Container.remove_child(dbcard)
 	dbcard.queue_free()
 	reset_visual()
 
 
 func reset_visual():
-	$Name.text = deck_name
-	var cost := 0
-	var rgb := [0,0,0,0]
-	var level := [0,0,0,0]
+	$Name.text = deck_data.name
 	
-	for i in deck_cards:
-		var c := Global.card_catalog.get_card_data(i)
-		rgb[c.color] += 1
-		level[c.level] += 1
-		cost += c.level
+	var face := Global.card_catalog.get_deck_face(deck_data)
 
 	$Information.bbcode_text = (
-		tr("CARDS:%s COST:%s") % [deck_cards.size(),cost] + "\n" +
-		tr("RED:%s GREEN:%s BLUE:%s") % [rgb[1],rgb[2],rgb[3]] + "\n" +
-		tr("L1:%s L2:%s L3:%s") % [level[1],level[2],level[3]])
+		tr("CARDS:%s COST:%s") % [face.cards_count,face.total_cost] + "\n" +
+		tr("RED:%s GREEN:%s BLUE:%s") % [face.color[1],face.color[2],face.color[3]] + "\n" +
+		tr("L1:%s L2:%s L3:%s") % [face.level[1],face.level[2],face.level[3]])
 
 	for c in $Container.get_children():
 		$Container.remove_child(c)
 		c.queue_free()
 		
-	for i in deck_key_cards.size():
-		var cd := Global.card_catalog.get_card_data(deck_key_cards[i])
+	for i in deck_data.key_cards.size():
+		var cd := Global.card_catalog.get_card_data(deck_data.key_cards[i])
 		var dbcard = DeckBannerCard.instance()
 		dbcard.get_node("CardFront").initialize_card(cd)
 		if editor_mode:

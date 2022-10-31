@@ -12,5 +12,3 @@ func _combat_select(data : IGameServer.UpdateData)-> int:
 
 func _recover_select(data : IGameServer.UpdateData)-> int:
 	return 0
-
-

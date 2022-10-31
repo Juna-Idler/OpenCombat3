@@ -340,10 +340,12 @@ custom_fonts/font = SubResource( 16 )
 text = "SETTINGS"
 
 [node name="MyNextEffect" parent="TopUILayer/Control" instance=ExtResource( 11 )]
+text = ""
 
 [node name="RivalNextEffect" parent="TopUILayer/Control" instance=ExtResource( 11 )]
 margin_left = -216.0
 margin_right = -80.0
+text = ""
 align = 2
 valign = 0
 opponent_layout = true
@@ -352,7 +354,6 @@ opponent_layout = true
 layer = 4
 
 [node name="CombatOverlay" parent="CombatLayer" instance=ExtResource( 4 )]
-visible = false
 
 [node name="ResultOverlap" type="Control" parent="CombatLayer"]
 unique_name_in_owner = true

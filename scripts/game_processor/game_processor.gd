@@ -44,31 +44,31 @@ func standby(p1_deck : Array,p1_hands:int,p1_shuffle:bool,
 	player2 = ProcessorPlayerData.new(p2_deck,p2_hands,_card_catalog,p2_shuffle)
 	return true
 
-#hand_indexes is deck_in_id Array
-func reorder_hand1(hand_indexes:Array):
-	if hand_indexes.size() != player1.hand_indexes.size():
+#hand is deck_in_id Array
+func reorder_hand1(hand:Array):
+	if hand.size() != player1.hand.size():
 		return
-	for i in player1.hand_indexes:
-		if not hand_indexes.has(i):
+	for i in player1.hand:
+		if not hand.has(i):
 			return
-	player1.hand_indexes = hand_indexes.duplicate()
+	player1.hand = hand.duplicate()
 
-func reorder_hand2(hand_indexes:Array):
-	if hand_indexes.size() != player2.hand_indexes.size():
+func reorder_hand2(hand:Array):
+	if hand.size() != player2.hand.size():
 		return
-	for i in player2.hand_indexes:
-		if not hand_indexes.has(i):
+	for i in player2.hand:
+		if not hand.has(i):
 			return
-	player2.hand_indexes = hand_indexes.duplicate()
+	player2.hand = hand.duplicate()
 
 
 func combat(index1 : int,index2 : int) -> void:
 	if phase & 1 != 0:
 		return
 # warning-ignore:narrowing_conversion
-	index1 = min(max(0, index1), player1.hand_indexes.size() - 1);
+	index1 = min(max(0, index1), player1.hand.size() - 1);
 # warning-ignore:narrowing_conversion
-	index2 = min(max(0, index2), player2.hand_indexes.size() - 1);
+	index2 = min(max(0, index2), player2.hand.size() - 1);
 
 	var link1 = player1.get_lastplayed_card()
 	var link2 = player2.get_lastplayed_card()
@@ -128,10 +128,10 @@ func recover(index1:int,index2:int):
 	if player1.is_recovery() and player2.is_recovery():
 		phase += 1
 	elif (((not player1.is_recovery()) and
-			player1.hand_indexes.size() + player1.stack_indexes.size() <= 1)
+			player1.hand.size() + player1.stock.size() <= 1)
 			or
 			((not player2.is_recovery()) and
-			player2.hand_indexes.size() + player2.stack_indexes.size() <= 1)):
+			player2.hand.size() + player2.stock.size() <= 1)):
 		phase = -phase
 
 func reset_select():

@@ -8,7 +8,7 @@ var deck_list : Array# of Card
 var hand : Array = []# of int
 var played : Array = []# of int
 var discard : Array = []# of int
-var stack_count : int
+var stock_count : int
 var life : int = 0
 var damage : int = 0
 
@@ -71,20 +71,23 @@ func _init(dl:Array,
 	damage_label = d_label
 	power_balance = pb_interface
 	
-	stack_count = deck_list.size()
+	stock_count = deck_list.size()
 	for i_ in deck_list:
 		var i := i_ as Card
-		life += i.get_card_data().level
 		i.place = Card.Place.STACK
 	name_lable.set_message_translation(false)
 	name_lable.notification(Node.NOTIFICATION_TRANSLATION_CHANGED)
 	name_lable.text = player_name
-	life_label.text = "%d / %d" % [life,stack_count]
+
+func standby(l: int):
+	life = l
+	life_label.text = "%d / %d" % [life,stock_count]
 	damage_label.text = ""
+	pass
 
 func draw(draw_indexes:Array):
-	stack_count -= draw_indexes.size()
-	life_label.text = "%d / %d" % [life,stack_count]
+	stock_count -= draw_indexes.size()
+	life_label.text = "%d / %d" % [life,stock_count]
 	hand.append_array(draw_indexes)
 	set_hand(hand)
 
@@ -108,7 +111,7 @@ func play(hand_select : int,new_hand : Array,d : int,tween : SceneTreeTween):
 	playing_card = deck_list[playing_card_id]
 	hand.remove(hand_select)
 	life -= playing_card.get_card_data().level
-	life_label.text = "%d / %d" % [life,stack_count]
+	life_label.text = "%d / %d" % [life,stock_count]
 	tween.parallel()
 	tween.tween_property(playing_card,"global_position",combat_pos,0.5)\
 			.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
@@ -126,7 +129,7 @@ func play_end(draw_indexes : Array,tween : SceneTreeTween):
 	tween.parallel()
 	tween.tween_property(playing_card,"rotation",PI/2,0.5)
 	draw(draw_indexes)
-	life_label.text = "%d / %d" % [life,stack_count]
+	life_label.text = "%d / %d" % [life,stock_count]
 	damage_label.text = str(damage) if damage > 0 else ""
 
 	playing_card_id = -1
@@ -142,7 +145,7 @@ func recover(hand_select : int,new_hand : Array,draw_indexes : Array,tween : Sce
 		life -= recovery_card.get_card_data().level
 		damage -= recovery_card.front.data.level
 		damage_label.text = str(damage) if damage > 0 else ""
-		life_label.text = "%d / %d" % [life,stack_count]
+		life_label.text = "%d / %d" % [life,stock_count]
 		recovery_card.z_index = discard.size() + 200
 		recovery_card.place = Card.Place.DISCARD
 		discard.append(select_id)
@@ -150,17 +153,17 @@ func recover(hand_select : int,new_hand : Array,draw_indexes : Array,tween : Sce
 	draw(draw_indexes)
 
 func update_affected(updates : Array):#of IGameServer.UpdateData.Affected
-	for a_ in updates:
-		var a = a_ as IGameServer.UpdateData.Affected
-		var c := deck_list[a.id] as Card
-		c.affected.power = a.power
-		c.affected.hit = a.hit
-		c.affected.block = a.block
+	for u_ in updates:
+		var u = u_ as IGameServer.UpdateData.Updated
+		var c := deck_list[u.index] as Card
+		c.affected.power = u.power
+		c.affected.hit = u.hit
+		c.affected.block = u.block
 
-func set_next_effect(e : IGameServer.UpdateData.Affected):
-	next_effect.power = e.power
-	next_effect.hit = e.hit
-	next_effect.block = e.block
+func set_next_effect(p,h,b):
+	next_effect.power = p
+	next_effect.hit = h
+	next_effect.block = b
 
 	next_effect_label.set_effect(next_effect)
 

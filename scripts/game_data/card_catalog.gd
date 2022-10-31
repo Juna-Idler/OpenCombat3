@@ -89,6 +89,18 @@ func get_skill_short_string(skill : SkillData.NamedSkill) -> String:
 	return skill.data.short_name
 
 
+func get_deck_face(deck : DeckData) -> DeckData.DeckFace:
+	var cost := 0
+	var rgb := [0,0,0,0]
+	var level := [0,0,0,0]
+	for i in deck.cards:
+		var c := Global.card_catalog.get_card_data(i) as CardData
+		rgb[c.color] += 1
+		level[c.level] += 1
+		cost += c.level
+	return DeckData.DeckFace.new(deck.name,deck.key_cards,deck.cards.size(),cost,level,rgb)
+
+
 func _load_effect_data():
 	var effect_resource = preload("res://card_data/skill_effect_catalog.txt")
 	var effects = effect_resource.text.split("\n")

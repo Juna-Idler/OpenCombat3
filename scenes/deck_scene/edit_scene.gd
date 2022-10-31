@@ -37,7 +37,9 @@ func initialize(deck : DeckData):
 	key_cards = deck.key_cards
 	set_deck(deck.cards)
 	$Header/DeckName.text = deck.name
-
+	if banner_mode:
+		$"%BannerEditor".initialize(deck)
+	
 
 func _ready():
 	pool_controls = [[],[]]

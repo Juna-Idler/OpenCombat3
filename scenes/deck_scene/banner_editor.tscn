@@ -32,4 +32,5 @@ margin_bottom = 72.0
 custom_fonts/font = SubResource( 12 )
 text = "デフォルトデッキ名がはいってるんじゃないの"
 
+[connection signal="card_clicked" from="Banner" to="." method="_on_Banner_card_clicked"]
 [connection signal="text_changed" from="NameEdit" to="." method="_on_NameEdit_text_changed"]

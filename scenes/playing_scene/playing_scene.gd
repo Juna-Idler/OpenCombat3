@@ -59,7 +59,7 @@ func _ready():
 		c.position = rival_stack_pos
 		c.visible = false
 		$CardLayer.add_child(c)	
-	
+
 	myself = PlayingPlayer.new(my_deck,pd.my_name,
 			$UILayer/MyField/HandArea,
 			my_combat_pos,
@@ -128,16 +128,18 @@ func _on_GameServer_recieved_abort(winlose:int,message:String)->void:
 	return
 
 func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
+	myself.standby(data.myself.life)
+	rival.standby(data.rival.life)
 	phase = IGameServer.Phase.COMBAT
 	round_count = 1
-	myself.draw(data.myself.hand_indexes)
-	rival.draw(data.rival.hand_indexes)
+	myself.draw(data.myself.hand)
+	rival.draw(data.rival.hand)
 
 
 func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData,_situation:int):
 	var tween := create_tween()
-	myself.play(data.myself.hand_select,data.myself.hand_indexes,data.myself.damage,tween)
-	rival.play(data.rival.hand_select,data.rival.hand_indexes,data.rival.damage,tween)
+	myself.play(data.myself.select,data.myself.hand,data.myself.damage,tween)
+	rival.play(data.rival.select,data.rival.hand,data.rival.damage,tween)
 	yield(tween,"finished")
 
 	yield(combat_director.perform(self,data.next_phase == IGameServer.Phase.GAMEFINISH),"completed")
@@ -165,18 +167,18 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData,_situatio
 		return
 
 	tween = create_tween()
-	myself.play_end(data.myself.draw_indexes,tween)
-	rival.play_end(data.rival.draw_indexes,tween)
+	myself.play_end(data.myself.draw,tween)
+	rival.play_end(data.rival.draw,tween)
 	
-	myself.set_next_effect(data.myself.next_effect)
-	rival.set_next_effect(data.rival.next_effect)
+	myself.set_next_effect(data.myself.next_power,data.myself.next_hit,data.myself.next_block)
+	rival.set_next_effect(data.rival.next_power,data.rival.next_hit,data.rival.next_block)
 	tween.parallel()
 	tween.tween_property(myself.next_effect_label,"modulate:a",1.0,0.5)
 	tween.parallel()
 	tween.tween_property(rival.next_effect_label,"modulate:a",1.0,0.5)
 
-	myself.update_affected(data.myself.cards_update)
-	rival.update_affected(data.rival.cards_update)
+	myself.update_affected(data.myself.updates)
+	rival.update_affected(data.rival.updates)
 	
 	round_count = data.round_count
 	phase = data.next_phase
@@ -195,9 +197,9 @@ func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
 	var tween := create_tween()
 	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 	tween.parallel()
-	myself.recover(data.myself.hand_select,data.myself.hand_indexes,data.myself.draw_indexes,tween)
+	myself.recover(data.myself.select,data.myself.hand,data.myself.draw,tween)
 	tween.parallel()
-	rival.recover(data.rival.hand_select,data.rival.hand_indexes,data.rival.draw_indexes,tween)
+	rival.recover(data.rival.select,data.rival.hand,data.rival.draw,tween)
 	tween.tween_callback(myself,"change_damage",[true])
 	tween.tween_callback(rival,"change_damage",[true])
 
@@ -297,3 +299,4 @@ func _on_SettingsScene_pressed_surrender():
 
 func _on_ReturnButton_pressed():
 	scene_changer._goto_title_scene()
+

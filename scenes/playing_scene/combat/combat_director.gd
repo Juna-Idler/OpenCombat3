@@ -118,15 +118,12 @@ func perform(node : Node,lethal : bool):
  # 交戦後タイミング
 	tween.tween_callback(overlay,"change_timing_label",[CombatOverlay.CombatTiming.After])
 	_after_skills_effect(tween,situation)
-
- # 勝敗判定
-	if lethal:
-		Engine.time_scale = 1.0
-		return
-
-	tween.tween_interval(0.3)
+	
 	yield(tween,"finished")
+
+
 	tween = node.create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_interval(0.3)
 
  # 終了時タイミング
 	tween.tween_callback(overlay,"change_timing_label",[CombatOverlay.CombatTiming.End])
@@ -141,13 +138,15 @@ func perform(node : Node,lethal : bool):
 	tween.tween_property(p2_card,"modulate:a",1.0,0.5)
 	tween.tween_property(overlay,"modulate:a",0.0,0.5)
 	tween.tween_property(power_balance,"modulate:a",0.0,0.5)
+	tween.set_parallel(false)
+	tween.tween_callback(overlay,"hide")
+	tween.tween_callback(power_balance,"hide")
 
+	if lethal:
+		Engine.time_scale = 1.0
+		return
 	yield(tween,"finished")
 	
-	overlay.hide()
-	power_balance.hide()
-
-
 
 func _before_skills_effect(tween : SceneTreeTween):
 	var skill_order := []

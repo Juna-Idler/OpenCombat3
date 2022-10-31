@@ -38,13 +38,13 @@ func _get_primary_data() -> PrimaryData:
 	for c in _processor.player2.deck_list:
 		r_deck_list.append(c.data.id)
 	return PrimaryData.new(_player_name,my_deck_list,
-			_commander._get_commander_name(),r_deck_list)
+			_commander._get_commander_name(),r_deck_list,"")
 	
 func _send_ready():
-	var p1 := FirstData.PlayerData.new(_processor.player1.hand_indexes,_processor.player1.get_life())
-	var p2 := FirstData.PlayerData.new(_processor.player2.hand_indexes,_processor.player2.get_life())
+	var p1 := FirstData.PlayerData.new(_processor.player1.hand,_processor.player1.get_life())
+	var p2 := FirstData.PlayerData.new(_processor.player2.hand,_processor.player2.get_life())
 	var p1first := FirstData.new(p1,p2)
-	_result = _commander._first_select(p2.hand_indexes,p1.hand_indexes)
+	_result = _commander._first_select(p2.hand,p1.hand)
 	emit_signal("recieved_first_data", p1first)
 
 
@@ -67,16 +67,8 @@ func _send_combat_select(round_count:int,index:int,hands_order:Array = []):
 
 	var p1 := _create_update_playerData(_processor.player1)
 	var p2 := _create_update_playerData(_processor.player2)
-	var p1update := UpdateData.new()
-	p1update.round_count = round_count
-	p1update.next_phase = phase
-	p1update.myself = p1
-	p1update.rival = p2
-	var p2update := UpdateData.new()
-	p2update.round_count = round_count
-	p2update.next_phase = phase
-	p2update.myself = p2
-	p2update.rival = p1
+	var p1update := UpdateData.new(round_count,phase,_processor.situation,p1,p2)
+	var p2update := UpdateData.new(round_count,phase,-_processor.situation,p2,p1)
 	_processor.reset_select()
 
 	if phase == Phase.COMBAT:
@@ -105,16 +97,8 @@ func _send_recovery_select(round_count:int,index:int,hands_order:Array = []):
 		round_count += 1
 	var p1 := _create_update_playerData(_processor.player1)
 	var p2 := _create_update_playerData(_processor.player2)
-	var p1update := UpdateData.new()
-	p1update.round_count = round_count
-	p1update.next_phase = phase
-	p1update.myself = p1
-	p1update.rival = p2
-	var p2update := UpdateData.new()
-	p2update.round_count = round_count
-	p2update.next_phase = phase
-	p2update.myself = p2
-	p2update.rival = p1
+	var p1update := UpdateData.new(round_count,phase,_processor.situation,p1,p2)
+	var p2update := UpdateData.new(round_count,phase,-_processor.situation,p2,p1)
 	_processor.reset_select()
 	
 	if phase == Phase.COMBAT:
@@ -136,30 +120,21 @@ func _terminalize():
 
 
 static func _create_update_playerData(player : ProcessorPlayerData) -> UpdateData.PlayerData:
-	var affecteds = []
+	var updates = []
 	for c in player.deck_list:
 		var a := (c as ProcessorData.PlayerCard).affected
 		if a.updated:
-			var ua := IGameServer.UpdateData.Affected.new()
-			ua.id = (c as ProcessorData.PlayerCard).id_in_deck
-			ua.power = a.power
-			ua.hit = a.hit
-			ua.block = a.block
-			affecteds.append(ua)
+			var u := IGameServer.UpdateData.Updated.new([
+					(c as ProcessorData.PlayerCard).id_in_deck,
+					(c as ProcessorData.PlayerCard).data.id,
+					a.power,
+					a.hit,
+					a.block])
+			updates.append(u)
 	var n := player.next_effect
-	var next = IGameServer.UpdateData.Affected.new()
-	next.id = 0
-	next.power = n.power
-	next.hit = n.hit
-	next.block = n.block
-	var p = IGameServer.UpdateData.PlayerData.new()
-	p.hand_indexes = player.hand_indexes.duplicate()
-	p.hand_indexes.insert(player.select,player.select_card.id_in_deck)
-	p.hand_indexes.resize(p.hand_indexes.size() - player.draw_indexes.size())
-	p.hand_select = player.select
-	p.cards_update = affecteds
-	p.next_effect = next
-	p.draw_indexes = player.draw_indexes
-	p.damage = player.combat_damage
-	p.life = player.get_life()
+	var hand := player.hand.duplicate()
+	hand.insert(player.select,player.select_card.id_in_deck)
+	hand.resize(hand.size() - player.draw_indexes.size())
+	var p = IGameServer.UpdateData.PlayerData.new(hand,player.select,updates,
+			n.power,n.hit,n.block,player.draw_indexes,player.combat_damage,player.get_life())
 	return p;
