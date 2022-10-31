@@ -109,7 +109,7 @@ func _load_effect_data():
 	for s in effects:
 		var csv = s.split("\t")
 		var id := int(csv[0])
-		_effect_catalog[id] = EffectData.SkillEffectData.new(id,csv[1],csv[2],csv[3],csv[1])
+		_effect_catalog[id] = EffectData.SkillEffectData.new(id,csv[1],csv[2],csv[3],csv[4])
 
 	if translation.find("ja") != 0:
 		var trans_res = load("res://card_data/skill_effect_" + translation + ".txt")
@@ -132,7 +132,7 @@ func _load_skill_data():
 		var csv = s.split("\t")
 		var id := int(csv[0])
 		var text = csv[5].replace("\\n","\n")
-		_skill_catalog[id] = SkillData.NamedSkillData.new(id,csv[1],csv[2],csv[3],csv[4],text)
+		_skill_catalog[id] = SkillData.NamedSkillData.new(id,csv[1],csv[2],int(csv[3]),csv[4],text)
 	skill_version = int((_skill_catalog[0] as SkillData.NamedSkillData).text)
 
 	if translation.find("ja") != 0:
@@ -159,7 +159,7 @@ func _load_card_data():
 			skill_texts.resize(0)
 		for s in skill_texts:
 			var skill_line = s.split(":");
-			var condition : String = skill_line[0]
+			var condition : int = int(skill_line[0])
 			var base_data := get_skill_data(int(skill_line[1]))
 			var param = get_skill_param(base_data.param_type,skill_line[2])
 			skills.append(SkillData.NamedSkill.new(base_data,condition,param))

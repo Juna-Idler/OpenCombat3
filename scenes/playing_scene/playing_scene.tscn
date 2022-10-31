@@ -348,12 +348,12 @@ margin_right = -80.0
 text = ""
 align = 2
 valign = 0
-opponent_layout = true
 
 [node name="CombatLayer" type="CanvasLayer" parent="."]
 layer = 4
 
 [node name="CombatOverlay" parent="CombatLayer" instance=ExtResource( 4 )]
+visible = false
 
 [node name="ResultOverlap" type="Control" parent="CombatLayer"]
 unique_name_in_owner = true

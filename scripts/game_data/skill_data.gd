@@ -26,28 +26,17 @@ class NamedSkillData:
 	var name : String
 	var short_name : String
 	var param_type : int
-	var parameter
+	var parameter : String
 	var text : String
 	
-	func _init(i:int,n:String,sn:String,pt:String,p:String,t:String):
+	func _init(i:int,n:String,sn:String,pt:int,p:String,t:String):
 		id = i
 		name = n
 		short_name = sn
-		_set_param_type(pt,p)
+		param_type = pt
+		parameter = p
 		text = t
 	
-	func _set_param_type(pt : String,p : String):
-		match pt:
-			"Integer":
-				param_type = ParamType.INTEGER
-				parameter = p
-			"Effects":
-				param_type = ParamType.EFFECTS
-				parameter = p
-			_:
-				param_type = ParamType.VOID
-				parameter = null
-
 
 class NamedSkill:
 	var data : NamedSkillData
@@ -56,9 +45,9 @@ class NamedSkill:
 	var parameter
 	var text : String
 	
-	func _init(sd:NamedSkillData,c:String,p):
+	func _init(sd:NamedSkillData,c:int,p):
 		data = sd
-		condition = kanji2condition(c)
+		condition = c
 		parameter = p
 		
 		match data.param_type:
@@ -84,23 +73,5 @@ class NamedSkill:
 			return true
 		return false
 
-	static func kanji2condition(c : String) -> int:
-		if c.find("無") >= 0:
-			return ColorCondition.NOCONDITION
-		if c.find("対赤") >= 0:
-			return ColorCondition.VS_RED
-		if c.find("対緑") >= 0:
-			return ColorCondition.VS_GREEN
-		if c.find("対青") >= 0:
-			return ColorCondition.VS_BLUE
-		if c.find("連赤") >= 0:
-			return ColorCondition.LINK_RED
-		if c.find("連緑") >= 0:
-			return ColorCondition.LINK_GREEN
-		if c.find("連青") >= 0:
-			return ColorCondition.LINK_BLUE
-		return ColorCondition.NOCONDITION
-		
-	
 
 

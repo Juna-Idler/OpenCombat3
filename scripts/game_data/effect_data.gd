@@ -9,17 +9,17 @@ enum Attribute {
 
 class SkillEffectData:
 	var id : int
+	var pid : String
 	var name : String
 	var short_name : String
 	var text : String
-	var keyword : String
 
-	func _init(i : int, n : String, sn : String, t : String,k : String):
+	func _init(i : int,p : String, n : String, sn : String, t : String):
 		id = i
+		pid = p
 		name = n
 		short_name = sn
 		text = t
-		keyword = k
 
 
 class SkillEffect:
@@ -34,8 +34,8 @@ class SkillEffect:
 static func create_effect(text : String, catalog : Array) -> SkillEffect:
 	for d in catalog:
 		var data := d as SkillEffectData
-		if text.find(data.keyword) == 0:
-			return SkillEffect.new(data,int(text.substr(data.keyword.length())))
+		if text.find(data.pid) == 0:
+			return SkillEffect.new(data,int(text.substr(data.pid.length())))
 	return null
 
 
