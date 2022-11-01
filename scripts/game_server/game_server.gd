@@ -13,7 +13,7 @@ signal recieved_first_data(first_data)
 # 
 # server.connect("recieved_first_data",self,"_on_GameServer_recieved_first_data")
 
-signal recieved_combat_result(data,situation)
+signal recieved_combat_result(data)
 # func _on_GameServer_recieved_combat_result(data:UpdateData,situation:int)->void:
 # server.connect("recieved_combat_result",self,"_on_GameServer_recieved_combat_result")
 signal recieved_recovery_result(data)

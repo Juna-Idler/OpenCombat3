@@ -11,14 +11,18 @@ func _init():
 	pass
 
 
-func initialize(url : String,parent : Node):
-	parent.add_child(self)
-	parent_node = parent
-	_server.initialize(url)
+func initialize():
+	_server.initialize(websocket_url)
 
-func terminalize():
-	_server._terminalize()
-	parent_node.remove_child(self)
+#func initialize(url : String,parent : Node):
+#	parent.add_child(self)
+#	parent_node = parent
+#	_server.initialize(url)
+#
+#
+#func terminalize():
+#	_server._terminalize()
+#	parent_node.remove_child(self)
 	
 func is_connecting():
 	return _server.is_connecting

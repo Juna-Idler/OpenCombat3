@@ -12,8 +12,7 @@ var _life : int = 0
 var next_effect := ProcessorData.Affected.new()
 
 var select : int = -1
-var combat_damage : int = 0
-var additional_damage : int = 0
+var damage : int = 0
 var draw_indexes : Array = []
 var select_card : ProcessorData.PlayerCard = null
 
@@ -67,26 +66,25 @@ func get_current_block() -> int:
 	return int(select_card.get_current_block() * multiply_block)
 
 func combat_fix_damage() -> void:
-	var damage := combat_damage + additional_damage
-	additional_damage = 0
-	combat_damage = 0 if damage < 0 else damage
+	var total_damage := damage - get_current_block()
+	damage = 0 if total_damage < 0 else total_damage
 
 func combat_end() -> void:
 	played.push_back(select_card.id_in_deck)
 	
 
 func add_damage(d: int):
-	additional_damage += d
+	damage += d
 	
 func is_fatal() -> bool:
-	if _life <= combat_damage:
+	if _life <= damage:
 		return true
 	return false
 	
 func supply() -> void:
 # warning-ignore:return_value_discarded
 	_draw_card()
-	if combat_damage > 0:
+	if damage > 0:
 # warning-ignore:return_value_discarded
 		_draw_card()
 	
@@ -96,10 +94,10 @@ func recover(index : int) -> void:
 	select_card = deck_list[hand[index]]
 	var id := _discard_card(index)
 	var card := deck_list[id] as ProcessorData.PlayerCard
-	if combat_damage <= card.data.level:
-		combat_damage = 0
+	if damage <= card.data.level:
+		damage = 0
 		return
-	combat_damage -= card.data.level
+	damage -= card.data.level
 	# warning-ignore:return_value_discarded
 	_draw_card()
 
@@ -108,7 +106,7 @@ func no_recover() -> void:
 	draw_indexes.clear()
 	
 func is_recovery() -> bool:
-	return combat_damage == 0
+	return damage == 0
 
 func change_order(new_indexies : Array) -> bool:
 	if new_indexies.size() != hand.size():

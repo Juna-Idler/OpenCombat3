@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://scenes/playing_scene/combat/combat_skill_line.tscn" type="PackedScene" id=1]
 [ext_resource path="res://CardTest.gd" type="Script" id=2]
+[ext_resource path="res://scripts/game_server/online_node.tscn" type="PackedScene" id=3]
 
 [sub_resource type="StyleBoxFlat" id=1]
 draw_center = false
@@ -44,7 +45,7 @@ custom_styles/panel = SubResource( 2 )
 margin_left = 8.0
 margin_top = 8.0
 margin_right = 320.0
-margin_bottom = 160.0
+margin_bottom = 120.0
 custom_constants/separation = 8
 
 [node name="ColorRect" type="ColorRect" parent="MarginContainer/VBoxContainer"]
@@ -65,8 +66,6 @@ margin_bottom = 112.0
 rect_min_size = Vector2( 0, 32 )
 
 [node name="CombatSkillLine" parent="MarginContainer/VBoxContainer" instance=ExtResource( 1 )]
-margin_top = 120.0
-margin_bottom = 152.0
 
 [node name="Panel2" type="Panel" parent="."]
 margin_right = 100.0
@@ -82,3 +81,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -33.0
 margin_top = -144.0
+
+[node name="Node" parent="." instance=ExtResource( 3 )]
+websocket_url = "https://127.0.0.1:8080/"

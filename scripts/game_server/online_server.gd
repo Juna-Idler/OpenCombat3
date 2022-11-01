@@ -66,7 +66,7 @@ func _on_data():
 			var first = IGameServer.FirstData.new(myself,rival)
 			emit_signal("recieved_first_data",first)
 			
-		"Update":
+		"Recover","Combat":
 			var y := data["y"] as Dictionary
 			var r := data["r"] as Dictionary
 			var yu := []
@@ -80,7 +80,11 @@ func _on_data():
 			var rival := IGameServer.UpdateData.PlayerData.new(r["h"],r["s"],
 					ru,r["np"],r["nh"],r["nb"],r["dc"],r["d"],r["l"])
 			var update = IGameServer.UpdateData.new(data["r"],data["n"],data["s"],myself,rival)
-			emit_signal("recieved_combat_result",update)
+			if type == "Combat":
+				emit_signal("recieved_combat_result",update)
+			else:
+				emit_signal("recieved_recovery_result",update)
+
 
 
 func _get_primary_data() -> PrimaryData:

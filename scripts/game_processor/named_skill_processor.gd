@@ -71,7 +71,7 @@ class Charge extends Skill:
 		return 1
 	func _process_end(skill : SkillData.NamedSkill,_situation : int,
 			myself : ProcessorPlayerData,_rival : ProcessorPlayerData) -> void:
-		if myself.combat_damage == 0:
+		if myself.damage == 0:
 			var affected := myself.next_effect
 			for p in skill.parameter as Array:
 				var e := p as EffectData.SkillEffect

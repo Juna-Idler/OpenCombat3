@@ -82,19 +82,14 @@ func combat(index1 : int,index2 : int) -> void:
 
 	situation = player1.get_current_power() - player2.get_current_power();
 
-	situation = _engaged_process(p1_link_color,p2_link_color,situation)
+	_engaged_process(p1_link_color,p2_link_color)
 
 	if (situation > 0):
-		player2.combat_damage = player1.get_current_hit() - player2.get_current_block()
-		player1.combat_damage = -player1.get_current_block()
+		player2.add_damage(player1.get_current_hit())
 	elif (situation < 0):
-		player1.combat_damage = player2.get_current_hit() - player1.get_current_block()
-		player2.combat_damage = -player2.get_current_block()
-	else:
-		player1.combat_damage = -player1.get_current_block()
-		player2.combat_damage = -player2.get_current_block()
+		player1.add_damage(player2.get_current_hit())
 
-	_after_process(p1_link_color,p2_link_color,situation)
+	_after_process(p1_link_color,p2_link_color)
 
 	player1.combat_fix_damage()
 	player2.combat_fix_damage()
@@ -103,7 +98,7 @@ func combat(index1 : int,index2 : int) -> void:
 		phase = -phase
 		return
 
-	_end_process(p1_link_color,p2_link_color,situation)
+	_end_process(p1_link_color,p2_link_color)
 
 	player1.combat_end()
 	player2.combat_end()
@@ -111,7 +106,7 @@ func combat(index1 : int,index2 : int) -> void:
 
 	player1.supply()
 	player2.supply()
-	if player1.combat_damage == 0 and player2.combat_damage == 0:
+	if player1.is_recovery() and player2.is_recovery():
 		phase += 1
 	phase += 1
 
@@ -156,7 +151,7 @@ func _before_process(p1_link_color : int, p2_link_color):
 		_named_skills.get_skill(s.skill.data.id)._process_before(s.skill,s.myself,s.rival)
 
 
-func _engaged_process(p1_link_color : int, p2_link_color: int, situation: int):
+func _engaged_process(p1_link_color : int, p2_link_color: int):
 	var skill_order := []
 	for s in player1.select_card.data.skills:
 		if s.test_condition(player2.select_card.data.color,p1_link_color):
@@ -171,10 +166,9 @@ func _engaged_process(p1_link_color : int, p2_link_color: int, situation: int):
 	skill_order.sort_custom(SkillOrder,"custom_compare")
 	for s in skill_order:
 		situation = _named_skills.get_skill(s.skill.data.id)._process_engaged(s.skill,s.situation,s.myself,s.rival)
-	return situation
 
 
-func _after_process(p1_link_color : int, p2_link_color: int, situation: int):
+func _after_process(p1_link_color : int, p2_link_color: int):
 	var skill_order := []
 	for s in player1.select_card.data.skills:
 		if s.test_condition(player2.select_card.data.color,p1_link_color):
@@ -191,7 +185,7 @@ func _after_process(p1_link_color : int, p2_link_color: int, situation: int):
 		_named_skills.get_skill(s.skill.data.id)._process_after(s.skill,s.situation,s.myself,s.rival)
 
 
-func _end_process(p1_link_color : int, p2_link_color: int, situation: int):
+func _end_process(p1_link_color : int, p2_link_color: int):
 	var skill_order := []
 	for s in player1.select_card.data.skills:
 		if s.test_condition(player2.select_card.data.color,p1_link_color):
