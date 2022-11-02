@@ -1,7 +1,7 @@
 extends Control
 
-signal closed(deck)
-#_on_DeckList_closed(deck : Array)
+signal closed(deck,updated)
+#_on_DeckList_closed(deck : Array,updated : bool)
 
 const DeckItem := preload("small_card.tscn")
 
@@ -22,6 +22,8 @@ var y_start : int
 
 var moving : bool = false
 
+var initial_deck : Array
+
 func _ready():
 	var deck := []
 	for i in 30:
@@ -29,7 +31,8 @@ func _ready():
 	set_deck(deck)
 
 
-func set_deck(deck : Array):
+func set_deck(deck : Array,draggable = true):
+	initial_deck = deck
 	for c in deck_container.get_children():
 		deck_container.remove_child(c)
 		c.queue_free()
@@ -44,9 +47,10 @@ func set_deck(deck : Array):
 		var x := deck_item_x_start + deck_item_x_step * (i % deck_item_x_count)
 		var y := y_start + y_step * int(i / deck_item_x_count)
 		var c := DeckItem.instance()
-		c.connect("dragged",self,"_on_DeckItem_dragged")
-		c.connect("dragging",self,"_on_DeckItem_dragging")
-		c.connect("dropped",self,"_on_DeckItem_dropped")
+		if draggable:
+			c.connect("dragged",self,"_on_DeckItem_dragged")
+			c.connect("dragging",self,"_on_DeckItem_dragging")
+			c.connect("dropped",self,"_on_DeckItem_dropped")
 		c.connect("held",self,"_on_DeckItem_held")
 		c._timer = $Timer
 		c.connect("mouse_entered",self,"_on_DeckItem_mouse_entered",[c])
@@ -129,5 +133,11 @@ func _on_DeckItem_mouse_exited(item):
 
 
 func _on_Hide_pressed():
+	var deck = get_deck()
+	var count := 0
+	if deck.size() == initial_deck.size():
+		count += 1
+		for i in deck.size():
+			count += int(deck[i] == initial_deck[i])
 	visible = false
-	emit_signal("closed",get_deck())
+	emit_signal("closed",deck,count != deck.size() + 1)

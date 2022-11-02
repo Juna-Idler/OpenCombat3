@@ -1,9 +1,8 @@
 extends Node
 
-export var websocket_url := "wss://"
+export var websocket_url := "https://127.0.0.1:8080"
 
 var _server := OnlineServer.new()
-var parent_node : Node
 
 func _init():
 	_server.connect("connected",self,"_on_Server_connected")
@@ -12,25 +11,22 @@ func _init():
 
 
 func initialize():
-	_server.initialize(websocket_url)
+	_server.initialize(websocket_url,Global.card_catalog.version)
 
-#func initialize(url : String,parent : Node):
-#	parent.add_child(self)
-#	parent_node = parent
-#	_server.initialize(url)
-#
-#
-#func terminalize():
-#	_server._terminalize()
-#	parent_node.remove_child(self)
+
+func terminalize():
+	_server._terminalize()
 	
 func is_connecting():
 	return _server.is_connecting
 	
 
 func _on_Server_connected():
+	print("connected")
 	pass
+	
 func _on_Server_matched():
+	print("matched")
 	pass
 
 func _process(_delta):

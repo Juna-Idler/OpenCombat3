@@ -9,7 +9,18 @@ func _init(d_name : String, d_cards : PoolIntArray, k_cards : PoolIntArray):
 	cards = d_cards
 	name = d_name
 	key_cards = k_cards
-	
+
+func equal(other : DeckData) -> bool:
+	if name != other.name or cards.size() != other.cards.size()\
+			or key_cards.size() != other.key_cards.size():
+		return false
+	for i in cards.size():
+		if cards[i] != other.cards[i]:
+			return false
+	for i in key_cards.size():
+		if key_cards[i] != other.key_cards[i]:
+			return false
+	return true
 
 class DeckFace:
 	var name : String

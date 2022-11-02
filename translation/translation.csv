@@ -13,3 +13,6 @@ LIST_OPEN,一覧,List
 CARDS:%s COST:%s,カード:%s コスト:%s,Cards:%s Cost:%s
 RED:%s GREEN:%s BLUE:%s,[color=red]赤:[/color]%s [color=green]緑:[/color]%s [color=blue]青:[/color]%s,[color=red]R:[/color]%s [color=green]G:[/color]%s [color=blue]B:[/color]%s
 L1:%s L2:%s L3:%s,Lv1:%s Lv2:%s Lv3:%s,Lv1:%s Lv2:%s Lv3:%s
+MOVE_SAVE,保存,Save
+DECK_NO_SAVE_MESSAGE,変更がありますが、破棄しますか？,"There are changes, do you want to discard them?"
+NO_SAVE,破棄する,Discard

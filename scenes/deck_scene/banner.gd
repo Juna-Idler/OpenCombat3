@@ -25,7 +25,7 @@ func _ready():
 func get_deck_data() -> DeckData:
 	return deck_data
 
-func set_deck_Data(d : DeckData):
+func set_deck_data(d : DeckData):
 	deck_data = DeckData.new(d.name,d.cards,d.key_cards)
 	reset_visual()
 

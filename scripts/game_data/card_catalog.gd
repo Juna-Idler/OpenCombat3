@@ -11,8 +11,7 @@ enum EffectAttribute {
 	BLOCK,
 }
 
-var card_version : int
-var skill_version : int
+var version : String
 
 var translation : String
 
@@ -133,7 +132,6 @@ func _load_skill_data():
 		var id := int(csv[0])
 		var text = csv[5].replace("\\n","\n")
 		_skill_catalog[id] = SkillData.NamedSkillData.new(id,csv[1],csv[2],int(csv[3]),csv[4],text)
-	skill_version = int((_skill_catalog[0] as SkillData.NamedSkillData).text)
 
 	if translation.find("ja") != 0:
 		var trans_res = load("res://card_data/named_skill_" + translation + ".txt")
@@ -168,7 +166,7 @@ func _load_card_data():
 		_card_catalog[id] = CardData.new(id,csv[1],csv[2],
 				int(csv[3]),int(csv[4]),int(csv[5]),int(csv[6]),int(csv[7]),
 				skills,text,csv[10])
-	card_version = int((_card_catalog[0] as CardData).name)
+	version = (_card_catalog[0] as CardData).name
 
 	if translation.find("ja") != 0:
 		var trans_res = load("res://card_data/card_data_" + translation + ".txt")

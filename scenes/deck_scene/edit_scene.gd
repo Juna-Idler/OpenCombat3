@@ -33,7 +33,10 @@ var deck_cost : int = 0
 
 var key_cards : PoolIntArray
 
+var initial_deck : DeckData
+
 func initialize(deck : DeckData):
+	initial_deck = deck
 	key_cards = deck.key_cards
 	set_deck(deck.cards)
 	$Header/DeckName.text = deck.name
@@ -64,12 +67,6 @@ func _ready():
 	$"%PoolList".move_child($"%Invalid",$"%PoolList".get_child_count()-1)
 	$"%Zoom".hide()
 	$"%Invalid".hide()
-
-	var deck := []
-	for i in 27:
-		deck.append(i+1)
-	var data = DeckData.new("名前はない",deck,[])
-	initialize(data)
 
 
 func set_pool(start_id : int):
@@ -271,8 +268,9 @@ func _on_ListOpen_pressed():
 	$DeckList.set_deck(get_deck())
 
 
-func _on_DeckList_closed(deck):
-	set_deck(deck)
+func _on_DeckList_closed(deck,updated):
+	if updated:
+		set_deck(deck)
 
 
 func _on_DeckName_clicked():
@@ -294,7 +292,16 @@ func _on_BannerEditor_name_changed(new_name):
 
 
 func _on_ReturnButton_pressed():
-	hide()
+	var deck : DeckData
+	if banner_mode:
+		deck = $"%BannerEditor".get_deck_data()
+	else:
+		deck = DeckData.new($Header/DeckName.text,get_deck(),key_cards)
+
+	if not deck.equal(initial_deck):
+		$PopupDialog.popup_centered()
+	else:
+		hide()
 
 
 func _on_SaveButton_pressed():
@@ -302,3 +309,11 @@ func _on_SaveButton_pressed():
 		emit_signal("pressed_save_button",$"%BannerEditor".get_deck_data())
 	else:
 		emit_signal("pressed_save_button",DeckData.new($Header/DeckName.text,get_deck(),key_cards))
+
+
+func _on_ButtonNoSave_pressed():
+	$PopupDialog.hide()
+	hide()
+
+func _on_ButtonCancel_pressed():
+	$PopupDialog.hide()

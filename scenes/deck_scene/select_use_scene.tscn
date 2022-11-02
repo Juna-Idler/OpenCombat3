@@ -1,7 +1,9 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://scenes/deck_scene/select_use_scene.gd" type="Script" id=1]
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=2]
+[ext_resource path="res://scenes/deck_scene/banner_container.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/deck_scene/list_view.tscn" type="PackedScene" id=4]
 
 [sub_resource type="DynamicFont" id=5]
 size = 24
@@ -12,19 +14,6 @@ Button/fonts/font = SubResource( 5 )
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0, 0, 0, 1 )
-
-[sub_resource type="StyleBoxFlat" id=3]
-bg_color = Color( 0.752941, 0.752941, 0.752941, 1 )
-border_width_left = 15
-border_width_right = 15
-border_color = Color( 0.498039, 0.498039, 0.498039, 1 )
-border_blend = true
-
-[sub_resource type="Theme" id=4]
-VScrollBar/styles/scroll = SubResource( 3 )
-
-[sub_resource type="StyleBoxFlat" id=7]
-bg_color = Color( 0.313726, 0.313726, 0.313726, 1 )
 
 [node name="DeckSelectScene" type="Panel"]
 anchor_right = 1.0
@@ -44,26 +33,27 @@ margin_left = 16.0
 margin_top = 16.0
 margin_right = 208.0
 margin_bottom = 80.0
-text = "戻る"
+text = "BACK"
 
 [node name="ButtonDecide" type="Button" parent="Panel"]
 margin_left = 1056.0
 margin_top = 576.0
 margin_right = 1248.0
 margin_bottom = 640.0
-text = "決定"
+text = "DECIDE"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
-margin_left = 264.0
-margin_right = 1016.0
-margin_bottom = 720.0
-rect_min_size = Vector2( 720, 720 )
-theme = SubResource( 4 )
-custom_styles/bg = SubResource( 7 )
-follow_focus = true
+[node name="ButtonViewList" type="Button" parent="Panel"]
+margin_left = 1056.0
+margin_top = 448.0
+margin_right = 1248.0
+margin_bottom = 512.0
+text = "LIST_OPEN"
 
-[node name="BannerContainer" type="VBoxContainer" parent="ScrollContainer"]
-unique_name_in_owner = true
+[node name="BannerContainer" parent="." instance=ExtResource( 3 )]
+
+[node name="DeckList" parent="." instance=ExtResource( 4 )]
+visible = false
 
 [connection signal="pressed" from="Panel/ReturnButton" to="." method="_on_ReturnButton_pressed"]
 [connection signal="pressed" from="Panel/ButtonDecide" to="." method="_on_ButtonDecide_pressed"]
+[connection signal="pressed" from="Panel/ButtonViewList" to="." method="_on_ButtonViewList_pressed"]

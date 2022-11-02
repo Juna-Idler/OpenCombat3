@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://scenes/deck_scene/edit_scene.gd" type="Script" id=1]
 [ext_resource path="res://scenes/card/card_front.tscn" type="PackedScene" id=2]
@@ -55,6 +55,17 @@ corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id=12]
+bg_color = Color( 0, 0, 0, 0.878431 )
+
+[sub_resource type="DynamicFont" id=13]
+size = 32
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=14]
+size = 32
+font_data = ExtResource( 3 )
 
 [node name="BuildScene" type="Panel"]
 anchor_right = 1.0
@@ -195,6 +206,43 @@ wait_time = 0.5
 [node name="DeckList" parent="." instance=ExtResource( 5 )]
 visible = false
 
+[node name="PopupDialog" type="PopupDialog" parent="."]
+visible = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/panel = SubResource( 12 )
+popup_exclusive = true
+
+[node name="ButtonCancel" type="Button" parent="PopupDialog"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+flat = true
+
+[node name="ButtonNoSave" type="Button" parent="PopupDialog"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -192.0
+margin_top = -40.0
+margin_right = 192.0
+margin_bottom = 60.0
+custom_fonts/font = SubResource( 13 )
+text = "NO_SAVE"
+
+[node name="Label" type="Label" parent="PopupDialog"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -320.0
+margin_top = 89.0
+margin_right = 320.0
+margin_bottom = 233.0
+custom_fonts/font = SubResource( 14 )
+text = "DECK_NO_SAVE_MESSAGE"
+align = 1
+valign = 1
+autowrap = true
+
 [connection signal="gui_input" from="Container/PoolList" to="." method="_on_PoolList_gui_input"]
 [connection signal="pressed" from="Container/PoolList/Prev" to="." method="_on_Prev_pressed"]
 [connection signal="pressed" from="Container/PoolList/Next" to="." method="_on_Next_pressed"]
@@ -204,3 +252,5 @@ visible = false
 [connection signal="pressed" from="Header/ListOpen" to="." method="_on_ListOpen_pressed"]
 [connection signal="clicked" from="Header/DeckName" to="." method="_on_DeckName_clicked"]
 [connection signal="closed" from="DeckList" to="." method="_on_DeckList_closed"]
+[connection signal="pressed" from="PopupDialog/ButtonCancel" to="." method="_on_ButtonCancel_pressed"]
+[connection signal="pressed" from="PopupDialog/ButtonNoSave" to="." method="_on_ButtonNoSave_pressed"]
