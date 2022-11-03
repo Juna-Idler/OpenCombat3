@@ -2,10 +2,10 @@ extends Reference
 class_name IGameServer
 
 # 何らかの事情でゲームを強制終了する時のシグナル
-signal recieved_abort(winlose,message)
-# func _on_GameServer_recieved_abort(winlose:int,message:String)->void:
+signal recieved_end(msg)
+# func _on_GameServer_recieved_end(msg:String)->void:
 # 
-# server.connect("recieved_abort",self,"_on_GameServer_recieved_abort")
+# server.connect("recieved_end",self,"_on_GameServer_recieved_end")
 
 # 1ターン目の情報を受信した時のシグナル
 signal recieved_first_data(first_data)
@@ -129,7 +129,4 @@ func _send_recovery_select(round_count:int,index:int,hands_order:Array = []):
 func _send_surrender():
 	pass
 
-# このインターフェイスの破棄
-func _terminalize():
-	pass
 

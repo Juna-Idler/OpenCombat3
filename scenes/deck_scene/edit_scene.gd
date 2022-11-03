@@ -305,10 +305,9 @@ func _on_ReturnButton_pressed():
 
 
 func _on_SaveButton_pressed():
-	if banner_mode:
-		emit_signal("pressed_save_button",$"%BannerEditor".get_deck_data())
-	else:
-		emit_signal("pressed_save_button",DeckData.new($Header/DeckName.text,get_deck(),key_cards))
+	initial_deck = $"%BannerEditor".get_deck_data() if banner_mode\
+			else DeckData.new($Header/DeckName.text,get_deck(),key_cards)
+	emit_signal("pressed_save_button",initial_deck)
 
 
 func _on_ButtonNoSave_pressed():

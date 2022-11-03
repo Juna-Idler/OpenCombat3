@@ -59,6 +59,19 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "VS_CPU"
 
+[node name="ButtonVSOnline" type="Button" parent="Panel"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -128.0
+margin_top = -264.0
+margin_right = 128.0
+margin_bottom = -200.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "VS_ONLINE"
+
 [node name="BuildButton" type="Button" parent="Panel"]
 anchor_left = 0.5
 anchor_top = 1.0
@@ -82,5 +95,6 @@ items = [ "日本語", null, false, 0, null, "English", null, false, 1, null ]
 selected = 0
 
 [connection signal="pressed" from="Panel/CpuButton" to="." method="_on_CpuButton_pressed"]
+[connection signal="pressed" from="Panel/ButtonVSOnline" to="." method="_on_ButtonVSOnline_pressed"]
 [connection signal="pressed" from="Panel/BuildButton" to="." method="_on_BuildButton_pressed"]
 [connection signal="item_selected" from="Panel/LanguageOptionButton" to="." method="_on_LanguageOptionButton_item_selected"]

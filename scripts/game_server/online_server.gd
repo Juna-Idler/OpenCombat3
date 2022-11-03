@@ -5,7 +5,7 @@ class_name OnlineServer
 
 signal connected()
 signal matched()
-
+signal disconnected()
 
 var _primary_data :IGameServer.PrimaryData = null
 
@@ -30,6 +30,8 @@ func initialize(url : String,ver : String, protocols = PoolStringArray()) -> boo
 		return false
 	return true
 
+func terminalize():
+	_client.disconnect_from_host()
 
 func send_match(name :String, deck :Array, regulation :String):
 	if not is_connecting:
@@ -42,11 +44,11 @@ func send_match(name :String, deck :Array, regulation :String):
 func _closed(was_clean = false):
 	is_connecting = false
 	_primary_data = null
+	emit_signal("disconnected")	
 
 func _connected(proto = ""):
 	var send := """{"type":"Version","data":{"version":"%s"}}""" % version_string
 	_client.get_peer(1).put_packet(send.to_utf8())
-
 
 
 func _on_data():
@@ -64,7 +66,7 @@ func _on_data():
 				is_connecting = true
 				emit_signal("connected")
 			else:
-				_terminalize()
+				terminalize()
 			
 		"Primary":
 			_primary_data = IGameServer.PrimaryData.new(data["name"],data["deck"],
@@ -95,6 +97,11 @@ func _on_data():
 				emit_signal("recieved_combat_result",update)
 			else:
 				emit_signal("recieved_recovery_result",update)
+				
+		"End":
+			var msg := data["msg"] as String
+			emit_signal("recieved_end",msg)
+			
 
 
 
@@ -114,6 +121,8 @@ func _send_combat_select(round_count:int,index:int,hands_order:Array = []):
 	_client.get_peer(1).put_packet(send.to_utf8())
 
 func _send_recovery_select(round_count:int,index:int,hands_order:Array = []):
+	if index < 0:
+		return
 	var phase = round_count * 2 + 1
 	var hand := PoolStringArray(hands_order)
 	var send := """{"type":"Select","data":{"p":%s,"i":%s,"h":[%s]}}"""\
@@ -125,7 +134,5 @@ func _send_surrender():
 	var send := """{"type":"Surrender","data":{}}"""
 	_client.get_peer(1).put_packet(send.to_utf8())
 
-# このインターフェイスの破棄
-func _terminalize():
-	_client.disconnect_from_host()
+
 

@@ -11,8 +11,8 @@ const Card = preload("../card/card.tscn")
 onready var my_combat_pos : Vector2 = $UILayer/MyField/Playing.rect_global_position + $UILayer/MyField/Playing.rect_size / 2
 onready var rival_combat_pos : Vector2 = $UILayer/RivalField/Playing.rect_global_position + $UILayer/RivalField/Playing.rect_size / 2
 
-onready var my_stack_pos : Vector2 = $UILayer/MyField/Stack.rect_global_position + $UILayer/MyField/Stack.rect_size / 2
-onready var rival_stack_pos : Vector2 = $UILayer/RivalField/Stack.rect_global_position + $UILayer/RivalField/Stack.rect_size / 2
+onready var my_stock_pos : Vector2 = $UILayer/MyField/Stock.rect_global_position + $UILayer/MyField/Stock.rect_size / 2
+onready var rival_stock_pos : Vector2 = $UILayer/RivalField/Stock.rect_global_position + $UILayer/RivalField/Stock.rect_size / 2
 
 onready var my_played_pos : Vector2 = $UILayer/MyField/Played.rect_global_position + Vector2(-$UILayer/MyField/Played.rect_size.y / 2,$UILayer/MyField/Played.rect_size.x / 2)
 onready var rival_played_pos : Vector2 = $UILayer/RivalField/Played.rect_global_position + Vector2($UILayer/RivalField/Played.rect_size.y / 2,-$UILayer/RivalField/Played.rect_size.x / 2)
@@ -49,14 +49,14 @@ func _ready():
 	for i in pd.my_deck_list.size():
 		var c := Card.instance().initialize_card(i,Global.card_catalog.get_card_data(pd.my_deck_list[i])) as Card
 		my_deck.append(c)
-		c.position = my_stack_pos
+		c.position = my_stock_pos
 		c.visible = false
 		$CardLayer.add_child(c)
 	var rival_deck := []
 	for i in pd.rival_deck_list.size():
 		var c := Card.instance().initialize_card(i,Global.card_catalog.get_card_data(pd.rival_deck_list[i]),true) as Card
 		rival_deck.append(c)
-		c.position = rival_stack_pos
+		c.position = rival_stock_pos
 		c.visible = false
 		$CardLayer.add_child(c)	
 
@@ -100,7 +100,7 @@ func initialize(server : IGameServer,changer : ISceneChanger):
 	game_server.connect("recieved_first_data",self,"_on_GameServer_recieved_first_data")
 	game_server.connect("recieved_combat_result",self,"_on_GameServer_recieved_combat_result")
 	game_server.connect("recieved_recovery_result",self,"_on_GameServer_recieved_recovery_result")
-	game_server.connect("recieved_abort",self,"_on_GameServer_recieved_abort")
+	game_server.connect("recieved_end",self,"_on_GameServer_recieved_end")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -110,19 +110,10 @@ func initialize(server : IGameServer,changer : ISceneChanger):
 
 
 
-func _on_GameServer_recieved_abort(winlose:int,message:String)->void:
-	if winlose > 0:
-		$CombatLayer/ResultOverlap/RivalVeil.self_modulate = Color.black
-		$CombatLayer/ResultOverlap/MyVeil.self_modulate = Color.white
-		$CombatLayer/ResultOverlap/ResultLabel.text = "Win"
-	elif winlose < 0:
-		$CombatLayer/ResultOverlap/RivalVeil.self_modulate = Color.white
-		$CombatLayer/ResultOverlap/MyVeil.self_modulate = Color.black
-		$CombatLayer/ResultOverlap/ResultLabel.text = "Lose"
-	else:
-		$CombatLayer/ResultOverlap/RivalVeil.self_modulate = Color.gray
-		$CombatLayer/ResultOverlap/MyVeil.self_modulate = Color.gray
-		$CombatLayer/ResultOverlap/ResultLabel.text = "Draw"
+func _on_GameServer_recieved_end(msg:String)->void:
+	$CombatLayer/ResultOverlap/RivalVeil.self_modulate = Color.gray
+	$CombatLayer/ResultOverlap/MyVeil.self_modulate = Color.gray
+	$CombatLayer/ResultOverlap/ResultLabel.text = msg
 	$"%ResultOverlap".show()
 	$TopUILayer/Control/SettingButton.disabled = true
 	return
@@ -270,11 +261,11 @@ func _on_RivalPlayed_clicked_card(_card):
 	pass # Replace with function body.
 
 
-func _on_MyStack_clicked():
+func _on_MyStock_clicked():
 	pass # Replace with function body.
 
 
-func _on_RivalStack_clicked():
+func _on_RivalStock_clicked():
 	pass # Replace with function body.
 
 

@@ -110,12 +110,9 @@ func _send_recovery_select(round_count:int,index:int,hands_order:Array = []):
 
 
 func _send_surrender():
-	emit_signal("recieved_abort",-1,"Surrender")
+	emit_signal("recieved_end","You surrender")
 	pass
 
-# このインターフェイスの破棄
-func _terminalize():
-	pass
 
 
 

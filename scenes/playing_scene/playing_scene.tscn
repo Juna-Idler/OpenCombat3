@@ -106,7 +106,7 @@ layer = -1
 
 [node name="MyField" type="Node" parent="UILayer"]
 
-[node name="Stack" type="Panel" parent="UILayer/MyField"]
+[node name="Stock" type="Panel" parent="UILayer/MyField"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -167,7 +167,7 @@ script = ExtResource( 2 )
 
 [node name="RivalField" type="Node" parent="UILayer"]
 
-[node name="Stack" type="Panel" parent="UILayer/RivalField"]
+[node name="Stock" type="Panel" parent="UILayer/RivalField"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -235,9 +235,6 @@ margin_top = 128.0
 margin_bottom = -128.0
 
 [node name="CardLayer" type="CanvasLayer" parent="."]
-
-[node name="EffectLayer" type="CanvasLayer" parent="."]
-layer = 2
 
 [node name="TopUILayer" type="CanvasLayer" parent="."]
 layer = 3
@@ -419,14 +416,14 @@ visible = false
 wait_time = 0.5
 one_shot = true
 
-[connection signal="clicked" from="UILayer/MyField/Stack" to="." method="_on_MyStack_clicked"]
+[connection signal="clicked" from="UILayer/MyField/Stock" to="." method="_on_MyStack_clicked"]
 [connection signal="clicked_card" from="UILayer/MyField/HandArea" to="." method="_on_MyHandArea_clicked_card"]
 [connection signal="decided_card" from="UILayer/MyField/HandArea" to="." method="_on_MyHandArea_decided_card"]
 [connection signal="held_card" from="UILayer/MyField/HandArea" to="." method="_on_MyHandArea_held_card"]
 [connection signal="clicked" from="UILayer/MyField/Played" to="." method="_on_MyPlayed_clicked"]
 [connection signal="held" from="UILayer/MyField/Played" to="." method="_on_MyPlayed_held"]
 [connection signal="clicked" from="UILayer/MyField/Discard" to="." method="_on_MyDiscard_clicked"]
-[connection signal="clicked" from="UILayer/RivalField/Stack" to="." method="_on_RivalStack_clicked"]
+[connection signal="clicked" from="UILayer/RivalField/Stock" to="." method="_on_RivalStack_clicked"]
 [connection signal="clicked_card" from="UILayer/RivalField/HandArea" to="." method="_on_RivalHandArea_clicked_card"]
 [connection signal="held_card" from="UILayer/RivalField/HandArea" to="." method="_on_RivalHandArea_held_card"]
 [connection signal="clicked" from="UILayer/RivalField/Played" to="." method="_on_RivalPlayed_clicked"]

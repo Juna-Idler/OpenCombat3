@@ -9,3 +9,5 @@ func _goto_title_scene():
 func _goto_build_scene():
 	pass
 
+func _goto_online_entrance_scene():
+	pass

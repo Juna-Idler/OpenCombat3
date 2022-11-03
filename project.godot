@@ -169,6 +169,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/game_server/offline_server.gd"
 }, {
+"base": "Node",
+"class": "OnlineEntranceScene",
+"language": "GDScript",
+"path": "res://scenes/online/entrance_scene.gd"
+}, {
 "base": "IGameServer",
 "class": "OnlineServer",
 "language": "GDScript",
@@ -257,6 +262,7 @@ _global_script_class_icons={
 "NamedSkillProcessor": "",
 "NextEffectLabel": "",
 "OfflineServer": "",
+"OnlineEntranceScene": "",
 "OnlineServer": "",
 "PlainTextResource": "",
 "PlayingPlayer": "",
