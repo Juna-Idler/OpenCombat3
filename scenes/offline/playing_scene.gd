@@ -21,7 +21,8 @@ func initialize(changer : ISceneChanger):
 	$PlayingScene.initialize(offline_server)
 	
 	$PlayingScene.send_ready()
-	
+	$"%ResultOverlap".hide()
+
 
 func _terminalize():
 	$PlayingScene.terminalize()
@@ -31,14 +32,19 @@ func _on_PlayingScene_ended(situation,msg):
 	$"%ResultOverlap".show()
 	match situation:
 		1:
-			$Panel/ResultOverlap/ResultLabel.text = "Win"
+			$"%ResultOverlap".get_node("RivalVeil").self_modulate = Color.black
+			$"%ResultOverlap".get_node("MyVeil").self_modulate = Color.white
+			$"%ResultOverlap".get_node("ResultLabel").text = "Win"
 		0:
-			$Panel/ResultOverlap/ResultLabel.text = "Draw"
+			$"%ResultOverlap".get_node("RivalVeil").self_modulate = Color.gray
+			$"%ResultOverlap".get_node("MyVeil").self_modulate = Color.gray
+			$"%ResultOverlap".get_node("ResultLabel").text = "Draw"
 		-1:
-			$Panel/ResultOverlap/ResultLabel.text = "Lose"
+			$"%ResultOverlap".get_node("RivalVeil").self_modulate = Color.white
+			$"%ResultOverlap".get_node("MyVeil").self_modulate = Color.black
+			$"%ResultOverlap".get_node("ResultLabel").text = "Lose"
 		-2:
-			$Panel/ResultOverlap/ResultLabel.text = msg
-	pass # Replace with function body.
+			$"%ResultOverlap".get_node("ResultLabel").text = msg
 
 
 func _on_ReturnButton_pressed():

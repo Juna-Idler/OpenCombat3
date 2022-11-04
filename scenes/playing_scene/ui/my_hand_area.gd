@@ -1,3 +1,5 @@
+# warning-ignore-all:return_value_discarded
+
 extends Control
 
 
@@ -44,13 +46,9 @@ func set_hand_card(cards : Array):
 		for i in range(new_count - controls.size()):
 			var c := HandSelectControl.instance()
 			c.index = controls.size()
-# warning-ignore:return_value_discarded
 			c.connect("slid_card",self,"_on_slid_card")
-# warning-ignore:return_value_discarded
 			c.connect("decided_card",self,"_on_decided_card")
-# warning-ignore:return_value_discarded
 			c.connect("held_card",self,"_on_held_card")
-# warning-ignore:return_value_discarded
 			c.connect("clicked_card",self,"_on_clicked_card")
 			c.hold_timer = timer
 			controls.append(c)

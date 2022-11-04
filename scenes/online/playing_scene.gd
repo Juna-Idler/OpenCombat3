@@ -24,14 +24,19 @@ func _on_PlayingScene_ended(situation,msg):
 	$"%ResultOverlap".show()
 	match situation:
 		1:
-			pass
+			$"%ResultOverlap".get_node("RivalVeil").self_modulate = Color.black
+			$"%ResultOverlap".get_node("MyVeil").self_modulate = Color.white
+			$"%ResultOverlap".get_node("ResultLabel").text = "Win"
 		0:
-			pass
+			$"%ResultOverlap".get_node("RivalVeil").self_modulate = Color.gray
+			$"%ResultOverlap".get_node("MyVeil").self_modulate = Color.gray
+			$"%ResultOverlap".get_node("ResultLabel").text = "Draw"
 		-1:
-			pass
+			$"%ResultOverlap".get_node("RivalVeil").self_modulate = Color.white
+			$"%ResultOverlap".get_node("MyVeil").self_modulate = Color.black
+			$"%ResultOverlap".get_node("ResultLabel").text = "Lose"
 		-2:
-			pass
-	pass # Replace with function body.
+			$"%ResultOverlap".get_node("ResultLabel").text = msg
 
 
 func _on_ButtonBack_pressed():

@@ -39,7 +39,6 @@ layer = 10
 
 [node name="ResultOverlap" type="Control" parent="Panel"]
 unique_name_in_owner = true
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -84,6 +83,7 @@ custom_fonts/font = SubResource( 2 )
 text = "戻る"
 
 [node name="Button" type="Button" parent="Panel/ResultOverlap"]
+visible = false
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
