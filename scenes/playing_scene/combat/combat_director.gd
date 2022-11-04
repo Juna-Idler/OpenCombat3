@@ -24,20 +24,20 @@ class SkillOrder:
 
 var player1 : PlayingPlayer
 var player2 : PlayingPlayer
-var overlay : CombatOverlay
+var overlay : CombatOverlap
 var power_balance : CombatPowerBalance
 
 var named_skills := NamedSkillPerformer.new()
 
 
 func initialize(p1 : PlayingPlayer,p2 : PlayingPlayer,
-		ol : CombatOverlay,pb : CombatPowerBalance):
+		ol : CombatOverlap,pb : CombatPowerBalance):
 	player1 = p1
 	player2 = p2
 	overlay = ol
 	power_balance = pb
 	
-	overlay.change_timing_label(CombatOverlay.CombatTiming.NoTiming)
+	overlay.change_timing_label(CombatOverlap.CombatTiming.NoTiming)
 
 
 func perform(node : Node,lethal : bool):
@@ -80,7 +80,7 @@ func perform(node : Node,lethal : bool):
 	
 
  # 交戦前タイミング
-	tween.tween_callback(overlay,"change_timing_label",[CombatOverlay.CombatTiming.Before])
+	tween.tween_callback(overlay,"change_timing_label",[CombatOverlap.CombatTiming.Before])
 	
 	_before_skills_effect(tween)
 
@@ -95,7 +95,7 @@ func perform(node : Node,lethal : bool):
 	tween = node.create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
  # 交戦タイミング
-	tween.tween_callback(overlay,"change_timing_label",[CombatOverlay.CombatTiming.Engagement])
+	tween.tween_callback(overlay,"change_timing_label",[CombatOverlap.CombatTiming.Engagement])
 	
 	var situation := (player1.get_current_power() - player2.get_current_power())
 	situation = _engaged_skills_effect(tween,situation)
@@ -116,7 +116,7 @@ func perform(node : Node,lethal : bool):
 	tween = node.create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
  # 交戦後タイミング
-	tween.tween_callback(overlay,"change_timing_label",[CombatOverlay.CombatTiming.After])
+	tween.tween_callback(overlay,"change_timing_label",[CombatOverlap.CombatTiming.After])
 	_after_skills_effect(tween,situation)
 	
 	yield(tween,"finished")
@@ -126,7 +126,7 @@ func perform(node : Node,lethal : bool):
 	tween.tween_interval(0.3)
 
  # 終了時タイミング
-	tween.tween_callback(overlay,"change_timing_label",[CombatOverlay.CombatTiming.End])
+	tween.tween_callback(overlay,"change_timing_label",[CombatOverlap.CombatTiming.End])
 	_end_skills_effect(tween,situation)
 
 	tween.tween_property(overlay.p1_avatar.avatar,"global_position:x",p1_start_pos_x,0.5)

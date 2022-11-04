@@ -55,9 +55,9 @@ _global_script_classes=[ {
 "path": "res://scenes/playing_scene/combat/combat_director.gd"
 }, {
 "base": "Control",
-"class": "CombatOverlay",
+"class": "CombatOverlap",
 "language": "GDScript",
-"path": "res://scenes/playing_scene/combat/combat_overlay.gd"
+"path": "res://scenes/playing_scene/combat/combat_overlap.gd"
 }, {
 "base": "Control",
 "class": "CombatPowerBalance",
@@ -239,7 +239,7 @@ _global_script_class_icons={
 "CombatAvatarBullet": "",
 "CombatAvatarMagazine": "",
 "CombatDirector": "",
-"CombatOverlay": "",
+"CombatOverlap": "",
 "CombatPowerBalance": "",
 "CombatSkillLine": "",
 "CustomResFormatLoader": "",

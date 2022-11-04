@@ -69,12 +69,10 @@ class SceneChanger extends ISceneChanger:
 
 
 var scene_changer : SceneChanger
-var online_server := OnlineServer.new()
+onready var online_server : OnlineServer = $OnlineNode.server
 
 func _ready():
 	scene_changer = SceneChanger.new(self,$"%SceneFade",$TitleScene)
 	$TitleScene.scene_changer = scene_changer
 	$"%SceneFade".hide()
 	pass
-
-

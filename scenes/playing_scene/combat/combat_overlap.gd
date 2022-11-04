@@ -1,6 +1,6 @@
 extends Control
 
-class_name CombatOverlay
+class_name CombatOverlap
 
 onready var p1_avatar := $Player1Avatar
 onready var p2_avatar := $Player2Avatar
