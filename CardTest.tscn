@@ -1,8 +1,7 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scenes/playing_scene/combat/combat_skill_line.tscn" type="PackedScene" id=1]
 [ext_resource path="res://CardTest.gd" type="Script" id=2]
-[ext_resource path="res://scripts/game_server/online_node.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/deck_scene/banner.tscn" type="PackedScene" id=4]
 
 [sub_resource type="StyleBoxFlat" id=1]
@@ -25,6 +24,25 @@ content_margin_top = 8.0
 content_margin_bottom = 8.0
 bg_color = Color( 0, 0, 0, 1 )
 
+[sub_resource type="Gradient" id=3]
+offsets = PoolRealArray( 0, 0.578704, 0.768519 )
+colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0.54902, 0, 0, 0, 0 )
+
+[sub_resource type="GradientTexture2D" id=4]
+gradient = SubResource( 3 )
+fill = 1
+fill_from = Vector2( 0.5, 0.5 )
+
+[sub_resource type="Gradient" id=5]
+offsets = PoolRealArray( 0, 0.745192 )
+colors = PoolColorArray( 1, 1, 1, 1, 0, 0, 0, 0 )
+
+[sub_resource type="GradientTexture2D" id=6]
+gradient = SubResource( 5 )
+fill = 1
+fill_from = Vector2( 0.5, 0.5 )
+repeat = 1
+
 [node name="Node" type="Node"]
 script = ExtResource( 2 )
 
@@ -36,10 +54,10 @@ margin_bottom = 248.0
 custom_styles/panel = SubResource( 1 )
 
 [node name="MarginContainer" type="PanelContainer" parent="."]
-margin_left = 16.0
-margin_top = -256.0
-margin_right = 344.0
-margin_bottom = -168.0
+margin_left = 584.0
+margin_top = 400.0
+margin_right = 912.0
+margin_bottom = 528.0
 custom_styles/panel = SubResource( 2 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
@@ -95,6 +113,13 @@ margin_right = 720.0
 margin_bottom = 216.0
 flat = true
 
-[node name="Node" parent="." instance=ExtResource( 3 )]
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 992, 352 )
+texture = SubResource( 4 )
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+position = Vector2( 832, 272 )
+texture = SubResource( 6 )
+polygon = PoolVector2Array( 0, 0, 32, -88, 64, 0, 144, 32, 64, 64, 32, 128, 0, 64, -80, 32 )
 
 [connection signal="pressed" from="Panel2/DeckBanner/Button" to="." method="_on_Button_pressed"]

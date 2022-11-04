@@ -1,4 +1,4 @@
-extends Node
+extends ISceneChanger.IScene
 
 class_name OnlineEntranceScene
 
@@ -6,13 +6,26 @@ var scene_changer : ISceneChanger
 
 export var websocket_url := "https://127.0.0.1:8080"
 
-onready var server : OnlineServer = $OnlineServer._server
+onready var server : OnlineServer
 
-func initialize(changer : ISceneChanger):
+func initialize(s : OnlineServer,changer : ISceneChanger):
+	server = s
 	scene_changer = changer
+	
+	server.connect("connected",self,"_on_Server_connected")
+	server.connect("matched",self,"_on_Server_matched")
+	server.connect("disconnected",self,"_on_Server_disconnected")
+
+	if not server.is_connecting:
+		server.initialize(websocket_url,Global.card_catalog.version)
+
+func _terminalize():
+	server.disconnect("connected",self,"_on_Server_connected")
+	server.disconnect("matched",self,"_on_Server_matched")
+	server.disconnect("disconnected",self,"_on_Server_disconnected")
+	
 
 func _ready():
-	$OnlineServer.initialize(websocket_url)
 	$Panel/DeckBanner.set_deck_data(Global.deck_list.list[Global.deck_list.online_deck])
 
 
@@ -32,13 +45,17 @@ func _on_DeckSelectScene_decided(index):
 
 
 func _on_ButtonBack_pressed():
-	$OnlineServer.terminalize()
+	server.terminalize()
 	scene_changer._goto_title_scene()
 
 
-func _on_OnlineServer_connected():
+func _on_Server_connected():
 	$Panel/Matching.disabled = false
-
-
-func _on_OnlineServer_matched():
-	pass # Replace with function body.
+	pass
+	
+func _on_Server_matched():
+	pass
+	
+func _on_Server_disconnected():
+	$Panel/Matching.disabled = true
+	pass

@@ -1,4 +1,4 @@
-extends Node
+extends ISceneChanger.IScene
 
 class_name TitleScene
 
@@ -10,6 +10,9 @@ func _ready():
 	
 func initialize(changer : ISceneChanger):
 	scene_changer = changer
+	pass
+	
+func _terminalize():
 	pass
 
 

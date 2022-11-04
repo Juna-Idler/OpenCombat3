@@ -1,4 +1,4 @@
-extends Control
+extends ISceneChanger.IScene
 
 class_name SelectEditDeckScene
 
@@ -9,6 +9,8 @@ onready var banner_container := $BannerContainer
 func initialize(changer : ISceneChanger):
 	scene_changer = changer
 
+func _terminalize():
+	pass
 
 func _ready():
 	pass

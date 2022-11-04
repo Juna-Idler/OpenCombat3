@@ -346,27 +346,28 @@ text = ""
 align = 2
 valign = 0
 
-[node name="CombatLayer" type="CanvasLayer" parent="."]
+[node name="OverlapLayer" type="CanvasLayer" parent="."]
 layer = 4
 
-[node name="CombatOverlay" parent="CombatLayer" instance=ExtResource( 4 )]
+[node name="CombatOverlap" parent="OverlapLayer" instance=ExtResource( 4 )]
+unique_name_in_owner = true
 visible = false
 
-[node name="ResultOverlap" type="Control" parent="CombatLayer"]
+[node name="ResultOverlap" type="Control" parent="OverlapLayer"]
 unique_name_in_owner = true
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 
-[node name="RivalVeil" type="TextureRect" parent="CombatLayer/ResultOverlap"]
+[node name="RivalVeil" type="TextureRect" parent="OverlapLayer/ResultOverlap"]
 anchor_right = 1.0
 margin_bottom = 192.0
 mouse_filter = 2
 texture = SubResource( 18 )
 expand = true
 
-[node name="MyVeil" type="TextureRect" parent="CombatLayer/ResultOverlap"]
+[node name="MyVeil" type="TextureRect" parent="OverlapLayer/ResultOverlap"]
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -375,7 +376,7 @@ mouse_filter = 2
 texture = SubResource( 20 )
 expand = true
 
-[node name="ReturnButton" type="Button" parent="CombatLayer/ResultOverlap"]
+[node name="ReturnButton" type="Button" parent="OverlapLayer/ResultOverlap"]
 margin_left = 240.0
 margin_top = 576.0
 margin_right = 1040.0
@@ -383,7 +384,7 @@ margin_bottom = 701.0
 custom_fonts/font = SubResource( 21 )
 text = "Return Title"
 
-[node name="ResultLabel" type="Label" parent="CombatLayer/ResultOverlap"]
+[node name="ResultLabel" type="Label" parent="OverlapLayer/ResultOverlap"]
 margin_left = 256.0
 margin_top = 32.0
 margin_right = 1024.0
@@ -394,21 +395,24 @@ text = "Win"
 align = 1
 valign = 1
 
-[node name="ListLayer" type="CanvasLayer" parent="."]
+[node name="CardListLayer" type="CanvasLayer" parent="."]
 layer = 5
 
-[node name="CardList" parent="ListLayer" instance=ExtResource( 9 )]
+[node name="CardList" parent="CardListLayer" instance=ExtResource( 9 )]
 unique_name_in_owner = true
 visible = false
 
-[node name="OverlayLayer" type="CanvasLayer" parent="."]
-layer = 5
+[node name="LargeCardLayer" type="CanvasLayer" parent="."]
+layer = 6
 
-[node name="LargeCardView" parent="OverlayLayer" instance=ExtResource( 1 )]
+[node name="LargeCardView" parent="LargeCardLayer" instance=ExtResource( 1 )]
 unique_name_in_owner = true
 visible = false
 
-[node name="SettingsScene" parent="OverlayLayer" instance=ExtResource( 10 )]
+[node name="SettingsLayer" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="SettingsScene" parent="SettingsLayer" instance=ExtResource( 10 )]
 unique_name_in_owner = true
 visible = false
 
@@ -430,5 +434,5 @@ one_shot = true
 [connection signal="held" from="UILayer/RivalField/Played" to="." method="_on_RivalPlayed_held"]
 [connection signal="clicked" from="UILayer/RivalField/Discard" to="." method="_on_RivalDiscard_clicked"]
 [connection signal="pressed" from="TopUILayer/Control/SettingButton" to="." method="_on_SettingButton_pressed"]
-[connection signal="pressed" from="CombatLayer/ResultOverlap/ReturnButton" to="." method="_on_ReturnButton_pressed"]
-[connection signal="pressed_surrender" from="OverlayLayer/SettingsScene" to="." method="_on_SettingsScene_pressed_surrender"]
+[connection signal="pressed" from="OverlapLayer/ResultOverlap/ReturnButton" to="." method="_on_ReturnButton_pressed"]
+[connection signal="pressed_surrender" from="SettingsLayer/SettingsScene" to="." method="_on_SettingsScene_pressed_surrender"]

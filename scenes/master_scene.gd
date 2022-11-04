@@ -3,15 +3,15 @@ extends Node
 class_name MasterScene
 
 class SceneChanger extends ISceneChanger:
-	var node : Node
+	var master_scene : MasterScene
 	var fade : ColorRect
-	var current_scene : Node
+	var current_scene : ISceneChanger.IScene
 	
 	var fade_in_duration : float = 1.0
 	var fade_out_duration : float = 1.0
 	
 	func _init(n : Node,f : ColorRect,c : Node):
-		node = n
+		master_scene = n
 		fade = f
 		current_scene = c
 		
@@ -21,12 +21,12 @@ class SceneChanger extends ISceneChanger:
 	func fade_out():
 		fade.color.a = 0.0
 		fade.show()
-		var tween := node.create_tween()
+		var tween := master_scene.create_tween()
 		tween.tween_property(fade,"color:a",1.0,fade_out_duration)
 		yield(tween,"finished")
 		
 	func fade_in():
-		var tween = node.create_tween()
+		var tween = master_scene.create_tween()
 		tween.tween_property(fade,"color:a",0.0,fade_in_duration)
 		yield(tween,"finished")
 		fade.hide()
@@ -35,12 +35,13 @@ class SceneChanger extends ISceneChanger:
 	func _goto_scene_before(tscn_path : String):
 		yield(fade_out(),"completed")
 		if current_scene != null:
-			node.remove_child(current_scene)
+			current_scene._terminalize()
+			master_scene.remove_child(current_scene)
 			current_scene.free()
 		current_scene = load(tscn_path).instance()
 	
 	func _goto_scene_after():
-		node.add_child(current_scene)
+		master_scene.add_child(current_scene)
 		yield(fade_in(),"completed")
 		
 	
@@ -62,13 +63,13 @@ class SceneChanger extends ISceneChanger:
 		
 	func _goto_online_entrance_scene():
 		yield(_goto_scene_before("res://scenes/online/entrance_scene.tscn"),"completed")
-		(current_scene as OnlineEntranceScene).initialize(self)
+		(current_scene as OnlineEntranceScene).initialize(master_scene.online_server,self)
 		yield(_goto_scene_after(),"completed")
 
 
 
 var scene_changer : SceneChanger
-
+var online_server := OnlineServer.new()
 
 func _ready():
 	scene_changer = SceneChanger.new(self,$"%SceneFade",$TitleScene)

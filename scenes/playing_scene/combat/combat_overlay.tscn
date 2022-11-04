@@ -22,7 +22,7 @@ size = 30
 outline_size = 1
 font_data = ExtResource( 3 )
 
-[node name="CombatOverlay" type="Panel"]
+[node name="CombatOverlap" type="Panel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_pivot_offset = Vector2( 640, 360 )

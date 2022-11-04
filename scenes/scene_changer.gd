@@ -11,3 +11,8 @@ func _goto_build_scene():
 
 func _goto_online_entrance_scene():
 	pass
+
+
+class IScene extends Node:
+	func _teminalize():
+		pass

@@ -1,6 +1,6 @@
 # warning-ignore-all:return_value_discarded
 
-extends Node
+extends ISceneChanger.IScene
 
 class_name PlayingScene
 
@@ -23,10 +23,10 @@ onready var rival_discard_pos : Vector2 = $UILayer/RivalField/Discard.rect_globa
 onready var my_life := $TopUILayer/Control/MyLife
 onready var rival_life := $TopUILayer/Control/RivalLife
 
-onready var combat_overlay := $CombatLayer/CombatOverlay
+onready var combat_overlap := $"%CombatOverlap"
 
 var game_server : IGameServer = null
-var commander : ICpuCommander = null
+
 
 var round_count = 0
 var phase : int = IGameServer.Phase.COMBAT
@@ -68,7 +68,7 @@ func _ready():
 			$TopUILayer/Control/MyName,
 			my_life,
 			$"%MyNextEffect",
-			combat_overlay.p1_avatar,
+			combat_overlap.p1_avatar,
 			$TopUILayer/Control/MyDamage,
 			CombatPowerBalance.Interface.new($BGLayer/PowerBalance,false))
 	rival = PlayingPlayer.new(rival_deck,pd.rival_name,
@@ -79,13 +79,13 @@ func _ready():
 			$TopUILayer/Control/RivalName,
 			rival_life,
 			$"%RivalNextEffect",
-			combat_overlay.p2_avatar,
+			combat_overlap.p2_avatar,
 			$TopUILayer/Control/RivalDamage,
 			CombatPowerBalance.Interface.new($BGLayer/PowerBalance,true))
 
 	combat_director.initialize(myself,rival,
-			combat_overlay,$BGLayer/PowerBalance)
-	combat_overlay.visible = false
+			combat_overlap,$BGLayer/PowerBalance)
+	combat_overlap.visible = false
 	$"%CardList".large_card_view = $"%LargeCardView"
 	$"%ResultOverlap".hide()
 	
@@ -102,18 +102,17 @@ func initialize(server : IGameServer,changer : ISceneChanger):
 	game_server.connect("recieved_recovery_result",self,"_on_GameServer_recieved_recovery_result")
 	game_server.connect("recieved_end",self,"_on_GameServer_recieved_end")
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
-
-
+func _terminalize():
+	game_server.disconnect("recieved_first_data",self,"_on_GameServer_recieved_first_data")
+	game_server.disconnect("recieved_combat_result",self,"_on_GameServer_recieved_combat_result")
+	game_server.disconnect("recieved_recovery_result",self,"_on_GameServer_recieved_recovery_result")
+	game_server.disconnect("recieved_end",self,"_on_GameServer_recieved_end")
 
 
 func _on_GameServer_recieved_end(msg:String)->void:
-	$CombatLayer/ResultOverlap/RivalVeil.self_modulate = Color.gray
-	$CombatLayer/ResultOverlap/MyVeil.self_modulate = Color.gray
-	$CombatLayer/ResultOverlap/ResultLabel.text = msg
+	$"%ResultOverlap".get_node("RivalVeil").self_modulate = Color.gray
+	$"%ResultOverlap".get_node("MyVeil").self_modulate = Color.gray
+	$"%ResultOverlap".get_node("ResultLabel").text = msg
 	$"%ResultOverlap".show()
 	$TopUILayer/Control/SettingButton.disabled = true
 	return
@@ -142,17 +141,17 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData,_situatio
 		var mlife = data.myself.life - data.myself.damage
 		var rlife = data.rival.life - data.rival.damage
 		if mlife > rlife:
-			$CombatLayer/ResultOverlap/RivalVeil.self_modulate = Color.black
-			$CombatLayer/ResultOverlap/MyVeil.self_modulate = Color.white
-			$CombatLayer/ResultOverlap/ResultLabel.text = "Win"
+			$"%ResultOverlap".get_node("RivalVeil").self_modulate = Color.black
+			$"%ResultOverlap".get_node("MyVeil").self_modulate = Color.white
+			$"%ResultOverlap".get_node("ResultLabel").text = "Win"
 		elif mlife < rlife:
-			$CombatLayer/ResultOverlap/RivalVeil.self_modulate = Color.white
-			$CombatLayer/ResultOverlap/MyVeil.self_modulate = Color.black
-			$CombatLayer/ResultOverlap/ResultLabel.text = "Lose"
+			$"%ResultOverlap".get_node("RivalVeil").self_modulate = Color.white
+			$"%ResultOverlap".get_node("MyVeil").self_modulate = Color.black
+			$"%ResultOverlap".get_node("ResultLabel").text = "Lose"
 		else:
-			$CombatLayer/ResultOverlap/RivalVeil.self_modulate = Color.gray
-			$CombatLayer/ResultOverlap/MyVeil.self_modulate = Color.gray
-			$CombatLayer/ResultOverlap/ResultLabel.text = "Draw"
+			$"%ResultOverlap".get_node("RivalVeil").self_modulate = Color.gray
+			$"%ResultOverlap".get_node("MyVeil").self_modulate = Color.gray
+			$"%ResultOverlap".get_node("ResultLabel").text = "Draw"
 		$"%ResultOverlap".show()
 		$TopUILayer/Control/SettingButton.disabled = true
 		return

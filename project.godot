@@ -169,7 +169,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/game_server/offline_server.gd"
 }, {
-"base": "Node",
+"base": "",
 "class": "OnlineEntranceScene",
 "language": "GDScript",
 "path": "res://scenes/online/entrance_scene.gd"
@@ -189,7 +189,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scenes/playing_scene/playing_player.gd"
 }, {
-"base": "Node",
+"base": "",
 "class": "PlayingScene",
 "language": "GDScript",
 "path": "res://scenes/playing_scene/playing_scene.gd"
@@ -204,7 +204,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/game_processor/processor_player_data.gd"
 }, {
-"base": "Control",
+"base": "",
 "class": "SelectEditDeckScene",
 "language": "GDScript",
 "path": "res://scenes/deck_scene/select_edit_scene.gd"
@@ -219,7 +219,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/game_data/skill_data.gd"
 }, {
-"base": "Node",
+"base": "",
 "class": "TitleScene",
 "language": "GDScript",
 "path": "res://scenes/title_scene.gd"

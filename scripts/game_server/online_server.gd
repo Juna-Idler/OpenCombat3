@@ -34,8 +34,6 @@ func terminalize():
 	_client.disconnect_from_host()
 
 func send_match(name :String, deck :Array, regulation :String):
-	if not is_connecting:
-		return
 	var send := """{"type":"Match","data":{"regulation":"%s","name":"%s","deck":[%s]}}"""\
 			% [regulation,name,PoolStringArray(deck).join(",")]
 	_client.get_peer(1).put_packet(send.to_utf8())
@@ -131,7 +129,7 @@ func _send_recovery_select(round_count:int,index:int,hands_order:Array = []):
 
 
 func _send_surrender():
-	var send := """{"type":"Surrender","data":{}}"""
+	var send := """{"type":"End","data":{"msg":"Surrender"}}"""
 	_client.get_peer(1).put_packet(send.to_utf8())
 
 

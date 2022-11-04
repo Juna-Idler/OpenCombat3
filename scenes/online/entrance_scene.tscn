@@ -1,8 +1,7 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=1]
 [ext_resource path="res://scenes/deck_scene/banner.tscn" type="PackedScene" id=2]
-[ext_resource path="res://scripts/game_server/online_node.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/deck_scene/select_use_scene.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scenes/online/entrance_scene.gd" type="Script" id=5]
 
@@ -67,11 +66,7 @@ flat = true
 [node name="DeckSelectScene" parent="." instance=ExtResource( 4 )]
 visible = false
 
-[node name="OnlineServer" parent="." instance=ExtResource( 3 )]
-
 [connection signal="pressed" from="Panel/Matching" to="." method="_on_Matching_pressed"]
 [connection signal="pressed" from="Panel/ButtonBack" to="." method="_on_ButtonBack_pressed"]
 [connection signal="pressed" from="Panel/DeckBanner/ButtonDeckChange" to="." method="_on_ButtonDeckChange_pressed"]
 [connection signal="decided" from="DeckSelectScene" to="." method="_on_DeckSelectScene_decided"]
-[connection signal="connected" from="OnlineServer" to="." method="_on_OnlineServer_connected"]
-[connection signal="matched" from="OnlineServer" to="." method="_on_OnlineServer_matched"]
