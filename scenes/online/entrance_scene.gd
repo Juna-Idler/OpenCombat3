@@ -54,6 +54,7 @@ func _on_Server_connected():
 	pass
 	
 func _on_Server_matched():
+	scene_changer._goto_online_playing_scene(server)
 	pass
 	
 func _on_Server_disconnected():

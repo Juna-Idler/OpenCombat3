@@ -17,13 +17,7 @@ func _terminalize():
 
 
 func _on_CpuButton_pressed():
-	var offline := OfflineServer.new("Tester",Global.card_catalog)
-	var deck = []
-	for i in range(30):
-		deck.append(i+1)
-	offline.standby_single(deck,0)
-	
-	scene_changer._goto_playing_scene(offline)
+	scene_changer._goto_offline_playing_scene()
 
 func _on_ButtonVSOnline_pressed():
 	scene_changer._goto_online_entrance_scene()

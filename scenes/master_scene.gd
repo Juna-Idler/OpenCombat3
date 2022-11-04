@@ -39,15 +39,15 @@ class SceneChanger extends ISceneChanger:
 			master_scene.remove_child(current_scene)
 			current_scene.free()
 		current_scene = load(tscn_path).instance()
+		master_scene.add_child(current_scene)
 	
 	func _goto_scene_after():
-		master_scene.add_child(current_scene)
 		yield(fade_in(),"completed")
 		
 	
-	func _goto_playing_scene(server : IGameServer):
-		yield(_goto_scene_before("res://scenes/playing_scene/playing_scene.tscn"),"completed")
-		(current_scene as PlayingScene).initialize(server,self)
+	func _goto_offline_playing_scene():
+		yield(_goto_scene_before("res://scenes/offline/playing_scene.tscn"),"completed")
+		(current_scene as OfflinePlayingScene).initialize(self)
 		yield(_goto_scene_after(),"completed")
 
 	func _goto_title_scene():
@@ -64,6 +64,11 @@ class SceneChanger extends ISceneChanger:
 	func _goto_online_entrance_scene():
 		yield(_goto_scene_before("res://scenes/online/entrance_scene.tscn"),"completed")
 		(current_scene as OnlineEntranceScene).initialize(master_scene.online_server,self)
+		yield(_goto_scene_after(),"completed")
+
+	func _goto_online_playing_scene(server : IGameServer):
+		yield(_goto_scene_before("res://scenes/online/playing_scene.tscn"),"completed")
+		(current_scene as OnlinePlayingScene).initialize(server,self)
 		yield(_goto_scene_after(),"completed")
 
 

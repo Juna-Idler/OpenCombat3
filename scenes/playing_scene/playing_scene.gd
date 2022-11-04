@@ -1,10 +1,10 @@
 # warning-ignore-all:return_value_discarded
 
-extends ISceneChanger.IScene
+extends Node
 
 class_name PlayingScene
 
-var scene_changer : ISceneChanger
+signal ended(situation,msg)
 
 const Card = preload("../card/card.tscn")
 
@@ -36,14 +36,16 @@ var rival : PlayingPlayer
 var combat_director : CombatDirector = CombatDirector.new()
 
 func _ready():
-	if game_server == null:
-		var offline := OfflineServer.new("Tester",Global.card_catalog)
-		var deck = []
-		for i in range(27):
-			deck.append(i+1)
-		offline.standby_single(deck,0)
-		initialize(offline,null)
+	pass
 
+
+func initialize(server : IGameServer):
+	game_server = server
+	game_server.connect("recieved_first_data",self,"_on_GameServer_recieved_first_data")
+	game_server.connect("recieved_combat_result",self,"_on_GameServer_recieved_combat_result")
+	game_server.connect("recieved_recovery_result",self,"_on_GameServer_recieved_recovery_result")
+	game_server.connect("recieved_end",self,"_on_GameServer_recieved_end")
+	
 	var pd := game_server._get_primary_data()
 	var my_deck := []
 	for i in pd.my_deck_list.size():
@@ -87,22 +89,14 @@ func _ready():
 			combat_overlap,$BGLayer/PowerBalance)
 	combat_overlap.visible = false
 	$"%CardList".large_card_view = $"%LargeCardView"
-	$"%ResultOverlap".hide()
-	
+
+
+func send_ready():
 	game_server._send_ready()
-	
 
-func initialize(server : IGameServer,changer : ISceneChanger):
-	
-	scene_changer = changer
 
-	game_server = server
-	game_server.connect("recieved_first_data",self,"_on_GameServer_recieved_first_data")
-	game_server.connect("recieved_combat_result",self,"_on_GameServer_recieved_combat_result")
-	game_server.connect("recieved_recovery_result",self,"_on_GameServer_recieved_recovery_result")
-	game_server.connect("recieved_end",self,"_on_GameServer_recieved_end")
 
-func _terminalize():
+func terminalize():
 	game_server.disconnect("recieved_first_data",self,"_on_GameServer_recieved_first_data")
 	game_server.disconnect("recieved_combat_result",self,"_on_GameServer_recieved_combat_result")
 	game_server.disconnect("recieved_recovery_result",self,"_on_GameServer_recieved_recovery_result")
@@ -110,10 +104,7 @@ func _terminalize():
 
 
 func _on_GameServer_recieved_end(msg:String)->void:
-	$"%ResultOverlap".get_node("RivalVeil").self_modulate = Color.gray
-	$"%ResultOverlap".get_node("MyVeil").self_modulate = Color.gray
-	$"%ResultOverlap".get_node("ResultLabel").text = msg
-	$"%ResultOverlap".show()
+	emit_signal("ended",-2,msg)
 	$TopUILayer/Control/SettingButton.disabled = true
 	return
 
@@ -126,33 +117,26 @@ func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
 	rival.draw(data.rival.hand)
 
 
-func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData,_situation:int):
+func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 	var tween := create_tween()
 	myself.play(data.myself.select,data.myself.hand,data.myself.damage,tween)
 	rival.play(data.rival.select,data.rival.hand,data.rival.damage,tween)
 	yield(tween,"finished")
 
-	yield(combat_director.perform(self,data.next_phase == IGameServer.Phase.GAMEFINISH),"completed")
+	yield(combat_director.perform(self,data.next_phase == IGameServer.Phase.GAME_END),"completed")
 
-	if data.next_phase == IGameServer.Phase.GAMEFINISH:
+	if data.next_phase == IGameServer.Phase.GAME_END:
 		round_count = data.round_count
 		phase = data.next_phase
 		
 		var mlife = data.myself.life - data.myself.damage
 		var rlife = data.rival.life - data.rival.damage
 		if mlife > rlife:
-			$"%ResultOverlap".get_node("RivalVeil").self_modulate = Color.black
-			$"%ResultOverlap".get_node("MyVeil").self_modulate = Color.white
-			$"%ResultOverlap".get_node("ResultLabel").text = "Win"
+			emit_signal("ended",1,"win")
 		elif mlife < rlife:
-			$"%ResultOverlap".get_node("RivalVeil").self_modulate = Color.white
-			$"%ResultOverlap".get_node("MyVeil").self_modulate = Color.black
-			$"%ResultOverlap".get_node("ResultLabel").text = "Lose"
+			emit_signal("ended",-1,"lose")
 		else:
-			$"%ResultOverlap".get_node("RivalVeil").self_modulate = Color.gray
-			$"%ResultOverlap".get_node("MyVeil").self_modulate = Color.gray
-			$"%ResultOverlap".get_node("ResultLabel").text = "Draw"
-		$"%ResultOverlap".show()
+			emit_signal("ended",0,"draw")
 		$TopUILayer/Control/SettingButton.disabled = true
 		return
 
@@ -287,6 +271,4 @@ func _on_SettingsScene_pressed_surrender():
 	game_server._send_surrender()
 
 
-func _on_ReturnButton_pressed():
-	scene_changer._goto_title_scene()
 

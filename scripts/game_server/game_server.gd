@@ -14,13 +14,13 @@ signal recieved_first_data(first_data)
 # server.connect("recieved_first_data",self,"_on_GameServer_recieved_first_data")
 
 signal recieved_combat_result(data)
-# func _on_GameServer_recieved_combat_result(data:UpdateData,situation:int)->void:
+# func _on_GameServer_recieved_combat_result(data:UpdateData)->void:
 # server.connect("recieved_combat_result",self,"_on_GameServer_recieved_combat_result")
 signal recieved_recovery_result(data)
 # func _on_GameServer_recieved_recovery_result(data:UpdateData)->void:
 # server.connect("recieved_recovery_result",self,"_on_GameServer_recieved_recovery_result")
 
-enum  Phase {GAMEFINISH = -1,COMBAT = 0,RECOVERY = 1}
+enum  Phase {GAME_END = -1,COMBAT = 0,RECOVERY = 1}
 enum  Situation {INFERIOR = -1,EVEN = 0,SUPERIOR = 1}
 
 

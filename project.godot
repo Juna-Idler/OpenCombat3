@@ -164,6 +164,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scenes/playing_scene/next_effect.gd"
 }, {
+"base": "",
+"class": "OfflinePlayingScene",
+"language": "GDScript",
+"path": "res://scenes/offline/playing_scene.gd"
+}, {
 "base": "IGameServer",
 "class": "OfflineServer",
 "language": "GDScript",
@@ -173,6 +178,11 @@ _global_script_classes=[ {
 "class": "OnlineEntranceScene",
 "language": "GDScript",
 "path": "res://scenes/online/entrance_scene.gd"
+}, {
+"base": "",
+"class": "OnlinePlayingScene",
+"language": "GDScript",
+"path": "res://scenes/online/playing_scene.gd"
 }, {
 "base": "IGameServer",
 "class": "OnlineServer",
@@ -189,7 +199,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scenes/playing_scene/playing_player.gd"
 }, {
-"base": "",
+"base": "Node",
 "class": "PlayingScene",
 "language": "GDScript",
 "path": "res://scenes/playing_scene/playing_scene.gd"
@@ -261,8 +271,10 @@ _global_script_class_icons={
 "NamedSkillPerformer": "",
 "NamedSkillProcessor": "",
 "NextEffectLabel": "",
+"OfflinePlayingScene": "",
 "OfflineServer": "",
 "OnlineEntranceScene": "",
+"OnlinePlayingScene": "",
 "OnlineServer": "",
 "PlainTextResource": "",
 "PlayingPlayer": "",

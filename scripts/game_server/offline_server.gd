@@ -59,7 +59,7 @@ func _send_combat_select(round_count:int,index:int,hands_order:Array = []):
 
 	_processor.combat(index,index2)
 
-	var phase : int = (Phase.GAMEFINISH if _processor.phase < 0
+	var phase : int = (Phase.GAME_END if _processor.phase < 0
 			else Phase.COMBAT if _processor.phase & 1 == 0
 			else Phase.RECOVERY)
 	if phase == Phase.COMBAT:
@@ -76,7 +76,7 @@ func _send_combat_select(round_count:int,index:int,hands_order:Array = []):
 	elif phase == Phase.RECOVERY:
 		if not _processor.player2.is_recovery():
 			_result = _commander._recover_select(p2update)
-	emit_signal("recieved_combat_result", p1update,_processor.situation)
+	emit_signal("recieved_combat_result", p1update)
 
 
 func _send_recovery_select(round_count:int,index:int,hands_order:Array = []):
@@ -90,7 +90,7 @@ func _send_recovery_select(round_count:int,index:int,hands_order:Array = []):
 
 	_processor.recover(index,index2)
 
-	var phase : int = (Phase.GAMEFINISH if _processor.phase < 0
+	var phase : int = (Phase.GAME_END if _processor.phase < 0
 			else Phase.COMBAT if _processor.phase & 1 == 0
 			else Phase.RECOVERY)
 	if phase == Phase.COMBAT:

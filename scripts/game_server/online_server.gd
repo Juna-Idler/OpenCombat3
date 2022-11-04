@@ -50,7 +50,8 @@ func _connected(proto = ""):
 
 
 func _on_data():
-	var j := JSON.parse(_client.get_peer(1).get_packet().get_string_from_utf8())
+	var json_string = _client.get_peer(1).get_packet().get_string_from_utf8()
+	var j := JSON.parse(json_string)
 	if j.error != OK or not j.result is Dictionary:
 		return
 	var type = (j.result as Dictionary).get("type")
@@ -87,10 +88,10 @@ func _on_data():
 			for ua in (r["u"] as Array):
 				ru.append(IGameServer.UpdateData.Updated.new(ua))
 			var myself := IGameServer.UpdateData.PlayerData.new(y["h"],y["s"],
-					yu,y["np"],y["nh"],y["nb"],y["dc"],y["d"],y["l"])
+					yu,y["n"][0],y["n"][1],y["n"][2],y["dc"],y["d"],y["l"])
 			var rival := IGameServer.UpdateData.PlayerData.new(r["h"],r["s"],
-					ru,r["np"],r["nh"],r["nb"],r["dc"],r["d"],r["l"])
-			var update = IGameServer.UpdateData.new(data["r"],data["n"],data["s"],myself,rival)
+					ru,r["n"][0],r["n"][1],r["n"][2],r["dc"],r["d"],r["l"])
+			var update := IGameServer.UpdateData.new(data["rc"],data["np"],data["ls"],myself,rival)
 			if type == "Combat":
 				emit_signal("recieved_combat_result",update)
 			else:

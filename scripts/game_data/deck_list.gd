@@ -14,6 +14,11 @@ func _init():
 const file_path := "user://deck_list.json"
 
 
+func get_online_deck():
+	if online_deck < 0 or online_deck >= list.size():
+		return null
+	return list[online_deck]
+
 
 func save_deck_list():
 	var f = File.new()
