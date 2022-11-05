@@ -2,7 +2,7 @@ extends IGameServer
 
 class_name OnlineServer
 
-
+signal connecting()
 signal connected()
 signal matched()
 signal disconnected()
@@ -12,7 +12,7 @@ var _primary_data :IGameServer.PrimaryData = null
 
 var _client := WebSocketClient.new()
 var version_string : String
-var is_connecting := false
+var is_ws_connected := false
 
 func _init():
 	_client.connect("connection_closed", self, "_closed")
@@ -22,12 +22,13 @@ func _init():
 
 
 func initialize(url : String,ver : String, protocols = PoolStringArray()) -> bool:
-	is_connecting = false
+	is_ws_connected = false
 	version_string = ver
 	_primary_data = null
 	var err = _client.connect_to_url(url,protocols)
 	if err != OK:
 		return false
+	emit_signal("connecting")
 	return true
 
 func terminalize():
@@ -40,7 +41,7 @@ func send_match(name :String, deck :Array, regulation :String):
 
 
 func _closed(was_clean = false):
-	is_connecting = false
+	is_ws_connected = false
 	_primary_data = null
 	emit_signal("disconnected")	
 
@@ -62,7 +63,7 @@ func _on_data():
 	match (type):
 		"Version":
 			if data["result"]:
-				is_connecting = true
+				is_ws_connected = true
 				emit_signal("connected")
 			else:
 				terminalize()

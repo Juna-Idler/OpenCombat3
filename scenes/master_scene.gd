@@ -40,6 +40,7 @@ class SceneChanger extends ISceneChanger:
 			current_scene.free()
 		current_scene = load(tscn_path).instance()
 		master_scene.add_child(current_scene)
+		master_scene.move_child(current_scene,0)
 	
 	func _goto_scene_after():
 		yield(fade_in(),"completed")
@@ -81,3 +82,9 @@ func _ready():
 	$TitleScene.scene_changer = scene_changer
 	$"%SceneFade".hide()
 	pass
+
+func _unhandled_input(event):
+	var key := event as InputEventKey
+	if key and key.scancode == KEY_S and key.pressed:
+		$"%Camera2D".shake()
+

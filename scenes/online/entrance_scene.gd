@@ -16,8 +16,11 @@ func initialize(s : OnlineServer,changer : ISceneChanger):
 	server.connect("matched",self,"_on_Server_matched")
 	server.connect("disconnected",self,"_on_Server_disconnected")
 
-	if not server.is_connecting:
+	if not server.is_ws_connected:
 		server.initialize(websocket_url,Global.card_catalog.version)
+	else:
+		$Panel/Matching.disabled = false
+		
 
 func _terminalize():
 	server.disconnect("connected",self,"_on_Server_connected")

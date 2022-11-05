@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://scenes/title_scene.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/online_node.gd" type="Script" id=2]
 [ext_resource path="res://scenes/master_scene.gd" type="Script" id=3]
+[ext_resource path="res://camera2d.tscn" type="PackedScene" id=4]
 
 [node name="MasterScene" type="Node"]
 script = ExtResource( 3 )
@@ -21,3 +22,6 @@ color = Color( 0, 0, 0, 1 )
 
 [node name="OnlineNode" type="Node" parent="."]
 script = ExtResource( 2 )
+
+[node name="Camera2D" parent="." instance=ExtResource( 4 )]
+unique_name_in_owner = true

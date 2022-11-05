@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://scenes/card/large_card_view.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/ui/clickable_control.gd" type="Script" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://scenes/playing_scene/card_list.tscn" type="PackedScene" id=9]
 [ext_resource path="res://scenes/settings scene.tscn" type="PackedScene" id=10]
 [ext_resource path="res://scenes/playing_scene/next_effect.tscn" type="PackedScene" id=11]
+[ext_resource path="res://camera2d.tscn" type="PackedScene" id=12]
 
 [sub_resource type="StyleBoxFlat" id=4]
 bg_color = Color( 1, 1, 1, 0.498039 )
@@ -350,6 +351,11 @@ visible = false
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.5
 one_shot = true
+
+[node name="Camera2D" parent="." instance=ExtResource( 12 )]
+unique_name_in_owner = true
+anchor_mode = 1
+current = false
 
 [connection signal="clicked" from="UILayer/MyField/Stock" to="." method="_on_MyStack_clicked"]
 [connection signal="clicked_card" from="UILayer/MyField/HandArea" to="." method="_on_MyHandArea_clicked_card"]
