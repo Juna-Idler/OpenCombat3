@@ -77,6 +77,7 @@ script = ExtResource( 5 )
 
 [node name="UILayer" type="CanvasLayer" parent="."]
 layer = -1
+follow_viewport_enable = true
 
 [node name="MyField" type="Node" parent="UILayer"]
 
@@ -202,6 +203,7 @@ script = ExtResource( 2 )
 
 [node name="BGLayer" type="CanvasLayer" parent="."]
 layer = 0
+follow_viewport_enable = true
 
 [node name="PowerBalance" parent="BGLayer" instance=ExtResource( 6 )]
 visible = false
@@ -209,9 +211,11 @@ margin_top = 128.0
 margin_bottom = -128.0
 
 [node name="CardLayer" type="CanvasLayer" parent="."]
+follow_viewport_enable = true
 
 [node name="TopUILayer" type="CanvasLayer" parent="."]
 layer = 3
+follow_viewport_enable = true
 
 [node name="Control" type="Control" parent="TopUILayer"]
 anchor_right = 1.0
@@ -322,6 +326,7 @@ valign = 0
 
 [node name="OverlapLayer" type="CanvasLayer" parent="."]
 layer = 4
+follow_viewport_enable = true
 
 [node name="CombatOverlap" parent="OverlapLayer" instance=ExtResource( 4 )]
 unique_name_in_owner = true

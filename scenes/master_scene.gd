@@ -78,8 +78,8 @@ var scene_changer : SceneChanger
 onready var online_server : OnlineServer = $OnlineNode.server
 
 func _ready():
-	scene_changer = SceneChanger.new(self,$"%SceneFade",$TitleScene)
-	$TitleScene.scene_changer = scene_changer
+	scene_changer = SceneChanger.new(self,$"%SceneFade",$"%TitleScene")
+	$"%TitleScene".scene_changer = scene_changer
 	$"%SceneFade".hide()
 	pass
 
