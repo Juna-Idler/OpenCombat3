@@ -1,3 +1,5 @@
+# warning-ignore-all:return_value_discarded
+
 extends ISceneChanger.IScene
 
 class_name OnlineEntranceScene
@@ -5,6 +7,8 @@ class_name OnlineEntranceScene
 var scene_changer : ISceneChanger
 
 export var websocket_url := "https://127.0.0.1:8080"
+
+#export var websocket_url := "https://opencombat3.onrender.com:8080"
 
 onready var server : OnlineServer
 

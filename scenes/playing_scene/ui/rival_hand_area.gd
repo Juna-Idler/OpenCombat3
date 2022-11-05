@@ -1,5 +1,6 @@
-extends Control
+# warning-ignore-all:return_value_discarded
 
+extends Control
 
 const ClickableCardControl = preload("clickable_card_control.tscn")
 

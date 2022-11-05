@@ -1,3 +1,5 @@
+# warning-ignore-all:return_value_discarded
+
 class_name CombatDirector
 
 
@@ -48,10 +50,6 @@ func perform(node : Node,lethal : bool):
 	power_balance.initialize()
 	var p1_card := player1.deck_list[player1.playing_card_id] as Card
 	var p2_card := player2.deck_list[player2.playing_card_id] as Card
-	var p1_link_color := 0 if player1.played.empty() else\
-			 player1.deck_list[player1.played.back()].front.data.color
-	var p2_link_color := 0 if player2.played.empty() else\
-			 player2.deck_list[player2.played.back()].front.data.color
 
 	overlay.modulate = Color(1,1,1,0)
 	overlay.visible = true
@@ -169,7 +167,6 @@ func _before_skills_effect(tween : SceneTreeTween):
 		var skill := named_skills.get_skill(s.skill.data.id)
 		if skill._test_before(s.skill,s.myself,s.rival):
 			tween.tween_callback(s.skill_line,"highlight_flash",[Color.blue,0.2,0.6,0.2])
-			var move_pos = Vector2(s.skill_line.global_position.x,360)
 			tween.tween_callback(s.skill_line,"move_and_remove",[0.3,0.5,0.2])
 			tween.tween_interval(0.4)
 			skill._before(tween,s.skill,s.myself,s.rival)
@@ -198,7 +195,6 @@ func _engaged_skills_effect(tween : SceneTreeTween,situation : int) -> int:
 		var skill := named_skills.get_skill(s.skill.data.id)
 		if skill._test_engaged(s.skill,s.situation,s.myself,s.rival):
 			tween.tween_callback(s.skill_line,"highlight_flash",[Color.blue,0.2,0.6,0.2])
-			var move_pos = Vector2(s.skill_line.global_position.x,360)
 			tween.tween_callback(s.skill_line,"move_and_remove",[0.3,0.5,0.2])
 			tween.tween_interval(0.4)
 			situation = skill._engaged(tween,s.skill,s.situation,s.myself,s.rival)
@@ -228,7 +224,6 @@ func _after_skills_effect(tween : SceneTreeTween,situation : int):
 		var skill := named_skills.get_skill(s.skill.data.id)
 		if skill._test_after(s.skill,s.situation,s.myself,s.rival):
 			tween.tween_callback(s.skill_line,"highlight_flash",[Color.blue,0.2,0.6,0.2])
-			var move_pos = Vector2(s.skill_line.global_position.x,360)
 			tween.tween_callback(s.skill_line,"move_and_remove",[0.3,0.5,0.2])
 			tween.tween_interval(0.4)
 			skill._after(tween,s.skill,s.situation,s.myself,s.rival)
@@ -257,7 +252,6 @@ func _end_skills_effect(tween : SceneTreeTween,situation : int):
 		var skill := named_skills.get_skill(s.skill.data.id)
 		if skill._test_end(s.skill,s.situation,s.myself,s.rival):
 			tween.tween_callback(s.skill_line,"highlight_flash",[Color.blue,0.2,0.6,0.2])
-			var move_pos = Vector2(s.skill_line.global_position.x,360)
 			tween.tween_callback(s.skill_line,"move_and_remove",[0.3,0.5,0.2])
 			tween.tween_interval(0.4)
 			skill._end(tween,s.skill,s.situation,s.myself,s.rival)

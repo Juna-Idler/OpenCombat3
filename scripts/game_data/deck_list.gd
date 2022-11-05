@@ -8,6 +8,7 @@ var selected : int
 
 
 func _init():
+# warning-ignore:return_value_discarded
 	load_deck_list()
 	selected = online_deck
 

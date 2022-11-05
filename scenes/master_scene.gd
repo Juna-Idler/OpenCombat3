@@ -22,6 +22,7 @@ class SceneChanger extends ISceneChanger:
 		fade.color.a = 0.0
 		fade.show()
 		var tween := master_scene.create_tween()
+# warning-ignore:return_value_discarded
 		tween.tween_property(fade,"color:a",1.0,fade_out_duration)
 		yield(tween,"finished")
 		

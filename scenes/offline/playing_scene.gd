@@ -15,6 +15,7 @@ func initialize(changer : ISceneChanger):
 	offline_server = OfflineServer.new("Tester",Global.card_catalog)
 
 	var deck = Global.deck_list.get_online_deck()
+# warning-ignore:return_value_discarded
 	offline_server.standby_single(deck.cards,0)
 	
 	scene_changer = changer

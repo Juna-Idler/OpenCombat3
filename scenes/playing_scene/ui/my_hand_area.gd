@@ -43,7 +43,7 @@ func set_hand_card(cards : Array):
 	var new_count := cards.size()
 	hands = cards
 	if new_count > controls.size():
-		for i in range(new_count - controls.size()):
+		for _i in range(new_count - controls.size()):
 			var c := HandSelectControl.instance()
 			c.index = controls.size()
 			c.connect("slid_card",self,"_on_slid_card")

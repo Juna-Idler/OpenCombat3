@@ -1,3 +1,5 @@
+# warning-ignore-all:return_value_discarded
+
 extends Control
 
 signal closed(deck,updated)
@@ -83,25 +85,25 @@ func align_move():
 func _on_tween_finished():
 	moving = false
 		
-func _on_DeckItem_dragged(_self,pos):
+func _on_DeckItem_dragged(_self,_pos):
 	_self.modulate.a = 0.25
 	mover.initialize_card(_self.get_node("CardFront").data)
 	var gp = _self.rect_global_position
 	mover.rect_global_position = gp + Vector2(deck_item_width - 144,deck_item_height - 216)/2
 	mover.visible = true
 	
-func _on_DeckItem_dragging(_self,relative_pos,start_pos):
+func _on_DeckItem_dragging(_self,relative_pos,_start_pos):
 	var gp = _self.rect_global_position
 	mover.rect_global_position = gp + relative_pos + Vector2(deck_item_width - 144,deck_item_height - 216)/2
 
-func _on_DeckItem_dropped(_self,relative_pos,start_pos):
-	var g_drop_pos = _self.rect_global_position + relative_pos
+func _on_DeckItem_dropped(_self,relative_pos,_start_pos):
+#	var g_drop_pos = _self.rect_global_position + relative_pos
 	var x_skip : int = relative_pos.x / (deck_item_width + deck_item_x_space)
-	var y_skip : int = floor((relative_pos.y + deck_item_height/2) / float(y_step))
+	var y_skip : int = int(floor((relative_pos.y + deck_item_height/2) / float(y_step)))
 
 	var old_index : int = deck_container.get_children().find(_self)
 	var new_index : int = old_index + x_skip + y_skip * deck_item_x_count
-	new_index = max(min(new_index,deck_container.get_child_count()-1),0)
+	new_index = int(max(min(new_index,deck_container.get_child_count()-1),0))
 
 	if old_index != new_index:
 		deck_container.move_child(_self,new_index)
@@ -128,7 +130,7 @@ func _on_DeckItem_mouse_entered(item):
 	mover.rect_global_position = gp
 	mover.visible = true
 	
-func _on_DeckItem_mouse_exited(item):
+func _on_DeckItem_mouse_exited(_item):
 	mover.visible = false
 
 

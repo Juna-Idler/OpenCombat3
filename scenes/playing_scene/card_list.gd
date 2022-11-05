@@ -1,3 +1,5 @@
+# warning-ignore-all:return_value_discarded
+
 extends "res://scenes/ui/clickable_control.gd"
 
 

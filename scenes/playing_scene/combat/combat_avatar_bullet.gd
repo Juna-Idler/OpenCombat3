@@ -1,3 +1,5 @@
+# warning-ignore-all:return_value_discarded
+
 extends Area2D
 
 class_name CombatAvatarBullet
@@ -31,5 +33,5 @@ func vanish():
 		emit_signal("vanished",self)
 
 
-func _on_Bullet_area_entered(area):
+func _on_Bullet_area_entered(_area):
 	emit_signal("hit",self)

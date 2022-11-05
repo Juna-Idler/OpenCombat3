@@ -1,3 +1,5 @@
+# warning-ignore-all:return_value_discarded
+
 tool
 extends Node2D
 
@@ -40,8 +42,6 @@ func set_skill(skill : SkillData.NamedSkill,vs_color:int,link_color:int):
 	$Highlight.modulate = Color.black
 	$Background/Label.text = Global.card_catalog.get_skill_short_string(skill)
 
-	var left = $Background/ColorRectLeft
-	var right = $Background/ColorRectRight
 	if skill.condition & SkillData.ColorCondition.VS_FLAG:
 		$Background/ColorRectRight.visible = false
 		$Background/ColorRectLeft.visible = true

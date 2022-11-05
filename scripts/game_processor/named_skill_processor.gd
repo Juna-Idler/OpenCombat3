@@ -60,9 +60,10 @@ class Reinforce extends Skill:
 class Rush extends Skill:
 	func _after_priority() -> int:
 		return 1
-	func _process_after(skill : SkillData.NamedSkill,situation : int,
-			myself : ProcessorPlayerData,rival : ProcessorPlayerData) -> void:
+	func _process_after(_skill : SkillData.NamedSkill,situation : int,
+			_myself : ProcessorPlayerData,rival : ProcessorPlayerData) -> void:
 		if situation > 0:
+# warning-ignore:integer_division
 			rival.add_damage((rival.get_current_block() + 1) / 2)
 
 
@@ -87,7 +88,7 @@ class Charge extends Skill:
 class Isolate extends Skill:
 	func _engaged_priority() -> int:
 		return 255
-	func _process_engaged(_skill : SkillData.NamedSkill,situation : int,
+	func _process_engaged(_skill : SkillData.NamedSkill,_situation : int,
 			myself : ProcessorPlayerData,_rival : ProcessorPlayerData) -> int:
 		myself.add_damage(1)
 		return 0

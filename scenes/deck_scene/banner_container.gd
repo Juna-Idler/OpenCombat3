@@ -14,6 +14,7 @@ func _ready():
 	
 	for i in Global.deck_list.list.size():
 		var b = Banner.instance()
+		b.focus_mode = Control.FOCUS_ALL
 		var db = b.get_node("DeckBanner").initialize(Global.deck_list.list[i])
 		b.connect("clicked",self,"_on_Banner_clicked",[db])
 		$Container.add_child(b)
@@ -50,6 +51,7 @@ func append(deck_data : DeckData):
 		db.set_frame_color(Color.white)
 	
 	var b = Banner.instance()
+	b.focus_mode = Control.FOCUS_ALL
 	var db = b.get_node("DeckBanner").initialize(deck_data)
 	b.connect("clicked",self,"_on_Banner_clicked",[db])
 	$Container.add_child(b)

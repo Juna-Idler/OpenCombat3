@@ -21,12 +21,13 @@ func initialize(name:String,card_catalog):
 	_processor = GameProcessor.new(card_catalog)
 	_player_name = name;
 
-func standby_single(deck:Array,enemy_id:int) -> bool:
+func standby_single(deck:Array,_enemy_id:int) -> bool:
 	var edeck := []
 	for i in 27:
 		edeck.append(i + 1)
 	edeck.shuffle()
 	_commander = ZeroCommander.new()
+# warning-ignore:return_value_discarded
 	_processor.standby(deck,4,true,edeck,4,false)
 	return true
 
@@ -50,6 +51,7 @@ func _send_ready():
 
 func _send_combat_select(round_count:int,index:int,hands_order:Array = []):
 	var index2 = _result
+# warning-ignore:integer_division
 	if int(_processor.phase / 2) + 1 != round_count:
 		return
 	if _processor.phase & 1 != 0:
@@ -81,7 +83,8 @@ func _send_combat_select(round_count:int,index:int,hands_order:Array = []):
 
 func _send_recovery_select(round_count:int,index:int,hands_order:Array = []):
 	var index2 = _result
-	if int(_processor.phase / 2) + 1 != round_count:
+# warning-ignore:integer_division
+	if _processor.phase / 2 + 1 != round_count:
 		return
 	if _processor.phase & 1 == 0:
 		return

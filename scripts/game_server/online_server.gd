@@ -1,3 +1,5 @@
+# warning-ignore-all:return_value_discarded
+
 extends IGameServer
 
 class_name OnlineServer
@@ -40,12 +42,12 @@ func send_match(name :String, deck :Array, regulation :String):
 	_client.get_peer(1).put_packet(send.to_utf8())
 
 
-func _closed(was_clean = false):
+func _closed(_was_clean = false):
 	is_ws_connected = false
 	_primary_data = null
 	emit_signal("disconnected")	
 
-func _connected(proto = ""):
+func _connected(_proto = ""):
 	var send := """{"type":"Version","data":{"version":"%s"}}""" % version_string
 	_client.get_peer(1).put_packet(send.to_utf8())
 

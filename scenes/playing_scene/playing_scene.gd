@@ -175,8 +175,6 @@ func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
 	myself.recover(data.myself.select,data.myself.hand,data.myself.draw,tween)
 	tween.parallel()
 	rival.recover(data.rival.select,data.rival.hand,data.rival.draw,tween)
-	tween.tween_callback(myself,"change_damage",[true])
-	tween.tween_callback(rival,"change_damage",[true])
 
 #
 	round_count = data.round_count

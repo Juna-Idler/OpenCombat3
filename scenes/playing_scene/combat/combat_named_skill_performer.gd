@@ -1,3 +1,4 @@
+# warning-ignore-all:return_value_discarded
 
 class_name NamedSkillPerformer
 
@@ -27,7 +28,7 @@ class Skill:
 	func _engaged_priority() -> int:
 		return 0
 	func _test_engaged(_skill : SkillData.NamedSkill,
-			situation : int,_myself : PlayingPlayer,_rival : PlayingPlayer) -> bool:
+			_situation : int,_myself : PlayingPlayer,_rival : PlayingPlayer) -> bool:
 		return true
 	func _engaged(_tween : SceneTreeTween,_skill : SkillData.NamedSkill,
 			situation : int,_myself : PlayingPlayer,_rival : PlayingPlayer) -> int:
@@ -58,8 +59,7 @@ class Reinforce extends Skill:
 			_myself : PlayingPlayer,_rival : PlayingPlayer) -> bool:
 		return true
 	func _before(tween : SceneTreeTween,skill : SkillData.NamedSkill,
-			myself : PlayingPlayer,rival : PlayingPlayer) -> void:
-		var playing_card := myself.playing_card
+			myself : PlayingPlayer,_rival : PlayingPlayer) -> void:
 		var a := [0,0,0]
 		for p in skill.parameter as Array:
 			var e := p as EffectData.SkillEffect
@@ -74,14 +74,14 @@ class Reinforce extends Skill:
 class Rush extends Skill:
 	func _after_priority() -> int:
 		return 1
-	func _test_after(skill : SkillData.NamedSkill,
-			situation : int,myself : PlayingPlayer,rival : PlayingPlayer) -> bool:
+	func _test_after(_skill : SkillData.NamedSkill,
+			situation : int,_myself : PlayingPlayer,rival : PlayingPlayer) -> bool:
 		if situation > 0:
 			if (rival.get_current_block() + 1) / 2 > 0:
 				return true
 		return false
 		
-	func _after(tween : SceneTreeTween,skill : SkillData.NamedSkill,
+	func _after(tween : SceneTreeTween,_skill : SkillData.NamedSkill,
 			situation : int,myself : PlayingPlayer,rival : PlayingPlayer) -> void:
 		if situation > 0:
 			myself.combat_avatar.attack_close((rival.get_current_block() + 1) / 2,rival.combat_avatar,tween)
@@ -120,7 +120,7 @@ class Isolate extends Skill:
 	func _engaged_priority() -> int:
 		return 255
 	func _test_engaged(_skill : SkillData.NamedSkill,
-			situation : int,_myself : PlayingPlayer,_rival : PlayingPlayer) -> bool:
+			_situation : int,_myself : PlayingPlayer,_rival : PlayingPlayer) -> bool:
 		return true
 	func _engaged(tween : SceneTreeTween,_skill : SkillData.NamedSkill,
 			_situation : int,myself : PlayingPlayer,_rival : PlayingPlayer) -> int:

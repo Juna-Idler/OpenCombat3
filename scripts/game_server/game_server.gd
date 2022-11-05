@@ -1,3 +1,5 @@
+# warning-ignore-all:unused_signal
+
 extends Reference
 class_name IGameServer
 
@@ -119,10 +121,10 @@ func _send_ready():
 	pass
 
 #
-func _send_combat_select(round_count:int,index:int,hands_order:Array = []):
+func _send_combat_select(_round_count:int,_index:int,_hands_order:Array = []):
 	pass
 #
-func _send_recovery_select(round_count:int,index:int,hands_order:Array = []):
+func _send_recovery_select(_round_count:int,_index:int,_hands_order:Array = []):
 	pass
 
 # 即時ゲーム終了（降参）を送信
