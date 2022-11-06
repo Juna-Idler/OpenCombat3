@@ -167,6 +167,8 @@ func _load_card_data():
 				int(csv[3]),int(csv[4]),int(csv[5]),int(csv[6]),int(csv[7]),
 				skills,text,csv[10])
 	version = (_card_catalog[0] as CardData).name
+# warning-ignore:return_value_discarded
+	_card_catalog.erase(0)
 
 	if translation.find("ja") != 0:
 		var trans_res = load("res://card_data/card_data_" + translation + ".txt")

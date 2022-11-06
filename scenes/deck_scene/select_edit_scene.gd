@@ -13,20 +13,15 @@ func _terminalize():
 	pass
 
 func _ready():
+	banner_container.initialize(Global.deck_list)
 	pass
-
-func save_deck_list():
-	Global.deck_list.list = banner_container.get_deck_list()
-	Global.deck_list.save_deck_list()
-	$Panel/ButtonMoveSave.disabled = true
-
 
 
 func _on_ButtonEdit_pressed():
 	if banner_container.select:
 		var db = banner_container.get_select_banner()
-		$BuildScene.initialize(db.get_deck_data())
 		$BuildScene.show()
+		$BuildScene.initialize(db.get_deck_data(),15,15,Global.card_catalog._card_catalog.values())
 
 
 func _on_BuildScene_pressed_save_button(deck_data):
@@ -34,18 +29,20 @@ func _on_BuildScene_pressed_save_button(deck_data):
 		var db = banner_container.get_select_banner()
 		db.initialize(deck_data)
 		db.reset_visual()
-		save_deck_list()
+		banner_container.save_deck_list()
+		$Panel/ButtonMoveSave.disabled = true
 
 
 
 func _on_ButtonNew_pressed():
 	banner_container.append(DeckData.new("",[],[]))
+	$Panel/ButtonMoveSave.disabled = true
 
 
 func _on_ButtonCopy_pressed():
 	if banner_container.select:
 		banner_container.append(banner_container.get_select_banner().get_deck_data())
-		save_deck_list()
+		$Panel/ButtonMoveSave.disabled = true
 
 
 func _on_ButtonDelete_pressed():
@@ -58,7 +55,7 @@ func _on_ButtonDelete_pressed():
 func _on_ButtonOK_pressed():
 	if banner_container.select:
 		banner_container.delete_select()
-		save_deck_list()
+		$Panel/ButtonMoveSave.disabled = true
 		$PopupDialog.hide()
 
 func _on_ButtonCancel_pressed():
@@ -79,4 +76,5 @@ func _on_ButtonDown_pressed():
 		$Panel/ButtonMoveSave.disabled = false
 
 func _on_ButtonMoveSave_pressed():
-		save_deck_list()
+		banner_container.save_deck_list()
+		$Panel/ButtonMoveSave.disabled = true

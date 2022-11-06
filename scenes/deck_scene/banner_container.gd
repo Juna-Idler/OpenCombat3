@@ -4,24 +4,29 @@ const Banner = preload("clickable_banner.tscn")
 
 var select : Control
 
+var deck_list : DeckList
 
-func _ready():
-	var selected = Global.deck_list.selected
+func initialize(list : DeckList):
+	deck_list = list
+	var select_index = list.select
 	
-	var s := Global.deck_list.list.size()
-	selected = 0 if selected < 0 else selected
-	selected = s - 1 if selected >= s else selected
+	var s := list.list.size()
+	select_index = 0 if select_index < 0 else select_index
+	select_index = s - 1 if select_index >= s else select_index
 	
-	for i in Global.deck_list.list.size():
+	for i in list.list.size():
 		var b = Banner.instance()
 		b.focus_mode = Control.FOCUS_ALL
-		var db = b.get_node("DeckBanner").initialize(Global.deck_list.list[i])
+		var db = b.get_node("DeckBanner").initialize(list.list[i])
 		b.connect("clicked",self,"_on_Banner_clicked",[db])
 		$Container.add_child(b)
-		if i == selected:
+		if i == select_index:
 			select = b
 			db.set_frame_color(Color.red)
 			b.grab_focus()
+
+func _ready():
+	pass
 
 
 func _on_Banner_clicked(click_db : DeckBanner):
@@ -31,19 +36,20 @@ func _on_Banner_clicked(click_db : DeckBanner):
 		if db == click_db:
 			click_db.set_frame_color(Color.red)
 			select = c
-			Global.deck_list.selected = i
+			deck_list.select = i
 		else:
 			db.set_frame_color(Color.white)
 
 func get_select_banner() -> DeckBanner:
 	return select.get_node("DeckBanner") as DeckBanner
 
-func get_deck_list() -> Array:
-	var deck_list = []
+func save_deck_list():
+	var list = []
 	for c in $Container.get_children():
 		var db = c.get_node("DeckBanner").get_deck_data()
-		deck_list.append(db)
-	return deck_list
+		list.append(db)
+	deck_list.list = list
+	deck_list.save_deck_list()
 
 func append(deck_data : DeckData):
 	if select:
@@ -58,11 +64,13 @@ func append(deck_data : DeckData):
 	select = b
 	db.set_frame_color(Color.red)
 	b.grab_focus()
+	save_deck_list()
 
 func delete_select():
 	$Container.remove_child(select)
 	select.queue_free()
 	select = null
+	save_deck_list()
 
 func move_up_select() -> bool:
 	var i := get_select_index()

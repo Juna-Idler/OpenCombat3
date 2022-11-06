@@ -1,17 +1,11 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://scenes/deck_scene/banner.tscn" type="PackedScene" id=1]
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=2]
 [ext_resource path="res://scenes/deck_scene/select_edit_scene.gd" type="Script" id=3]
 [ext_resource path="res://scenes/deck_scene/edit_scene.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scenes/deck_scene/banner_container.tscn" type="PackedScene" id=5]
-
-[sub_resource type="DynamicFont" id=5]
-size = 24
-font_data = ExtResource( 2 )
-
-[sub_resource type="Theme" id=6]
-Button/fonts/font = SubResource( 5 )
+[ext_resource path="res://scenes/deck_scene/theme.tres" type="Theme" id=6]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0, 0, 0, 1 )
@@ -35,7 +29,7 @@ bg_color = Color( 0, 0, 0, 0.752941 )
 [node name="DeckSelectScene" type="Panel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme = SubResource( 6 )
+theme = ExtResource( 6 )
 script = ExtResource( 3 )
 
 [node name="Panel" type="Panel" parent="."]
@@ -108,7 +102,7 @@ margin_right = -16.0
 margin_bottom = 408.0
 grow_horizontal = 2
 disabled = true
-text = "MOVE_SAVE"
+text = "SAVE"
 clip_text = true
 
 [node name="ButtonEdit" type="Button" parent="Panel"]

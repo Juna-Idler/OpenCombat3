@@ -168,15 +168,26 @@ margin_bottom = 52.0
 custom_fonts/font = SubResource( 6 )
 text = "LIST_OPEN"
 
-[node name="Infomation" type="Label" parent="Header"]
+[node name="CardsCount" type="Label" parent="Header"]
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -654.0
 margin_top = 5.0
+margin_right = -480.0
+margin_bottom = 53.0
+custom_fonts/font = SubResource( 9 )
+text = "CARDS:%s"
+valign = 1
+
+[node name="TotalCost" type="Label" parent="Header"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -480.0
+margin_top = 5.0
 margin_right = -340.0
 margin_bottom = 53.0
 custom_fonts/font = SubResource( 9 )
-text = "デッキ枚数            総コスト"
+text = "COST:%s"
 valign = 1
 
 [node name="DeckName" type="Label" parent="Header"]
@@ -217,7 +228,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 flat = true
 
-[node name="ButtonNoSave" type="Button" parent="PopupDialog"]
+[node name="ButtonDiscard" type="Button" parent="PopupDialog"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -229,6 +240,18 @@ margin_bottom = 60.0
 custom_fonts/font = SubResource( 13 )
 text = "NO_SAVE"
 
+[node name="ButtonSave" type="Button" parent="PopupDialog"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -192.0
+margin_top = -40.0
+margin_right = 192.0
+margin_bottom = 60.0
+custom_fonts/font = SubResource( 13 )
+text = "SAVE"
+
 [node name="Label" type="Label" parent="PopupDialog"]
 anchor_left = 0.5
 anchor_right = 0.5
@@ -237,7 +260,7 @@ margin_top = 89.0
 margin_right = 320.0
 margin_bottom = 233.0
 custom_fonts/font = SubResource( 14 )
-text = "DECK_NO_SAVE_MESSAGE"
+text = "Message"
 align = 1
 valign = 1
 autowrap = true
@@ -252,4 +275,5 @@ autowrap = true
 [connection signal="clicked" from="Header/DeckName" to="." method="_on_DeckName_clicked"]
 [connection signal="closed" from="DeckList" to="." method="_on_DeckList_closed"]
 [connection signal="pressed" from="PopupDialog/ButtonCancel" to="." method="_on_ButtonCancel_pressed"]
-[connection signal="pressed" from="PopupDialog/ButtonNoSave" to="." method="_on_ButtonNoSave_pressed"]
+[connection signal="pressed" from="PopupDialog/ButtonDiscard" to="." method="_on_ButtonDiscard_pressed"]
+[connection signal="pressed" from="PopupDialog/ButtonSave" to="." method="_on_ButtonSave_pressed"]

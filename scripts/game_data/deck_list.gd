@@ -2,29 +2,33 @@
 class_name DeckList
 
 
+var file_path := "user://deck_list.json"
+
 var list : Array # of DeckData
-var online_deck : int = 0
-var selected : int
+var select : int = 0
 
 
-func _init():
+func _init(path : String):
+	file_path = path
 # warning-ignore:return_value_discarded
 	load_deck_list()
-	selected = online_deck
-
-const file_path := "user://deck_list.json"
 
 
-func get_online_deck():
-	if online_deck < 0 or online_deck >= list.size():
+func get_select_deck():
+	if select < 0 or select >= list.size():
 		return null
-	return list[online_deck]
+	return list[select]
 
 
 func save_deck_list():
+	if select >= list.size():
+		select = list.size()-1;
+	if select < 0:
+		select = 0
+
 	var f = File.new()
 	f.open(file_path, File.WRITE)
-	f.store_csv_line(PoolStringArray([online_deck,selected]),"\t")
+	f.store_csv_line(PoolStringArray([select]),"\t")
 	for i in list:
 		var item := i as DeckData
 		var cards_text := PoolStringArray(Array(item.cards)).join(",")
@@ -39,7 +43,7 @@ func load_deck_list() -> bool:
 	list = []
 	f.open(file_path, File.READ)
 	var head = f.get_csv_line("\t")
-	online_deck = int(head[0])
+	select = int(head[0])
 	while (not f.eof_reached()):
 		var line = f.get_csv_line("\t")
 		if line.size() != 3:

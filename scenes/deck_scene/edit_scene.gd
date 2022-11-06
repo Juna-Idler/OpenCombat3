@@ -28,7 +28,7 @@ var banner_mode := false
 
 var pool_controls :Array
 
-var pool_start_id : int = 1
+var pool_start_index : int
 
 var deck_cards_count : int
 var deck_cost : int = 0
@@ -37,14 +37,23 @@ var key_cards : PoolIntArray
 
 var initial_deck : DeckData
 
-func initialize(deck : DeckData):
+var regulation_cards_count : int
+var regulation_cost_limit : int
+var card_pool : Array
+
+func initialize(deck : DeckData,cards_count : int,cost_limit : int,pool : Array):
+	regulation_cards_count = cards_count
+	regulation_cost_limit = cost_limit
+	card_pool = pool
 	initial_deck = deck
 	key_cards = deck.key_cards
 	set_deck(deck.cards)
 	$Header/DeckName.text = deck.name
 	if banner_mode:
 		$"%BannerEditor".initialize(deck)
-	
+	set_pool(0)
+
+
 
 func _ready():
 	pool_controls = [[],[]]
@@ -54,8 +63,6 @@ func _ready():
 			p.rect_position.x = pool_item_start.x + pool_item_x_step * j
 			p.rect_position.y = pool_item_start.y + pool_item_y_step * i
 			pool_controls[i].append(p)
-			var cd := Global.card_catalog.get_card_data(j + i * pool_item_x_count + 1)
-			p.get_node("CardFront").initialize_card(cd)
 			p.connect("dragged",self,"_on_PoolItem_dragged")
 			p.connect("dragging",self,"_on_PoolItem_dragging")
 			p.connect("dropped",self,"_on_PoolItem_dropped")
@@ -71,13 +78,13 @@ func _ready():
 	$"%Invalid".hide()
 
 
-func set_pool(start_id : int):
-	pool_start_id = start_id
+func set_pool(start_index : int):
+	pool_start_index = start_index
 	for i in 2:
 		for j in pool_item_x_count:
-			var id = start_id + j + i * pool_item_x_count
-			if id >= 1 and id <= Global.card_catalog.get_max_card_id():
-				var cd := Global.card_catalog.get_card_data(id)
+			var index = start_index + j + i * pool_item_x_count
+			if index >= 0 and index < card_pool.size():
+				var cd := card_pool[index] as CardData
 				pool_controls[i][j].get_node("CardFront").initialize_card(cd)
 				pool_controls[i][j].visible = true
 			else:
@@ -101,8 +108,7 @@ func set_deck(deck : Array):
 		c.get_node("CardFront").initialize_card(cd)
 		deck_cost += cd.level
 	deck_container.layout()
-		
-	$Header/Infomation.text = tr("CARDS:%s COST:%s") % [deck_cards_count,deck_cost]
+	display_deck_number()
 
 
 func add_card(id : int,g_position : Vector2):
@@ -128,7 +134,7 @@ func add_card(id : int,g_position : Vector2):
 	c.get_node("CardFront").initialize_card(cd)
 	deck_cards_count += 1
 	deck_cost += cd.level
-	$Header/Infomation.text = tr("CARDS:%s COST:%s") % [deck_cards_count,deck_cost]
+	display_deck_number()
 
 	var tween := create_tween()
 	var target : int = (deck_container.rect_min_size.x - sc.rect_size.x) * rate
@@ -136,16 +142,25 @@ func add_card(id : int,g_position : Vector2):
 	var t: = tween.tween_property(sc,"scroll_horizontal",target,0.5)
 	t.set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_OUT)
 
- # こっちのTweenならintとfloatの型の違いを吸収してくれる？
-#	$Tween.interpolate_property(sc,"scroll_horizontal",null,(deck_container.rect_min_size.x - sc.rect_size.x) * rate,
-#			0.5,Tween.TRANS_LINEAR,Tween.EASE_OUT)
-#	yield(get_tree(),"idle_frame")
-#	sc.scroll_horizontal = (deck_container.rect_min_size.x - sc.rect_size.x) * rate
 
 func remove_card(cd : CardData):
 	deck_cost -= cd.level
 	deck_cards_count -= 1
-	$Header/Infomation.text = tr("CARDS:%s COST:%s") % [deck_cards_count,deck_cost]
+	display_deck_number()
+
+func display_deck_number():
+	if deck_cards_count < regulation_cards_count:
+		$Header/CardsCount.self_modulate = Color.blue
+	elif deck_cards_count > regulation_cards_count:
+		$Header/CardsCount.self_modulate = Color.red
+	else:
+		$Header/CardsCount.self_modulate = Color.white
+	if deck_cost <= regulation_cost_limit:
+		$Header/TotalCost.self_modulate = Color.white
+	else:
+		$Header/TotalCost.self_modulate = Color.red
+	$Header/CardsCount.text = tr("CARDS") + ":" + str(deck_cards_count)
+	$Header/TotalCost.text = tr("COST") + ":" + str(deck_cost)
 
 
 func get_deck() -> Array:
@@ -236,18 +251,18 @@ func _on_PoolItem_mouse_exited(_pool_item):
 
 
 func _on_Next_pressed():
-	pool_start_id += 18
-	set_pool(pool_start_id)
-	if pool_start_id + 18 > Global.card_catalog.get_max_card_id():
+	pool_start_index += 18
+	set_pool(pool_start_index)
+	if pool_start_index + 18 >= card_pool.size():
 		$"%Next".disabled = true
 	$"%Prev".disabled = false
 	$"%Zoom".visible = false
 
 
 func _on_Prev_pressed():
-	pool_start_id -= 18
-	set_pool(pool_start_id)
-	if pool_start_id <= 1:
+	pool_start_index -= 18
+	set_pool(pool_start_index)
+	if pool_start_index <= 0:
 		$"%Prev".disabled = true
 	$"%Next".disabled = false
 	$"%Zoom".visible = false
@@ -302,20 +317,36 @@ func _on_ReturnButton_pressed():
 		deck = DeckData.new($Header/DeckName.text,get_deck(),key_cards)
 
 	if not deck.equal(initial_deck):
+		$PopupDialog/Label.text = "DECK_NO_SAVE_MESSAGE"
+		$PopupDialog/ButtonDiscard.show()
+		$PopupDialog/ButtonSave.hide()
 		$PopupDialog.popup_centered()
 	else:
 		hide()
 
 
 func _on_SaveButton_pressed():
+	if deck_cards_count != regulation_cards_count or deck_cost > regulation_cost_limit:
+		$PopupDialog/Label.text = "DECK_OUT_OF_REGULATION"
+		$PopupDialog/ButtonDiscard.hide()
+		$PopupDialog/ButtonSave.show()
+		$PopupDialog.popup_centered()
+		return
 	initial_deck = $"%BannerEditor".get_deck_data() if banner_mode\
 			else DeckData.new($Header/DeckName.text,get_deck(),key_cards)
 	emit_signal("pressed_save_button",initial_deck)
 
 
-func _on_ButtonNoSave_pressed():
+func _on_ButtonDiscard_pressed():
 	$PopupDialog.hide()
 	hide()
 
+func _on_ButtonSave_pressed():
+	initial_deck = $"%BannerEditor".get_deck_data() if banner_mode\
+			else DeckData.new($Header/DeckName.text,get_deck(),key_cards)
+	emit_signal("pressed_save_button",initial_deck)
+	
+
 func _on_ButtonCancel_pressed():
 	$PopupDialog.hide()
+
