@@ -118,7 +118,6 @@ func attack_close(count : int ,rival : CombatAvatar,tween : SceneTreeTween):
 	tween.tween_property($Image,"global_position:x",stay_x,0.2)\
 			.set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
 	for i in count - 1:
-		tween.tween_callback(self,"play_sound")
 		tween.tween_property($Image,"global_position:x",move_unit * 0.75,0.1).as_relative()\
 				.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 		tween.tween_callback(rival,"add_damage",[1])
@@ -173,12 +172,10 @@ func _on_Bullet_hit(bullet,rival):
 func add_damage(add_d : int):
 	damage += add_d
 	if damage <= block:
-		$AudioStreamPlayer.stream = load("res://sound/剣で打ち合う4.mp3")
-		$AudioStreamPlayer.play()
+		play_sound(load("res://sound/剣で打ち合う4.mp3"))
 		$Image/BlockDamage/Label.text = str(-damage)
 	else:
-		$AudioStreamPlayer.stream = load("res://sound/小パンチ.mp3")
-		$AudioStreamPlayer.play()
+		play_sound(load("res://sound/小パンチ.mp3"))
 		$Image/BlockDamage/Label.text = str(-block) if block > 0 else ""
 		$Image/Damage/Label.text = str(damage - block)
 
@@ -191,6 +188,6 @@ func add_damage(add_d : int):
 
 
 func play_sound(stream):
-	$AudioStreamPlayer.stream = load(stream)
+	$AudioStreamPlayer.stream = stream
 	$AudioStreamPlayer.play()
 	

@@ -65,7 +65,7 @@ class Reinforce extends Skill:
 			var e := p as EffectData.SkillEffect
 			a[e.data.id - 1] += e.parameter
 		tween.tween_callback(myself,"add_attribute",[a[0],a[1],a[2]])
-		tween.tween_callback(myself.combat_avatar,"play_sound",["res://sound/ステータス上昇魔法2.mp3"])
+		tween.tween_callback(myself.combat_avatar,"play_sound",[load("res://sound/ステータス上昇魔法2.mp3")])
 		tween.chain()
 		tween.tween_interval(1.0)
 		tween.chain()
@@ -77,6 +77,7 @@ class Rush extends Skill:
 	func _test_after(_skill : SkillData.NamedSkill,
 			situation : int,_myself : PlayingPlayer,rival : PlayingPlayer) -> bool:
 		if situation > 0:
+# warning-ignore:integer_division
 			if (rival.get_current_block() + 1) / 2 > 0:
 				return true
 		return false
@@ -84,6 +85,7 @@ class Rush extends Skill:
 	func _after(tween : SceneTreeTween,_skill : SkillData.NamedSkill,
 			situation : int,myself : PlayingPlayer,rival : PlayingPlayer) -> void:
 		if situation > 0:
+# warning-ignore:integer_division
 			myself.combat_avatar.attack_close((rival.get_current_block() + 1) / 2,rival.combat_avatar,tween)
 			return
 
@@ -110,7 +112,7 @@ class Charge extends Skill:
 					EffectData.Attribute.BLOCK:
 						pass
 				pass
-			tween.tween_callback(myself.combat_avatar,"play_sound",["res://sound/オーラ2.mp3"])
+			tween.tween_callback(myself.combat_avatar,"play_sound",[load("res://sound/オーラ2.mp3")])
 			tween.tween_interval(1.0)
 			return
 		return

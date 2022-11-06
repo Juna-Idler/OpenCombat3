@@ -38,6 +38,7 @@ func set_deck(deck : Array,draggable = true):
 	for c in deck_container.get_children():
 		deck_container.remove_child(c)
 		c.queue_free()
+# warning-ignore:integer_division
 	var y_count := int((deck.size() - 1) / deck_item_x_count) + 1
 	y_step = deck_item_height + deck_item_y_space
 	var height = y_step * y_count - deck_item_y_space
@@ -47,6 +48,7 @@ func set_deck(deck : Array,draggable = true):
 		y_step = (deck_container.rect_size.y - deck_item_height - y_start*2) / (y_count - 1);
 	for i in range(deck.size()):
 		var x := deck_item_x_start + deck_item_x_step * (i % deck_item_x_count)
+# warning-ignore:integer_division
 		var y := y_start + y_step * int(i / deck_item_x_count)
 		var c := DeckItem.instance()
 		if draggable:
@@ -77,6 +79,7 @@ func align_move():
 	tween.set_trans(Tween.TRANS_QUAD)
 	for i in range(deck_container.get_child_count()):
 		var x := deck_item_x_start + deck_item_x_step * (i % deck_item_x_count)
+# warning-ignore:integer_division
 		var y := y_start + y_step * int(i / deck_item_x_count)
 		tween.parallel()
 		tween.tween_property(deck_container.get_child(i),"rect_position",Vector2(x,y),0.5)
@@ -99,6 +102,7 @@ func _on_DeckItem_dragging(_self,relative_pos,_start_pos):
 func _on_DeckItem_dropped(_self,relative_pos,_start_pos):
 #	var g_drop_pos = _self.rect_global_position + relative_pos
 	var x_skip : int = relative_pos.x / (deck_item_width + deck_item_x_space)
+# warning-ignore:integer_division
 	var y_skip : int = int(floor((relative_pos.y + deck_item_height/2) / float(y_step)))
 
 	var old_index : int = deck_container.get_children().find(_self)

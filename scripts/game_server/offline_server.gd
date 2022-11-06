@@ -131,7 +131,8 @@ static func _create_update_playerData(player : ProcessorPlayerData) -> UpdateDat
 			updates.append(u)
 	var n := player.next_effect
 	var hand := player.hand.duplicate()
-	hand.insert(player.select,player.select_card.id_in_deck)
+	if player.select >= 0:
+		hand.insert(player.select,player.select_card.id_in_deck)
 	hand.resize(hand.size() - player.draw_indexes.size())
 	var p = IGameServer.UpdateData.PlayerData.new(hand,player.select,updates,
 			n.power,n.hit,n.block,player.draw_indexes,player.damage,player.get_life())

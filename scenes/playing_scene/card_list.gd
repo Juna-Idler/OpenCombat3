@@ -38,15 +38,18 @@ func set_card_list(list : Array,deck_list : Array):
 		var ci = container.get_child(i)
 		ci.visible = false
 		
+# warning-ignore:integer_division
 	var y_count := int((list.size() - 1) / item_x_count) + 1
 	var y_step := 216 + 8
 	var height := y_step * y_count - 8
+# warning-ignore:integer_division
 	var y_start := (720 - height) / 2
 	if y_start < 8:
 		y_start = 8
 		y_step = (container.rect_size.y - 216 - y_start*2) / (y_count - 1);
 	for i in range(list.size()):
 		var x := x_start + (144 + 8) * (i % item_x_count)
+# warning-ignore:integer_division
 		var y := y_start + y_step * int(i / item_x_count)
 		var ci := container.get_child(i)
 		ci.rect_position = Vector2(x,y)

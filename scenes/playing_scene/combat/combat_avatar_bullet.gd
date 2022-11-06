@@ -27,7 +27,7 @@ func shoot(parent : Node,g_pos : Vector2,r_target : Vector2,duration : float) ->
 
 func vanish():
 	if parent_node:
-		parent_node.remove_child(self)
+		parent_node.call_deferred("remove_child",self)
 		parent_node = null
 		tween.kill()
 		emit_signal("vanished",self)

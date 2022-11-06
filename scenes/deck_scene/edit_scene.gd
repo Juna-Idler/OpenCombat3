@@ -1,3 +1,5 @@
+# warning-ignore-all:return_value_discarded
+
 extends Control
 
 
@@ -108,8 +110,9 @@ func add_card(id : int,g_position : Vector2):
 	var rate : float = sc.scroll_horizontal / (deck_container.rect_size.x - sc.rect_size.x)
 	g_position -= sc.rect_global_position + deck_container.rect_position
 
-	var index : int = (g_position.x + deck_item_width/2) / (deck_item_width + deck_item_space)
-	index = max(min(index,deck_container.get_child_count()),0)
+# warning-ignore:integer_division
+	var index := int((g_position.x + deck_item_width/2) / (deck_item_width + deck_item_space))
+	index = int(max(min(index,deck_container.get_child_count()),0))
 	
 	var c := DeckItem.instance() as Control
 	c.connect("dragged",self,"_on_DeckItem_dragged")
@@ -155,14 +158,14 @@ func get_deck() -> Array:
 		
 onready var mover = $"%DragMover"
 		
-func _on_DeckItem_dragged(_self,pos):
+func _on_DeckItem_dragged(_self,_pos):
 	_self.modulate.a = 0.5
 	mover.initialize_card(_self.get_node("CardFront").data)
 	var gp = _self.rect_global_position
 	mover.rect_global_position = gp
 	mover.visible = true
 	
-func _on_DeckItem_dragging(_self,relative_pos,start_pos):
+func _on_DeckItem_dragging(_self,relative_pos,_start_pos):
 	var gp = _self.rect_global_position
 	mover.rect_global_position = gp + relative_pos
 
@@ -179,7 +182,7 @@ func _on_DeckItem_dropped(_self,relative_pos,start_pos):
 				var old_index : int = deck_container.get_children().find(_self)
 				var new_index : int = old_index + skip
 				if new_index >= 0 and new_index < deck_cards_count:
-					var v = deck_container.move_child(_self,new_index)
+					deck_container.move_child(_self,new_index)
 					_self.rect_position += relative_pos
 					deck_container.layout_tween()
 		else:
@@ -196,7 +199,7 @@ func _on_DeckItem_held(_self):
 	$LargeCardView.show_layer(_self.get_node("CardFront").data)
 
 
-func _on_PoolItem_dragged(_self,pos):
+func _on_PoolItem_dragged(_self,_pos):
 	_self.modulate.a = 0.5
 	mover.initialize_card(_self.get_node("CardFront").data)
 	var gp = _self.rect_global_position
@@ -205,12 +208,12 @@ func _on_PoolItem_dragged(_self,pos):
 	mover.visible = true
 	$"%Zoom".visible = false
 	
-func _on_PoolItem_dragging(_self,relative_pos,start_pos):
+func _on_PoolItem_dragging(_self,relative_pos,_start_pos):
 	var gp = _self.rect_global_position
 	var diff : Vector2 = (_self.rect_size - Vector2(144,216)) / 2
 	mover.rect_global_position = gp + relative_pos + diff
 
-func _on_PoolItem_dropped(_self,relative_pos,start_pos):
+func _on_PoolItem_dropped(_self,relative_pos,_start_pos):
 	var g_drop_pos = _self.rect_global_position + relative_pos + Vector2(pool_item_width,pool_item_height)/2
 	if $"%ScrollContainer".get_global_rect().has_point(g_drop_pos):
 		add_card(_self.get_node("CardFront").data.id,g_drop_pos)
@@ -228,7 +231,7 @@ func _on_PoolItem_mouse_entered(pool_item):
 	$"%Zoom".rect_global_position = gp + diff
 	$"%Zoom".visible = true
 	
-func _on_PoolItem_mouse_exited(pool_item):
+func _on_PoolItem_mouse_exited(_pool_item):
 	$"%Zoom".visible = false
 
 
