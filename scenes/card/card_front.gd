@@ -49,9 +49,9 @@ func initialize_card(cd : CardData,rotate := false) -> CardFront:
 		$Name/.rect_rotation = 180
 		$Power/Label.rect_rotation = 180
 		$Hit/Label.rect_rotation = 180
-		$Hit/Label.rect_position += Vector2(0,6)
+		$Hit/Label.rect_position += Vector2(0,0)
 		$Block/Label.rect_rotation = 180
-		$Block/Label.rect_position += Vector2(0,6)
+		$Block/Label.rect_position += Vector2(0,0)
 		$Level/Label.rect_rotation = 180
 
 	return self
