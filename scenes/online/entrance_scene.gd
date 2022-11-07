@@ -33,7 +33,7 @@ func _terminalize():
 	
 
 func _ready():
-	$Panel/DeckBanner.set_deck_data(Global.deck_list.list[Global.deck_list.online_deck])
+	$Panel/DeckBanner.set_deck_data(Global.deck_list_newbie.get_select_deck())
 
 
 func _on_Matching_pressed():
@@ -46,9 +46,9 @@ func _on_ButtonDeckChange_pressed():
 
 
 func _on_DeckSelectScene_decided(index):
-	if index >= 0 and index < Global.deck_list.list.size():
-		Global.deck_list.online_deck = index
-		$Panel/DeckBanner.set_deck_data(Global.deck_list.list[index])
+	if index >= 0 and index < Global.deck_list_newbie.list.size():
+		Global.deck_list_newbie.select = index
+		$Panel/DeckBanner.set_deck_data(Global.deck_list_newbie.get_select_deck())
 
 
 func _on_ButtonBack_pressed():

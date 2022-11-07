@@ -3,7 +3,6 @@ extends Node
 
 var card_catalog := CardCatalog.new()
 
-var deck_list := DeckList.new("user://deck_list.json")
 
 var deck_list_newbie := DeckList.new("user://deck_newbie.tsv")
 var deck_list_hotdogger

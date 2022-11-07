@@ -13,7 +13,7 @@ func _terminalize():
 	pass
 
 func _ready():
-	banner_container.initialize(Global.deck_list)
+	banner_container.initialize(Global.deck_list_newbie)
 	pass
 
 

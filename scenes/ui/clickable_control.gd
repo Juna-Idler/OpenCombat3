@@ -23,7 +23,8 @@ func _gui_input(event: InputEvent):
 				_timer.stop()
 				_timer.disconnect("timeout",self,"_on_timer_timeout")
 			_holding = false
-			emit_signal("clicked")
+			if get_global_rect().has_point((event as InputEventMouseButton).global_position):
+				emit_signal("clicked")
 	else:
 		if (event is InputEventMouseButton
 				and event.button_index == BUTTON_LEFT

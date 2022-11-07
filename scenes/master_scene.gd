@@ -7,8 +7,8 @@ class SceneChanger extends ISceneChanger:
 	var fade : ColorRect
 	var current_scene : ISceneChanger.IScene
 	
-	var fade_in_duration : float = 1.0
-	var fade_out_duration : float = 1.0
+	var fade_in_duration : float = 0.5
+	var fade_out_duration : float = 0.5
 	
 	func _init(n : Node,f : ColorRect,c : Node):
 		master_scene = n

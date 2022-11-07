@@ -48,8 +48,10 @@ func load_deck_list() -> bool:
 		var line = f.get_csv_line("\t")
 		if line.size() != 3:
 			continue
-		var cards := PoolIntArray(Array(line[1].split(",")))
-		var keys := PoolIntArray(Array(line[2].split(",")))
+		var tmp : PoolStringArray = line[1].split(",")
+		var cards := PoolIntArray([] if tmp.size() == 1 and tmp[0] == "" else Array(tmp))
+		tmp = line[2].split(",")
+		var keys := PoolIntArray([] if tmp.size() == 1 and tmp[0] == "" else Array(tmp))
 		list.append(DeckData.new(line[0],cards,keys))
 	return true
 	

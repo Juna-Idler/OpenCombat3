@@ -67,6 +67,7 @@ func _ready():
 			p.connect("dragging",self,"_on_PoolItem_dragging")
 			p.connect("dropped",self,"_on_PoolItem_dropped")
 			p.connect("held",self,"_on_PoolItem_held")
+			p.connect("double_clicked",self,"_on_PoolItem_double_clicked")
 			p._timer = $Timer
 			p.connect("mouse_entered",self,"_on_PoolItem_mouse_entered",[p])
 			p.connect("mouse_exited",self,"_on_PoolItem_mouse_exited",[p])
@@ -113,11 +114,13 @@ func set_deck(deck : Array):
 
 func add_card(id : int,g_position : Vector2):
 	var sc = $"%ScrollContainer"
-	var rate : float = sc.scroll_horizontal / (deck_container.rect_size.x - sc.rect_size.x)
 	g_position -= sc.rect_global_position + deck_container.rect_position
-
 # warning-ignore:integer_division
 	var index := int((g_position.x + deck_item_width/2) / (deck_item_width + deck_item_space))
+	var rate : float = sc.scroll_horizontal / (deck_container.rect_size.x - sc.rect_size.x)
+	add_card_index(id,index,g_position,rate)
+	
+func add_card_index(id : int,index : int, g_position : Vector2,rate : float):
 	index = int(max(min(index,deck_container.get_child_count()),0))
 	
 	var c := DeckItem.instance() as Control
@@ -137,10 +140,10 @@ func add_card(id : int,g_position : Vector2):
 	display_deck_number()
 
 	var tween := create_tween()
-	var target : int = (deck_container.rect_min_size.x - sc.rect_size.x) * rate
+	var scroll : int = (deck_container.rect_min_size.x - $"%ScrollContainer".rect_size.x) * rate
  # intを明示しないと型違いでtween_propertyが失敗する
-	var t: = tween.tween_property(sc,"scroll_horizontal",target,0.5)
-	t.set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_OUT)
+	tween.tween_property($"%ScrollContainer","scroll_horizontal",scroll,0.5)\
+			.set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_OUT)
 
 
 func remove_card(cd : CardData):
@@ -237,7 +240,12 @@ func _on_PoolItem_dropped(_self,relative_pos,_start_pos):
 	
 func _on_PoolItem_held(_self):
 	$LargeCardView.show_layer(_self.get_node("CardFront").data)
-
+	
+func _on_PoolItem_double_clicked(_self : Control):
+	var sc := $"%ScrollContainer"
+	var g_position = _self.rect_global_position + Vector2(pool_item_width,pool_item_height)/2\
+			- (sc.rect_global_position + deck_container.rect_position)
+	add_card_index(_self.get_node("CardFront").data.id,deck_container.get_child_count(),g_position,1)
 
 func _on_PoolItem_mouse_entered(pool_item):
 	$"%Zoom".initialize_card(pool_item.get_node("CardFront").data)

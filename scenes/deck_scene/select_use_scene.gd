@@ -9,6 +9,7 @@ onready var banner_container := $BannerContainer
 
 
 func _ready():
+	banner_container.initialize(Global.deck_list_newbie)
 	pass
 
 
