@@ -2,7 +2,7 @@
 class_name DeckList
 
 
-var file_path := "user://deck_list.json"
+var file_path : String
 
 var list : Array # of DeckData
 var select : int = 0

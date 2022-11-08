@@ -3,13 +3,16 @@ extends Node
 
 var card_catalog := CardCatalog.new()
 
+var regulation_newbie := RegulationData.DeckRegulation.new("newbie",15,15,0,0,"1-27")
 
-var deck_list_newbie := DeckList.new("user://deck_newbie.tsv")
-var deck_list_hotdogger
+var deck_list := {
+	"newbie":DeckList.new("user://deck_newbie.tsv")
+}
+
 
 func _init():
-	if deck_list_newbie.list.empty():
-		deck_list_newbie.list.append(DeckData.new("デフォルトデッキ",[1,2,3,4,5,6,7,8,9,10,11,12,19,20,21],[]))
+	if deck_list["newbie"].list.empty():
+		deck_list["newbie"].list.append(DeckData.new("デフォルトデッキ",[1,2,3,4,5,6,7,8,9,10,11,12,19,20,21],[]))
 
 func _ready():
 	pause_mode = Node.PAUSE_MODE_PROCESS

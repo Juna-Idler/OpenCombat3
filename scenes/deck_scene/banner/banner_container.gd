@@ -13,6 +13,10 @@ func initialize(list : DeckList):
 	var s := list.list.size()
 	select_index = 0 if select_index < 0 else select_index
 	select_index = s - 1 if select_index >= s else select_index
+
+	for c in $Container.get_children():
+		$Container.remove_child(c)
+		c.queue_free()
 	
 	for i in list.list.size():
 		var b = Banner.instance()

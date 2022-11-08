@@ -58,8 +58,8 @@ class SceneChanger extends ISceneChanger:
 		yield(_goto_scene_after(),"completed")
 
 	func _goto_build_scene():
-		yield(_goto_scene_before("res://scenes/deck_scene/select_edit_scene.tscn"),"completed")
-		(current_scene as SelectEditDeckScene).initialize(self)
+		yield(_goto_scene_before("res://scenes/deck_scene/build_menu_scene.tscn"),"completed")
+		(current_scene as BuildMenuScene).initialize(self)
 		yield(_goto_scene_after(),"completed")
 
 		

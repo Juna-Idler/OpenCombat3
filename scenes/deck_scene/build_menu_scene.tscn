@@ -1,8 +1,14 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scenes/deck_scene/theme.tres" type="Theme" id=1]
+[ext_resource path="res://scenes/deck_scene/build_select_scene.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/deck_scene/build_menu_scene.gd" type="Script" id=3]
 
 [node name="BuildMenuScene" type="Node"]
+script = ExtResource( 3 )
+
+[node name="BuildSelectScene" parent="." instance=ExtResource( 2 )]
+visible = false
 
 [node name="Panel" type="Panel" parent="."]
 anchor_right = 1.0
@@ -16,7 +22,7 @@ margin_right = 208.0
 margin_bottom = 80.0
 text = "BACK"
 
-[node name="Button" type="Button" parent="Panel"]
+[node name="ButtonNewbie" type="Button" parent="Panel"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -26,7 +32,7 @@ margin_top = -232.0
 margin_right = -192.0
 margin_bottom = 280.0
 
-[node name="Label" type="Label" parent="Panel/Button"]
+[node name="Label" type="Label" parent="Panel/ButtonNewbie"]
 anchor_right = 1.0
 margin_bottom = 128.0
 text = "初級レギュレーション"
@@ -34,7 +40,20 @@ align = 1
 valign = 1
 autowrap = true
 
+[node name="Label2" type="Label" parent="Panel/ButtonNewbie"]
+margin_left = 32.0
+margin_top = 160.0
+margin_right = 288.0
+margin_bottom = 480.0
+text = "枚数：15
+コスト：15
+Level2：0
+Level3：0
+プール：1-27
+"
+
 [node name="Button2" type="Button" parent="Panel"]
+visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -43,3 +62,23 @@ margin_left = -160.0
 margin_top = -232.0
 margin_right = 160.0
 margin_bottom = 280.0
+
+[node name="Button3" type="Button" parent="Panel"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 192.0
+margin_top = -232.0
+margin_right = 512.0
+margin_bottom = 280.0
+
+[node name="Cover" type="Control" parent="Panel"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[connection signal="return_button_pressed" from="BuildSelectScene" to="." method="_on_BuildSelectScene_return_button_pressed"]
+[connection signal="pressed" from="Panel/ReturnButton" to="." method="_on_ReturnButton_pressed"]
+[connection signal="pressed" from="Panel/ButtonNewbie" to="." method="_on_ButtonNewbie_pressed"]

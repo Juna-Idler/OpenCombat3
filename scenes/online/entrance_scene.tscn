@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=1]
-[ext_resource path="res://scenes/deck_scene/banner.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/deck_scene/banner/banner.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/deck_scene/select_use_scene.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scenes/online/entrance_scene.gd" type="Script" id=5]
 

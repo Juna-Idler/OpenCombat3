@@ -9,6 +9,16 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "",
+"class": "BuildMenuScene",
+"language": "GDScript",
+"path": "res://scenes/deck_scene/build_menu_scene.gd"
+}, {
+"base": "Node",
+"class": "BuildSelectScene",
+"language": "GDScript",
+"path": "res://scenes/deck_scene/build_select_scene.gd"
+}, {
 "base": "Node2D",
 "class": "Card",
 "language": "GDScript",
@@ -82,7 +92,7 @@ _global_script_classes=[ {
 "base": "Control",
 "class": "DeckBanner",
 "language": "GDScript",
-"path": "res://scenes/deck_scene/banner.gd"
+"path": "res://scenes/deck_scene/banner/banner.gd"
 }, {
 "base": "Reference",
 "class": "DeckData",
@@ -214,10 +224,10 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/game_processor/processor_player_data.gd"
 }, {
-"base": "",
-"class": "SelectEditDeckScene",
+"base": "Reference",
+"class": "RegulationData",
 "language": "GDScript",
-"path": "res://scenes/deck_scene/select_edit_scene.gd"
+"path": "res://scripts/game_data/regulation_data.gd"
 }, {
 "base": "Control",
 "class": "SelectUseDeckScene",
@@ -240,6 +250,8 @@ _global_script_classes=[ {
 "path": "res://scenes/ui/v_box_layout.gd"
 } ]
 _global_script_class_icons={
+"BuildMenuScene": "",
+"BuildSelectScene": "",
 "Card": "",
 "CardCatalog": "",
 "CardData": "",
@@ -281,7 +293,7 @@ _global_script_class_icons={
 "PlayingScene": "",
 "ProcessorData": "",
 "ProcessorPlayerData": "",
-"SelectEditDeckScene": "",
+"RegulationData": "",
 "SelectUseDeckScene": "",
 "SkillData": "",
 "TitleScene": "",

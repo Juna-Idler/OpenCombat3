@@ -1,13 +1,13 @@
 [gd_scene load_steps=21 format=2]
 
-[ext_resource path="res://scenes/deck_scene/edit_scene.gd" type="Script" id=1]
+[ext_resource path="res://scenes/deck_scene/build_scene.gd" type="Script" id=1]
 [ext_resource path="res://scenes/card/card_front.tscn" type="PackedScene" id=2]
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=3]
 [ext_resource path="res://scenes/card/large_card_view.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scenes/deck_scene/list_view.tscn" type="PackedScene" id=5]
 [ext_resource path="res://scenes/ui/h_tween_box_container.tscn" type="PackedScene" id=6]
 [ext_resource path="res://scenes/ui/clickable_control.gd" type="Script" id=7]
-[ext_resource path="res://scenes/deck_scene/banner_editor.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scenes/deck_scene/banner/banner_editor.tscn" type="PackedScene" id=8]
 
 [sub_resource type="DynamicFont" id=8]
 size = 40

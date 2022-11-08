@@ -37,13 +37,11 @@ var key_cards : PoolIntArray
 
 var initial_deck : DeckData
 
-var regulation_cards_count : int
-var regulation_cost_limit : int
+var deck_regulation : RegulationData.DeckRegulation
 var card_pool : Array
 
-func initialize(deck : DeckData,cards_count : int,cost_limit : int,pool : Array):
-	regulation_cards_count = cards_count
-	regulation_cost_limit = cost_limit
+func initialize(deck : DeckData,regulation : RegulationData.DeckRegulation,pool : Array):
+	deck_regulation = regulation
 	card_pool = pool
 	initial_deck = deck
 	key_cards = deck.key_cards
@@ -152,13 +150,13 @@ func remove_card(cd : CardData):
 	display_deck_number()
 
 func display_deck_number():
-	if deck_cards_count < regulation_cards_count:
+	if deck_cards_count < deck_regulation.card_count:
 		$Header/CardsCount.self_modulate = Color.blue
-	elif deck_cards_count > regulation_cards_count:
+	elif deck_cards_count > deck_regulation.card_count:
 		$Header/CardsCount.self_modulate = Color.red
 	else:
 		$Header/CardsCount.self_modulate = Color.white
-	if deck_cost <= regulation_cost_limit:
+	if deck_cost <= deck_regulation.total_cost:
 		$Header/TotalCost.self_modulate = Color.white
 	else:
 		$Header/TotalCost.self_modulate = Color.red
@@ -334,14 +332,16 @@ func _on_ReturnButton_pressed():
 
 
 func _on_SaveButton_pressed():
-	if deck_cards_count != regulation_cards_count or deck_cost > regulation_cost_limit:
+	var deck = $"%BannerEditor".get_deck_data() if banner_mode\
+			else DeckData.new($Header/DeckName.text,get_deck(),key_cards)
+	var failed := deck_regulation.check_regulation(deck.cards,Global.card_catalog)
+	if not failed.empty():
 		$PopupDialog/Label.text = "DECK_OUT_OF_REGULATION"
 		$PopupDialog/ButtonDiscard.hide()
 		$PopupDialog/ButtonSave.show()
 		$PopupDialog.popup_centered()
 		return
-	initial_deck = $"%BannerEditor".get_deck_data() if banner_mode\
-			else DeckData.new($Header/DeckName.text,get_deck(),key_cards)
+	initial_deck = deck
 	emit_signal("pressed_save_button",initial_deck)
 
 
