@@ -9,6 +9,7 @@ var scene_changer : ISceneChanger
 
 func initialize(changer : ISceneChanger):
 	scene_changer = changer
+	$RegulationSelect.initialize()
 
 func _terminalize():
 	pass
@@ -17,25 +18,27 @@ func _ready():
 	pass
 
 
-func _on_ReturnButton_pressed():
-	scene_changer._goto_title_scene()
+func _on_RegulationSelect_regulation_button_pressed(name):
+	if name == "newbie":
+		$Cover.show()
+		$BuildSelectScene.initialize_build(Global.regulation_newbie)
+		$BuildSelectScene.show()
+		var tween := create_tween()
+		tween.tween_property($RegulationSelect,"modulate:a",0.0,0.5)
+		tween.tween_callback($RegulationSelect,"hide")
+		tween.tween_callback($Cover,"hide")
 
-func _on_ButtonNewbie_pressed():
-	$BuildSelectScene.initialize(Global.regulation_newbie)
-	$Panel/Cover.show()
-	$BuildSelectScene.show()
-	var tween := create_tween()
-	tween.tween_property($Panel,"modulate:a",0.0,0.5)
-	tween.tween_callback($Panel,"hide")
-	
+
+func _on_RegulationSelect_return_button_pressed():
+	$Cover.show()
+	scene_changer._goto_title_scene()
 
 
 func _on_BuildSelectScene_return_button_pressed():
-	$Panel.show()
+	$Cover.show()
+	$RegulationSelect.show()
 	var tween := create_tween()
-	tween.tween_property($Panel,"modulate:a",1.0,0.5)
+	tween.tween_property($RegulationSelect,"modulate:a",1.0,0.5)
 	tween.tween_callback($BuildSelectScene,"hide")
-	tween.tween_callback($Panel/Cover,"hide")
-
-
+	tween.tween_callback($Cover,"hide")
 

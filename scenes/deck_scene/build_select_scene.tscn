@@ -39,14 +39,15 @@ rect_min_size = Vector2( 256, 0 )
 size_flags_horizontal = 3
 custom_styles/panel = SubResource( 1 )
 
-[node name="ReturnButton" type="Button" parent="Panel"]
-margin_left = 16.0
-margin_top = 16.0
-margin_right = 208.0
-margin_bottom = 80.0
-text = "BACK"
+[node name="BuildControl" type="Control" parent="Panel"]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -256.0
+margin_bottom = -256.0
 
-[node name="ButtonDelete" type="Button" parent="Panel"]
+[node name="ButtonDelete" type="Button" parent="Panel/BuildControl"]
+unique_name_in_owner = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -216.0
@@ -55,7 +56,8 @@ margin_right = -40.0
 margin_bottom = 88.0
 text = "DELETE"
 
-[node name="ButtonCopy" type="Button" parent="Panel"]
+[node name="ButtonCopy" type="Button" parent="Panel/BuildControl"]
+unique_name_in_owner = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -216.0
@@ -64,7 +66,8 @@ margin_right = -40.0
 margin_bottom = 184.0
 text = "COPY"
 
-[node name="ButtonNew" type="Button" parent="Panel"]
+[node name="ButtonNew" type="Button" parent="Panel/BuildControl"]
+unique_name_in_owner = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -216.0
@@ -73,7 +76,8 @@ margin_right = -40.0
 margin_bottom = 280.0
 text = "NEW"
 
-[node name="ButtonUP" type="Button" parent="Panel"]
+[node name="ButtonUP" type="Button" parent="Panel/BuildControl"]
+unique_name_in_owner = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -224.0
@@ -82,7 +86,8 @@ margin_right = -144.0
 margin_bottom = 376.0
 text = "↑"
 
-[node name="ButtonDown" type="Button" parent="Panel"]
+[node name="ButtonDown" type="Button" parent="Panel/BuildControl"]
+unique_name_in_owner = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -224.0
@@ -93,7 +98,8 @@ grow_horizontal = 2
 text = "↓"
 clip_text = true
 
-[node name="ButtonMoveSave" type="Button" parent="Panel"]
+[node name="ButtonMoveSave" type="Button" parent="Panel/BuildControl"]
+unique_name_in_owner = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -112.0
@@ -105,12 +111,12 @@ disabled = true
 text = "SAVE"
 clip_text = true
 
-[node name="ButtonEdit" type="Button" parent="Panel"]
-margin_left = 1056.0
-margin_top = 576.0
-margin_right = 1248.0
-margin_bottom = 640.0
-text = "EDIT"
+[node name="ReturnButton" type="Button" parent="Panel"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 208.0
+margin_bottom = 64.0
+text = "BACK"
 
 [node name="Label" type="Label" parent="Panel"]
 margin_left = 32.0
@@ -133,11 +139,25 @@ text = "枚数:
 autowrap = true
 clip_text = true
 
+[node name="ButtonEdit" type="Button" parent="Panel"]
+margin_left = 1056.0
+margin_top = 520.0
+margin_right = 1248.0
+margin_bottom = 584.0
+text = "EDIT"
+
+[node name="ButtonDecide" type="Button" parent="Panel"]
+margin_left = 1056.0
+margin_top = 616.0
+margin_right = 1248.0
+margin_bottom = 680.0
+text = "DECIDE"
+
 [node name="BannerContainer" parent="." instance=ExtResource( 1 )]
 margin_left = 256.0
-margin_top = 16.0
+margin_top = 64.0
 margin_bottom = 704.0
-rect_min_size = Vector2( 720, 688 )
+rect_min_size = Vector2( 720, 640 )
 
 [node name="BuildScene" parent="." instance=ExtResource( 3 )]
 visible = false
@@ -174,14 +194,15 @@ margin_top = -295.0
 margin_right = 360.0
 margin_bottom = -79.0
 
+[connection signal="pressed" from="Panel/BuildControl/ButtonDelete" to="." method="_on_ButtonDelete_pressed"]
+[connection signal="pressed" from="Panel/BuildControl/ButtonCopy" to="." method="_on_ButtonCopy_pressed"]
+[connection signal="pressed" from="Panel/BuildControl/ButtonNew" to="." method="_on_ButtonNew_pressed"]
+[connection signal="pressed" from="Panel/BuildControl/ButtonUP" to="." method="_on_ButtonUP_pressed"]
+[connection signal="pressed" from="Panel/BuildControl/ButtonDown" to="." method="_on_ButtonDown_pressed"]
+[connection signal="pressed" from="Panel/BuildControl/ButtonMoveSave" to="." method="_on_ButtonMoveSave_pressed"]
 [connection signal="pressed" from="Panel/ReturnButton" to="." method="_on_ReturnButton_pressed"]
-[connection signal="pressed" from="Panel/ButtonDelete" to="." method="_on_ButtonDelete_pressed"]
-[connection signal="pressed" from="Panel/ButtonCopy" to="." method="_on_ButtonCopy_pressed"]
-[connection signal="pressed" from="Panel/ButtonNew" to="." method="_on_ButtonNew_pressed"]
-[connection signal="pressed" from="Panel/ButtonUP" to="." method="_on_ButtonUP_pressed"]
-[connection signal="pressed" from="Panel/ButtonDown" to="." method="_on_ButtonDown_pressed"]
-[connection signal="pressed" from="Panel/ButtonMoveSave" to="." method="_on_ButtonMoveSave_pressed"]
 [connection signal="pressed" from="Panel/ButtonEdit" to="." method="_on_ButtonEdit_pressed"]
+[connection signal="pressed" from="Panel/ButtonDecide" to="." method="_on_ButtonDecide_pressed"]
 [connection signal="pressed_save_button" from="BuildScene" to="." method="_on_BuildScene_pressed_save_button"]
 [connection signal="pressed" from="PopupDialog/ButtonCancel" to="." method="_on_ButtonCancel_pressed"]
 [connection signal="pressed" from="PopupDialog/ButtonOK" to="." method="_on_ButtonOK_pressed"]

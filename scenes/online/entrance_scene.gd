@@ -10,11 +10,16 @@ var scene_changer : ISceneChanger
 
 export var websocket_url := "wss://opencombat3.onrender.com"
 
-onready var server : OnlineServer
+var server : OnlineServer
+
+var deck_regulation : RegulationData.DeckRegulation
+var match_regulation : RegulationData.MatchRegulation
 
 func initialize(s : OnlineServer,changer : ISceneChanger):
 	server = s
+	deck_regulation = Global.regulation_newbie
 	scene_changer = changer
+	$Panel/DeckBanner.set_deck_data(Global.deck_list["newbie"].get_select_deck())
 	
 	server.connect("connected",self,"_on_Server_connected")
 	server.connect("matched",self,"_on_Server_matched")
@@ -33,22 +38,49 @@ func _terminalize():
 	
 
 func _ready():
-	$Panel/DeckBanner.set_deck_data(Global.deck_list_newbie.get_select_deck())
+	pass
 
 
 func _on_Matching_pressed():
 	var deck = $Panel/DeckBanner.get_deck_data()
-	server.send_match("name",deck.cards,"")
+	var failed := deck_regulation.check_regulation(deck.cards,Global.card_catalog)
+	if failed.empty():
+		server.send_match(Global.player_name,deck.cards,"newbie")
+		$Panel/Matching.text = "マッチング待機中"
+		$Panel/Matching.disabled = true
+	else:
+		pass
 
 
 func _on_ButtonDeckChange_pressed():
-	$DeckSelectScene.show()
+	$BuildSelectScene.initialize_select(Global.regulation_newbie)
+	$BuildSelectScene.show()
+
+func _on_BuildSelectScene_decided(index):
+	if index >= 0 and index < Global.deck_list["newbie"].list.size():
+		Global.deck_list["newbie"].select = index
+		Global.deck_list["newbie"].save_deck_list()
+		$Panel/DeckBanner.set_deck_data(Global.deck_list["newbie"].get_select_deck())
+		$BuildSelectScene.hide()
+		
+func _on_BuildSelectScene_return_button_pressed():
+	$BuildSelectScene.hide()
 
 
-func _on_DeckSelectScene_decided(index):
-	if index >= 0 and index < Global.deck_list_newbie.list.size():
-		Global.deck_list_newbie.select = index
-		$Panel/DeckBanner.set_deck_data(Global.deck_list_newbie.get_select_deck())
+func _on_ButtonRegulation_pressed():
+	$RegulationSelect.initialize()
+	$RegulationSelect.show()
+
+func _on_RegulationSelect_regulation_button_pressed(name):
+	if name == "newbie":
+		$Panel/ButtonRegulation.text = "初級レギュレーション"
+		deck_regulation = Global.regulation_newbie
+		$Panel/DeckBanner.set_deck_data(Global.deck_list[name].get_select_deck())
+		$RegulationSelect.hide()
+
+func _on_RegulationSelect_return_button_pressed():
+	$RegulationSelect.hide()
+
 
 
 func _on_ButtonBack_pressed():
@@ -67,3 +99,7 @@ func _on_Server_matched():
 func _on_Server_disconnected():
 	$Panel/Matching.disabled = true
 	pass
+
+
+
+

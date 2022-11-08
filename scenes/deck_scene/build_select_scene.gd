@@ -3,19 +3,36 @@ extends Node
 class_name BuildSelectScene
 
 signal return_button_pressed()
+signal decided(index)
+
 
 onready var banner_container := $BannerContainer
 
 var deck_regulation : RegulationData.DeckRegulation
 var card_pool : Array
 
-func initialize(regulation : RegulationData.DeckRegulation):
+func initialize_build(regulation : RegulationData.DeckRegulation):
 	banner_container.initialize(Global.deck_list[regulation.name])
 	deck_regulation = regulation
 	card_pool = []
 	for i in range(0,regulation.card_pool.size(),2):
 		for id in range(regulation.card_pool[i],regulation.card_pool[i + 1] + 1):
 			card_pool.append(Global.card_catalog.get_card_data(id))
+
+	$Panel/BuildControl.show()
+	$Panel/ButtonDecide.hide()
+
+func initialize_select(regulation : RegulationData.DeckRegulation):
+	banner_container.initialize(Global.deck_list[regulation.name])
+	deck_regulation = regulation
+	card_pool = []
+	for i in range(0,regulation.card_pool.size(),2):
+		for id in range(regulation.card_pool[i],regulation.card_pool[i + 1] + 1):
+			card_pool.append(Global.card_catalog.get_card_data(id))
+			
+	$Panel/BuildControl.hide()
+	$Panel/ButtonDecide.show()
+
 
 func _terminalize():
 	pass
@@ -37,19 +54,19 @@ func _on_BuildScene_pressed_save_button(deck_data):
 		db.initialize(deck_data)
 		db.reset_visual()
 		banner_container.save_deck_list()
-		$Panel/ButtonMoveSave.disabled = true
+		$"%ButtonMoveSave".disabled = true
 
 
 
 func _on_ButtonNew_pressed():
 	banner_container.append(DeckData.new("",[],[]))
-	$Panel/ButtonMoveSave.disabled = true
+	$"%ButtonMoveSave".disabled = true
 
 
 func _on_ButtonCopy_pressed():
 	if banner_container.select:
 		banner_container.append(banner_container.get_select_banner().get_deck_data())
-		$Panel/ButtonMoveSave.disabled = true
+		$"%ButtonMoveSave".disabled = true
 
 
 func _on_ButtonDelete_pressed():
@@ -78,13 +95,19 @@ func _on_ReturnButton_pressed():
 
 func _on_ButtonUP_pressed():
 	if banner_container.move_up_select():
-		$Panel/ButtonMoveSave.disabled = false
+		$"%ButtonMoveSave".disabled = false
 
 
 func _on_ButtonDown_pressed():
 	if banner_container.move_down_select():
-		$Panel/ButtonMoveSave.disabled = false
+		$"%ButtonMoveSave".disabled = false
 
 func _on_ButtonMoveSave_pressed():
 		banner_container.save_deck_list()
-		$Panel/ButtonMoveSave.disabled = true
+		$"%ButtonMoveSave".disabled = true
+
+
+func _on_ButtonDecide_pressed():
+	if banner_container.select:
+		banner_container.get_select_index()
+		emit_signal("decided",banner_container.get_select_index())

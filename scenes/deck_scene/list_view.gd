@@ -27,13 +27,11 @@ var moving : bool = false
 var initial_deck : Array
 
 func _ready():
-	var deck := []
-	for i in 30:
-		deck.append(i % 27 + 1)
-	set_deck(deck)
+	pass
 
 
-func set_deck(deck : Array,draggable = true):
+func set_deck(deck : Array,name : String,draggable = true):
+	$LabelDeckName.text = name
 	initial_deck = deck
 	for c in deck_container.get_children():
 		deck_container.remove_child(c)

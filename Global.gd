@@ -1,6 +1,8 @@
 extends Node
 
 
+var player_name : String = "Name"
+
 var card_catalog := CardCatalog.new()
 
 var regulation_newbie := RegulationData.DeckRegulation.new("newbie",15,15,0,0,"1-27")

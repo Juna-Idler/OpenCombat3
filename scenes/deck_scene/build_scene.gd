@@ -289,7 +289,7 @@ func _on_PoolList_gui_input(event):
 
 func _on_ListOpen_pressed():
 	$DeckList.visible = true
-	$DeckList.set_deck(get_deck())
+	$DeckList.set_deck(get_deck(),$Header/DeckName.text)
 
 
 func _on_DeckList_closed(deck,updated):
@@ -353,7 +353,7 @@ func _on_ButtonSave_pressed():
 	initial_deck = $"%BannerEditor".get_deck_data() if banner_mode\
 			else DeckData.new($Header/DeckName.text,get_deck(),key_cards)
 	emit_signal("pressed_save_button",initial_deck)
-	
+	$PopupDialog.hide()
 
 func _on_ButtonCancel_pressed():
 	$PopupDialog.hide()
