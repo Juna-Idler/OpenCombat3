@@ -37,6 +37,8 @@ func terminalize():
 	_client.disconnect_from_host()
 
 func send_match(name :String, deck :Array, regulation :String):
+	if not is_ws_connected:
+		emit_signal("recieved_end","disconnected")
 	var send := """{"type":"Match","data":{"regulation":"%s","name":"%s","deck":[%s]}}"""\
 			% [regulation,name,PoolStringArray(deck).join(",")]
 	_client.get_peer(1).put_packet(send.to_utf8())
@@ -45,7 +47,9 @@ func send_match(name :String, deck :Array, regulation :String):
 func _closed(_was_clean = false):
 	is_ws_connected = false
 	_primary_data = null
-	emit_signal("disconnected")	
+	emit_signal("disconnected")
+	emit_signal("recieved_end","disconnected")
+	
 
 func _connected(_proto = ""):
 	var send := """{"type":"Version","data":{"version":"%s"}}""" % version_string
@@ -111,11 +115,15 @@ func _get_primary_data() -> PrimaryData:
 	return _primary_data
 
 func _send_ready():
+	if not is_ws_connected:
+		return
 	var send := """{"type":"Ready","data":{}}"""
 	_client.get_peer(1).put_packet(send.to_utf8())
 
 
 func _send_combat_select(round_count:int,index:int,hands_order:Array = []):
+	if not is_ws_connected:
+		return
 	var phase = round_count * 2
 	var hand := PoolStringArray(hands_order)
 	var send := """{"type":"Select","data":{"p":%s,"i":%s,"h":[%s]}}"""\
@@ -123,6 +131,8 @@ func _send_combat_select(round_count:int,index:int,hands_order:Array = []):
 	_client.get_peer(1).put_packet(send.to_utf8())
 
 func _send_recovery_select(round_count:int,index:int,hands_order:Array = []):
+	if not is_ws_connected:
+		return
 	if index < 0:
 		return
 	var phase = round_count * 2 + 1
@@ -133,6 +143,8 @@ func _send_recovery_select(round_count:int,index:int,hands_order:Array = []):
 
 
 func _send_surrender():
+	if not is_ws_connected:
+		return
 	var send := """{"type":"End","data":{"msg":"Surrender"}}"""
 	_client.get_peer(1).put_packet(send.to_utf8())
 
