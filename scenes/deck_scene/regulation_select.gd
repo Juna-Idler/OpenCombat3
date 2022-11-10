@@ -8,6 +8,7 @@ func initialize():
 	pass
 
 func _ready():
+# warning-ignore:return_value_discarded
 	$ButtonNewbie.connect("pressed",self,"_on_ButtonRegulation_pressed",["newbie"])
 	pass
 

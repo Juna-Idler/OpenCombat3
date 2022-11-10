@@ -96,6 +96,11 @@ class MatchRegulation:
 	var combat_additional_time : float
 	var recovery_additional_time : float
 	
+	func _init(hc:int,tt:float,cat:float,rat:float):
+		hand_count = hc
+		thinking_time = tt
+		combat_additional_time = cat
+		recovery_additional_time = rat
 
 	
 

@@ -6,23 +6,59 @@ var scene_changer : ISceneChanger
 
 var offline_server : OfflineServer
 
+var deck_regulation : RegulationData.DeckRegulation
+
+var select_cpu_deck : bool
+
+
+class ZeroCommander extends ICpuCommander:
+	func _get_commander_name()-> String:
+		return "ZeroCommander"
+
+
+class RandomCommander extends ICpuCommander:
+	var generator : RandomNumberGenerator
+	func _get_commander_name()-> String:
+		return "RandomCommander"
+
+	func _first_select(myhand : Array, _rivalhand : Array)-> int:
+		generator = RandomNumberGenerator.new()
+		generator.randomize()
+		return generator.randi_range(0,myhand.size() - 1)
+
+	func _combat_select(data : IGameServer.UpdateData)-> int:
+		var hand := data.myself.hand.duplicate()
+		hand.remove(data.myself.select)
+		hand.append_array(data.myself.draw)
+		return generator.randi_range(0,hand.size() - 1)
+
+	func _recover_select(data : IGameServer.UpdateData)-> int:
+		var hand := data.myself.hand.duplicate()
+		hand.remove(data.myself.select)
+		hand.append_array(data.myself.draw)
+		return generator.randi_range(0,hand.size() - 1)
+
+
+var commanders : Array = [
+	ZeroCommander.new(),
+	RandomCommander.new()
+]
+
+
 
 func _ready():
 	pass
 
 func initialize(changer : ISceneChanger):
-	
-	offline_server = OfflineServer.new("Tester",Global.card_catalog)
-
-	var deck = Global.deck_list_newbie.get_select_deck()
-# warning-ignore:return_value_discarded
-	offline_server.standby_single(deck.cards,0)
-	
 	scene_changer = changer
-	$PlayingScene.initialize(offline_server)
 	
-	$PlayingScene.send_ready()
-	$"%ResultOverlap".hide()
+	offline_server = OfflineServer.new(Global.card_catalog)
+
+	deck_regulation = Global.regulation_newbie
+	var deck_list = Global.deck_list[deck_regulation.name]
+	$Panel/Panel/CPUDeckBanner.set_deck_data(deck_list.get_select_deck())
+	$Panel/Panel/DeckBanner.set_deck_data(deck_list.get_select_deck())
+
 
 
 func _terminalize():
@@ -49,11 +85,79 @@ func _on_PlayingScene_ended(situation,msg):
 
 
 func _on_ReturnButton_pressed():
-	if scene_changer:
-		scene_changer._goto_title_scene()
-	else:
-		print("return title")
-		$PlayingScene.terminalize()
-		$PlayingScene.initialize(offline_server)
+	$"%ResultOverlap".hide()
+	$Panel/Panel.show()
 
 
+
+func _on_ButtonBack_pressed():
+	scene_changer._goto_title_scene()
+
+
+
+func _on_ButtonStart_pressed():
+	var deck = $Panel/Panel/DeckBanner.get_deck_data()
+	var cpu_deck = $Panel/Panel/CPUDeckBanner.get_deck_data()
+	
+	if !deck_regulation.check_regulation(deck.cards,Global.card_catalog).empty() or \
+			!deck_regulation.check_regulation(cpu_deck.cards,Global.card_catalog).empty():
+		return
+	
+	var regulation = RegulationData.MatchRegulation.new(3,180,10,5)
+	var commander = commanders[$Panel/Panel/OptionCommander.selected]
+	offline_server.initialize("name",deck.cards,commander,cpu_deck.cards,regulation)
+	
+	$PlayingScene.initialize(offline_server)
+	$PlayingScene.send_ready()
+	
+	$"%ResultOverlap".hide()
+	$Panel/Panel.hide()
+
+
+
+func _on_BuildSelectScene_decided(index):
+	var deck_list = Global.deck_list[deck_regulation.name]
+	if index >= 0 and index < deck_list.list.size():
+		if select_cpu_deck:
+			$Panel/Panel/CPUDeckBanner.set_deck_data(deck_list.list[index])
+		else:
+			deck_list.select = index
+			deck_list.save_deck_list()
+			$Panel/Panel/DeckBanner.set_deck_data(deck_list.get_select_deck())
+		$Panel/Panel/BuildSelectScene.hide()
+
+func _on_BuildSelectScene_return_button_pressed():
+	$Panel/Panel/BuildSelectScene.hide()
+
+func _on_ButtonDeckChange_pressed():
+	select_cpu_deck = false
+	$Panel/Panel/BuildSelectScene.initialize_select(deck_regulation)
+	$Panel/Panel/BuildSelectScene.show()
+
+func _on_ButtonCPUDeckChange_pressed():
+	select_cpu_deck = true
+	$Panel/Panel/BuildSelectScene.initialize_select(deck_regulation)
+	$Panel/Panel/BuildSelectScene.show()
+
+
+
+func _on_ButtonRegulation_pressed():
+	$Panel/Panel/RegulationSelect.initialize()
+	$Panel/Panel/RegulationSelect.show()
+
+
+func _on_RegulationSelect_regulation_button_pressed(name):
+	if name == "newbie" and deck_regulation.name != name:
+		$Panel/Panel/ButtonRegulation/Label.text = "初級レギュレーション"
+		deck_regulation = Global.regulation_newbie
+		$Panel/Panel/DeckBanner.set_deck_data(Global.deck_list[name].get_select_deck())
+		$Panel/Panel/CPUDeckBanner.set_deck_data(Global.deck_list[name].get_select_deck())
+		$Panel/Panel/RegulationSelect.hide()
+
+
+func _on_RegulationSelect_return_button_pressed():
+	$Panel/Panel/RegulationSelect.hide()
+
+
+func _on_OptionCommander_item_selected(index):
+	pass # Replace with function body.

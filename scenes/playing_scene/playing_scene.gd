@@ -36,6 +36,7 @@ var rival : PlayingPlayer
 var combat_director : CombatDirector = CombatDirector.new()
 
 func _ready():
+	$"%CardList".large_card_view = $"%LargeCardView"
 	pass
 
 
@@ -45,6 +46,10 @@ func initialize(server : IGameServer):
 	game_server.connect("recieved_combat_result",self,"_on_GameServer_recieved_combat_result")
 	game_server.connect("recieved_recovery_result",self,"_on_GameServer_recieved_recovery_result")
 	game_server.connect("recieved_end",self,"_on_GameServer_recieved_end")
+	
+	for c in $CardLayer.get_children():
+		$CardLayer.remove_child(c)
+		c.queue_free()
 	
 	var pd := game_server._get_primary_data()
 	var my_deck := []
@@ -88,7 +93,8 @@ func initialize(server : IGameServer):
 	combat_director.initialize(myself,rival,
 			combat_overlap,$BGLayer/PowerBalance)
 	combat_overlap.visible = false
-	$"%CardList".large_card_view = $"%LargeCardView"
+
+	$TopUILayer/Control/SettingButton.disabled = false
 
 
 func send_ready():

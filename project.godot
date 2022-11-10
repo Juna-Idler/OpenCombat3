@@ -14,7 +14,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scenes/deck_scene/build_menu_scene.gd"
 }, {
-"base": "Node",
+"base": "Control",
 "class": "BuildSelectScene",
 "language": "GDScript",
 "path": "res://scenes/deck_scene/build_select_scene.gd"

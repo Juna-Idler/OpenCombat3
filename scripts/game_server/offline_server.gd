@@ -9,27 +9,17 @@ var _commander : ICpuCommander = null
 var _result:int
 
 
-class ZeroCommander extends ICpuCommander:
-	func _get_commander_name()-> String:
-		return "ZeroCommander"
-	
 
-func _init(name:String,card_catalog : CardCatalog):
-	initialize(name,card_catalog)
-
-func initialize(name:String,card_catalog):
+func _init(card_catalog : CardCatalog):
 	_processor = GameProcessor.new(card_catalog)
-	_player_name = name;
+	pass
 
-func standby_single(deck:Array,_enemy_id:int) -> bool:
-	var edeck := []
-	for i in 27:
-		edeck.append(i + 1)
-	edeck.shuffle()
-	_commander = ZeroCommander.new()
-# warning-ignore:return_value_discarded
-	_processor.standby(deck,4,true,edeck,4,false)
-	return true
+func initialize(name:String,deck:Array,
+		commander : ICpuCommander,cpu_deck:Array,
+		regulation :RegulationData.MatchRegulation):
+	_player_name = name;
+	_commander = commander
+	_processor.standby(deck,regulation.hand_count,true,cpu_deck,regulation.hand_count,true)
 
 func _get_primary_data() -> PrimaryData:
 	var my_deck_list = []

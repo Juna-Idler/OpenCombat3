@@ -6,12 +6,12 @@
 [ext_resource path="res://scenes/deck_scene/regulation_select.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scenes/online/entrance_scene.gd" type="Script" id=5]
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=3]
 size = 24
 font_data = ExtResource( 1 )
 
 [sub_resource type="Theme" id=2]
-default_font = SubResource( 1 )
+default_font = SubResource( 3 )
 
 [node name="EntranceScene" type="Node"]
 script = ExtResource( 5 )
