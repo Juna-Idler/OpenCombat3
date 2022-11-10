@@ -14,8 +14,8 @@ onready var rival_combat_pos : Vector2 = $UILayer/RivalField/Playing.rect_global
 onready var my_stock_pos : Vector2 = $UILayer/MyField/Stock.rect_global_position + $UILayer/MyField/Stock.rect_size / 2
 onready var rival_stock_pos : Vector2 = $UILayer/RivalField/Stock.rect_global_position + $UILayer/RivalField/Stock.rect_size / 2
 
-onready var my_played_pos : Vector2 = $UILayer/MyField/Played.rect_global_position + Vector2(-$UILayer/MyField/Played.rect_size.y / 2,$UILayer/MyField/Played.rect_size.x / 2)
-onready var rival_played_pos : Vector2 = $UILayer/RivalField/Played.rect_global_position + Vector2($UILayer/RivalField/Played.rect_size.y / 2,-$UILayer/RivalField/Played.rect_size.x / 2)
+onready var my_played_pos : Vector2 = $UILayer/MyField/Played.rect_global_position + $UILayer/MyField/Played.rect_size / 2
+onready var rival_played_pos : Vector2 = $UILayer/RivalField/Played.rect_global_position + $UILayer/RivalField/Played.rect_size / 2
 
 onready var my_discard_pos : Vector2 = $UILayer/MyField/Discard.rect_global_position + $UILayer/MyField/Discard.rect_size / 2
 onready var rival_discard_pos : Vector2 = $UILayer/RivalField/Discard.rect_global_position + $UILayer/RivalField/Discard.rect_size / 2

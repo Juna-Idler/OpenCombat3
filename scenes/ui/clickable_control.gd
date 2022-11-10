@@ -23,7 +23,8 @@ func _gui_input(event: InputEvent):
 				_timer.stop()
 				_timer.disconnect("timeout",self,"_on_timer_timeout")
 			_holding = false
-			if get_global_rect().has_point((event as InputEventMouseButton).global_position):
+			var rect := Rect2(Vector2.ZERO,rect_size)
+			if rect.has_point((event as InputEventMouseButton).position):
 				emit_signal("clicked")
 	else:
 		if (event is InputEventMouseButton
