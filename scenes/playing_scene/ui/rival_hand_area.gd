@@ -59,8 +59,8 @@ func align():
 	if step < control_width + control_space:
 		start = step / 10
 		step = (rect_size.x - control_width - start*2) / (hand_count - 1);
-	for i in range(hand_count - 1,-1,-1):
-		controls[i].rect_position.x = start + step * i
+	for i in range(hand_count):
+		controls[i].rect_position.x = start + step * (hand_count - 1 - i)
 		controls[i].rect_position.y = y
 
 
