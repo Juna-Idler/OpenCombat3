@@ -3,15 +3,15 @@ extends Node2D
 class_name Card
 
 
-enum Place{
-	STACK,
+enum Location{
+	STOCK,
 	HAND,
 	PLAYED,
 	DISCARD,
 }
 
 var id_in_deck:int
-var place : int
+var location : int
 
 var front : CardFront = null
 
@@ -29,7 +29,7 @@ class Affected:
 
 func initialize_card(id:int,cd : CardData,rotate := false) -> Card:
 	id_in_deck = id
-	place = Place.STACK
+	location = Location.STOCK
 	front = $CardFront.initialize_card(cd,rotate)
 
 	return self

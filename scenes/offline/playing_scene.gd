@@ -52,7 +52,7 @@ func _ready():
 func initialize(changer : ISceneChanger):
 	scene_changer = changer
 	
-	offline_server = OfflineServer.new(Global.card_catalog)
+	offline_server = OfflineServer.new()
 
 	deck_regulation = Global.regulation_newbie
 	var deck_list = Global.deck_list[deck_regulation.name]
@@ -105,7 +105,7 @@ func _on_ButtonStart_pressed():
 	
 	var regulation = RegulationData.MatchRegulation.new(3,180,10,5)
 	var commander = commanders[$Panel/Panel/OptionCommander.selected]
-	offline_server.initialize("name",deck.cards,commander,cpu_deck.cards,regulation)
+	offline_server.initialize("name",deck.cards,commander,cpu_deck.cards,regulation,Global.card_catalog)
 	
 	$PlayingScene.initialize(offline_server)
 	$PlayingScene.send_ready()

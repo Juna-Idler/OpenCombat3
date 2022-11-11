@@ -9,7 +9,6 @@ var player2 : ProcessorPlayerData
 
 var situation : int
 
-var _card_catalog : CardCatalog
 var _named_skills := NamedSkillProcessor.new()
 
 
@@ -34,16 +33,14 @@ class SkillOrder:
 		return a.priority < b.priority
 
 
-func _init(card_catalog : CardCatalog):
-	_card_catalog = card_catalog
+func _init():
 	pass
 
 
-func standby(p1_deck : Array,p1_hands:int,p1_shuffle:bool,
-		p2_deck : Array,p2_hands:int,p2_shuffle:bool) -> bool:
+func standby(p1 : ProcessorPlayerData,p2 : ProcessorPlayerData) -> bool:
 	phase = 0;
-	player1 = ProcessorPlayerData.new(p1_deck,p1_hands,_card_catalog,p1_shuffle)
-	player2 = ProcessorPlayerData.new(p2_deck,p2_hands,_card_catalog,p2_shuffle)
+	player1 = p1
+	player2 = p2
 	return true
 
 #hand is deck_in_id Array
@@ -93,10 +90,10 @@ func combat(index1 : int,index2 : int) -> void:
 
 	_after_process(p1_link_color,p2_link_color)
 
-	player1.combat_fix_damage()
-	player2.combat_fix_damage()
+	var p1fatal := player1.damage_is_fatal()
+	var p2fatal := player2.damage_is_fatal()
 
-	if player1.is_fatal() or player2.is_fatal():
+	if p1fatal or p2fatal:
 		phase = -phase
 		return
 

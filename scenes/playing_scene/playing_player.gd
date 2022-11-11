@@ -76,7 +76,7 @@ func _init(dl:Array,
 	stock_count = deck_list.size()
 	for i_ in deck_list:
 		var i := i_ as Card
-		i.place = Card.Place.STACK
+		i.location = Card.Location.STOCK
 	name_lable.set_message_translation(false)
 	name_lable.notification(Node.NOTIFICATION_TRANSLATION_CHANGED)
 	name_lable.text = player_name
@@ -100,7 +100,7 @@ func set_hand(new_hand_indexes:Array):
 		var c := deck_list[hand[i]] as Card
 		c.visible = true
 		c.z_index = i + 100
-		c.place = Card.Place.HAND
+		c.location = Card.Location.HAND
 		cards.append(c)
 	hand_area.set_hand_card(cards)
 	hand_area.move_card(1)
@@ -124,7 +124,7 @@ func play(hand_select : int,new_hand : Array,d : int,tween : SceneTreeTween):
 func play_end(draw_indexes : Array,tween : SceneTreeTween):
 	played.append(playing_card_id)
 	playing_card.z_index = played.size() + 0
-	playing_card.place = Card.Place.PLAYED
+	playing_card.location = Card.Location.PLAYED
 	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 	tween.parallel()
 	tween.tween_property(playing_card,"global_position",played_pos,0.5)
@@ -149,14 +149,14 @@ func recover(hand_select : int,new_hand : Array,draw_indexes : Array,tween : Sce
 		damage_label.text = str(damage) if damage > 0 else ""
 		life_label.text = "%d / %d" % [life,stock_count]
 		recovery_card.z_index = discard.size() + 200
-		recovery_card.place = Card.Place.DISCARD
+		recovery_card.location = Card.Location.DISCARD
 		discard.append(select_id)
 		tween.tween_property(recovery_card,"global_position",discard_pos,1)
 	draw(draw_indexes)
 
 func update_affected(updates : Array):#of IGameServer.UpdateData.Affected
 	for u_ in updates:
-		var u = u_ as IGameServer.UpdateData.Updated
+		var u = u_ as IGameServer.UpdatedCard
 		var c := deck_list[u.index] as Card
 		c.affected.power = u.power
 		c.affected.hit = u.hit

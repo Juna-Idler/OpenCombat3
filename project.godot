@@ -229,6 +229,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/game_data/regulation_data.gd"
 }, {
+"base": "ProcessorPlayerData",
+"class": "SinglePlayerEnemy",
+"language": "GDScript",
+"path": "res://scripts/single_player/enemy.gd"
+}, {
+"base": "IGameServer",
+"class": "SinglePlayerServer",
+"language": "GDScript",
+"path": "res://scripts/single_player/server.gd"
+}, {
 "base": "Reference",
 "class": "SkillData",
 "language": "GDScript",
@@ -289,6 +299,8 @@ _global_script_class_icons={
 "ProcessorData": "",
 "ProcessorPlayerData": "",
 "RegulationData": "",
+"SinglePlayerEnemy": "",
+"SinglePlayerServer": "",
 "SkillData": "",
 "TitleScene": "",
 "VBoxLayout": ""

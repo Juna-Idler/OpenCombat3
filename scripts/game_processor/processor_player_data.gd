@@ -65,40 +65,36 @@ func get_current_hit() -> int:
 func get_current_block() -> int:
 	return int(select_card.get_current_block() * multiply_block)
 
-func combat_fix_damage() -> void:
+func damage_is_fatal() -> bool:
 	var total_damage := damage - get_current_block()
 	damage = 0 if total_damage < 0 else total_damage
-
-func combat_end() -> void:
-	played.push_back(select_card.id_in_deck)
-	
-
-func add_damage(d: int):
-	damage += d
-	
-func is_fatal() -> bool:
 	if _life <= damage:
 		return true
 	return false
 	
+func combat_end() -> void:
+	played.push_back(select_card.id_in_deck)
+	select_card.affected.location = ProcessorData.CardLocation.PLAYED
+
+
+func add_damage(d: int):
+	damage += d
+	
+	
 func supply() -> void:
-# warning-ignore:return_value_discarded
 	_draw_card()
 	if damage > 0:
-# warning-ignore:return_value_discarded
 		_draw_card()
 	
 func recover(index : int) -> void:
 	select = index
 	draw_indexes.clear()
 	select_card = deck_list[hand[index]]
-	var id := _discard_card(index)
-	var card := deck_list[id] as ProcessorData.PlayerCard
-	if damage <= card.data.level:
+	_discard_card(index)
+	if damage <= select_card.data.level:
 		damage = 0
 		return
-	damage -= card.data.level
-	# warning-ignore:return_value_discarded
+	damage -= select_card.data.level
 	_draw_card()
 
 func no_recover() -> void:
@@ -122,16 +118,21 @@ func change_order(new_indexies : Array) -> bool:
 func reset_select():
 	select = -1
 
-func _draw_card() -> int:
+func _draw_card():
 	if stock.empty():
 		return -1
 	var i := stock.pop_back() as int
 	hand.push_back(i)
 	draw_indexes.push_back(i)
-	return i
-func _discard_card(i : int) -> int:
+	(deck_list[i] as ProcessorData.PlayerCard).affected.location = ProcessorData.CardLocation.HAND
+func _discard_card(i : int):
 	var id := hand.pop_at(i) as int
 	_life -= deck_list[id].data.level
 	discard.push_back(id)
-	return id
+	(deck_list[id] as ProcessorData.PlayerCard).affected.location = ProcessorData.CardLocation.DISCARD
+
+func hand_to_deck_bottom(i : int):
+	var id := hand.pop_at(i) as int
+	stock.push_front(id)
+	(deck_list[id] as ProcessorData.PlayerCard).affected.location = ProcessorData.CardLocation.DISCARD
 

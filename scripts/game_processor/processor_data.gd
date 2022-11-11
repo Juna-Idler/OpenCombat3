@@ -1,11 +1,19 @@
 
 class_name ProcessorData
 
+enum CardLocation{
+	STOCK,
+	HAND,
+	PLAYED,
+	DISCARD,
+}
+
 class Affected:
 	var updated : bool = false
 	var power : int = 0 setget set_p
 	var hit : int = 0 setget set_h
 	var block : int = 0 setget set_b
+	var location : int = CardLocation.STOCK setget set_l
 
 	func set_p(v):
 		power = v
@@ -15,6 +23,9 @@ class Affected:
 		updated = true
 	func set_b(v):
 		block = v
+		updated = true
+	func set_l(v):
+		location = v
 		updated = true
 
 	func add(p:int,h:int,b:int):

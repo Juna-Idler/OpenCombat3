@@ -25,6 +25,29 @@ signal recieved_recovery_result(data)
 enum  Phase {GAME_END = -1,COMBAT = 0,RECOVERY = 1}
 enum  Situation {INFERIOR = -1,EVEN = 0,SUPERIOR = 1}
 
+enum CardLocation{
+	STOCK,
+	HAND,
+	PLAYED,
+	DISCARD,
+}
+
+class UpdatedCard:
+	var index : int
+	var card : int
+	var power : int = 0
+	var hit : int = 0
+	var block : int = 0
+	var location : int
+	
+	func _init(a : Array,l : int):
+		index = a[0]
+		card = a[1]
+		power = a[2]
+		hit = a[3]
+		block = a[4]
+		location = l
+		
 
 class PrimaryData:
 	var my_deck_list : Array# of int
@@ -45,10 +68,13 @@ class FirstData:
 	class PlayerData:
 		var hand : Array# of int
 		var life : int
+		var updates : Array# of UpdatedCard
 		
-		func _init(h : Array,l : int):
+		func _init(h : Array,l : int,u : Array):
 			hand = h
 			life = l
+			updates = u
+
 	var myself:PlayerData
 	var rival:PlayerData
 
@@ -62,24 +88,10 @@ class UpdateData:
 	var next_phase : int
 	var situation : int
 
-	class Updated:
-		var index : int
-		var card : int
-		var power : int = 0
-		var hit : int = 0
-		var block : int = 0
-		
-		func _init(a : Array):
-			index = a[0]
-			card = a[1]
-			power = a[2]
-			hit = a[3]
-			block = a[4]
-	
 	class PlayerData:
 		var hand : Array# of int
 		var select:int
-		var updates : Array# of Updated
+		var updates : Array# of UpdatedCard
 		var next_power : int
 		var next_hit : int
 		var next_block : int
