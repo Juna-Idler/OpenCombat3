@@ -154,19 +154,8 @@ func recover(hand_select : int,new_hand : Array,draw_indexes : Array,tween : Sce
 		tween.tween_property(recovery_card,"global_position",discard_pos,1)
 	draw(draw_indexes)
 
-func update_affected(updates : Array):#of IGameServer.UpdateData.Affected
-	for u_ in updates:
-		var u = u_ as IGameServer.UpdatedCard
-		var c := deck_list[u.index] as Card
-		c.affected.power = u.power
-		c.affected.hit = u.hit
-		c.affected.block = u.block
 
-func set_next_effect(p,h,b):
-	next_effect.power = p
-	next_effect.hit = h
-	next_effect.block = b
-
+func set_next_effect_label():
 	next_effect_label.set_effect(next_effect)
 
 

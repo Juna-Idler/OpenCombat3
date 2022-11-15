@@ -106,10 +106,13 @@ class Charge extends Skill:
 				var e := p as EffectData.SkillEffect
 				match e.data.id:
 					EffectData.Attribute.POWER:
+						myself.next_effect.power += e.parameter
 						pass
 					EffectData.Attribute.HIT:
+						myself.next_effect.hit += e.parameter
 						pass
 					EffectData.Attribute.BLOCK:
+						myself.next_effect.block += e.parameter
 						pass
 				pass
 			tween.tween_callback(myself.combat_avatar,"play_sound",[load("res://sound/オーラ2.mp3")])

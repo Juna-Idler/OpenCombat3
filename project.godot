@@ -220,11 +220,6 @@ _global_script_classes=[ {
 "path": "res://scripts/game_processor/processor_data.gd"
 }, {
 "base": "Reference",
-"class": "ProcessorPlayerData",
-"language": "GDScript",
-"path": "res://scripts/game_processor/processor_player_data.gd"
-}, {
-"base": "Reference",
 "class": "RegulationData",
 "language": "GDScript",
 "path": "res://scripts/game_data/regulation_data.gd"
@@ -297,7 +292,6 @@ _global_script_class_icons={
 "PlayingPlayer": "",
 "PlayingScene": "",
 "ProcessorData": "",
-"ProcessorPlayerData": "",
 "RegulationData": "",
 "SinglePlayerEnemy": "",
 "SinglePlayerServer": "",

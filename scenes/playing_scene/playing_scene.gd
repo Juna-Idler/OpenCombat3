@@ -151,15 +151,13 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 	myself.play_end(data.myself.draw,tween)
 	rival.play_end(data.rival.draw,tween)
 	
-	myself.set_next_effect(data.myself.next_power,data.myself.next_hit,data.myself.next_block)
-	rival.set_next_effect(data.rival.next_power,data.rival.next_hit,data.rival.next_block)
+	myself.set_next_effect_label()
+	rival.set_next_effect_label()
 	tween.parallel()
 	tween.tween_property(myself.next_effect_label,"modulate:a",1.0,0.5)
 	tween.parallel()
 	tween.tween_property(rival.next_effect_label,"modulate:a",1.0,0.5)
 
-	myself.update_affected(data.myself.updates)
-	rival.update_affected(data.rival.updates)
 	
 	round_count = data.round_count
 	phase = data.next_phase

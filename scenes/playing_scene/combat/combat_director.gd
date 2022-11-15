@@ -75,6 +75,8 @@ func perform(node : Node,lethal : bool):
 	if player2.next_effect.power != 0:
 		tween.tween_interval(0.5)
 	tween.tween_interval(0.5)
+	tween.tween_callback(player1.next_effect,"reset")
+	tween.tween_callback(player2.next_effect,"reset")
 	
 
  # 交戦前タイミング

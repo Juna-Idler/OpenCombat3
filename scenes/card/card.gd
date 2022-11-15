@@ -25,6 +25,11 @@ class Affected:
 		power += other.power
 		hit += other.hit
 		block += other.block
+	
+	func reset():
+		power = 0
+		hit = 0
+		block = 0
 
 
 func initialize_card(id:int,cd : CardData,rotate := false) -> Card:

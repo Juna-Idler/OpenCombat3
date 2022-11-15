@@ -80,29 +80,32 @@ func _on_data():
 			emit_signal("matched")
 
 		"First":
-			var myself = IGameServer.FirstData.PlayerData.new(data["you"]["hand"],data["you"]["life"],[])
-			var rival = IGameServer.FirstData.PlayerData.new(data["rival"]["hand"],data["rival"]["life"],[])
+			var myself = IGameServer.FirstData.PlayerData.new(data["you"]["hand"],data["you"]["life"])
+			var rival = IGameServer.FirstData.PlayerData.new(data["rival"]["hand"],data["rival"]["life"])
 			var first = IGameServer.FirstData.new(myself,rival)
 			emit_signal("recieved_first_data",first)
 			
-		"Recovery","Combat":
+		"Combat":
 			var y := data["y"] as Dictionary
 			var r := data["r"] as Dictionary
-			var yu := []
-			var ru := []
-			for ua in (y["u"] as Array):
-				yu.append(IGameServer.UpdateData.Updated.new(ua))
-			for ua in (r["u"] as Array):
-				ru.append(IGameServer.UpdateData.Updated.new(ua))
-			var myself := IGameServer.UpdateData.PlayerData.new(y["h"],y["s"],
-					yu,y["n"][0],y["n"][1],y["n"][2],y["dc"],y["d"],y["l"])
-			var rival := IGameServer.UpdateData.PlayerData.new(r["h"],r["s"],
-					ru,r["n"][0],r["n"][1],r["n"][2],r["dc"],r["d"],r["l"])
+			var yskill := []
+			var rskill := []
+			for se in (y["s"] as Array):
+				yskill.append(IGameServer.UpdateData.SkillEffect.new(se["t"],se["i"],se["d"]))
+			for se in (r["s"] as Array):
+				rskill.append(IGameServer.UpdateData.SkillEffect.new(se["t"],se["i"],se["d"]))
+			var myself := IGameServer.UpdateData.PlayerData.new(y["h"],y["i"],yskill,y["dc"],y["d"],y["l"])
+			var rival := IGameServer.UpdateData.PlayerData.new(r["h"],r["s"],rskill,r["dc"],r["d"],r["l"])
 			var update := IGameServer.UpdateData.new(data["rc"],data["np"],data["ls"],myself,rival)
-			if type == "Combat":
-				emit_signal("recieved_combat_result",update)
-			else:
-				emit_signal("recieved_recovery_result",update)
+			emit_signal("recieved_combat_result",update)
+				
+		"Recovery":
+			var y := data["y"] as Dictionary
+			var r := data["r"] as Dictionary
+			var myself := IGameServer.UpdateData.PlayerData.new(y["h"],y["i"],[],y["dc"],y["d"],y["l"])
+			var rival := IGameServer.UpdateData.PlayerData.new(r["h"],r["s"],[],r["dc"],r["d"],r["l"])
+			var update := IGameServer.UpdateData.new(data["rc"],data["np"],0,myself,rival)
+			emit_signal("recieved_recovery_result",update)
 				
 		"End":
 			var msg := data["msg"] as String
