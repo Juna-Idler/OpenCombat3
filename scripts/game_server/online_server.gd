@@ -84,18 +84,18 @@ func _on_data():
 			var rival = IGameServer.FirstData.PlayerData.new(data["rival"]["hand"],data["rival"]["life"])
 			var first = IGameServer.FirstData.new(myself,rival)
 			emit_signal("recieved_first_data",first)
-			
+		
 		"Combat":
 			var y := data["y"] as Dictionary
 			var r := data["r"] as Dictionary
-			var yskill := []
-			var rskill := []
-			for se in (y["s"] as Array):
-				yskill.append(IGameServer.UpdateData.SkillEffect.new(se["t"],se["i"],se["d"]))
-			for se in (r["s"] as Array):
-				rskill.append(IGameServer.UpdateData.SkillEffect.new(se["t"],se["i"],se["d"]))
-			var myself := IGameServer.UpdateData.PlayerData.new(y["h"],y["i"],yskill,y["dc"],y["d"],y["l"])
-			var rival := IGameServer.UpdateData.PlayerData.new(r["h"],r["s"],rskill,r["dc"],r["d"],r["l"])
+			var ys_logs := []
+			var rs_logs := []
+			for sl in (y["s"] as Array):
+				ys_logs.append(IGameServer.UpdateData.SkillLog.new(sl["i"],sl["t"],sl["p"],sl["d"]))
+			for sl in (r["s"] as Array):
+				rs_logs.append(IGameServer.UpdateData.SkillLog.new(sl["i"],sl["t"],sl["p"],sl["d"]))
+			var myself := IGameServer.UpdateData.PlayerData.new(y["h"],y["i"],ys_logs,y["dc"],y["d"],y["l"])
+			var rival := IGameServer.UpdateData.PlayerData.new(r["h"],r["s"],rs_logs,r["dc"],r["d"],r["l"])
 			var update := IGameServer.UpdateData.new(data["rc"],data["np"],data["ls"],myself,rival)
 			emit_signal("recieved_combat_result",update)
 				

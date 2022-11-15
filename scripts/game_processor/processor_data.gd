@@ -47,13 +47,15 @@ class PlayerCard:
 enum SkillTiming {BEFORE = 0,ENGAGED = 1,AFTER = 2,END = 3}
 
 class SkillLog:
-	var timing : int
 	var index : int # select card skill index
+	var timing : int
+	var priority : int
 	var data # skill proper data
 	
-	func _init(t,i,d):
-		timing = t
+	func _init(i,t,p,d):
 		index = i
+		timing = t
+		priority = p
 		data = d
 
 

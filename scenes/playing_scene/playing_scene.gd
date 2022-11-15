@@ -126,8 +126,8 @@ func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
 func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 	$"%Camera2D".shake()
 	var tween := create_tween()
-	myself.play(data.myself.select,data.myself.hand,data.myself.damage,tween)
-	rival.play(data.rival.select,data.rival.hand,data.rival.damage,tween)
+	myself.play(data.myself.select,data.myself.hand,data.myself.damage,data.myself.skill_logs,tween)
+	rival.play(data.rival.select,data.rival.hand,data.rival.damage,data.rival.skill_logs,tween)
 	yield(tween,"finished")
 
 	yield(combat_director.perform(self,data.next_phase == IGameServer.Phase.GAME_END),"completed")

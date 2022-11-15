@@ -5,20 +5,21 @@ class_name CombatDirector
 
 class SkillOrder:
 	var priority : int
-	var skill : SkillData.NamedSkill
-	var skill_line : CombatSkillLine
+	var index : int
+	var data
 	var myself : PlayingPlayer
 	var rival : PlayingPlayer
 	var situation : int
+	var situation_sign : int
 
-	func _init(p:int,s:SkillData.NamedSkill,csl:CombatSkillLine,
-			m:PlayingPlayer,r:PlayingPlayer,situ : int = 0):
-		priority = p
-		skill = s
-		skill_line = csl
+	func _init(l: IGameServer.UpdateData.SkillLog,m:PlayingPlayer,r:PlayingPlayer,s : int = 0,s_sign : int = 0):
+		priority = l.priority
+		index = l.index
+		data = l.data
 		myself = m
 		rival = r
-		situation = situ
+		situation = s
+		situation_sign = s_sign
 		
 	static func custom_compare(a : SkillOrder, b : SkillOrder):
 		return a.priority < b.priority
@@ -150,114 +151,70 @@ func perform(node : Node,lethal : bool):
 
 func _before_skills_effect(tween : SceneTreeTween):
 	var skill_order := []
-	for i in player1.playing_card.front.data.skills.size():
-		var s := player1.playing_card.front.data.skills[i] as SkillData.NamedSkill
-		if s.test_condition(player2.playing_card.front.data.color,player1.get_link_color()):
-			var csl := player1.combat_avatar.skills[i] as CombatSkillLine
-			var priority = named_skills.get_skill(s.data.id)._before_priority()
-			if priority != 0:
-				skill_order.append(SkillOrder.new(priority,s,csl,player1,player2))
-	for i in player2.playing_card.front.data.skills.size():
-		var s := player2.playing_card.front.data.skills[i] as SkillData.NamedSkill
-		if s.test_condition(player1.playing_card.front.data.color,player2.get_link_color()):
-			var csl := player2.combat_avatar.skills[i] as CombatSkillLine
-			var priority = named_skills.get_skill(s.data.id)._before_priority()
-			if priority != 0:
-				skill_order.append(SkillOrder.new(priority,s,csl,player2,player1))
+	for _l in player1.skill_logs:
+		var l := _l as IGameServer.UpdateData.SkillLog
+		if l.timing == IGameServer.SkillTiming.BEFORE:
+			skill_order.append(SkillOrder.new(l,player1,player2))
+	for _l in player2.skill_logs:
+		var l := _l as IGameServer.UpdateData.SkillLog
+		if l.timing == IGameServer.SkillTiming.BEFORE:
+			skill_order.append(SkillOrder.new(l,player2,player1))
+
 	skill_order.sort_custom(SkillOrder,"custom_compare")
 	for s in skill_order:
-		var skill := named_skills.get_skill(s.skill.data.id)
-		if skill._test_before(s.skill,s.myself,s.rival):
-			tween.tween_callback(s.skill_line,"highlight_flash",[Color.blue,0.2,0.6,0.2])
-			tween.tween_callback(s.skill_line,"move_and_remove",[0.3,0.5,0.2])
-			tween.tween_interval(0.4)
-			skill._before(tween,s.skill,s.myself,s.rival)
-		else:
-			tween.tween_callback(s.skill_line,"highlight_flash",[Color.red,0.2,0.6,0.2])
-			tween.tween_interval(0.3)
+		var skill := s.myself.playing_card.front.data.skills[s.index] as SkillData.NamedSkill
+		var csl := s.myself.combat_avatar.skills[s.index] as CombatSkillLine
+		named_skills.get_skill(skill.data.id)._before(tween,skill,csl,s.myself,s.rival,s.data)
 
 func _engaged_skills_effect(tween : SceneTreeTween,situation : int) -> int:
 	var skill_order := []
-	for i in player1.playing_card.front.data.skills.size():
-		var s := player1.playing_card.front.data.skills[i] as SkillData.NamedSkill
-		if s.test_condition(player2.playing_card.front.data.color,player1.get_link_color()):
-			var csl := player1.combat_avatar.skills[i] as CombatSkillLine
-			var priority = named_skills.get_skill(s.data.id)._engaged_priority()
-			if priority != 0:
-				skill_order.append(SkillOrder.new(priority,s,csl,player1,player2,situation))
-	for i in player2.playing_card.front.data.skills.size():
-		var s := player2.playing_card.front.data.skills[i] as SkillData.NamedSkill
-		if s.test_condition(player1.playing_card.front.data.color,player2.get_link_color()):
-			var csl := player2.combat_avatar.skills[i] as CombatSkillLine
-			var priority = named_skills.get_skill(s.data.id)._engaged_priority()
-			if priority != 0:
-				skill_order.append(SkillOrder.new(priority,s,csl,player2,player1,-situation))
+	for _l in player1.skill_logs:
+		var l := _l as IGameServer.UpdateData.SkillLog
+		if l.timing == IGameServer.SkillTiming.ENGAGED:
+			skill_order.append(SkillOrder.new(l,player1,player2,situation,1))
+	for _l in player2.skill_logs:
+		var l := _l as IGameServer.UpdateData.SkillLog
+		if l.timing == IGameServer.SkillTiming.ENGAGED:
+			skill_order.append(SkillOrder.new(l,player2,player1,-situation,-1))
+
 	skill_order.sort_custom(SkillOrder,"custom_compare")
 	for s in skill_order:
-		var skill := named_skills.get_skill(s.skill.data.id)
-		if skill._test_engaged(s.skill,s.situation,s.myself,s.rival):
-			tween.tween_callback(s.skill_line,"highlight_flash",[Color.blue,0.2,0.6,0.2])
-			tween.tween_callback(s.skill_line,"move_and_remove",[0.3,0.5,0.2])
-			tween.tween_interval(0.4)
-			situation = skill._engaged(tween,s.skill,s.situation,s.myself,s.rival)
-		else:
-			tween.tween_callback(s.skill_line,"highlight_flash",[Color.red,0.2,0.6,0.2])
-			tween.tween_interval(0.3)
+		var skill := s.myself.playing_card.front.data.skills[s.index] as SkillData.NamedSkill
+		var csl := s.myself.combat_avatar.skills[s.index] as CombatSkillLine
+		situation = named_skills.get_skill(skill.data.id)._engaged(tween,skill,csl,s.situation,s.myself,s.rival,s.data) * s.situation_sign
 	return situation
 
 func _after_skills_effect(tween : SceneTreeTween,situation : int):
 	var skill_order := []
-	for i in player1.playing_card.front.data.skills.size():
-		var s := player1.playing_card.front.data.skills[i] as SkillData.NamedSkill
-		if s.test_condition(player2.playing_card.front.data.color,player1.get_link_color()):
-			var csl := player1.combat_avatar.skills[i] as CombatSkillLine
-			var priority = named_skills.get_skill(s.data.id)._after_priority()
-			if priority != 0:
-				skill_order.append(SkillOrder.new(priority,s,csl,player1,player2,situation))
-	for i in player2.playing_card.front.data.skills.size():
-		var s := player2.playing_card.front.data.skills[i] as SkillData.NamedSkill
-		if s.test_condition(player1.playing_card.front.data.color,player2.get_link_color()):
-			var csl := player2.combat_avatar.skills[i] as CombatSkillLine
-			var priority = named_skills.get_skill(s.data.id)._after_priority()
-			if priority != 0:
-				skill_order.append(SkillOrder.new(priority,s,csl,player2,player1,-situation))
+	for _l in player1.skill_logs:
+		var l := _l as IGameServer.UpdateData.SkillLog
+		if l.timing == IGameServer.SkillTiming.AFTER:
+			skill_order.append(SkillOrder.new(l,player1,player2,situation,1))
+	for _l in player2.skill_logs:
+		var l := _l as IGameServer.UpdateData.SkillLog
+		if l.timing == IGameServer.SkillTiming.AFTER:
+			skill_order.append(SkillOrder.new(l,player2,player1,-situation,-1))
+
 	skill_order.sort_custom(SkillOrder,"custom_compare")
 	for s in skill_order:
-		var skill := named_skills.get_skill(s.skill.data.id)
-		if skill._test_after(s.skill,s.situation,s.myself,s.rival):
-			tween.tween_callback(s.skill_line,"highlight_flash",[Color.blue,0.2,0.6,0.2])
-			tween.tween_callback(s.skill_line,"move_and_remove",[0.3,0.5,0.2])
-			tween.tween_interval(0.4)
-			skill._after(tween,s.skill,s.situation,s.myself,s.rival)
-		else:
-			tween.tween_callback(s.skill_line,"highlight_flash",[Color.red,0.2,0.6,0.2])
-			tween.tween_interval(0.3)
+		var skill := s.myself.playing_card.front.data.skills[s.index] as SkillData.NamedSkill
+		var csl := s.myself.combat_avatar.skills[s.index] as CombatSkillLine
+		named_skills.get_skill(skill.data.id)._after(tween,skill,csl,s.situation,s.myself,s.rival,s.data)
 
 func _end_skills_effect(tween : SceneTreeTween,situation : int):
 	var skill_order := []
-	for i in player1.playing_card.front.data.skills.size():
-		var s := player1.playing_card.front.data.skills[i] as SkillData.NamedSkill
-		if s.test_condition(player2.playing_card.front.data.color,player1.get_link_color()):
-			var csl := player1.combat_avatar.skills[i] as CombatSkillLine
-			var priority = named_skills.get_skill(s.data.id)._end_priority()
-			if priority != 0:
-				skill_order.append(SkillOrder.new(priority,s,csl,player1,player2,situation))
-	for i in player2.playing_card.front.data.skills.size():
-		var s := player2.playing_card.front.data.skills[i] as SkillData.NamedSkill
-		if s.test_condition(player1.playing_card.front.data.color,player2.get_link_color()):
-			var csl := player2.combat_avatar.skills[i] as CombatSkillLine
-			var priority = named_skills.get_skill(s.data.id)._end_priority()
-			if priority != 0:
-				skill_order.append(SkillOrder.new(priority,s,csl,player2,player1,-situation))
+	for _l in player1.skill_logs:
+		var l := _l as IGameServer.UpdateData.SkillLog
+		if l.timing == IGameServer.SkillTiming.END:
+			skill_order.append(SkillOrder.new(l,player1,player2,situation,1))
+	for _l in player2.skill_logs:
+		var l := _l as IGameServer.UpdateData.SkillLog
+		if l.timing == IGameServer.SkillTiming.END:
+			skill_order.append(SkillOrder.new(l,player2,player1,-situation,-1))
+
 	skill_order.sort_custom(SkillOrder,"custom_compare")
 	for s in skill_order:
-		var skill := named_skills.get_skill(s.skill.data.id)
-		if skill._test_end(s.skill,s.situation,s.myself,s.rival):
-			tween.tween_callback(s.skill_line,"highlight_flash",[Color.blue,0.2,0.6,0.2])
-			tween.tween_callback(s.skill_line,"move_and_remove",[0.3,0.5,0.2])
-			tween.tween_interval(0.4)
-			skill._end(tween,s.skill,s.situation,s.myself,s.rival)
-		else:
-			tween.tween_callback(s.skill_line,"highlight_flash",[Color.red,0.2,0.6,0.2])
-			tween.tween_interval(0.3)
+		var skill := s.myself.playing_card.front.data.skills[s.index] as SkillData.NamedSkill
+		var csl := s.myself.combat_avatar.skills[s.index] as CombatSkillLine
+		named_skills.get_skill(skill.data.id)._end(tween,skill,csl,s.situation,s.myself,s.rival,s.data)
 

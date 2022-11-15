@@ -57,7 +57,7 @@ class Reinforce extends Skill:
 					affected.hit += e.parameter
 				EffectData.Attribute.BLOCK:
 					affected.block += e.parameter
-		myself.skill_log.append(ProcessorData.SkillLog.new(ProcessorData.SkillTiming.BEFORE,index,true))
+		myself.skill_log.append(ProcessorData.SkillLog.new(index,ProcessorData.SkillTiming.BEFORE,1,true))
 
 
 class Rush extends Skill:
@@ -70,7 +70,7 @@ class Rush extends Skill:
 # warning-ignore:integer_division
 			damage = (rival.get_current_block() + 1) / 2
 			rival.add_damage(damage)
-		myself.skill_log.append(ProcessorData.SkillLog.new(ProcessorData.SkillTiming.AFTER,index,damage))
+		myself.skill_log.append(ProcessorData.SkillLog.new(index,ProcessorData.SkillTiming.AFTER,1,damage))
 
 
 class Charge extends Skill:
@@ -90,9 +90,9 @@ class Charge extends Skill:
 						affected.hit += e.parameter
 					EffectData.Attribute.BLOCK:
 						affected.block += e.parameter
-			myself.skill_log.append(ProcessorData.SkillLog.new(ProcessorData.SkillTiming.END,index,true))
+			myself.skill_log.append(ProcessorData.SkillLog.new(index,ProcessorData.SkillTiming.END,1,true))
 		else:
-			myself.skill_log.append(ProcessorData.SkillLog.new(ProcessorData.SkillTiming.END,index,false))
+			myself.skill_log.append(ProcessorData.SkillLog.new(index,ProcessorData.SkillTiming.END,1,false))
 
 
 class Isolate extends Skill:
@@ -101,5 +101,5 @@ class Isolate extends Skill:
 	func _process_engaged(index : int,_situation : int,
 			myself : ProcessorData.Player,_rival : ProcessorData.Player) -> int:
 		myself.add_damage(1)
-		myself.skill_log.append(ProcessorData.SkillLog.new(ProcessorData.SkillTiming.END,index,true))
+		myself.skill_log.append(ProcessorData.SkillLog.new(index,ProcessorData.SkillTiming.END,255,true))
 		return 0

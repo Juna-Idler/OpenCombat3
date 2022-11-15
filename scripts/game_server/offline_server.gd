@@ -104,7 +104,7 @@ static func _create_update_playerData(player : ProcessorData.Player) -> UpdateDa
 	var skilllog = []
 	for sl in player.skill_log:
 		var s := sl as ProcessorData.SkillLog
-		skilllog.append(IGameServer.UpdateData.SkillLog.new(s.timing,s.index,s.data))
+		skilllog.append(IGameServer.UpdateData.SkillLog.new(s.index,s.timing,s.priority,s.data))
 	var p = IGameServer.UpdateData.PlayerData.new(player.playing_hand,player.select,skilllog,
 			player.draw_indexes,player.damage,player.get_life())
 	return p;

@@ -5,14 +5,15 @@ extends Reference
 class_name PlayingPlayer
 
 
-var deck_list : Array# of Card
+var deck_list : Array # of Card
 
-var hand : Array = []# of int
-var played : Array = []# of int
-var discard : Array = []# of int
+var hand : Array = [] # of int
+var played : Array = [] # of int
+var discard : Array = [] # of int
 var stock_count : int
 var life : int = 0
 var damage : int = 0
+var skill_logs : Array = [] # of IGameServer.UpdateData.SkillLog
 
 var next_effect := Card.Affected.new()
 
@@ -106,9 +107,10 @@ func set_hand(new_hand_indexes:Array):
 	hand_area.move_card(1)
 
 
-func play(hand_select : int,new_hand : Array,d : int,tween : SceneTreeTween):
+func play(hand_select : int,new_hand : Array,d : int,s_log : Array,tween : SceneTreeTween):
 	hand = new_hand
 	damage = d
+	skill_logs = s_log
 	playing_card_id = hand[hand_select]
 	playing_card = deck_list[playing_card_id]
 	hand.remove(hand_select)
