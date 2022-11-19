@@ -6,21 +6,16 @@ class_name IGameServer
 # 何らかの事情でゲームを強制終了する時のシグナル
 signal recieved_end(msg)
 # func _on_GameServer_recieved_end(msg:String)->void:
-# 
-# server.connect("recieved_end",self,"_on_GameServer_recieved_end")
 
 # 1ターン目の情報を受信した時のシグナル
 signal recieved_first_data(first_data)
 # func _on_GameServer_recieved_first_data(data:FirstData)->void:
-# 
-# server.connect("recieved_first_data",self,"_on_GameServer_recieved_first_data")
 
 signal recieved_combat_result(data)
 # func _on_GameServer_recieved_combat_result(data:UpdateData)->void:
-# server.connect("recieved_combat_result",self,"_on_GameServer_recieved_combat_result")
 signal recieved_recovery_result(data)
 # func _on_GameServer_recieved_recovery_result(data:UpdateData)->void:
-# server.connect("recieved_recovery_result",self,"_on_GameServer_recieved_recovery_result")
+
 
 enum  Phase {GAME_END = -1,COMBAT = 0,RECOVERY = 1}
 enum  Situation {INFERIOR = -1,EVEN = 0,SUPERIOR = 1}
