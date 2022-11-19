@@ -3,7 +3,7 @@ class_name NamedSkillProcessor
 
 var skills : Array = [
 	Reinforce.new(),
-	Rush.new(),
+	Pierce.new(),
 	Charge.new(),
 	Isolate.new(),
 ]
@@ -16,35 +16,35 @@ func get_skill(id : int) -> Skill:
 
 
 class Skill:
-	func _before_priority() -> int:
-		return 0
-	func _process_before(_index : int,
+	func _before_priority() -> Array:
+		return []
+	func _process_before(_index : int,_priority : int,
 			_myself : ProcessorData.Player,_rival : ProcessorData.Player) -> void:
 		pass
 		
-	func _engaged_priority() -> int:
-		return 0
-	func _process_engaged(_index : int,situation : int,
+	func _engaged_priority() -> Array:
+		return []
+	func _process_engaged(_index : int,_priority : int,situation : int,
 			_myself : ProcessorData.Player,_rival : ProcessorData.Player) -> int:
 		return situation
 		
-	func _after_priority() -> int:
-		return 0
-	func _process_after(_index : int,_situation : int,
+	func _after_priority() -> Array:
+		return []
+	func _process_after(_index : int,_priority : int,_situation : int,
 			_myself : ProcessorData.Player,_rival : ProcessorData.Player) -> void:
 		pass
 		
-	func _end_priority() -> int:
-		return 0
-	func _process_end(_index : int,_situation : int,
+	func _end_priority() -> Array:
+		return []
+	func _process_end(_index : int,_priority : int,_situation : int,
 			_myself : ProcessorData.Player,_rival : ProcessorData.Player) -> void:
 		pass
 
 
 class Reinforce extends Skill:
-	func _before_priority() -> int:
-		return 1
-	func _process_before(index : int,
+	func _before_priority() -> Array:
+		return [1]
+	func _process_before(index : int,_priority : int,
 			myself : ProcessorData.Player,_rival : ProcessorData.Player) -> void:
 		var skill := myself.select_card.data.skills[index] as SkillData.NamedSkill
 		var affected := myself.select_card.affected
@@ -60,10 +60,10 @@ class Reinforce extends Skill:
 		myself.skill_log.append(ProcessorData.SkillLog.new(index,ProcessorData.SkillTiming.BEFORE,1,true))
 
 
-class Rush extends Skill:
-	func _after_priority() -> int:
-		return 1
-	func _process_after(index : int,situation : int,
+class Pierce extends Skill:
+	func _after_priority() -> Array:
+		return [1]
+	func _process_after(index : int,_priority : int,situation : int,
 			myself : ProcessorData.Player,rival : ProcessorData.Player) -> void:
 		var damage := 0
 		if situation > 0:
@@ -74,9 +74,9 @@ class Rush extends Skill:
 
 
 class Charge extends Skill:
-	func _end_priority() -> int:
-		return 1
-	func _process_end(index : int,_situation : int,
+	func _end_priority() -> Array:
+		return [1]
+	func _process_end(index : int,_priority : int,_situation : int,
 			myself : ProcessorData.Player,_rival : ProcessorData.Player) -> void:
 		if myself.damage == 0:
 			var skill := myself.select_card.data.skills[index] as SkillData.NamedSkill
@@ -96,9 +96,9 @@ class Charge extends Skill:
 
 
 class Isolate extends Skill:
-	func _engaged_priority() -> int:
-		return 255
-	func _process_engaged(index : int,_situation : int,
+	func _engaged_priority() -> Array:
+		return [255]
+	func _process_engaged(index : int,_priority : int,_situation : int,
 			myself : ProcessorData.Player,_rival : ProcessorData.Player) -> int:
 		myself.add_damage(1)
 		myself.skill_log.append(ProcessorData.SkillLog.new(index,ProcessorData.SkillTiming.END,255,true))

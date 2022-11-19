@@ -4,7 +4,7 @@ class_name NamedSkillPerformer
 
 var skills : Array = [
 	Reinforce.new(),
-	Rush.new(),
+	Pierce.new(),
 	Charge.new(),
 	Isolate.new(),
 ]
@@ -48,7 +48,7 @@ class Reinforce extends Skill:
 		tween.chain()
 
 
-class Rush extends Skill:
+class Pierce extends Skill:
 	func _after(tween : SceneTreeTween,_skill : SkillData.NamedSkill,csl : CombatSkillLine,
 			situation : int,myself : PlayingPlayer,rival : PlayingPlayer,_data) -> void:
 		if situation > 0:
