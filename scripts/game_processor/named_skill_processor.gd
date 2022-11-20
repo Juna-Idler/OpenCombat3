@@ -6,6 +6,7 @@ var skills : Array = [
 	Pierce.new(),
 	Charge.new(),
 	Isolate.new(),
+	Absorb.new(),
 ]
 
 func _init():
@@ -48,7 +49,7 @@ class Reinforce extends Skill:
 			myself : ProcessorData.Player,_rival : ProcessorData.Player) -> void:
 		var skill := myself.select_card.data.skills[index] as SkillData.NamedSkill
 		var affected := myself.select_card.affected
-		for p in skill.parameter as Array:
+		for p in skill.parameter[0].data as Array:
 			var e := p as EffectData.SkillEffect
 			match e.data.id:
 				EffectData.Attribute.POWER:
@@ -81,7 +82,7 @@ class Charge extends Skill:
 		if myself.damage == 0:
 			var skill := myself.select_card.data.skills[index] as SkillData.NamedSkill
 			var affected := myself.next_effect
-			for p in skill.parameter as Array:
+			for p in skill.parameter[0].data as Array:
 				var e := p as EffectData.SkillEffect
 				match e.data.id:
 					EffectData.Attribute.POWER:
@@ -103,3 +104,32 @@ class Isolate extends Skill:
 		myself.add_damage(1)
 		myself.skill_log.append(ProcessorData.SkillLog.new(index,ProcessorData.SkillTiming.END,255,true))
 		return 0
+
+class Absorb extends Skill:
+	func _before_priority() -> Array:
+		return [1]
+	func _process_before(index : int,_priority : int,
+			myself : ProcessorData.Player,_rival : ProcessorData.Player) -> void:
+		var skill := myself.select_card.data.skills[index] as SkillData.NamedSkill
+		var level := 0
+		var skill_log := []
+		for i in myself.hand.size():
+			var card := myself.deck_list[myself.hand[i]] as ProcessorData.PlayerCard
+			if card.data.color == skill.parameter[0].data:
+				level = card.data.level
+				myself.discard_card(i)
+				var draw_index := myself.skill_draw_card()
+				skill_log = [i,draw_index]
+				break
+		var affected := myself.select_card.affected
+		for p in skill.parameter[1].data as Array:
+			var e := p as EffectData.SkillEffect
+			match e.data.id:
+				EffectData.Attribute.POWER:
+					affected.power += e.parameter * level
+				EffectData.Attribute.HIT:
+					affected.hit += e.parameter * level
+				EffectData.Attribute.BLOCK:
+					affected.block += e.parameter * level
+		myself.skill_log.append(ProcessorData.SkillLog.new(index,ProcessorData.SkillTiming.BEFORE,1,skill_log))
+	

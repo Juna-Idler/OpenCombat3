@@ -67,7 +67,7 @@ func move_and_remove(in_time : float,duration : float,end_time : float):
 
 func set_skill(skill : SkillData.NamedSkill,vs_color:int,link_color:int):
 	$Highlight.modulate = Color.black
-	$Background/Label.text = Global.card_catalog.get_skill_short_string(skill)
+	$Background/Label.text = skill.get_short_string()
 
 	if skill.condition & SkillData.ColorCondition.VS_FLAG:
 		$Background/ColorRectRight.visible = false

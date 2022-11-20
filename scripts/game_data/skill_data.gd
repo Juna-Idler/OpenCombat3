@@ -1,8 +1,6 @@
 
 class_name SkillData
 
-enum CardColors {NOCOLOR = 0,RED = 1,GREEN = 2,BLUE = 3}
-
 enum ColorCondition {
 	NOCONDITION = 0,
 	COLOR_BITS = 3,
@@ -17,52 +15,72 @@ enum ColorCondition {
 }
 enum ParamType {
 	VOID = 0,
-	INTEGER,
-	EFFECTS,
+	INTEGER = 1,
+	EFFECTS = 2,
+	COLOR = 3,
 }
 
 class NamedSkillData:
 	var id : int
 	var name : String
 	var short_name : String
-	var param_type : int
-	var parameter : String
+	var param_type : PoolIntArray
+	var parameter : PoolStringArray
 	var text : String
 	
-	func _init(i:int,n:String,sn:String,pt:int,p:String,t:String):
+	func _init(i:int,n:String,sn:String,pt:String,p:String,t:String):
 		id = i
 		name = n
 		short_name = sn
-		param_type = pt
-		parameter = p
+		param_type = Array(pt.split(","))
+		if param_type.size() == 1 and param_type[0] == ParamType.VOID:
+			param_type = []
+			parameter = []
+		else:
+			parameter = p.split(",")
 		text = t
+
+class SkillParameter:
+	var name : String
+	var short_name : String
+	var data
 	
+	func _init(n,sn,d):
+		name = n
+		short_name = sn
+		data = d
 
 class NamedSkill:
 	var data : NamedSkillData
 	var condition : int
-
-	var parameter
+	var parameter : Array
 	var text : String
 	
-	func _init(sd:NamedSkillData,c:int,p):
+	func _init(sd:NamedSkillData,c:int,p : Array):
 		data = sd
 		condition = c
 		parameter = p
-		
-		match data.param_type:
-			ParamType.INTEGER:
-				var param_string : String = "{" + data.parameter + "}"
-				text = data.text.replace(param_string,"{" + parameter + "}")
-			ParamType.EFFECTS:
-				var param_string : String = "{" + data.parameter + "}"
-				var replace_string : PoolStringArray = []
-				for e_ in parameter:
-					var e := e_ as EffectData.SkillEffect
-					replace_string.append(e.data.short_name + "%+d" % e.parameter)
-				text = data.text.replace(param_string,"{" + replace_string.join(" ") + "}")
-			_:
-				text = data.text
+		text = data.text
+		for i in data.param_type.size():
+			var param_string : String = "{" + data.parameter[i] + "}"
+			text = text.replace(param_string,"{" + parameter[i].name + "}")
+	
+	func get_string() -> String:
+		if data.param_type.empty():
+			return data.name
+		var p_str : PoolStringArray = []
+		for p in parameter:
+			p_str.append(p.name)
+		return data.name + "(" + p_str.join(",")  + ")"
+
+	func get_short_string() -> String:
+		if data.param_type.empty():
+			return data.short_name
+		var p_str : PoolStringArray = []
+		for p in parameter:
+			p_str.append(p.short_name)
+		return data.short_name + "(" + p_str.join(",")  + ")"
+
 
 	func test_condition(rival_color : int,link_color : int) -> bool :
 		if condition & ColorCondition.VS_FLAG:

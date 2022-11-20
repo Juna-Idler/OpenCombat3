@@ -38,7 +38,7 @@ class Reinforce extends Skill:
 			myself : PlayingPlayer,_rival : PlayingPlayer,_data) -> void:
 		tween.tween_callback(csl,"succeeded")
 		var a := [0,0,0]
-		for p in skill.parameter as Array:
+		for p in skill.parameter[0].data as Array:
 			var e := p as EffectData.SkillEffect
 			a[e.data.id - 1] += e.parameter
 		tween.tween_callback(myself,"add_attribute",[a[0],a[1],a[2]])
@@ -65,7 +65,7 @@ class Charge extends Skill:
 	func _end(tween : SceneTreeTween,skill : SkillData.NamedSkill,csl : CombatSkillLine,
 			_situation : int,myself : PlayingPlayer,_rival : PlayingPlayer,_data) -> void:
 		if myself.damage == 0:
-			for p in skill.parameter as Array:
+			for p in skill.parameter[0].data as Array:
 				var e := p as EffectData.SkillEffect
 				match e.data.id:
 					EffectData.Attribute.POWER:

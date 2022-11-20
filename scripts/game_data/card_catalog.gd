@@ -29,17 +29,23 @@ func load_catalog():
 func get_effect_data(id:int) -> EffectData.SkillEffectData:
 	return _effect_catalog[id]
 
-func get_skill_param(param_type : int,param : String):
+func get_skill_param(param_type : int,param : String) -> SkillData.SkillParameter:
 	match param_type:
 		SkillData.ParamType.INTEGER:
-			return int(param)
+			return SkillData.SkillParameter.new(param,param,int(param))
 		SkillData.ParamType.EFFECTS:
 			var effects = []
+			var e_string : PoolStringArray = []
+			var e_s_string : PoolStringArray = []
 			for e in param.split(" "):
-				effects.append(EffectData.create_effect(e,_effect_catalog))
-			return effects
-		SkillData.ParamType.VOID:
-			return null
+				var effect = EffectData.create_effect(e,_effect_catalog)
+				effects.append(effect)
+				e_string.append(effect.data.name + "%+d" % effect.parameter)
+				e_s_string.append(effect.data.short_name + "%+d" % effect.parameter)
+			return SkillData.SkillParameter.new(e_string.join(" "),e_s_string.join(" "),effects)
+		SkillData.ParamType.COLOR:
+			var ColorName := [tr("NO_COLOR"),tr("RED"),tr("GREEN"),tr("BLUE")]
+			return SkillData.SkillParameter.new(ColorName[int(param)],ColorName[int(param)],int(param))
 	return null
 
 
@@ -58,34 +64,6 @@ func new_card_data(id : int) -> CardData:
 	
 func set_card_data(card : CardData, id : int):
 	CardData.copy(card,get_card_data(id))
-
-func get_skill_string(skill : SkillData.NamedSkill) -> String:
-	match skill.data.param_type:
-		SkillData.ParamType.INTEGER:
-			return skill.data.name + "(" + str(skill.parameter as int) + ")"
-		SkillData.ParamType.EFFECTS:
-			var param : PoolStringArray = []
-			for e_ in skill.parameter as Array:
-				var e := e_ as EffectData.SkillEffect
-				param.append(e.data.short_name + "%+d" % e.parameter)
-			return skill.data.name + "(" + param.join(" ") + ")"
-		SkillData.ParamType.VOID:
-			pass
-	return skill.data.name
-
-func get_skill_short_string(skill : SkillData.NamedSkill) -> String:
-	match skill.data.param_type:
-		SkillData.ParamType.INTEGER:
-			return skill.data.short_name + "(" + str(skill.parameter as int) + ")"
-		SkillData.ParamType.EFFECTS:
-			var param : PoolStringArray = []
-			for e_ in skill.parameter as Array:
-				var e := e_ as EffectData.SkillEffect
-				param.append(e.data.short_name + "%+d" % e.parameter)
-			return skill.data.short_name + "(" + param.join(" ") + ")"
-		SkillData.ParamType.VOID:
-			pass
-	return skill.data.short_name
 
 
 func get_deck_face(deck : DeckData) -> DeckData.DeckFace:
@@ -131,7 +109,7 @@ func _load_skill_data():
 		var csv = s.split("\t")
 		var id := int(csv[0])
 		var text = csv[5].replace("\\n","\n")
-		_skill_catalog[id] = SkillData.NamedSkillData.new(id,csv[1],csv[2],int(csv[3]),csv[4],text)
+		_skill_catalog[id] = SkillData.NamedSkillData.new(id,csv[1],csv[2],csv[3],csv[4],text)
 
 	if translation.find("ja") != 0:
 		var trans_res = load("res://card_data/named_skill_" + translation + ".txt")
@@ -159,8 +137,12 @@ func _load_card_data():
 			var skill_line = s.split(":");
 			var condition : int = int(skill_line[0])
 			var base_data := get_skill_data(int(skill_line[1]))
-			var param = get_skill_param(base_data.param_type,skill_line[2])
-			skills.append(SkillData.NamedSkill.new(base_data,condition,param))
+			var params := []
+			var skill_line_param : PoolStringArray = skill_line[2].split(",")
+			for i in base_data.param_type.size():
+				params.append(get_skill_param(base_data.param_type[i],skill_line_param[i]))
+			var skill := SkillData.NamedSkill.new(base_data,condition,params)
+			skills.append(skill)
 		var id := int(csv[0])
 		var text = csv[9].replace("\\n","\n")
 		_card_catalog[id] = CardData.new(id,csv[1],csv[2],

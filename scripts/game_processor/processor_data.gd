@@ -95,7 +95,7 @@ class Player:
 	# warning-ignore:unused_variable
 		for i in range(hand_count):
 	# warning-ignore:return_value_discarded
-			_draw_card()
+			draw_card()
 
 	func get_hand_card(index : int) -> PlayerCard:
 		return deck_list[hand[index]]
@@ -143,9 +143,9 @@ class Player:
 		
 		
 	func supply() -> void:
-		_draw_card()
+		draw_card()
 		if damage > 0:
-			_draw_card()
+			draw_card()
 		
 	func recover(index : int) -> void:
 		playing_hand = hand.duplicate()
@@ -153,12 +153,12 @@ class Player:
 		draw_indexes.clear()
 		skill_log.clear()
 		select_card = deck_list[hand[index]]
-		_discard_card(index)
+		discard_card(index)
 		if damage <= select_card.data.level:
 			damage = 0
 			return
 		damage -= select_card.data.level
-		_draw_card()
+		draw_card()
 
 	func no_recover() -> void:
 		playing_hand = hand
@@ -183,17 +183,24 @@ class Player:
 	func reset_select():
 		select = -1
 
-	func _draw_card():
+	func draw_card():
 		if stock.empty():
-			return -1
+			return
 		var i := stock.pop_back() as int
 		hand.push_back(i)
 		draw_indexes.push_back(i)
 
-	func _discard_card(i : int):
+	func discard_card(i : int):
 		var id := hand.pop_at(i) as int
 		_life -= deck_list[id].data.level
 		discard.push_back(id)
+
+	func skill_draw_card() -> int:
+		if stock.empty():
+			return -1
+		var i := stock.pop_back() as int
+		hand.push_back(i)
+		return i
 
 	func hand_to_deck_bottom(i : int):
 		var id := hand.pop_at(i) as int

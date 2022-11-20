@@ -31,7 +31,7 @@ func initialize_card(cd : CardData):
 		var skill_text : String = ""
 		
 		var s := s_ as SkillData.NamedSkill
-		skill_text = Global.card_catalog.get_skill_string(s) + ":" + s.text
+		skill_text = s.get_string() + ":" + s.text
 		
 		var richlabel = line.get_node("RichTextLabel")
 		richlabel.rect_min_size.x = skill_node.rect_size.x - 32
