@@ -1,6 +1,7 @@
 keys,ja,en
 SETTINGS,設定,Settings
-VS_CPU,VS CPU,VS CPU
+VS_CPU,CPU対戦,CPU Match
+VS_ONLINE,オンライン対戦,Online Match
 DECK_BUILD,デッキ構築,Deck Build
 BACK,戻る,Back
 SURRENDER,負けを認める,Surrender
@@ -19,3 +20,7 @@ SAVE,保存,Save
 DECK_NO_SAVE_MESSAGE,変更がありますが破棄しますか？,"There are changes, do you want to discard them?"
 NO_SAVE,破棄,Discard
 DECK_OUT_OF_REGULATION,レギュレーションを満たしていませんが保存しますか？,"Doesn't meet the regulations, do you want to save?"
+NO_COLOR,無色,No Color
+RED,赤,Red
+GREEN,緑,Green
+BLUE,青,Blue

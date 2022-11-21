@@ -140,22 +140,27 @@ func play_end(draw_indexes : Array,tween : SceneTreeTween):
 	playing_card = null
 	
 
-func recover(hand_select : int,new_hand : Array,draw_indexes : Array,tween : SceneTreeTween):
+func recover(hand_select : int,new_hand : Array,draw_indexes : Array):
 	hand = new_hand
 	if hand_select >= 0:
 		var select_id = hand[hand_select]
-		hand.remove(hand_select)
 		var recovery_card := deck_list[select_id] as Card
-		life -= recovery_card.get_card_data().level
+		discard_card(hand_select,1)
 		damage -= recovery_card.front.data.level
 		damage_label.text = str(damage) if damage > 0 else ""
 		life_label.text = "%d / %d" % [life,stock_count]
-		recovery_card.z_index = discard.size() + 200
-		recovery_card.location = Card.Location.DISCARD
-		discard.append(select_id)
-		tween.tween_property(recovery_card,"global_position",discard_pos,1)
 	draw(draw_indexes)
 
+func discard_card(hand_index : int,duration : float):
+	var select_id = hand[hand_index]
+	hand.remove(hand_index)
+	discard.append(select_id)
+	var card := deck_list[select_id] as Card
+	life -= card.get_card_data().level
+	card.z_index = discard.size() + 200
+	card.location = Card.Location.DISCARD
+	var tween := card.create_tween()
+	tween.tween_property(card,"global_position",discard_pos,duration)
 
 func set_next_effect_label():
 	next_effect_label.set_effect(next_effect)

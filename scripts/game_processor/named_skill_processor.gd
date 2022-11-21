@@ -102,7 +102,7 @@ class Isolate extends Skill:
 	func _process_engaged(index : int,_priority : int,_situation : int,
 			myself : ProcessorData.Player,_rival : ProcessorData.Player) -> int:
 		myself.add_damage(1)
-		myself.skill_log.append(ProcessorData.SkillLog.new(index,ProcessorData.SkillTiming.END,255,true))
+		myself.skill_log.append(ProcessorData.SkillLog.new(index,ProcessorData.SkillTiming.ENGAGED,255,true))
 		return 0
 
 class Absorb extends Skill:
@@ -112,14 +112,14 @@ class Absorb extends Skill:
 			myself : ProcessorData.Player,_rival : ProcessorData.Player) -> void:
 		var skill := myself.select_card.data.skills[index] as SkillData.NamedSkill
 		var level := 0
-		var skill_log := []
+		var data := []
 		for i in myself.hand.size():
 			var card := myself.deck_list[myself.hand[i]] as ProcessorData.PlayerCard
 			if card.data.color == skill.parameter[0].data:
 				level = card.data.level
 				myself.discard_card(i)
 				var draw_index := myself.skill_draw_card()
-				skill_log = [i,draw_index]
+				data = [i,draw_index]
 				break
 		var affected := myself.select_card.affected
 		for p in skill.parameter[1].data as Array:
@@ -131,5 +131,5 @@ class Absorb extends Skill:
 					affected.hit += e.parameter * level
 				EffectData.Attribute.BLOCK:
 					affected.block += e.parameter * level
-		myself.skill_log.append(ProcessorData.SkillLog.new(index,ProcessorData.SkillTiming.BEFORE,1,skill_log))
+		myself.skill_log.append(ProcessorData.SkillLog.new(index,ProcessorData.SkillTiming.BEFORE,1,data))
 	

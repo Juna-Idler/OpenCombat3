@@ -103,10 +103,11 @@ func send_ready():
 
 
 func terminalize():
-	game_server.disconnect("recieved_first_data",self,"_on_GameServer_recieved_first_data")
-	game_server.disconnect("recieved_combat_result",self,"_on_GameServer_recieved_combat_result")
-	game_server.disconnect("recieved_recovery_result",self,"_on_GameServer_recieved_recovery_result")
-	game_server.disconnect("recieved_end",self,"_on_GameServer_recieved_end")
+	if game_server:
+		game_server.disconnect("recieved_first_data",self,"_on_GameServer_recieved_first_data")
+		game_server.disconnect("recieved_combat_result",self,"_on_GameServer_recieved_combat_result")
+		game_server.disconnect("recieved_recovery_result",self,"_on_GameServer_recieved_recovery_result")
+		game_server.disconnect("recieved_end",self,"_on_GameServer_recieved_end")
 
 
 func _on_GameServer_recieved_end(msg:String)->void:
@@ -173,12 +174,8 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 
 func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
 	
-	var tween := create_tween()
-	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
-	tween.parallel()
-	myself.recover(data.myself.select,data.myself.hand,data.myself.draw,tween)
-	tween.parallel()
-	rival.recover(data.rival.select,data.rival.hand,data.rival.draw,tween)
+	myself.recover(data.myself.select,data.myself.hand,data.myself.draw)
+	rival.recover(data.rival.select,data.rival.hand,data.rival.draw)
 
 #
 	round_count = data.round_count
