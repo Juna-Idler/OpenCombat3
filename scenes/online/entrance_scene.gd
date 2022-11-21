@@ -6,10 +6,6 @@ class_name OnlineEntranceScene
 
 var scene_changer : ISceneChanger
 
-#export var websocket_url := "https://127.0.0.1:8080"
-
-export var websocket_url := "wss://opencombat3.onrender.com"
-
 var server : OnlineServer
 
 var deck_regulation : RegulationData.DeckRegulation
@@ -25,8 +21,9 @@ func initialize(s : OnlineServer,changer : ISceneChanger):
 	server.connect("matched",self,"_on_Server_matched")
 	server.connect("disconnected",self,"_on_Server_disconnected")
 
+	$Panel/LabelUrl.text = Global.websocket_url
 	if not server.is_ws_connected:
-		server.initialize(websocket_url,Global.card_catalog.version)
+		server.initialize(Global.websocket_url,Global.card_catalog.version)
 	else:
 		$Panel/Matching.disabled = false
 		

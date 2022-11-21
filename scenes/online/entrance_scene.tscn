@@ -27,9 +27,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_left = -224.0
-margin_top = -168.0
+margin_top = -192.0
 margin_right = 224.0
-margin_bottom = -32.0
+margin_bottom = -56.0
 disabled = true
 text = "マッチング"
 
@@ -59,14 +59,22 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 margin_left = -360.0
-margin_top = -64.0
+margin_top = -72.0
 margin_right = 360.0
-margin_bottom = 152.0
+margin_bottom = 144.0
 
 [node name="ButtonDeckChange" type="Button" parent="Panel/DeckBanner"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 flat = true
+
+[node name="LabelUrl" type="Label" parent="Panel"]
+margin_left = 256.0
+margin_top = 672.0
+margin_right = 1024.0
+margin_bottom = 712.0
+align = 1
+valign = 1
 
 [node name="BuildSelectScene" parent="." instance=ExtResource( 3 )]
 visible = false

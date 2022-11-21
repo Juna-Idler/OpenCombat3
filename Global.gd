@@ -1,5 +1,9 @@
 extends Node
 
+#var websocket_url := "https://127.0.0.1:8080"
+
+var websocket_url := "wss://opencombat3.onrender.com"
+
 
 var player_name : String = "Name"
 
