@@ -73,7 +73,11 @@ class SceneChanger extends ISceneChanger:
 		(current_scene as OnlinePlayingScene).initialize(server,self)
 		yield(_goto_scene_after(),"completed")
 
-
+	func _goto_replay_scene():
+		yield(_goto_scene_before("res://scenes/replay/replay_scene.tscn"),"completed")
+		(current_scene as ReplayScene).initialize(self)
+		yield(_goto_scene_after(),"completed")
+		
 
 var scene_changer : SceneChanger
 onready var online_server : OnlineServer = $OnlineNode.server

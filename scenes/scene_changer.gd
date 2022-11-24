@@ -15,6 +15,9 @@ func _goto_online_entrance_scene():
 func _goto_online_playing_scene(_server : IGameServer):
 	pass
 
+func _goto_replay_scene():
+	pass
+
 
 class IScene extends Node:
 	func _teminalize():

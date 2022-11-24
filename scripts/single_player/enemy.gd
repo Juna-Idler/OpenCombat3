@@ -1,4 +1,4 @@
-extends ProcessorPlayerData
+extends ProcessorData.Player
 
 
 class_name SinglePlayerEnemy

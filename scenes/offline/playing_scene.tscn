@@ -7,20 +7,20 @@
 [ext_resource path="res://scenes/deck_scene/build_select_scene.tscn" type="PackedScene" id=5]
 [ext_resource path="res://scenes/deck_scene/regulation_select.tscn" type="PackedScene" id=6]
 
-[sub_resource type="Gradient" id=17]
+[sub_resource type="Gradient" id=25]
 offsets = PoolRealArray( 0, 0.5, 1 )
 colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0.752941, 1, 1, 1, 0 )
 
 [sub_resource type="GradientTexture2D" id=20]
-gradient = SubResource( 17 )
+gradient = SubResource( 25 )
 fill_to = Vector2( 0, 1 )
 
-[sub_resource type="Gradient" id=19]
+[sub_resource type="Gradient" id=26]
 offsets = PoolRealArray( 0, 0.5, 1 )
 colors = PoolColorArray( 1, 1, 1, 0, 1, 1, 1, 0.752941, 1, 1, 1, 1 )
 
 [sub_resource type="GradientTexture2D" id=21]
-gradient = SubResource( 19 )
+gradient = SubResource( 26 )
 fill_to = Vector2( 0, 1 )
 
 [sub_resource type="DynamicFont" id=22]
@@ -34,12 +34,12 @@ size = 140
 outline_size = 5
 font_data = ExtResource( 1 )
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=27]
 size = 24
 font_data = ExtResource( 1 )
 
 [sub_resource type="Theme" id=24]
-default_font = SubResource( 1 )
+default_font = SubResource( 27 )
 
 [node name="OfflinePlayingScene" type="Node"]
 script = ExtResource( 3 )

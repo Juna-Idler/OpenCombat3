@@ -26,6 +26,9 @@ func _on_BuildButton_pressed():
 	scene_changer._goto_build_scene()
 
 
+func _on_ButtonReplay_pressed():
+	scene_changer._goto_replay_scene()
+
 
 func _on_LanguageOptionButton_item_selected(index):
 	match index:
@@ -38,5 +41,7 @@ func _on_LanguageOptionButton_item_selected(index):
 				TranslationServer.set_locale("en")
 				Global.card_catalog.translation = "en"
 	Global.card_catalog.load_catalog()
+
+
 
 

@@ -111,7 +111,7 @@ func _send_surrender():
 
 
 
-static func _create_update_playerData(player : ProcessorPlayerData) -> UpdateData.PlayerData:
+static func _create_update_playerData(player : ProcessorData.Player) -> UpdateData.PlayerData:
 	var updates = []
 	for c in player.deck_list:
 		var a := (c as ProcessorData.PlayerCard).affected
