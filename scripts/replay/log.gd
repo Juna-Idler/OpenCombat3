@@ -46,7 +46,7 @@ class TimedSendSelect:
 	var time : int
 	var round_count:int
 	var index:int
-	var hands_order:Array
+	var hands_order:PoolIntArray
 	func _init(t,rc,i,h):
 		time = t
 		round_count = rc
@@ -55,6 +55,7 @@ class TimedSendSelect:
 
 
 var end_msg : String
+var end_time : int
 var primary_data : IGameServer.PrimaryData
 var first_data : IGameServer.FirstData
 var update_data : Array # of TimedUpdateData
@@ -68,9 +69,12 @@ func _init():
 	update_data = []
 	send_select = []
 	_first_time = 0
+	end_time = -1
 
 func set_end_msg(msg:String):
-	_first_time = -1
+	if _first_time >= 0:
+		end_time = Time.get_ticks_msec() - _first_time
+		_first_time = -1
 	end_msg = msg
 
 func set_primary_data(data:IGameServer.PrimaryData):

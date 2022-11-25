@@ -27,6 +27,9 @@ func play_one_step() -> int:
 		step += 1
 	return step
 
+func emit_end_signal():
+	emit_signal("recieved_end",match_log.end_msg)
+
 func _get_primary_data() -> PrimaryData:
 	return match_log.primary_data
 

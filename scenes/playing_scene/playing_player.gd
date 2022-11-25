@@ -5,6 +5,8 @@ extends Reference
 class_name PlayingPlayer
 
 
+const CARD_MOVE_DURATION : float = 1.0
+
 var deck_list : Array # of Card
 
 var hand : Array = [] # of int
@@ -104,7 +106,7 @@ func set_hand(new_hand_indexes:Array):
 		c.location = Card.Location.HAND
 		cards.append(c)
 	hand_area.set_hand_card(cards)
-	hand_area.move_card(1)
+	hand_area.move_card(CARD_MOVE_DURATION)
 
 
 func play(hand_select : int,new_hand : Array,d : int,s_log : Array,tween : SceneTreeTween):
@@ -145,7 +147,7 @@ func recover(hand_select : int,new_hand : Array,draw_indexes : Array):
 	if hand_select >= 0:
 		var select_id = hand[hand_select]
 		var recovery_card := deck_list[select_id] as Card
-		discard_card(hand_select,1)
+		discard_card(hand_select,CARD_MOVE_DURATION)
 		damage -= recovery_card.front.data.level
 		damage_label.text = str(damage) if damage > 0 else ""
 		life_label.text = "%d / %d" % [life,stock_count]

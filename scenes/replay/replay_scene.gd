@@ -1,3 +1,5 @@
+# warning-ignore-all:return_value_discarded
+
 extends ISceneChanger.IScene
 
 
@@ -39,6 +41,7 @@ func _on_ButtonStart_pressed():
 		
 	replay_server.initialize(selected.match_log)
 	$PlayingScene.initialize(replay_server)
+	$"%HSliderSpeed".editable = true
 	$"%ResultOverlap".hide()
 	$Panel/Panel.hide()
 	$PlayingScene.send_ready()
@@ -49,7 +52,12 @@ func _on_Timer_timeout():
 	if step < replay_server.match_log.update_data.size():
 		var duration = replay_server.match_log.update_data[step].time - replay_server.match_log.update_data[step-1].time
 		$Timer.start(duration / 1000.0)
-	
+	else:
+		if replay_server.match_log.end_time > 0:
+			var duration = replay_server.match_log.end_time - replay_server.match_log.update_data.back().time
+			yield(get_tree().create_timer(duration / 1000.0), "timeout")
+			replay_server.emit_end_signal()
+
 
 func _on_Banner_clicked(banner : ReplayBanner):
 	selected = banner
@@ -79,6 +87,7 @@ func _on_PlayingScene_ended(situation, msg):
 		-2:
 			$"%ResultOverlap".get_node("ResultLabel").text = msg
 	$"%HSliderSpeed".value = 1
+	$"%HSliderSpeed".editable = false
 
 func _on_ReturnButton_pressed():
 	$"%ResultOverlap".hide()
