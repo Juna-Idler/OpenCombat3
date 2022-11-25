@@ -24,13 +24,13 @@ enum SkillTiming {BEFORE = 0,ENGAGED = 1,AFTER = 2,END = 3}
 
 
 class PrimaryData:
-	var my_deck_list : Array# of int
-	var rival_deck_list : Array# of int
+	var my_deck_list : PoolIntArray# of int
+	var rival_deck_list : PoolIntArray# of int
 	var my_name:String
 	var rival_name:String
 	var regulation :String
 
-	func _init(name:String,deck:Array,rname:String,rdeck:Array,reg):
+	func _init(name:String,deck:PoolIntArray,rname:String,rdeck:PoolIntArray,reg):
 		my_deck_list = deck
 		rival_deck_list = rdeck
 		my_name = name
@@ -40,10 +40,10 @@ class PrimaryData:
 
 class FirstData:
 	class PlayerData:
-		var hand : Array # of int
+		var hand : PoolIntArray # of int
 		var life : int
 		
-		func _init(h : Array,l : int):
+		func _init(h : PoolIntArray,l : int):
 			hand = h
 			life = l
 
@@ -73,12 +73,12 @@ class UpdateData:
 			data = d
 
 	class PlayerData:
-		var hand : Array # of int
+		var hand:PoolIntArray # of int
 		var select:int
-		var skill_logs : Array # of SkillLog
-		var draw:Array # of int
-		var damage : int
-		var life : int
+		var skill_logs:Array # of SkillLog
+		var draw:PoolIntArray # of int
+		var damage:int
+		var life:int
 		
 		func _init(h,s,sl,dc,d,l):
 			hand = h
@@ -111,10 +111,10 @@ func _send_ready():
 	pass
 
 #
-func _send_combat_select(_round_count:int,_index:int,_hands_order:Array = []):
+func _send_combat_select(_round_count:int,_index:int,_hands_order:PoolIntArray = []):
 	pass
 #
-func _send_recovery_select(_round_count:int,_index:int,_hands_order:Array = []):
+func _send_recovery_select(_round_count:int,_index:int,_hands_order:PoolIntArray = []):
 	pass
 
 # 即時ゲーム終了（降参）を送信

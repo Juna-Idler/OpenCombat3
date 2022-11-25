@@ -10,6 +10,8 @@ var deck_regulation : RegulationData.DeckRegulation
 
 var select_cpu_deck : bool
 
+var match_logger : MatchLogger
+
 
 class ZeroCommander extends ICpuCommander:
 	func _get_commander_name()-> String:
@@ -27,13 +29,13 @@ class RandomCommander extends ICpuCommander:
 		return generator.randi_range(0,myhand.size() - 1)
 
 	func _combat_select(data : IGameServer.UpdateData)-> int:
-		var hand := data.myself.hand.duplicate()
+		var hand := PoolIntArray(data.myself.hand)
 		hand.remove(data.myself.select)
 		hand.append_array(data.myself.draw)
 		return generator.randi_range(0,hand.size() - 1)
 
 	func _recover_select(data : IGameServer.UpdateData)-> int:
-		var hand := data.myself.hand.duplicate()
+		var hand := PoolIntArray(data.myself.hand)
 		hand.remove(data.myself.select)
 		hand.append_array(data.myself.draw)
 		return generator.randi_range(0,hand.size() - 1)
@@ -63,6 +65,8 @@ func initialize(changer : ISceneChanger):
 
 func _terminalize():
 	$PlayingScene.terminalize()
+	if match_logger:
+		match_logger.terminalize()
 
 
 func _on_PlayingScene_ended(situation,msg):
@@ -82,6 +86,9 @@ func _on_PlayingScene_ended(situation,msg):
 			$"%ResultOverlap".get_node("ResultLabel").text = "Lose"
 		-2:
 			$"%ResultOverlap".get_node("ResultLabel").text = msg
+
+	if match_logger:
+		Global.test_replay_logs.append(match_logger.match_log)
 
 
 func _on_ReturnButton_pressed():
@@ -106,8 +113,16 @@ func _on_ButtonStart_pressed():
 	var regulation = RegulationData.MatchRegulation.new(3,180,10,5)
 	var commander = commanders[$Panel/Panel/OptionCommander.selected]
 	offline_server.initialize("name",deck.cards,commander,cpu_deck.cards,regulation,Global.card_catalog)
+
+	if match_logger:
+		match_logger.terminalize()
+	if $Panel/Panel/CheckBoxLog.pressed:
+		match_logger = MatchLogger.new()
+		match_logger.initialize(offline_server)
+	else:
+		match_logger = null
 	
-	$PlayingScene.initialize(offline_server)
+	$PlayingScene.initialize(match_logger if match_logger else offline_server)
 	$PlayingScene.send_ready()
 	
 	$"%ResultOverlap".hide()

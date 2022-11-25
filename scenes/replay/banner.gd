@@ -1,4 +1,4 @@
-extends Control
+extends "res://scenes/ui/clickable_control.gd"
 
 class_name ReplayBanner
 
@@ -14,3 +14,8 @@ func initialize(match_log : MatchLog):
 
 func _ready():
 	pass
+
+func set_frame_color(color : Color):
+	$Frame.self_modulate = color
+	
+	

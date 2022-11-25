@@ -20,7 +20,14 @@ func initialize(target_server : IGameServer):
 
 	match_log = MatchLog.new()
 
-
+func terminalize():
+	if server:
+		server.disconnect("recieved_end",self,"_on_GameServer_recieved_end")
+		server.disconnect("recieved_first_data",self,"_on_GameServer_recieved_first_data")
+		server.disconnect("recieved_combat_result",self,"_on_GameServer_recieved_combat_result")
+		server.disconnect("recieved_recovery_result",self,"_on_GameServer_recieved_recovery_result")
+		server = null
+	
 
 func _get_primary_data() -> PrimaryData:
 	match_log.set_primary_data(server._get_primary_data())
@@ -30,11 +37,11 @@ func _get_primary_data() -> PrimaryData:
 func _send_ready():
 	server._send_ready()
 
-func _send_combat_select(round_count:int,index:int,hands_order:Array = []):
+func _send_combat_select(round_count:int,index:int,hands_order:PoolIntArray = []):
 	match_log.add_send_select(round_count,index,hands_order)
 	server._send_combat_select(round_count,index,hands_order)
 
-func _send_recovery_select(round_count:int,index:int,hands_order:Array = []):
+func _send_recovery_select(round_count:int,index:int,hands_order:PoolIntArray = []):
 	match_log.add_send_select(round_count,index,hands_order)
 	server._send_recovery_select(round_count,index,hands_order)
 

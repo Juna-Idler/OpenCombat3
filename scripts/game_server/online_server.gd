@@ -124,7 +124,7 @@ func _send_ready():
 	_client.get_peer(1).put_packet(send.to_utf8())
 
 
-func _send_combat_select(round_count:int,index:int,hands_order:Array = []):
+func _send_combat_select(round_count:int,index:int,hands_order:PoolIntArray = []):
 	if not is_ws_connected:
 		return
 	var phase = round_count * 2
@@ -133,7 +133,7 @@ func _send_combat_select(round_count:int,index:int,hands_order:Array = []):
 			% [phase,index,hand.join(",")]
 	_client.get_peer(1).put_packet(send.to_utf8())
 
-func _send_recovery_select(round_count:int,index:int,hands_order:Array = []):
+func _send_recovery_select(round_count:int,index:int,hands_order:PoolIntArray = []):
 	if not is_ws_connected:
 		return
 	if index < 0:

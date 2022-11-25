@@ -41,7 +41,7 @@ func _send_ready():
 	emit_signal("recieved_first_data", p1first)
 
 
-func _send_combat_select(round_count:int,index:int,hands_order:Array = []):
+func _send_combat_select(round_count:int,index:int,hands_order:PoolIntArray = []):
 	var index2 = _result
 # warning-ignore:integer_division
 	if _processor.round_count != round_count:
@@ -67,7 +67,7 @@ func _send_combat_select(round_count:int,index:int,hands_order:Array = []):
 	emit_signal("recieved_combat_result", p1update)
 
 
-func _send_recovery_select(round_count:int,index:int,hands_order:Array = []):
+func _send_recovery_select(round_count:int,index:int,hands_order:PoolIntArray = []):
 	var index2 = _result
 # warning-ignore:integer_division
 	if _processor.round_count != round_count:

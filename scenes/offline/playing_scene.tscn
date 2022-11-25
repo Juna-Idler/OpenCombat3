@@ -172,6 +172,14 @@ visible = false
 [node name="RegulationSelect" parent="Panel/Panel" instance=ExtResource( 6 )]
 visible = false
 
+[node name="CheckBoxLog" type="CheckBox" parent="Panel/Panel"]
+margin_left = 944.0
+margin_top = 384.0
+margin_right = 1216.0
+margin_bottom = 448.0
+pressed = true
+text = "プレイを記録する"
+
 [connection signal="ended" from="PlayingScene" to="." method="_on_PlayingScene_ended"]
 [connection signal="pressed" from="Panel/ResultOverlap/ReturnButton" to="." method="_on_ReturnButton_pressed"]
 [connection signal="pressed" from="Panel/Panel/ButtonBack" to="." method="_on_ButtonBack_pressed"]

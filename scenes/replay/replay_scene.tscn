@@ -1,8 +1,7 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://scenes/playing_scene/playing_scene.tscn" type="PackedScene" id=1]
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=2]
-[ext_resource path="res://scenes/replay/banner.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/replay/replay_scene.gd" type="Script" id=4]
 
 [sub_resource type="Gradient" id=17]
@@ -45,6 +44,36 @@ default_font = SubResource( 1 )
 script = ExtResource( 4 )
 
 [node name="PlayingScene" parent="." instance=ExtResource( 1 )]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 4
+
+[node name="Panel" type="Panel" parent="CanvasLayer"]
+margin_left = 1136.0
+margin_top = 64.0
+margin_right = 1280.0
+margin_bottom = 256.0
+
+[node name="HSliderSpeed" type="HSlider" parent="CanvasLayer/Panel"]
+unique_name_in_owner = true
+margin_left = 8.0
+margin_top = 104.0
+margin_right = 136.0
+margin_bottom = 128.0
+min_value = 0.5
+max_value = 3.0
+step = 0.25
+value = 1.0
+tick_count = 6
+ticks_on_borders = true
+
+[node name="Button" type="Button" parent="CanvasLayer/Panel"]
+margin_left = 16.0
+margin_top = 16.0
+margin_right = 128.0
+margin_bottom = 48.0
+toggle_mode = true
+text = "Pause"
 
 [node name="Panel" type="CanvasLayer" parent="."]
 layer = 10
@@ -127,38 +156,13 @@ custom_styles/bg = SubResource( 25 )
 follow_focus = true
 
 [node name="Container" type="VBoxContainer" parent="Panel/Panel/BannerContainer"]
-margin_right = 768.0
-margin_bottom = 752.0
+unique_name_in_owner = true
 
-[node name="ReplayBanner" parent="Panel/Panel/BannerContainer/Container" instance=ExtResource( 3 )]
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
 
-[node name="ReplayBanner2" parent="Panel/Panel/BannerContainer/Container" instance=ExtResource( 3 )]
-margin_top = 108.0
-margin_bottom = 212.0
-
-[node name="ReplayBanner3" parent="Panel/Panel/BannerContainer/Container" instance=ExtResource( 3 )]
-margin_top = 216.0
-margin_bottom = 320.0
-rect_pivot_offset = Vector2( 264, 304 )
-
-[node name="ReplayBanner7" parent="Panel/Panel/BannerContainer/Container" instance=ExtResource( 3 )]
-margin_top = 324.0
-margin_bottom = 428.0
-rect_pivot_offset = Vector2( 264, 304 )
-
-[node name="ReplayBanner4" parent="Panel/Panel/BannerContainer/Container" instance=ExtResource( 3 )]
-margin_top = 432.0
-margin_bottom = 536.0
-rect_pivot_offset = Vector2( 264, 304 )
-
-[node name="ReplayBanner5" parent="Panel/Panel/BannerContainer/Container" instance=ExtResource( 3 )]
-margin_top = 540.0
-margin_bottom = 644.0
-rect_pivot_offset = Vector2( 264, 304 )
-
-[node name="ReplayBanner6" parent="Panel/Panel/BannerContainer/Container" instance=ExtResource( 3 )]
-margin_top = 648.0
-margin_bottom = 752.0
-rect_pivot_offset = Vector2( 264, 304 )
-
+[connection signal="ended" from="PlayingScene" to="." method="_on_PlayingScene_ended"]
+[connection signal="value_changed" from="CanvasLayer/Panel/HSliderSpeed" to="." method="_on_HSliderSpeed_value_changed"]
+[connection signal="pressed" from="Panel/ResultOverlap/ReturnButton" to="." method="_on_ReturnButton_pressed"]
 [connection signal="pressed" from="Panel/Panel/ButtonBack" to="." method="_on_ButtonBack_pressed"]
+[connection signal="pressed" from="Panel/Panel/ButtonStart" to="." method="_on_ButtonStart_pressed"]
