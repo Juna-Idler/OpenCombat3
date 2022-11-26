@@ -11,31 +11,26 @@ class TimedUpdateData:
 		phase = p
 		data = d
 	
-	func to_json_string() -> String:
-		var m_json = _update_player_to_json(data.myself)
-		var r_json = _update_player_to_json(data.rival)
-		return """{"t":%s,"p":%s,"d":{"rc":%s,"np":%s,"ls":%s,"m":%s,"r":%s}}"""\
-				% [time,phase,data.round_count,data.next_phase,data.situation,m_json,r_json]
+	func to_json_dictionary() -> Dictionary:
+		var m = _update_player_to_json(data.myself)
+		var r = _update_player_to_json(data.rival)
+		return {"t":time,"p":phase,"d":{"rc":data.round_count,"np":data.next_phase,"ls":data.situation,"m":m,"r":r}}
 
-	static func from_json_string(json : String) -> TimedUpdateData:
-		var r := JSON.parse(json)
-		if r.error != OK:
-			return null
-		var d : Dictionary = r.result["d"]
-		var m_player = _update_player_from_json(d["m"])
-		var r_player = _update_player_from_json(d["r"])
-		var ud = IGameServer.UpdateData.new(d["rc"],d["np"],d["ls"],m_player,r_player)
-		return TimedUpdateData.new(r.result["t"],r.result["p"],ud)
+	static func from_json_dictionary(json : Dictionary) -> TimedUpdateData:
+		var d : Dictionary = json["d"]
+		var m = _update_player_from_json(d["m"])
+		var r = _update_player_from_json(d["r"])
+		var ud = IGameServer.UpdateData.new(d["rc"],d["np"],d["ls"],m,r)
+		return TimedUpdateData.new(json["t"],json["p"],ud)
 
-	static func _update_player_to_json(player : IGameServer.UpdateData.PlayerData) -> String:
-		var logs : PoolStringArray = []
+	static func _update_player_to_json(player ) -> Dictionary:
+		var logs : Array = []
 		for _i in player.skill_logs:
 			var i = _i as IGameServer.UpdateData.SkillLog
-			logs.append("""{"i":%s,"t":%s,"p":%s,"d":%s}""" % [i.index,i.timing,i.priority,JSON.print(i.data)])
-		return """{"h":%s,"i":%s,"s":[%s],"dc":%s,"d":%s,"l":%s}"""\
-				% [JSON.print(player.hand),player.select,logs.join(","),JSON.print(player.draw),player.damage,player.life]
-		
-	static func _update_player_from_json(json : Dictionary) -> IGameServer.UpdateData.PlayerData:
+			logs.append({"i":i.index,"t":i.timing,"p":i.priority,"d":i.data})
+		return  {"h":player.hand,"i":player.select,"s":logs,"dc":player.draw,"d":player.damage,"l":player.life}
+	
+	static func _update_player_from_json(json : Dictionary):# -> IGameServer.UpdateData.PlayerData:
 		var logs := []
 		for l in (json["s"] as Array):
 			logs.append(IGameServer.UpdateData.SkillLog.new(l["i"],l["t"],l["p"],l["d"]))
@@ -91,4 +86,38 @@ func add_update_data(data:IGameServer.UpdateData,phase : int):
 
 func add_send_select(rc,i,ho):
 	send_select.append(TimedSendSelect.new(Time.get_ticks_msec() - _first_time,rc,i,ho))
+
+
+func to_json_dictionary() -> Dictionary:
+	var dic = {
+		"end":{"msg":end_msg,"time":end_time},
+		"pd":{
+			"name":primary_data.my_name,"deck":primary_data.my_deck_list,
+			"rname":primary_data.rival_name,"rdeck":primary_data.rival_deck_list,
+			"reg":primary_data.regulation
+		},
+		"fd":{
+			"hand":first_data.myself.hand,"life":first_data.myself.life,
+			"rhand":first_data.rival.hand,"rlife":first_data.rival.life
+		},
+		"ud":[]
+	}
+	var ud = []
+	for u_ in update_data:
+		var u = u_ as TimedUpdateData
+		ud.append(u.to_json_dictionary())
+	dic["ud"] = ud
+	return dic
+	
+func from_json_dictionary(json : Dictionary) -> void:
+	end_msg = json["end"]["msg"]
+	end_time = json["end"]["time"]
+	primary_data = IGameServer.PrimaryData.new(json["pd"]["name"],json["pd"]["deck"],
+			json["pd"]["rname"],json["pd"]["rdeck"],json["pd"]["reg"])
+	first_data = IGameServer.FirstData.new(
+			IGameServer.FirstData.PlayerData.new(json["fd"]["hand"],json["fd"]["life"]),
+			IGameServer.FirstData.PlayerData.new(json["fd"]["rhand"],json["fd"]["rlife"]))
+	update_data = []
+	for u in json["ud"]:
+		update_data.append(TimedUpdateData.from_json_dictionary(u))
 

@@ -18,19 +18,19 @@ func get_skill(id : int) -> Skill:
 
 class Skill:
 	func _before(_tween : SceneTreeTween,_skill : SkillData.NamedSkill,_csl : CombatSkillLine,
-			_myself : PlayingPlayer,_rival : PlayingPlayer,data) -> void:
+			_myself : PlayingPlayer,_rival : PlayingPlayer,_data) -> void:
 		return
 
 	func _engaged(_tween : SceneTreeTween,_skill : SkillData.NamedSkill,_csl : CombatSkillLine,
-			situation : int,_myself : PlayingPlayer,_rival : PlayingPlayer,data) -> int:
+			situation : int,_myself : PlayingPlayer,_rival : PlayingPlayer,_data) -> int:
 		return situation
 		
 	func _after(_tween : SceneTreeTween,_skill : SkillData.NamedSkill,_csl : CombatSkillLine,
-			_situation : int,_myself : PlayingPlayer,_rival : PlayingPlayer,data) -> void:
+			_situation : int,_myself : PlayingPlayer,_rival : PlayingPlayer,_data) -> void:
 		return
 		
 	func _end(_tween : SceneTreeTween,_skill : SkillData.NamedSkill,_csl : CombatSkillLine,
-			_situation : int,_myself : PlayingPlayer,_rival : PlayingPlayer,data) -> void:
+			_situation : int,_myself : PlayingPlayer,_rival : PlayingPlayer,_data) -> void:
 		return
 
 class Reinforce extends Skill:
@@ -51,7 +51,7 @@ class Reinforce extends Skill:
 
 class Pierce extends Skill:
 	func _after(tween : SceneTreeTween,_skill : SkillData.NamedSkill,csl : CombatSkillLine,
-			situation : int,myself : PlayingPlayer,rival : PlayingPlayer,data) -> void:
+			_situation : int,myself : PlayingPlayer,rival : PlayingPlayer,data) -> void:
 		if data > 0:
 			tween.tween_callback(csl,"succeeded")
 			myself.combat_avatar.attack_close(data,rival.combat_avatar,tween)
@@ -99,12 +99,12 @@ class Absorb extends Skill:
 		tween.tween_callback(csl,"succeeded")
 		var hand_index := data[0] as int
 		var draw := data[1] as int
+		var card := myself.deck_list[myself.hand[hand_index]] as Card
 		var a := [0,0,0]
 		for p in skill.parameter[1].data as Array:
 			var e := p as EffectData.SkillEffect
-			a[e.data.id - 1] += e.parameter
+			a[e.data.id - 1] += e.parameter * card.front.data.level
 		
-		var card := myself.deck_list[myself.hand[hand_index]] as Card
 		tween.tween_callback(myself,"discard_card",[hand_index,0.5])
 		tween.tween_callback(myself,"add_attribute",[a[0],a[1],a[2]])
 		if draw >= 0:

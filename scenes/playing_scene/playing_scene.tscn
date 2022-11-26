@@ -331,14 +331,14 @@ unique_name_in_owner = true
 visible = false
 
 [node name="CardListLayer" type="CanvasLayer" parent="."]
-layer = 5
+layer = 8
 
 [node name="CardList" parent="CardListLayer" instance=ExtResource( 9 )]
 unique_name_in_owner = true
 visible = false
 
 [node name="LargeCardLayer" type="CanvasLayer" parent="."]
-layer = 6
+layer = 9
 
 [node name="LargeCardView" parent="LargeCardLayer" instance=ExtResource( 1 )]
 unique_name_in_owner = true
@@ -360,14 +360,14 @@ unique_name_in_owner = true
 anchor_mode = 1
 current = false
 
-[connection signal="clicked" from="UILayer/MyField/Stock" to="." method="_on_MyStack_clicked"]
+[connection signal="clicked" from="UILayer/MyField/Stock" to="." method="_on_MyStock_clicked"]
 [connection signal="clicked_card" from="UILayer/MyField/HandArea" to="." method="_on_MyHandArea_clicked_card"]
 [connection signal="decided_card" from="UILayer/MyField/HandArea" to="." method="_on_MyHandArea_decided_card"]
 [connection signal="held_card" from="UILayer/MyField/HandArea" to="." method="_on_MyHandArea_held_card"]
 [connection signal="clicked" from="UILayer/MyField/Played" to="." method="_on_MyPlayed_clicked"]
 [connection signal="held" from="UILayer/MyField/Played" to="." method="_on_MyPlayed_held"]
 [connection signal="clicked" from="UILayer/MyField/Discard" to="." method="_on_MyDiscard_clicked"]
-[connection signal="clicked" from="UILayer/RivalField/Stock" to="." method="_on_RivalStack_clicked"]
+[connection signal="clicked" from="UILayer/RivalField/Stock" to="." method="_on_RivalStock_clicked"]
 [connection signal="clicked_card" from="UILayer/RivalField/HandArea" to="." method="_on_RivalHandArea_clicked_card"]
 [connection signal="held_card" from="UILayer/RivalField/HandArea" to="." method="_on_RivalHandArea_held_card"]
 [connection signal="clicked" from="UILayer/RivalField/Played" to="." method="_on_RivalPlayed_clicked"]

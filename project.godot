@@ -164,6 +164,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/replay/log.gd"
 }, {
+"base": "Reference",
+"class": "MatchLogList",
+"language": "GDScript",
+"path": "res://scripts/replay/log_list.gd"
+}, {
 "base": "IGameServer",
 "class": "MatchLogger",
 "language": "GDScript",
@@ -306,6 +311,7 @@ _global_script_class_icons={
 "JsonResourceSaver": "",
 "MasterScene": "",
 "MatchLog": "",
+"MatchLogList": "",
 "MatchLogger": "",
 "NamedSkillPerformer": "",
 "NamedSkillProcessor": "",

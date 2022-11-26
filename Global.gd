@@ -15,7 +15,8 @@ var deck_list := {
 	"newbie":DeckList.new("user://deck_newbie.tsv")
 }
 
-var test_replay_logs := []
+var replay_log_list := MatchLogList.new("user://replay_log.json")
+
 
 func _init():
 	if deck_list["newbie"].list.empty():

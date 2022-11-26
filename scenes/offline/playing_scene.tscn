@@ -166,12 +166,6 @@ text = "Random"
 items = [ "Zero", null, false, 0, null, "Random", null, false, 1, null ]
 selected = 1
 
-[node name="BuildSelectScene" parent="Panel/Panel" instance=ExtResource( 5 )]
-visible = false
-
-[node name="RegulationSelect" parent="Panel/Panel" instance=ExtResource( 6 )]
-visible = false
-
 [node name="CheckBoxLog" type="CheckBox" parent="Panel/Panel"]
 margin_left = 944.0
 margin_top = 384.0
@@ -179,6 +173,12 @@ margin_right = 1216.0
 margin_bottom = 448.0
 pressed = true
 text = "プレイを記録する"
+
+[node name="BuildSelectScene" parent="Panel/Panel" instance=ExtResource( 5 )]
+visible = false
+
+[node name="RegulationSelect" parent="Panel/Panel" instance=ExtResource( 6 )]
+visible = false
 
 [connection signal="ended" from="PlayingScene" to="." method="_on_PlayingScene_ended"]
 [connection signal="pressed" from="Panel/ResultOverlap/ReturnButton" to="." method="_on_ReturnButton_pressed"]

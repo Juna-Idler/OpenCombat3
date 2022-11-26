@@ -18,4 +18,3 @@ func _ready():
 func set_frame_color(color : Color):
 	$Frame.self_modulate = color
 	
-	

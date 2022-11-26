@@ -7,6 +7,8 @@ var scene_changer : ISceneChanger
 func _ready():
 	if Global.card_catalog.translation == "en":
 		$Panel/LanguageOptionButton.selected = 1
+		
+	$Panel/Label.text = OS.get_user_data_dir()
 	
 func initialize(changer : ISceneChanger):
 	scene_changer = changer

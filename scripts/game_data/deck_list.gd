@@ -53,5 +53,6 @@ func load_deck_list() -> bool:
 		tmp = line[2].split(",")
 		var keys := PoolIntArray([] if tmp.size() == 1 and tmp[0] == "" else Array(tmp))
 		list.append(DeckData.new(line[0],cards,keys))
+	f.close()
 	return true
 	

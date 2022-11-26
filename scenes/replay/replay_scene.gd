@@ -11,6 +11,9 @@ var replay_server : ReplayServer = ReplayServer.new()
 
 var selected : ReplayBanner
 
+var performing : bool
+
+
 func _ready():
 	$Timer.connect("timeout",self,"_on_Timer_timeout")
 	pass
@@ -18,7 +21,7 @@ func _ready():
 func initialize(changer : ISceneChanger):
 	scene_changer = changer
 	
-	for i in Global.test_replay_logs:
+	for i in Global.replay_log_list.list:
 		var banner := preload("res://scenes/replay/banner.tscn").instance() as ReplayBanner
 		banner.initialize(i)
 		banner.connect("clicked",self,"_on_Banner_clicked",[banner])
@@ -39,15 +42,20 @@ func _on_ButtonStart_pressed():
 	if selected == null:
 		return
 		
+	$"%HSliderSpeed".value = 1
+	$"%HSliderSpeed".editable = true
+	$"%ButtonNoWait".pressed = false
+		
 	replay_server.initialize(selected.match_log)
 	$PlayingScene.initialize(replay_server)
-	$"%HSliderSpeed".editable = true
 	$"%ResultOverlap".hide()
 	$Panel/Panel.hide()
+	performing = true
 	$PlayingScene.send_ready()
 	$Timer.start(replay_server.match_log.update_data[0].time / 1000.0)
 
 func _on_Timer_timeout():
+	performing = true
 	var step = replay_server.play_one_step()
 	if step < replay_server.match_log.update_data.size():
 		var duration = replay_server.match_log.update_data[step].time - replay_server.match_log.update_data[step-1].time
@@ -88,6 +96,30 @@ func _on_PlayingScene_ended(situation, msg):
 			$"%ResultOverlap".get_node("ResultLabel").text = msg
 	$"%HSliderSpeed".value = 1
 	$"%HSliderSpeed".editable = false
+	$PlayingScene.terminalize()
+
+func _on_PlayingScene_performed():
+	performing = false
+	if $CanvasLayer/Panel/ButtonNoWait.pressed:
+		if replay_server.step >= replay_server.match_log.update_data.size():
+			replay_server.emit_end_signal()
+		else:
+			performing = true
+			var _step = replay_server.play_one_step()
+	$CanvasLayer/Panel/ButtonNoWait.disabled = false
+
+
+func _on_ButtonNoWait_toggled(button_pressed:bool):
+	if $PlayingScene.game_server:
+		if button_pressed:
+			$Timer.stop()
+			if not performing:
+				performing = true
+				replay_server.play_one_step()
+		else:
+			$Timer.start(1)
+		$CanvasLayer/Panel/ButtonNoWait.disabled = true
+	
 
 func _on_ReturnButton_pressed():
 	$"%ResultOverlap".hide()
@@ -96,3 +128,6 @@ func _on_ReturnButton_pressed():
 
 func _on_HSliderSpeed_value_changed(value):
 	Engine.time_scale = value
+
+
+

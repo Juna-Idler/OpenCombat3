@@ -88,7 +88,8 @@ func _on_PlayingScene_ended(situation,msg):
 			$"%ResultOverlap".get_node("ResultLabel").text = msg
 
 	if match_logger:
-		Global.test_replay_logs.append(match_logger.match_log)
+		Global.replay_log_list.append(match_logger.match_log)
+		Global.replay_log_list.save_list()
 
 
 func _on_ReturnButton_pressed():
@@ -122,7 +123,7 @@ func _on_ButtonStart_pressed():
 	else:
 		match_logger = null
 	
-	$PlayingScene.initialize(match_logger if match_logger else offline_server)
+	$PlayingScene.initialize(match_logger as IGameServer if match_logger else offline_server as IGameServer)
 	$PlayingScene.send_ready()
 	
 	$"%ResultOverlap".hide()
@@ -174,5 +175,5 @@ func _on_RegulationSelect_return_button_pressed():
 	$Panel/Panel/RegulationSelect.hide()
 
 
-func _on_OptionCommander_item_selected(index):
+func _on_OptionCommander_item_selected(_index):
 	pass # Replace with function body.

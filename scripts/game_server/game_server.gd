@@ -121,4 +121,3 @@ func _send_recovery_select(_round_count:int,_index:int,_hands_order:PoolIntArray
 func _send_surrender():
 	pass
 
-

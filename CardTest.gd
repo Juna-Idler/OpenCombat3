@@ -9,6 +9,10 @@ func _ready():
 	
 	print(card_str)
 	
+	
+	var pd := IGameServer.PrimaryData.new("name",[1,2,3,4,5],"rname",[1,2,3,4,5],"reg")
+	print(JSON.print(pd))
+	
 	var card2 = bytes2var(card_str)
 	
 	print(var2str(card2))

@@ -6,6 +6,9 @@ class_name PlayingScene
 
 signal ended(situation,msg)
 
+signal performed()
+
+
 const Card = preload("../card/card.tscn")
 
 onready var my_combat_pos : Vector2 = $UILayer/MyField/Playing.rect_global_position + $UILayer/MyField/Playing.rect_size / 2
@@ -108,6 +111,7 @@ func terminalize():
 		game_server.disconnect("recieved_combat_result",self,"_on_GameServer_recieved_combat_result")
 		game_server.disconnect("recieved_recovery_result",self,"_on_GameServer_recieved_recovery_result")
 		game_server.disconnect("recieved_end",self,"_on_GameServer_recieved_end")
+		game_server = null
 
 
 func _on_GameServer_recieved_end(msg:String)->void:
@@ -122,7 +126,8 @@ func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
 	round_count = 1
 	myself.draw(data.myself.hand)
 	rival.draw(data.rival.hand)
-
+	yield(get_tree().create_timer(PlayingPlayer.CARD_MOVE_DURATION), "timeout")
+	emit_signal("performed")
 
 func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 	var tween := create_tween()
@@ -168,7 +173,7 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 		game_server._send_recovery_select(data.round_count,-1)
 	else:
 		$UILayer/MyField/HandArea.ban_drag(false)
-
+	emit_signal("performed")
 
 
 func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
@@ -185,6 +190,7 @@ func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
 		game_server._send_recovery_select(data.round_count,-1)
 	else:
 		$UILayer/MyField/HandArea.ban_drag(false)
+	emit_signal("performed")
 
 
 
@@ -267,6 +273,5 @@ func _on_SettingButton_pressed():
 
 func _on_SettingsScene_pressed_surrender():
 	game_server._send_surrender()
-
 
 
