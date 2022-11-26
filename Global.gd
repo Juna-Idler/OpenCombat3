@@ -5,7 +5,7 @@ extends Node
 var websocket_url := "wss://opencombat3.onrender.com"
 
 
-var player_name : String = "Name"
+var player_name : String = "Unknown"
 
 var card_catalog := CardCatalog.new()
 

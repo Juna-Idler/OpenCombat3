@@ -45,5 +45,3 @@ valign = 1
 [node name="Player2Avatar" parent="." instance=ExtResource( 4 )]
 rotation = 3.14159
 opponent_layout = true
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]

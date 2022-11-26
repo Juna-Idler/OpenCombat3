@@ -34,35 +34,6 @@ margin_right = -16.0
 margin_bottom = 64.0
 text = "BACK"
 
-[node name="HSlider" type="HSlider" parent="."]
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 384.0
-margin_top = -272.0
-margin_right = -256.0
-margin_bottom = -208.0
-grow_horizontal = 2
-grow_vertical = 2
-step = 5.0
-value = 50.0
-tick_count = 11
-ticks_on_borders = true
-
-[node name="HSlider2" type="Label" parent="."]
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 128.0
-margin_top = -272.0
-margin_right = -912.0
-margin_bottom = -208.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "テスト"
-align = 2
-valign = 1
-
 [node name="SurrenderButton" type="Button" parent="."]
 margin_left = 16.0
 margin_top = 16.0
@@ -70,5 +41,113 @@ margin_right = 208.0
 margin_bottom = 64.0
 text = "SURRENDER"
 
+[node name="HSliderMaster" type="HSlider" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -320.0
+margin_top = -40.0
+margin_right = 320.0
+margin_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+max_value = 80.0
+tick_count = 11
+ticks_on_borders = true
+
+[node name="Label" type="Label" parent="HSliderMaster"]
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_left = -192.0
+margin_top = -32.0
+margin_right = -8.0
+margin_bottom = 32.0
+grow_horizontal = 0
+text = "MASTER"
+align = 2
+valign = 1
+
+[node name="CheckBoxMaster" type="CheckBox" parent="HSliderMaster"]
+margin_left = 640.0
+margin_top = 8.0
+margin_right = 768.0
+margin_bottom = 56.0
+text = "MUTE"
+
+[node name="HSliderBGM" type="HSlider" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -320.0
+margin_top = 40.0
+margin_right = 320.0
+margin_bottom = 104.0
+grow_horizontal = 2
+grow_vertical = 2
+max_value = 80.0
+tick_count = 11
+ticks_on_borders = true
+
+[node name="Label" type="Label" parent="HSliderBGM"]
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_left = -192.0
+margin_top = -32.0
+margin_right = -8.0
+margin_bottom = 32.0
+grow_horizontal = 0
+text = "BGM"
+align = 2
+valign = 1
+
+[node name="CheckBoxBGM" type="CheckBox" parent="HSliderBGM"]
+margin_left = 640.0
+margin_top = 8.0
+margin_right = 768.0
+margin_bottom = 56.0
+text = "MUTE"
+
+[node name="HSliderSE" type="HSlider" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -320.0
+margin_top = 120.0
+margin_right = 320.0
+margin_bottom = 184.0
+grow_horizontal = 2
+grow_vertical = 2
+max_value = 80.0
+tick_count = 11
+ticks_on_borders = true
+
+[node name="Label" type="Label" parent="HSliderSE"]
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_left = -192.0
+margin_top = -32.0
+margin_right = -8.0
+margin_bottom = 32.0
+grow_horizontal = 0
+text = "SE"
+align = 2
+valign = 1
+
+[node name="CheckBoxSE" type="CheckBox" parent="HSliderSE"]
+margin_left = 640.0
+margin_top = 8.0
+margin_right = 768.0
+margin_bottom = 56.0
+text = "MUTE"
+
 [connection signal="pressed" from="BackButton" to="." method="_on_BackButton_pressed"]
 [connection signal="pressed" from="SurrenderButton" to="." method="_on_SurrenderButton_pressed"]
+[connection signal="value_changed" from="HSliderMaster" to="." method="_on_HSliderMaster_value_changed"]
+[connection signal="toggled" from="HSliderMaster/CheckBoxMaster" to="." method="_on_CheckBoxMaster_toggled"]
+[connection signal="value_changed" from="HSliderBGM" to="." method="_on_HSliderBGM_value_changed"]
+[connection signal="toggled" from="HSliderBGM/CheckBoxBGM" to="." method="_on_CheckBoxBGM_toggled"]
+[connection signal="value_changed" from="HSliderSE" to="." method="_on_HSliderSE_value_changed"]
+[connection signal="toggled" from="HSliderSE/CheckBoxSE" to="." method="_on_CheckBoxSE_toggled"]

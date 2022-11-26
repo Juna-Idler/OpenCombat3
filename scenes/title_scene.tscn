@@ -52,9 +52,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_left = -104.0
-margin_top = -272.0
+margin_top = -208.0
 margin_right = 152.0
-margin_bottom = -208.0
+margin_bottom = -144.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "VS_CPU"
@@ -65,9 +65,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_left = 224.0
-margin_top = -272.0
+margin_top = -208.0
 margin_right = 480.0
-margin_bottom = -208.0
+margin_bottom = -144.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "VS_ONLINE"
@@ -92,9 +92,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_left = -104.0
-margin_top = -144.0
+margin_top = -112.0
 margin_right = 152.0
-margin_bottom = -80.0
+margin_bottom = -48.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "DECK_BUILD"
@@ -105,9 +105,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_left = 224.0
-margin_top = -144.0
+margin_top = -112.0
 margin_right = 480.0
-margin_bottom = -80.0
+margin_bottom = -48.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "REPLAY"
@@ -127,8 +127,21 @@ margin_top = 648.0
 margin_right = 680.0
 margin_bottom = 712.0
 
+[node name="LineEditName" type="LineEdit" parent="Panel"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -160.0
+margin_top = 24.0
+margin_right = 160.0
+margin_bottom = 88.0
+align = 1
+placeholder_text = "NAME"
+
 [connection signal="pressed" from="Panel/CpuButton" to="." method="_on_CpuButton_pressed"]
 [connection signal="pressed" from="Panel/ButtonVSOnline" to="." method="_on_ButtonVSOnline_pressed"]
 [connection signal="pressed" from="Panel/BuildButton" to="." method="_on_BuildButton_pressed"]
 [connection signal="pressed" from="Panel/ButtonReplay" to="." method="_on_ButtonReplay_pressed"]
 [connection signal="item_selected" from="Panel/LanguageOptionButton" to="." method="_on_LanguageOptionButton_item_selected"]
+[connection signal="text_changed" from="Panel/LineEditName" to="." method="_on_LineEditName_text_changed"]

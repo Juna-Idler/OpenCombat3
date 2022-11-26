@@ -7,11 +7,12 @@ var scene_changer : ISceneChanger
 func _ready():
 	if Global.card_catalog.translation == "en":
 		$Panel/LanguageOptionButton.selected = 1
-		
+	
 	$Panel/Label.text = OS.get_user_data_dir()
 	
 func initialize(changer : ISceneChanger):
 	scene_changer = changer
+	$Panel/LineEditName.text = Global.player_name
 	pass
 	
 func _terminalize():
@@ -47,3 +48,5 @@ func _on_LanguageOptionButton_item_selected(index):
 
 
 
+func _on_LineEditName_text_changed(new_text):
+	Global.player_name = new_text

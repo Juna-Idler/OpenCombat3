@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/魔王魂  ファンタジー11.ogg-ab3dd9bb6ca6d65dc7f4a3af37b8d131.oggstr"
+
+[deps]
+
+source_file="res://sound/魔王魂  ファンタジー11.ogg"
+dest_files=[ "res://.import/魔王魂  ファンタジー11.ogg-ab3dd9bb6ca6d65dc7f4a3af37b8d131.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

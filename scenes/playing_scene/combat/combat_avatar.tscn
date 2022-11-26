@@ -224,3 +224,4 @@ position = Vector2( 0, 120 )
 target_position = Vector2( 880, 360 )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+bus = "SE"

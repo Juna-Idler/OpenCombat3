@@ -21,6 +21,7 @@ func initialize(name:String,deck:Array,
 	
 	var p1 := ProcessorData.Player.new(deck,regulation.hand_count,card_catalog,true)
 	var p2 := ProcessorData.Player.new(cpu_deck,regulation.hand_count,card_catalog,true)
+# warning-ignore:return_value_discarded
 	_processor.standby(p1,p2)
 
 func _get_primary_data() -> PrimaryData:

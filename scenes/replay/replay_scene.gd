@@ -52,6 +52,8 @@ func _on_ButtonStart_pressed():
 	$Panel/Panel.hide()
 	performing = true
 	$PlayingScene.send_ready()
+	Bgm.stream = load("res://sound/魔王魂  ファンタジー11.ogg")
+	Bgm.play()
 	$Timer.start(replay_server.match_log.update_data[0].time / 1000.0)
 
 func _on_Timer_timeout():
@@ -94,6 +96,7 @@ func _on_PlayingScene_ended(situation, msg):
 			$"%ResultOverlap".get_node("ResultLabel").text = "Lose"
 		-2:
 			$"%ResultOverlap".get_node("ResultLabel").text = msg
+	Bgm.stop()
 	$"%HSliderSpeed".value = 1
 	$"%HSliderSpeed".editable = false
 	$PlayingScene.terminalize()

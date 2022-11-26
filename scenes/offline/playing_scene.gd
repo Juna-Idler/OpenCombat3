@@ -87,6 +87,8 @@ func _on_PlayingScene_ended(situation,msg):
 		-2:
 			$"%ResultOverlap".get_node("ResultLabel").text = msg
 
+	Bgm.stop()
+
 	if match_logger:
 		Global.replay_log_list.append(match_logger.match_log)
 		Global.replay_log_list.save_list()
@@ -113,7 +115,7 @@ func _on_ButtonStart_pressed():
 	
 	var regulation = RegulationData.MatchRegulation.new(3,180,10,5)
 	var commander = commanders[$Panel/Panel/OptionCommander.selected]
-	offline_server.initialize("name",deck.cards,commander,cpu_deck.cards,regulation,Global.card_catalog)
+	offline_server.initialize(Global.player_name,deck.cards,commander,cpu_deck.cards,regulation,Global.card_catalog)
 
 	if match_logger:
 		match_logger.terminalize()
@@ -125,7 +127,9 @@ func _on_ButtonStart_pressed():
 	
 	$PlayingScene.initialize(match_logger as IGameServer if match_logger else offline_server as IGameServer)
 	$PlayingScene.send_ready()
-	
+
+	Bgm.stream = load("res://sound/魔王魂  ファンタジー11.ogg")
+	Bgm.play()
 	$"%ResultOverlap".hide()
 	$Panel/Panel.hide()
 
