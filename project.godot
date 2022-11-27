@@ -114,6 +114,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/game_processor/game_processor.gd"
 }, {
+"base": "Reference",
+"class": "GameSettings",
+"language": "GDScript",
+"path": "res://game_settings.gd"
+}, {
 "base": "EditorVCSInterface",
 "class": "GitAPI",
 "language": "NativeScript",
@@ -301,6 +306,7 @@ _global_script_class_icons={
 "DeckList": "",
 "EffectData": "",
 "GameProcessor": "",
+"GameSettings": "",
 "GitAPI": "",
 "HTweenBoxContainer": "",
 "ICpuCommander": "",
@@ -344,8 +350,8 @@ config/icon="res://icon.png"
 
 [autoload]
 
-Global="*res://Global.gd"
 Bgm="*res://BGM.tscn"
+Global="*res://Global.gd"
 
 [display]
 

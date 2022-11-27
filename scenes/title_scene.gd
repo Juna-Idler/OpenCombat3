@@ -8,11 +8,12 @@ func _ready():
 	if Global.card_catalog.translation == "en":
 		$Panel/LanguageOptionButton.selected = 1
 	
-	$Panel/Label.text = OS.get_user_data_dir()
+	$SettingsScene.self_modulate.a = 0.9
+	$SettingsScene.get_node("SurrenderButton").hide()
+	
 	
 func initialize(changer : ISceneChanger):
 	scene_changer = changer
-	$Panel/LineEditName.text = Global.player_name
 	pass
 	
 func _terminalize():
@@ -48,5 +49,10 @@ func _on_LanguageOptionButton_item_selected(index):
 
 
 
-func _on_LineEditName_text_changed(new_text):
-	Global.player_name = new_text
+
+func _on_ButtonSettings_pressed():
+	$SettingsScene.modulate.a = 0
+	$SettingsScene.show()
+	var tween = create_tween()
+	tween.tween_property($SettingsScene,"modulate:a",1.0,0.5)
+

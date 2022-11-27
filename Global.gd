@@ -18,11 +18,16 @@ var deck_list := {
 var replay_log_list := MatchLogList.new("user://replay_log.json")
 
 
+var game_settings := GameSettings.new()
+
+
 func _init():
 	if deck_list["newbie"].list.empty():
 		deck_list["newbie"].list.append(DeckData.new("デフォルトデッキ",[1,2,3,4,5,6,7,8,9,10,11,12,19,20,21],[]))
 
 func _ready():
+	game_settings.load_config()
+	
 	pause_mode = Node.PAUSE_MODE_PROCESS
 
 	pass
