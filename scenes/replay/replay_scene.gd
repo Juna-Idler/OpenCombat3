@@ -21,7 +21,9 @@ func _ready():
 func initialize(changer : ISceneChanger):
 	scene_changer = changer
 	
-	for i in Global.replay_log_list.list:
+	var inv = Global.replay_log_list.list.duplicate()
+	inv.invert()
+	for i in inv:
 		var banner := preload("res://scenes/replay/banner.tscn").instance() as ReplayBanner
 		banner.initialize(i)
 		banner.connect("clicked",self,"_on_Banner_clicked",[banner])

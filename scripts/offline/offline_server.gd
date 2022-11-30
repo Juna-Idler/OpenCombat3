@@ -19,24 +19,24 @@ func initialize(name:String,deck:Array,
 	_player_name = name;
 	_commander = commander
 	
-	var p1 := ProcessorData.Player.new(deck,regulation.hand_count,card_catalog,true)
-	var p2 := ProcessorData.Player.new(cpu_deck,regulation.hand_count,card_catalog,true)
+	var p1 := MatchPlayer.new(deck,regulation.hand_count,card_catalog,true)
+	var p2 := MatchPlayer.new(cpu_deck,regulation.hand_count,card_catalog,true)
 # warning-ignore:return_value_discarded
 	_processor.standby(p1,p2)
 
 func _get_primary_data() -> PrimaryData:
 	var my_deck_list = []
-	for c in _processor.player1.deck_list:
+	for c in _processor.player1._get_deck_list():
 		my_deck_list.append(c.data.id)
 	var r_deck_list = []
-	for c in _processor.player2.deck_list:
+	for c in _processor.player2._get_deck_list():
 		r_deck_list.append(c.data.id)
 	return PrimaryData.new(_player_name,my_deck_list,
 			_commander._get_commander_name(),r_deck_list,"")
 	
 func _send_ready():
-	var p1 := FirstData.PlayerData.new(_processor.player1.hand,_processor.player1.get_life())
-	var p2 := FirstData.PlayerData.new(_processor.player2.hand,_processor.player2.get_life())
+	var p1 := FirstData.PlayerData.new(_processor.player1._get_hand(),_processor.player1._get_life())
+	var p2 := FirstData.PlayerData.new(_processor.player2._get_hand(),_processor.player2._get_life())
 	var p1first := FirstData.new(p1,p2)
 	_result = _commander._first_select(p2.hand,p1.hand)
 	emit_signal("recieved_first_data", p1first)
@@ -63,7 +63,7 @@ func _send_combat_select(round_count:int,index:int,hands_order:PoolIntArray = []
 	if _processor.phase == Phase.COMBAT:
 		_result = _commander._combat_select(p2update);
 	elif _processor.phase == Phase.RECOVERY:
-		if not _processor.player2.is_recovery():
+		if not _processor.player2._is_recovery():
 			_result = _commander._recover_select(p2update)
 	emit_signal("recieved_combat_result", p1update)
 
@@ -89,7 +89,7 @@ func _send_recovery_select(round_count:int,index:int,hands_order:PoolIntArray = 
 	if _processor.phase == Phase.COMBAT:
 		_result = _commander._combat_select(p2update);
 	elif _processor.phase == Phase.RECOVERY:
-		if not _processor.player2.is_recovery():
+		if not _processor.player2._is_recovery():
 			_result = _commander._recover_select(p2update)
 	emit_signal("recieved_recovery_result", p1update)
 
@@ -100,12 +100,11 @@ func _send_surrender():
 
 
 
-
-static func _create_update_playerData(player : ProcessorData.Player) -> UpdateData.PlayerData:
+static func _create_update_playerData(player : MechanicsData.IPlayer) -> UpdateData.PlayerData:
 	var skilllog = []
-	for sl in player.skill_log:
-		var s := sl as ProcessorData.SkillLog
+	for sl in player._get_skill_log():
+		var s := sl as MechanicsData.SkillLog
 		skilllog.append(IGameServer.UpdateData.SkillLog.new(s.index,s.timing,s.priority,s.data))
-	var p = IGameServer.UpdateData.PlayerData.new(player.playing_hand,player.select,skilllog,
-			player.draw_indexes,player.damage,player.get_life())
+	var p = IGameServer.UpdateData.PlayerData.new(player._get_playing_hand(),player._get_select(),skilllog,
+			player._get_draw(),player._get_damage(),player._get_life())
 	return p;

@@ -1,5 +1,5 @@
 
-class_name NamedSkillProcessor
+class_name SkillProcessor
 
 var skills : Array = [
 	Reinforce.new(),
@@ -20,25 +20,25 @@ class Skill:
 	func _before_priority() -> Array:
 		return []
 	func _process_before(_index : int,_priority : int,
-			_myself : ProcessorData.Player,_rival : ProcessorData.Player) -> void:
+			_myself : MechanicsData.IPlayer,_rival : MechanicsData.IPlayer) -> void:
 		pass
 		
 	func _engaged_priority() -> Array:
 		return []
 	func _process_engaged(_index : int,_priority : int,situation : int,
-			_myself : ProcessorData.Player,_rival : ProcessorData.Player) -> int:
+			_myself : MechanicsData.IPlayer,_rival : MechanicsData.IPlayer) -> int:
 		return situation
 		
 	func _after_priority() -> Array:
 		return []
 	func _process_after(_index : int,_priority : int,_situation : int,
-			_myself : ProcessorData.Player,_rival : ProcessorData.Player) -> void:
+			_myself : MechanicsData.IPlayer,_rival : MechanicsData.IPlayer) -> void:
 		pass
 		
 	func _end_priority() -> Array:
 		return []
 	func _process_end(_index : int,_priority : int,_situation : int,
-			_myself : ProcessorData.Player,_rival : ProcessorData.Player) -> void:
+			_myself : MechanicsData.IPlayer,_rival : MechanicsData.IPlayer) -> void:
 		pass
 
 
@@ -46,9 +46,9 @@ class Reinforce extends Skill:
 	func _before_priority() -> Array:
 		return [1]
 	func _process_before(index : int,_priority : int,
-			myself : ProcessorData.Player,_rival : ProcessorData.Player) -> void:
-		var skill := myself.select_card.data.skills[index] as SkillData.NamedSkill
-		var affected := myself.select_card.affected
+			myself : MechanicsData.IPlayer,_rival : MechanicsData.IPlayer) -> void:
+		var skill := myself._get_playing_card().data.skills[index] as SkillData.NamedSkill
+		var affected := myself._get_playing_card().affected
 		for p in skill.parameter[0].data as Array:
 			var e := p as EffectData.SkillEffect
 			match e.data.id:
@@ -58,30 +58,30 @@ class Reinforce extends Skill:
 					affected.hit += e.parameter
 				EffectData.Attribute.BLOCK:
 					affected.block += e.parameter
-		myself.skill_log.append(ProcessorData.SkillLog.new(index,ProcessorData.SkillTiming.BEFORE,1,true))
+		myself._append_skill_log(MechanicsData.SkillLog.new(index,MechanicsData.SkillTiming.BEFORE,1,true))
 
 
 class Pierce extends Skill:
 	func _after_priority() -> Array:
 		return [1]
 	func _process_after(index : int,_priority : int,situation : int,
-			myself : ProcessorData.Player,rival : ProcessorData.Player) -> void:
+			myself : MechanicsData.IPlayer,rival : MechanicsData.IPlayer) -> void:
 		var damage := 0
 		if situation > 0:
 # warning-ignore:integer_division
-			damage = (rival.get_current_block() + 1) / 2
-			rival.add_damage(damage)
-		myself.skill_log.append(ProcessorData.SkillLog.new(index,ProcessorData.SkillTiming.AFTER,1,damage))
+			damage = (rival._get_current_block() + 1) / 2
+			rival._add_damage(damage)
+		myself._append_skill_log(MechanicsData.SkillLog.new(index,MechanicsData.SkillTiming.AFTER,1,damage))
 
 
 class Charge extends Skill:
 	func _end_priority() -> Array:
 		return [1]
 	func _process_end(index : int,_priority : int,_situation : int,
-			myself : ProcessorData.Player,_rival : ProcessorData.Player) -> void:
-		if myself.damage == 0:
-			var skill := myself.select_card.data.skills[index] as SkillData.NamedSkill
-			var affected := myself.next_effect
+			myself : MechanicsData.IPlayer,_rival : MechanicsData.IPlayer) -> void:
+		if myself._is_recovery():
+			var skill := myself._get_playing_card().data.skills[index] as SkillData.NamedSkill
+			var affected := myself._get_next_effect()
 			for p in skill.parameter[0].data as Array:
 				var e := p as EffectData.SkillEffect
 				match e.data.id:
@@ -91,37 +91,37 @@ class Charge extends Skill:
 						affected.hit += e.parameter
 					EffectData.Attribute.BLOCK:
 						affected.block += e.parameter
-			myself.skill_log.append(ProcessorData.SkillLog.new(index,ProcessorData.SkillTiming.END,1,true))
+			myself._append_skill_log(MechanicsData.SkillLog.new(index,MechanicsData.SkillTiming.END,1,true))
 		else:
-			myself.skill_log.append(ProcessorData.SkillLog.new(index,ProcessorData.SkillTiming.END,1,false))
+			myself._append_skill_log(MechanicsData.SkillLog.new(index,MechanicsData.SkillTiming.END,1,false))
 
 
 class Isolate extends Skill:
 	func _engaged_priority() -> Array:
 		return [255]
 	func _process_engaged(index : int,_priority : int,_situation : int,
-			myself : ProcessorData.Player,_rival : ProcessorData.Player) -> int:
-		myself.add_damage(1)
-		myself.skill_log.append(ProcessorData.SkillLog.new(index,ProcessorData.SkillTiming.ENGAGED,255,true))
+			myself : MechanicsData.IPlayer,_rival : MechanicsData.IPlayer) -> int:
+		myself._add_damage(1)
+		myself._append_skill_log(MechanicsData.SkillLog.new(index,MechanicsData.SkillTiming.ENGAGED,255,true))
 		return 0
 
 class Absorb extends Skill:
 	func _before_priority() -> Array:
 		return [1]
 	func _process_before(index : int,_priority : int,
-			myself : ProcessorData.Player,_rival : ProcessorData.Player) -> void:
-		var skill := myself.select_card.data.skills[index] as SkillData.NamedSkill
+			myself : MechanicsData.IPlayer,_rival : MechanicsData.IPlayer) -> void:
+		var skill := myself._get_playing_card().data.skills[index] as SkillData.NamedSkill
 		var level := 0
 		var data := []
-		for i in myself.hand.size():
-			var card := myself.deck_list[myself.hand[i]] as ProcessorData.PlayerCard
+		for i in myself._get_hand().size():
+			var card := myself._get_deck_list()[myself._get_hand()[i]] as MechanicsData.PlayerCard
 			if card.data.color == skill.parameter[0].data:
 				level = card.data.level
-				myself.discard_card(i)
-				var draw_index := myself.skill_draw_card()
+				myself._discard_card(i)
+				var draw_index := myself._skill_draw_card()
 				data = [i,draw_index]
 				break
-		var affected := myself.select_card.affected
+		var affected := myself._get_playing_card().affected
 		for p in skill.parameter[1].data as Array:
 			var e := p as EffectData.SkillEffect
 			match e.data.id:
@@ -131,5 +131,5 @@ class Absorb extends Skill:
 					affected.hit += e.parameter * level
 				EffectData.Attribute.BLOCK:
 					affected.block += e.parameter * level
-		myself.skill_log.append(ProcessorData.SkillLog.new(index,ProcessorData.SkillTiming.BEFORE,1,data))
+		myself._append_skill_log(MechanicsData.SkillLog.new(index,MechanicsData.SkillTiming.BEFORE,1,data))
 	
