@@ -17,7 +17,11 @@ func _terminalize():
 
 
 func _ready():
-	pass
+	$PlayingScene.exit_button.connect("pressed",self,"_on_ExitButton_pressed")
+	$PlayingScene.exit_button.text = "SURRENDER"
+
+func _on_ExitButton_pressed():
+	$PlayingScene.game_server._send_surrender()
 
 
 func _on_PlayingScene_ended(situation,msg):

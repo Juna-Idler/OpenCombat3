@@ -130,22 +130,17 @@ func _supply() -> void:
 func _recover(index : int) -> void:
 	select_card = deck_list[hand[index]]
 	_discard_card(index)
-	_draw_card()
+	if step_data.damage > 0:
+		_draw_card()
 
 func _no_recover() -> void:
 	return
 	
 func _is_recovery() -> bool:
-	return step_data.damage == 0
+	return step_data.select < 0
 
 func _change_order(new_indexies : PoolIntArray) -> bool:
-	if new_indexies.size() != hand.size():
-		return false
-	for i in hand:
-		if not new_indexies.has(i):
-			return false
-	for i in range(hand.size()):
-		hand[i] = new_indexies[i]
+	hand = Array(new_indexies)
 	return true
 
 
@@ -164,7 +159,7 @@ func _discard_card(i : int):
 
 
 func _hand_to_deck_bottom(i : int):
-	var id := hand.pop_at(i) as int
+	var _id := hand.pop_at(i) as int
 	stock_count += 1
 
 

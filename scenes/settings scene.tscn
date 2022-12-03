@@ -30,20 +30,20 @@ margin_right = -8.0
 margin_bottom = 56.0
 text = "BACK"
 
-[node name="SurrenderButton" type="Button" parent="."]
+[node name="ExitButton" type="Button" parent="."]
 margin_left = 8.0
 margin_top = 8.0
 margin_right = 200.0
 margin_bottom = 56.0
-text = "SURRENDER"
 
 [node name="LineEditName" type="LineEdit" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
+margin_left = -64.0
 margin_top = -352.0
-margin_right = 320.0
+margin_right = 256.0
 margin_bottom = -304.0
 align = 1
 placeholder_text = "NAME"
@@ -186,7 +186,7 @@ margin_bottom = 712.0
 text = "SAVE"
 
 [connection signal="pressed" from="BackButton" to="." method="_on_BackButton_pressed"]
-[connection signal="pressed" from="SurrenderButton" to="." method="_on_SurrenderButton_pressed"]
+[connection signal="pressed" from="ExitButton" to="." method="_on_ExitButton_pressed"]
 [connection signal="text_changed" from="LineEditName" to="." method="_on_LineEditName_text_changed"]
 [connection signal="value_changed" from="HSliderMaster" to="." method="_on_HSliderMaster_value_changed"]
 [connection signal="toggled" from="HSliderMaster/CheckBoxMaster" to="." method="_on_CheckBoxMaster_toggled"]

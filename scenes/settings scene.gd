@@ -1,6 +1,5 @@
 extends Control
 
-signal pressed_surrender
 
 func _ready():
 	$LineEditSave.text =  OS.get_user_data_dir()
@@ -21,10 +20,8 @@ func set_sound(bus_name:String):
 func _on_BackButton_pressed():
 	hide()
 	
-func _on_SurrenderButton_pressed():
+func _on_ExitButton_pressed():
 	hide()
-	emit_signal("pressed_surrender")
-
 
 func _on_HSliderMaster_value_changed(value):
 	var idx = AudioServer.get_bus_index("Master")

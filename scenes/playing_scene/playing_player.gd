@@ -224,7 +224,6 @@ func multiply_attribute(power : float, hit : float, block : float):
 		power_balance.set_my_power_tween_step_by_step(playing_card.get_current_power() * multiply_power,0.5)
 
 
-
 func reset_board(h_card:PoolIntArray,p_card:PoolIntArray,d_card:PoolIntArray,
 		s_count:int,l_count:int,d_count:int,
 		n_effect:IGameServer.CompleteData.Affected,a_list:Array):
@@ -237,7 +236,6 @@ func reset_board(h_card:PoolIntArray,p_card:PoolIntArray,d_card:PoolIntArray,
 	next_effect.power = n_effect.power
 	next_effect.hit = n_effect.hit
 	next_effect.block = n_effect.block
-	set_next_effect_label()
 	
 	for i in a_list.size():
 		deck_list[i].affected.power = a_list[i].power
@@ -249,6 +247,7 @@ func reset_board(h_card:PoolIntArray,p_card:PoolIntArray,d_card:PoolIntArray,
 		c.location = Card.Location.STOCK
 		c.position = stock_pos
 		c.visible = false
+		c.rotation = 0
 
 	for i in played.size():
 		var c := deck_list[played[i]] as Card
@@ -276,5 +275,7 @@ func reset_board(h_card:PoolIntArray,p_card:PoolIntArray,d_card:PoolIntArray,
 	hand_area.move_card(0)
 
 	life_label.text = "%d / %d" % [life,stock_count]
+	damage_label.text = str(damage) if damage > 0 else ""
+	set_next_effect_label()
 
 

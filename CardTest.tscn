@@ -1,9 +1,8 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scenes/deck_scene/theme.tres" type="Theme" id=1]
 [ext_resource path="res://CardTest.gd" type="Script" id=2]
 [ext_resource path="res://images/triangle.png" type="Texture" id=3]
-[ext_resource path="res://scenes/deck_scene/banner/banner.tscn" type="PackedScene" id=4]
 
 [sub_resource type="StyleBoxFlat" id=1]
 draw_center = false
@@ -65,17 +64,6 @@ grow_horizontal = 0
 grow_vertical = 0
 rect_min_size = Vector2( 129, 0 )
 
-[node name="DeckBanner" parent="Panel2" instance=ExtResource( 4 )]
-margin_left = 413.0
-margin_top = 296.0
-margin_right = 600.0
-margin_bottom = 160.0
-
-[node name="Button" type="Button" parent="Panel2/DeckBanner"]
-margin_right = 720.0
-margin_bottom = 216.0
-flat = true
-
 [node name="RichTextLabel" type="RichTextLabel" parent="Panel2"]
 margin_right = 533.0
 margin_bottom = 192.0
@@ -83,6 +71,29 @@ theme = ExtResource( 1 )
 bbcode_enabled = true
 bbcode_text = "bbcodeてｓきすががががががが"
 text = "bbcodeてｓきすががががががが"
+
+[node name="TabContainer" type="TabContainer" parent="Panel2"]
+margin_left = 29.0
+margin_top = 120.0
+margin_right = 482.0
+margin_bottom = 328.0
+
+[node name="Panel" type="Panel" parent="Panel2/TabContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 24.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="Panel2" type="Panel" parent="Panel2/TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 24.0
+margin_right = -4.0
+margin_bottom = -4.0
 
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( 992, 352 )
@@ -109,5 +120,3 @@ color = Color( 1, 0, 0, 1 )
 color_ramp = SubResource( 9 )
 hue_variation = 1.0
 hue_variation_random = 1.0
-
-[connection signal="pressed" from="Panel2/DeckBanner/Button" to="." method="_on_Button_pressed"]

@@ -2,6 +2,7 @@
 
 [ext_resource path="res://scenes/playing_scene/playing_scene.tscn" type="PackedScene" id=1]
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=2]
+[ext_resource path="res://scenes/replay/replay_menu.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/replay/replay_scene.gd" type="Script" id=4]
 
 [sub_resource type="DynamicFont" id=26]
@@ -9,6 +10,12 @@ font_data = ExtResource( 2 )
 
 [sub_resource type="Theme" id=27]
 default_font = SubResource( 26 )
+
+[sub_resource type="DynamicFont" id=29]
+size = 24
+font_data = ExtResource( 2 )
+
+[sub_resource type="StyleBoxFlat" id=28]
 
 [sub_resource type="Gradient" id=17]
 offsets = PoolRealArray( 0, 0.5, 1 )
@@ -37,15 +44,6 @@ size = 140
 outline_size = 5
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=1]
-size = 24
-font_data = ExtResource( 2 )
-
-[sub_resource type="Theme" id=24]
-default_font = SubResource( 1 )
-
-[sub_resource type="StyleBoxFlat" id=25]
-
 [node name="ReplayScene" type="Node"]
 script = ExtResource( 4 )
 
@@ -56,39 +54,101 @@ layer = 7
 
 [node name="Panel" type="Panel" parent="CanvasLayer"]
 pause_mode = 2
-margin_left = 1136.0
+margin_left = 1128.0
 margin_right = 1280.0
 margin_bottom = 256.0
 theme = SubResource( 27 )
 
+[node name="SettingButton" type="Button" parent="CanvasLayer/Panel"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -144.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = 56.0
+grow_horizontal = 0
+custom_fonts/font = SubResource( 29 )
+text = "SETTINGS"
+
 [node name="HSliderSpeed" type="HSlider" parent="CanvasLayer/Panel"]
 unique_name_in_owner = true
 margin_left = 8.0
-margin_top = 64.0
-margin_right = 136.0
-margin_bottom = 88.0
+margin_top = 88.0
+margin_right = 144.0
+margin_bottom = 112.0
 max_value = 2.0
 step = 0.25
 value = 1.0
 tick_count = 5
 ticks_on_borders = true
 
+[node name="Label" type="Label" parent="CanvasLayer/Panel/HSliderSpeed"]
+margin_top = -24.0
+margin_right = 136.0
+margin_bottom = 1.0
+grow_vertical = 0
+text = "Game Speed"
+align = 1
+valign = 2
+
 [node name="ButtonPause" type="Button" parent="CanvasLayer/Panel"]
-margin_left = 16.0
-margin_top = 104.0
-margin_right = 128.0
-margin_bottom = 136.0
+margin_left = 8.0
+margin_top = 120.0
+margin_right = 144.0
+margin_bottom = 152.0
 toggle_mode = true
 text = "PAUSE"
 
-[node name="ButtonNoWait" type="Button" parent="CanvasLayer/Panel"]
+[node name="TabContainer" type="TabContainer" parent="CanvasLayer/Panel"]
+margin_top = 176.0
+margin_right = 152.0
+margin_bottom = 240.0
+custom_styles/panel = SubResource( 28 )
+tabs_visible = false
+
+[node name="Auto" type="Panel" parent="CanvasLayer/Panel/TabContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="ButtonNoWait" type="Button" parent="CanvasLayer/Panel/TabContainer/Auto"]
 unique_name_in_owner = true
-margin_left = 16.0
-margin_top = 152.0
-margin_right = 128.0
-margin_bottom = 184.0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -60.0
+margin_top = -16.0
+margin_right = 60.0
+margin_bottom = 16.0
 toggle_mode = true
 text = "NO_WAIT"
+
+[node name="Step" type="Panel" parent="CanvasLayer/Panel/TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="ButtonStepBack" type="Button" parent="CanvasLayer/Panel/TabContainer/Step"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -68.0
+margin_top = -24.0
+margin_right = -4.0
+margin_bottom = 24.0
+text = "<<"
+
+[node name="ButtonStep" type="Button" parent="CanvasLayer/Panel/TabContainer/Step"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 4.0
+margin_top = -24.0
+margin_right = 68.0
+margin_bottom = 24.0
+text = ">>"
 
 [node name="Panel" type="CanvasLayer" parent="."]
 layer = 10
@@ -134,52 +194,19 @@ text = "Win"
 align = 1
 valign = 1
 
-[node name="Panel" type="Panel" parent="Panel"]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-theme = SubResource( 24 )
-
-[node name="ButtonBack" type="Button" parent="Panel/Panel"]
-margin_left = 8.0
-margin_top = 8.0
-margin_right = 208.0
-margin_bottom = 64.0
-text = "BACK"
-
-[node name="ButtonStart" type="Button" parent="Panel/Panel"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = 416.0
-margin_top = 248.0
-margin_right = 608.0
-margin_bottom = 328.0
-text = "START"
-
-[node name="BannerContainer" type="ScrollContainer" parent="Panel/Panel"]
-anchor_left = 0.5
-anchor_right = 0.5
-anchor_bottom = 1.0
-margin_left = -392.0
-margin_top = 64.0
-margin_right = 392.0
-margin_bottom = -32.0
-rect_min_size = Vector2( 720, 624 )
-custom_styles/bg = SubResource( 25 )
-follow_focus = true
-
-[node name="Container" type="VBoxContainer" parent="Panel/Panel/BannerContainer"]
-unique_name_in_owner = true
+[node name="ReplayMenu" parent="Panel" instance=ExtResource( 3 )]
 
 [node name="Timer" type="Timer" parent="."]
 one_shot = true
 
 [connection signal="ended" from="PlayingScene" to="." method="_on_PlayingScene_ended"]
 [connection signal="performed" from="PlayingScene" to="." method="_on_PlayingScene_performed"]
+[connection signal="pressed" from="CanvasLayer/Panel/SettingButton" to="." method="_on_SettingButton_pressed"]
 [connection signal="value_changed" from="CanvasLayer/Panel/HSliderSpeed" to="." method="_on_HSliderSpeed_value_changed"]
-[connection signal="toggled" from="CanvasLayer/Panel/ButtonNoWait" to="." method="_on_ButtonNoWait_toggled"]
+[connection signal="toggled" from="CanvasLayer/Panel/ButtonPause" to="." method="_on_ButtonPause_toggled"]
+[connection signal="toggled" from="CanvasLayer/Panel/TabContainer/Auto/ButtonNoWait" to="." method="_on_ButtonNoWait_toggled"]
+[connection signal="pressed" from="CanvasLayer/Panel/TabContainer/Step/ButtonStepBack" to="." method="_on_ButtonStepBack_pressed"]
+[connection signal="pressed" from="CanvasLayer/Panel/TabContainer/Step/ButtonStep" to="." method="_on_ButtonStep_pressed"]
 [connection signal="pressed" from="Panel/ResultOverlap/ReturnButton" to="." method="_on_ReturnButton_pressed"]
-[connection signal="pressed" from="Panel/Panel/ButtonBack" to="." method="_on_ButtonBack_pressed"]
-[connection signal="pressed" from="Panel/Panel/ButtonStart" to="." method="_on_ButtonStart_pressed"]
+[connection signal="back_pressed" from="Panel/ReplayMenu" to="." method="_on_ReplayMenu_back_pressed"]
+[connection signal="start_pressed" from="Panel/ReplayMenu" to="." method="_on_ReplayMenu_start_pressed"]

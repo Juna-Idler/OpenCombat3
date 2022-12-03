@@ -27,6 +27,8 @@ onready var rival_life := $TopUILayer/Control/RivalLife
 
 onready var combat_overlap := $"%CombatOverlap"
 
+onready var exit_button : Button = $"%SettingsScene".get_node("ExitButton")
+
 var game_server : IGameServer = null
 
 
@@ -99,6 +101,7 @@ func terminalize():
 		game_server.disconnect("recieved_combat_result",self,"_on_GameServer_recieved_combat_result")
 		game_server.disconnect("recieved_recovery_result",self,"_on_GameServer_recieved_recovery_result")
 		game_server.disconnect("recieved_end",self,"_on_GameServer_recieved_end")
+		game_server.disconnect("recieved_complete_board",self,"_on_GameServer_recieved_complete_board")
 		game_server = null
 
 
@@ -275,7 +278,5 @@ func _on_SettingButton_pressed():
 	$"%SettingsScene".show()
 
 
-func _on_SettingsScene_pressed_surrender():
-	game_server._send_surrender()
 
 

@@ -49,7 +49,12 @@ var commanders : Array = [
 
 
 func _ready():
-	pass
+	$PlayingScene.exit_button.connect("pressed",self,"_on_ExitButton_pressed")
+	$PlayingScene.exit_button.text = "SURRENDER"
+
+func _on_ExitButton_pressed():
+	$PlayingScene.game_server._send_surrender()
+
 
 func initialize(changer : ISceneChanger):
 	scene_changer = changer
@@ -181,3 +186,4 @@ func _on_RegulationSelect_return_button_pressed():
 
 func _on_OptionCommander_item_selected(_index):
 	pass # Replace with function body.
+

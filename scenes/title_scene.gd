@@ -9,9 +9,9 @@ func _ready():
 		$Panel/LanguageOptionButton.selected = 1
 	
 	$SettingsScene.self_modulate.a = 0.9
-	$SettingsScene.get_node("SurrenderButton").hide()
-	
-	
+	$SettingsScene.get_node("ExitButton").hide()
+
+
 func initialize(changer : ISceneChanger):
 	scene_changer = changer
 	pass

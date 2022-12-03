@@ -21,8 +21,6 @@ func initialize(m_log : MatchLog):
 	step = -1
 	match_log = m_log
 
-	match_log.primary_data.my_deck_list
-	
 	player1 = ReplayPlayer.new(match_log,false,Global.card_catalog)
 	player2 = ReplayPlayer.new(match_log,true,Global.card_catalog)
 
@@ -45,6 +43,8 @@ func step_forward() -> int:
 		if step >= complete_board.size():
 			player1.set_step(step)
 			player2.set_step(step)
+			processor.reorder_hand1(data.data.myself.hand)
+			processor.reorder_hand2(data.data.rival.hand)
 			if data.phase == Phase.COMBAT:
 				processor.combat(data.data.myself.select,data.data.rival.select)
 			elif data.phase == Phase.RECOVERY:

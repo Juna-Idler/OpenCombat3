@@ -77,7 +77,7 @@ class IPlayer:
 
 	func _get_next_effect() -> Affected:
 		return null
-	func _add_next_effect(add : Affected):
+	func _add_next_effect(_add : Affected):
 		return
 
 	func _get_playing_hand() -> PoolIntArray:

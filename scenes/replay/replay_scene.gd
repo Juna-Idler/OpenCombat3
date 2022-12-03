@@ -2,48 +2,43 @@
 
 extends ISceneChanger.IScene
 
-
 class_name ReplayScene
+
 
 var scene_changer : ISceneChanger
 
 var replay_server : ReplayServer = ReplayServer.new()
 
-var selected : ReplayBanner
 
 var performing : bool
 
 
 func _ready():
 	$Timer.connect("timeout",self,"_on_Timer_timeout")
-	pass
+	$PlayingScene.exit_button.connect("pressed",self,"_on_ExitButton_pressed")
+	$PlayingScene.exit_button.text = "EXIT"
+
+func _on_ExitButton_pressed():
+	$Timer.stop()
+	Bgm.stop()
+	$PlayingScene.terminalize()
+	$Panel/ReplayMenu.show()
+
 
 func initialize(changer : ISceneChanger):
 	scene_changer = changer
-	
-	var inv = Global.replay_log_list.list.duplicate()
-	inv.invert()
-	for i in inv:
-		var banner := preload("res://scenes/replay/banner.tscn").instance() as ReplayBanner
-		banner.initialize(i)
-		banner.connect("clicked",self,"_on_Banner_clicked",[banner])
-		$Panel/Panel/BannerContainer/Container.add_child(banner)
-		
-	$Panel/Panel.show()
+
+	$Panel/ReplayMenu.initialize()
+	$Panel/ReplayMenu.show()
 	$"%ResultOverlap".hide()
 
 func _terminalize():
 	$PlayingScene.terminalize()
 
-
-func _on_ButtonBack_pressed():
+func _on_ReplayMenu_back_pressed():
 	scene_changer._goto_title_scene()
 
-
-func _on_ButtonStart_pressed():
-	if selected == null:
-		return
-		
+func _on_ReplayMenu_start_pressed(selected):
 	$"%HSliderSpeed".value = 1
 	$"%HSliderSpeed".editable = true
 	$"%ButtonNoWait".pressed = false
@@ -51,12 +46,17 @@ func _on_ButtonStart_pressed():
 	replay_server.initialize(selected.match_log)
 	$PlayingScene.initialize(replay_server)
 	$"%ResultOverlap".hide()
-	$Panel/Panel.hide()
+	$Panel/ReplayMenu.hide()
 	performing = true
 	$PlayingScene.send_ready()
 	Bgm.stream = load("res://sound/魔王魂  ファンタジー11.ogg")
 	Bgm.play()
-	$Timer.start(replay_server.match_log.update_data[0].time / 1000.0)
+	
+	if replay_server.match_log.update_data.empty():
+		yield(get_tree().create_timer(replay_server.match_log.end_time / 1000.0), "timeout")
+		replay_server.emit_end_signal()
+	else:
+		$Timer.start(replay_server.match_log.update_data[0].time / 1000.0)
 
 func _on_Timer_timeout():
 	performing = true
@@ -70,16 +70,6 @@ func _on_Timer_timeout():
 			yield(get_tree().create_timer(duration / 1000.0), "timeout")
 			replay_server.emit_end_signal()
 
-
-func _on_Banner_clicked(banner : ReplayBanner):
-	selected = banner
-	for i in $"%Container".get_child_count():
-		var c = $"%Container".get_child(i)
-		if c == banner:
-			c.set_frame_color(Color.red)
-		else:
-			c.set_frame_color(Color.white)
-	
 
 func _on_PlayingScene_ended(situation, msg):
 	$"%ResultOverlap".show()
@@ -105,13 +95,14 @@ func _on_PlayingScene_ended(situation, msg):
 
 func _on_PlayingScene_performed():
 	performing = false
-	if $CanvasLayer/Panel/ButtonNoWait.pressed:
+	
+	if $"%ButtonNoWait".pressed:
 		if replay_server.step >= replay_server.match_log.update_data.size():
 			replay_server.emit_end_signal()
 		else:
 			performing = true
 			var _step = replay_server.step_forward()
-	$CanvasLayer/Panel/ButtonNoWait.disabled = false
+	$"%ButtonNoWait".disabled = false
 
 
 func _on_ButtonNoWait_toggled(button_pressed:bool):
@@ -123,16 +114,44 @@ func _on_ButtonNoWait_toggled(button_pressed:bool):
 				replay_server.step_forward()
 		else:
 			$Timer.start(1)
-		$CanvasLayer/Panel/ButtonNoWait.disabled = true
+		$"%ButtonNoWait".disabled = true
 	
 
 func _on_ReturnButton_pressed():
 	$"%ResultOverlap".hide()
-	$Panel/Panel.show()
+	$Panel/ReplayMenu.show()
 
 
 func _on_HSliderSpeed_value_changed(value):
 	Engine.time_scale = value
+
+
+func _on_ButtonPause_toggled(button_pressed):
+	if button_pressed:
+		$Timer.stop()
+		$CanvasLayer/Panel/TabContainer.current_tab = 1
+	else:
+		$Timer.start(1)
+		$CanvasLayer/Panel/TabContainer.current_tab = 0
+
+
+func _on_SettingButton_pressed():
+	$PlayingScene.get_node("SettingsLayer/SettingsScene").show()
+
+
+func _on_ButtonStep_pressed():
+	if performing:
+		return
+	performing = true
+	replay_server.step_forward()
+
+
+func _on_ButtonStepBack_pressed():
+	if performing:
+		return
+	replay_server.step_backward()
+
+
 
 
 

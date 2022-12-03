@@ -12,6 +12,11 @@ func initialize(m_log : MatchLog):
 	$LabelPlayer2.text = match_log.primary_data.rival_name
 	$LabelRegulation.text = match_log.primary_data.regulation
 
+	if match_log.update_data.empty():
+		$LabelRound.text = "Round 0"
+	else:
+		$LabelRound.text = "Round %s" % (match_log.update_data.back() as MatchLog.TimedUpdateData).data.round_count
+
 func _ready():
 	pass
 
