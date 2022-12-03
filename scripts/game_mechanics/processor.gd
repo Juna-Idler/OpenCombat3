@@ -39,14 +39,13 @@ func _init():
 	pass
 
 
-func standby(p1 : MechanicsData.IPlayer,p2 : MechanicsData.IPlayer) -> bool:
+func standby(p1 : MechanicsData.IPlayer,p2 : MechanicsData.IPlayer):
 	round_count = 1
 	phase = Phase.COMBAT;
 	player1 = p1
 	player2 = p2
-	return true
 
-#hand is deck_in_id Array
+
 func reorder_hand1(hand:PoolIntArray):
 	player1._change_order(hand)
 

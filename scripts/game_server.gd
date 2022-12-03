@@ -16,6 +16,9 @@ signal recieved_combat_result(data)
 signal recieved_recovery_result(data)
 # func _on_GameServer_recieved_recovery_result(data:UpdateData)->void:
 
+signal recieved_complete_board(data)
+# func _on_GameServer_recieved_complete_board(data:CompleteData)->void:
+
 
 enum  Phase {GAME_END = -1,COMBAT = 0,RECOVERY = 1}
 enum  Situation {INFERIOR = -1,EVEN = 0,SUPERIOR = 1}
@@ -121,3 +124,48 @@ func _send_recovery_select(_round_count:int,_index:int,_hands_order:PoolIntArray
 func _send_surrender():
 	pass
 
+
+
+class CompleteData:
+	var round_count : int
+	var next_phase : int
+
+	class Affected:
+		var power : int
+		var hit : int
+		var block : int
+		func _init(p,h,b):
+			power = p
+			hit = h
+			block = b
+
+	class PlayerData:
+		var hand:PoolIntArray
+		var played:PoolIntArray
+		var discard:PoolIntArray
+		var stock:int
+		var life:int
+		var damage:int
+		var next_effect:Affected
+		var affected_list:Array
+		var additional_deck:PoolIntArray
+		
+		func _init(hc,pc,dc,s,l,d,ne,al,ad):
+			hand = hc
+			played = pc
+			discard = dc
+			stock = s
+			life = l
+			damage = d
+			next_effect = ne
+			affected_list = al
+			additional_deck = ad
+
+	var myself:PlayerData
+	var rival:PlayerData
+	
+	func _init(rc,np,m,r):
+		round_count = rc
+		next_phase = np
+		myself = m
+		rival = r

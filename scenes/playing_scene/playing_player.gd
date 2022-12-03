@@ -4,6 +4,7 @@ extends Reference
 
 class_name PlayingPlayer
 
+const CardScene = preload("../card/card.tscn")
 
 const CARD_MOVE_DURATION : float = 1.0
 
@@ -15,9 +16,10 @@ var discard : Array = [] # of int
 var stock_count : int
 var life : int = 0
 var damage : int = 0
+var draw : Array = [] # of int
 var skill_logs : Array = [] # of IGameServer.UpdateData.SkillLog
 
-var next_effect := Card.Affected.new()
+var next_effect := Card.Affected.new(0,0,0)
 
 var multiply_power = 1
 var multiply_hit = 1
@@ -31,6 +33,7 @@ var player_name : String
 
 
 var hand_area
+var stock_pos : Vector2
 var combat_pos : Vector2
 var played_pos : Vector2
 var discard_pos : Vector2
@@ -51,8 +54,12 @@ func get_link_color() -> int:
 	return (deck_list[played.back()] as Card).front.data.color
 
 
-func _init(dl:Array,
-		name : String,
+
+func _init(name : String,
+		dl:Array,
+		reverse : bool,
+		card_layer:Node,
+		s_pos : Vector2,
 		hand_area_node,
 		c_pos : Vector2,
 		p_pos : Vector2,
@@ -63,9 +70,17 @@ func _init(dl:Array,
 		avatar : CombatAvatar,
 		d_label : Label,
 		pb_interface : CombatPowerBalance.Interface):
+	deck_list = []
+	for i in dl.size():
+		var c := CardScene.instance().initialize_card(i,Global.card_catalog.get_card_data(dl[i]),reverse) as Card
+		deck_list.append(c)
+		c.position = s_pos
+		c.visible = false
+		card_layer.add_child(c)
+			
 	player_name = name
-	deck_list = dl
 	hand_area = hand_area_node
+	stock_pos = s_pos
 	combat_pos = c_pos
 	played_pos = p_pos
 	discard_pos = d_pos
@@ -84,17 +99,12 @@ func _init(dl:Array,
 	name_lable.notification(Node.NOTIFICATION_TRANSLATION_CHANGED)
 	name_lable.text = player_name
 
-func standby(l: int):
+func standby(l: int,start_hand : Array):
 	life = l
-	life_label.text = "%d / %d" % [life,stock_count]
 	damage_label.text = ""
-	pass
+	draw = start_hand
+	draw_all_card()
 
-func draw(draw_indexes:Array):
-	stock_count -= draw_indexes.size()
-	life_label.text = "%d / %d" % [life,stock_count]
-	hand.append_array(draw_indexes)
-	set_hand(hand)
 
 func set_hand(new_hand_indexes:Array):
 	hand = new_hand_indexes
@@ -109,9 +119,10 @@ func set_hand(new_hand_indexes:Array):
 	hand_area.move_card(CARD_MOVE_DURATION)
 
 
-func play(hand_select : int,new_hand : Array,d : int,s_log : Array,tween : SceneTreeTween):
+func play(hand_select : int,new_hand : Array,d : int,draw_indexes : Array,s_log : Array,tween : SceneTreeTween):
 	hand = new_hand
 	damage = d
+	draw = draw_indexes
 	skill_logs = s_log
 	playing_card_id = hand[hand_select]
 	playing_card = deck_list[playing_card_id]
@@ -125,7 +136,7 @@ func play(hand_select : int,new_hand : Array,d : int,s_log : Array,tween : Scene
 	multiply_hit = 1
 	multiply_block = 1
 
-func play_end(draw_indexes : Array,tween : SceneTreeTween):
+func play_end(tween : SceneTreeTween):
 	played.append(playing_card_id)
 	playing_card.z_index = played.size() + 0
 	playing_card.location = Card.Location.PLAYED
@@ -134,7 +145,7 @@ func play_end(draw_indexes : Array,tween : SceneTreeTween):
 	tween.tween_property(playing_card,"global_position",played_pos,0.5)
 	tween.parallel()
 	tween.tween_property(playing_card,"rotation",PI/2,0.5)
-	draw(draw_indexes)
+	draw_all_card()
 	life_label.text = "%d / %d" % [life,stock_count]
 	damage_label.text = str(damage) if damage > 0 else ""
 
@@ -144,6 +155,7 @@ func play_end(draw_indexes : Array,tween : SceneTreeTween):
 
 func recover(hand_select : int,new_hand : Array,draw_indexes : Array):
 	hand = new_hand
+	draw = draw_indexes
 	if hand_select >= 0:
 		var select_id = hand[hand_select]
 		var recovery_card := deck_list[select_id] as Card
@@ -151,7 +163,23 @@ func recover(hand_select : int,new_hand : Array,draw_indexes : Array):
 		damage -= recovery_card.front.data.level
 		damage_label.text = str(damage) if damage > 0 else ""
 		life_label.text = "%d / %d" % [life,stock_count]
-	draw(draw_indexes)
+	draw_all_card()
+
+func draw_card():
+	if not draw.empty():
+		stock_count -= 1
+		life_label.text = "%d / %d" % [life,stock_count]
+		var c = draw.pop_front()
+		hand.append(c)
+	set_hand(hand)
+
+func draw_all_card():
+	if not draw.empty():
+		stock_count -= draw.size()
+		life_label.text = "%d / %d" % [life,stock_count]
+		hand.append_array(draw)
+		draw.clear()
+	set_hand(hand)
 
 func discard_card(hand_index : int,duration : float):
 	var select_id = hand[hand_index]
@@ -194,3 +222,59 @@ func multiply_attribute(power : float, hit : float, block : float):
 	combat_avatar.set_block(int(playing_card.get_current_block() * multiply_block))
 	if power != 1:
 		power_balance.set_my_power_tween_step_by_step(playing_card.get_current_power() * multiply_power,0.5)
+
+
+
+func reset_board(h_card:PoolIntArray,p_card:PoolIntArray,d_card:PoolIntArray,
+		s_count:int,l_count:int,d_count:int,
+		n_effect:IGameServer.CompleteData.Affected,a_list:Array):
+	hand = Array(h_card)
+	played = Array(p_card)
+	discard = Array(d_card)
+	stock_count  = s_count
+	life = l_count
+	damage = d_count
+	next_effect.power = n_effect.power
+	next_effect.hit = n_effect.hit
+	next_effect.block = n_effect.block
+	set_next_effect_label()
+	
+	for i in a_list.size():
+		deck_list[i].affected.power = a_list[i].power
+		deck_list[i].affected.hit = a_list[i].hit
+		deck_list[i].affected.block = a_list[i].block
+
+	for c_ in deck_list:
+		var c := c_ as Card
+		c.location = Card.Location.STOCK
+		c.position = stock_pos
+		c.visible = false
+
+	for i in played.size():
+		var c := deck_list[played[i]] as Card
+		c.visible = true
+		c.z_index = i + 0
+		c.location = Card.Location.PLAYED
+		c.global_position = played_pos
+		c.rotation = PI/2
+	
+	for i in discard.size():
+		var c := deck_list[discard[i]] as Card
+		c.visible = true
+		c.z_index = i + 200
+		c.location = Card.Location.DISCARD
+		c.global_position = discard_pos
+	
+	var cards := []
+	for i in hand.size():
+		var c := deck_list[hand[i]] as Card
+		c.visible = true
+		c.z_index = i + 100
+		c.location = Card.Location.HAND
+		cards.append(c)
+	hand_area.set_hand_card(cards)
+	hand_area.move_card(0)
+
+	life_label.text = "%d / %d" % [life,stock_count]
+
+

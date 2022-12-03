@@ -2,7 +2,7 @@
 extends MechanicsData.IPlayer
 
 
-class_name MatchPlayer
+class_name OfflinePlayer
 
 
 var deck_list : Array = []
@@ -57,6 +57,8 @@ func _get_life() -> int:
 
 func _get_next_effect() -> MechanicsData.Affected:
 	return next_effect
+func _add_next_effect(add : MechanicsData.Affected):
+	next_effect.add_other(add)
 
 func _get_playing_hand() -> PoolIntArray:
 	return playing_hand
@@ -172,12 +174,6 @@ func _discard_card(i : int):
 	_life -= deck_list[id].data.level
 	discard.push_back(id)
 
-func _skill_draw_card() -> int:
-	if stock.empty():
-		return -1
-	var i := stock.pop_back() as int
-	hand.push_back(i)
-	return i
 
 func _hand_to_deck_bottom(i : int):
 	var id := hand.pop_at(i) as int

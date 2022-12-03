@@ -9,7 +9,6 @@ signal ended(situation,msg)
 signal performed()
 
 
-const Card = preload("../card/card.tscn")
 
 onready var my_combat_pos : Vector2 = $UILayer/MyField/Playing.rect_global_position + $UILayer/MyField/Playing.rect_size / 2
 onready var rival_combat_pos : Vector2 = $UILayer/RivalField/Playing.rect_global_position + $UILayer/RivalField/Playing.rect_size / 2
@@ -49,28 +48,16 @@ func initialize(server : IGameServer):
 	game_server.connect("recieved_combat_result",self,"_on_GameServer_recieved_combat_result")
 	game_server.connect("recieved_recovery_result",self,"_on_GameServer_recieved_recovery_result")
 	game_server.connect("recieved_end",self,"_on_GameServer_recieved_end")
+	game_server.connect("recieved_complete_board",self,"_on_GameServer_recieved_complete_board")
+	
 	
 	for c in $CardLayer.get_children():
 		$CardLayer.remove_child(c)
 		c.queue_free()
 	
 	var pd := game_server._get_primary_data()
-	var my_deck := []
-	for i in pd.my_deck_list.size():
-		var c := Card.instance().initialize_card(i,Global.card_catalog.get_card_data(pd.my_deck_list[i])) as Card
-		my_deck.append(c)
-		c.position = my_stock_pos
-		c.visible = false
-		$CardLayer.add_child(c)
-	var rival_deck := []
-	for i in pd.rival_deck_list.size():
-		var c := Card.instance().initialize_card(i,Global.card_catalog.get_card_data(pd.rival_deck_list[i]),true) as Card
-		rival_deck.append(c)
-		c.position = rival_stock_pos
-		c.visible = false
-		$CardLayer.add_child(c)	
-
-	myself = PlayingPlayer.new(my_deck,pd.my_name,
+	myself = PlayingPlayer.new(pd.my_name,
+			pd.my_deck_list,false,$CardLayer,my_stock_pos,
 			$UILayer/MyField/HandArea,
 			my_combat_pos,
 			my_played_pos,
@@ -81,7 +68,8 @@ func initialize(server : IGameServer):
 			combat_overlap.p1_avatar,
 			$TopUILayer/Control/MyDamage,
 			CombatPowerBalance.Interface.new($BGLayer/PowerBalance,false))
-	rival = PlayingPlayer.new(rival_deck,pd.rival_name,
+	rival = PlayingPlayer.new(pd.rival_name,
+			pd.rival_deck_list,true,$CardLayer,rival_stock_pos,
 			$UILayer/RivalField/HandArea,
 			rival_combat_pos,
 			rival_played_pos,
@@ -120,19 +108,19 @@ func _on_GameServer_recieved_end(msg:String)->void:
 	return
 
 func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
-	myself.standby(data.myself.life)
-	rival.standby(data.rival.life)
+	myself.standby(data.myself.life,Array(data.myself.hand))
+	rival.standby(data.rival.life,Array(data.rival.hand))
 	phase = IGameServer.Phase.COMBAT
 	round_count = 1
-	myself.draw(data.myself.hand)
-	rival.draw(data.rival.hand)
 	yield(get_tree().create_timer(PlayingPlayer.CARD_MOVE_DURATION), "timeout")
 	emit_signal("performed")
 
 func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 	var tween := create_tween()
-	myself.play(data.myself.select,data.myself.hand,data.myself.damage,data.myself.skill_logs,tween)
-	rival.play(data.rival.select,data.rival.hand,data.rival.damage,data.rival.skill_logs,tween)
+	myself.play(data.myself.select,data.myself.hand,data.myself.damage,
+			Array(data.myself.draw),data.myself.skill_logs,tween)
+	rival.play(data.rival.select,data.rival.hand,data.rival.damage,
+			Array(data.rival.draw),data.rival.skill_logs,tween)
 	yield(tween,"finished")
 
 	yield(combat_director.perform(self,data.next_phase == IGameServer.Phase.GAME_END),"completed")
@@ -153,8 +141,8 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 		return
 
 	tween = create_tween()
-	myself.play_end(data.myself.draw,tween)
-	rival.play_end(data.rival.draw,tween)
+	myself.play_end(tween)
+	rival.play_end(tween)
 	
 	myself.set_next_effect_label()
 	rival.set_next_effect_label()
@@ -191,6 +179,22 @@ func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
 	else:
 		$UILayer/MyField/HandArea.ban_drag(false)
 	emit_signal("performed")
+
+
+func _on_GameServer_recieved_complete_board(data:IGameServer.CompleteData)->void:
+	myself.reset_board(data.myself.hand,data.myself.played,data.myself.discard,
+			data.myself.stock,data.myself.life,data.myself.damage,
+			data.myself.next_effect,data.myself.affected_list)
+	rival.reset_board(data.rival.hand,data.rival.played,data.rival.discard,
+			data.rival.stock,data.rival.life,data.rival.damage,
+			data.rival.next_effect,data.rival.affected_list)
+	round_count = data.round_count
+	phase = data.next_phase
+	if (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0):
+		$UILayer/MyField/HandArea.ban_drag(true)
+		game_server._send_recovery_select(data.round_count,-1)
+	else:
+		$UILayer/MyField/HandArea.ban_drag(false)
 
 
 

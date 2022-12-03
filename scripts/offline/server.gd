@@ -19,8 +19,8 @@ func initialize(name:String,deck:Array,
 	_player_name = name;
 	_commander = commander
 	
-	var p1 := MatchPlayer.new(deck,regulation.hand_count,card_catalog,true)
-	var p2 := MatchPlayer.new(cpu_deck,regulation.hand_count,card_catalog,true)
+	var p1 := OfflinePlayer.new(deck,regulation.hand_count,card_catalog,true)
+	var p2 := OfflinePlayer.new(cpu_deck,regulation.hand_count,card_catalog,true)
 # warning-ignore:return_value_discarded
 	_processor.standby(p1,p2)
 

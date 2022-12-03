@@ -12,7 +12,8 @@ class SkillOrder:
 	var situation : int
 	var situation_sign : int
 
-	func _init(l: IGameServer.UpdateData.SkillLog,m:PlayingPlayer,r:PlayingPlayer,s : int = 0,s_sign : int = 0):
+	func _init(l: IGameServer.UpdateData.SkillLog,
+			m:PlayingPlayer,r:PlayingPlayer,s : int = 0,s_sign : int = 0):
 		priority = l.priority
 		index = l.index
 		data = l.data
@@ -60,7 +61,8 @@ func perform(node : Node,lethal : bool):
 	tween.set_parallel(true)
 	tween.tween_property(overlay,"modulate:a",1.0,0.5)
 	tween.tween_property(power_balance,"modulate:a",1.0,0.5)
-	tween.tween_callback(power_balance,"initial_tween",[p1_card.get_current_power(),p2_card.get_current_power(),0.5])
+	tween.tween_callback(power_balance,"initial_tween",
+			[p1_card.get_current_power(),p2_card.get_current_power(),0.5])
 	tween.tween_property(p1_card,"modulate:a",0.0,0.5)
 	tween.tween_property(p2_card,"modulate:a",0.0,0.5)
 	tween.tween_property(player1.next_effect_label,"modulate:a",0.0,0.5)
@@ -164,7 +166,8 @@ func _before_skills_effect(tween : SceneTreeTween):
 	for s in skill_order:
 		var skill := s.myself.playing_card.front.data.skills[s.index] as SkillData.NamedSkill
 		var csl := s.myself.combat_avatar.skills[s.index] as CombatSkillLine
-		named_skills.get_skill(skill.data.id)._before(tween,skill,csl,s.myself,s.rival,s.data)
+		named_skills.get_skill(skill.data.id)._before(tween,
+				skill,csl,s.myself,s.rival,s.data)
 
 func _engaged_skills_effect(tween : SceneTreeTween,situation : int) -> int:
 	var skill_order := []
@@ -181,7 +184,8 @@ func _engaged_skills_effect(tween : SceneTreeTween,situation : int) -> int:
 	for s in skill_order:
 		var skill := s.myself.playing_card.front.data.skills[s.index] as SkillData.NamedSkill
 		var csl := s.myself.combat_avatar.skills[s.index] as CombatSkillLine
-		situation = named_skills.get_skill(skill.data.id)._engaged(tween,skill,csl,s.situation,s.myself,s.rival,s.data) * s.situation_sign
+		situation = named_skills.get_skill(skill.data.id)._engaged(tween,
+				skill,csl,s.situation,s.myself,s.rival,s.data) * s.situation_sign
 	return situation
 
 func _after_skills_effect(tween : SceneTreeTween,situation : int):
@@ -199,7 +203,8 @@ func _after_skills_effect(tween : SceneTreeTween,situation : int):
 	for s in skill_order:
 		var skill := s.myself.playing_card.front.data.skills[s.index] as SkillData.NamedSkill
 		var csl := s.myself.combat_avatar.skills[s.index] as CombatSkillLine
-		named_skills.get_skill(skill.data.id)._after(tween,skill,csl,s.situation,s.myself,s.rival,s.data)
+		named_skills.get_skill(skill.data.id)._after(tween,
+				skill,csl,s.situation,s.myself,s.rival,s.data)
 
 func _end_skills_effect(tween : SceneTreeTween,situation : int):
 	var skill_order := []
@@ -216,5 +221,6 @@ func _end_skills_effect(tween : SceneTreeTween,situation : int):
 	for s in skill_order:
 		var skill := s.myself.playing_card.front.data.skills[s.index] as SkillData.NamedSkill
 		var csl := s.myself.combat_avatar.skills[s.index] as CombatSkillLine
-		named_skills.get_skill(skill.data.id)._end(tween,skill,csl,s.situation,s.myself,s.rival,s.data)
+		named_skills.get_skill(skill.data.id)._end(tween,
+				skill,csl,s.situation,s.myself,s.rival,s.data)
 

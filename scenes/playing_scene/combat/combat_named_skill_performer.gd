@@ -92,13 +92,13 @@ class Isolate extends Skill:
 class Absorb extends Skill:
 	func _before(tween : SceneTreeTween,skill : SkillData.NamedSkill,csl : CombatSkillLine,
 			myself : PlayingPlayer,_rival : PlayingPlayer,data) -> void:
-		if data.empty():
+		if data < 0:
 			tween.tween_callback(csl,"failed")
 			return
 
 		tween.tween_callback(csl,"succeeded")
-		var hand_index := data[0] as int
-		var draw := data[1] as int
+		var hand_index := data as int
+#		var draw := data[1] as int
 		var card := myself.deck_list[myself.hand[hand_index]] as Card
 		var a := [0,0,0]
 		for p in skill.parameter[1].data as Array:
@@ -107,8 +107,7 @@ class Absorb extends Skill:
 		
 		tween.tween_callback(myself,"discard_card",[hand_index,0.5])
 		tween.tween_callback(myself,"add_attribute",[a[0],a[1],a[2]])
-		if draw >= 0:
-			tween.tween_callback(myself,"draw",[[draw]])
+		tween.tween_callback(myself,"draw_card")
 		tween.tween_callback(myself.combat_avatar,"play_sound",[load("res://sound/ステータス上昇魔法2.mp3")])
 		tween.tween_interval(1.0)
 

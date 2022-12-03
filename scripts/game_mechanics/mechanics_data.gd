@@ -77,6 +77,8 @@ class IPlayer:
 
 	func _get_next_effect() -> Affected:
 		return null
+	func _add_next_effect(add : Affected):
+		return
 
 	func _get_playing_hand() -> PoolIntArray:
 		return PoolIntArray()
@@ -149,8 +151,9 @@ class IPlayer:
 	func _discard_card(_index : int):
 		return
 
-	func _skill_draw_card() -> int:
-		return -1
-
 	func _hand_to_deck_bottom(_index : int):
 		return
+
+	func _get_additional_deck() -> PoolIntArray:
+		return PoolIntArray()
+

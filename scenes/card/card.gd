@@ -15,11 +15,16 @@ var location : int
 
 var front : CardFront = null
 
-var affected := Affected.new()
+var affected := Affected.new(0,0,0)
 class Affected:
-	var power : int = 0
-	var hit : int = 0
-	var block : int = 0
+	var power : int
+	var hit : int
+	var block : int
+	
+	func _init(p,h,b):
+		power = p
+		hit= h
+		block = b
 	
 	func add(other : Affected):
 		power += other.power

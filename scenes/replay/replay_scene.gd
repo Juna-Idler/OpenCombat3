@@ -60,7 +60,7 @@ func _on_ButtonStart_pressed():
 
 func _on_Timer_timeout():
 	performing = true
-	var step = replay_server.play_one_step()
+	var step = replay_server.step_forward()
 	if step < replay_server.match_log.update_data.size():
 		var duration = replay_server.match_log.update_data[step].time - replay_server.match_log.update_data[step-1].time
 		$Timer.start(duration / 1000.0)
@@ -110,7 +110,7 @@ func _on_PlayingScene_performed():
 			replay_server.emit_end_signal()
 		else:
 			performing = true
-			var _step = replay_server.play_one_step()
+			var _step = replay_server.step_forward()
 	$CanvasLayer/Panel/ButtonNoWait.disabled = false
 
 
@@ -120,7 +120,7 @@ func _on_ButtonNoWait_toggled(button_pressed:bool):
 			$Timer.stop()
 			if not performing:
 				performing = true
-				replay_server.play_one_step()
+				replay_server.step_forward()
 		else:
 			$Timer.start(1)
 		$CanvasLayer/Panel/ButtonNoWait.disabled = true

@@ -81,7 +81,7 @@ class Charge extends Skill:
 			myself : MechanicsData.IPlayer,_rival : MechanicsData.IPlayer) -> void:
 		if myself._is_recovery():
 			var skill := myself._get_playing_card().data.skills[index] as SkillData.NamedSkill
-			var affected := myself._get_next_effect()
+			var affected := MechanicsData.Affected.new()
 			for p in skill.parameter[0].data as Array:
 				var e := p as EffectData.SkillEffect
 				match e.data.id:
@@ -91,6 +91,7 @@ class Charge extends Skill:
 						affected.hit += e.parameter
 					EffectData.Attribute.BLOCK:
 						affected.block += e.parameter
+			myself._add_next_effect(affected)
 			myself._append_skill_log(MechanicsData.SkillLog.new(index,MechanicsData.SkillTiming.END,1,true))
 		else:
 			myself._append_skill_log(MechanicsData.SkillLog.new(index,MechanicsData.SkillTiming.END,1,false))
@@ -112,14 +113,14 @@ class Absorb extends Skill:
 			myself : MechanicsData.IPlayer,_rival : MechanicsData.IPlayer) -> void:
 		var skill := myself._get_playing_card().data.skills[index] as SkillData.NamedSkill
 		var level := 0
-		var data := []
+		var data := -1
 		for i in myself._get_hand().size():
 			var card := myself._get_deck_list()[myself._get_hand()[i]] as MechanicsData.PlayerCard
 			if card.data.color == skill.parameter[0].data:
 				level = card.data.level
 				myself._discard_card(i)
-				var draw_index := myself._skill_draw_card()
-				data = [i,draw_index]
+				myself._draw_card()
+				data = i
 				break
 		var affected := myself._get_playing_card().affected
 		for p in skill.parameter[1].data as Array:

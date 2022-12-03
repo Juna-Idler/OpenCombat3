@@ -7,6 +7,13 @@ var match_log : MatchLog
 
 var step : int
 
+var complete_board : Array # of IGameServer.CompleteData
+
+var processor := GameProcessor.new()
+var player1 : ReplayPlayer
+var player2 : ReplayPlayer
+
+
 func _init():
 	pass
 
@@ -14,8 +21,18 @@ func initialize(m_log : MatchLog):
 	step = -1
 	match_log = m_log
 
+	match_log.primary_data.my_deck_list
+	
+	player1 = ReplayPlayer.new(match_log,false,Global.card_catalog)
+	player2 = ReplayPlayer.new(match_log,true,Global.card_catalog)
 
-func play_one_step() -> int:
+	processor.standby(player1,player2)
+	complete_board = []
+	var cb = create_complete_board(processor)
+	complete_board.append(cb)
+
+
+func step_forward() -> int:
 	if step < 0:
 		return -1
 	if step < match_log.update_data.size():
@@ -25,6 +42,22 @@ func play_one_step() -> int:
 		elif data.phase == Phase.RECOVERY:
 			emit_signal("recieved_recovery_result",data.data)
 		step += 1
+		if step >= complete_board.size():
+			player1.set_step(step)
+			player2.set_step(step)
+			if data.phase == Phase.COMBAT:
+				processor.combat(data.data.myself.select,data.data.rival.select)
+			elif data.phase == Phase.RECOVERY:
+				processor.recover(data.data.myself.select,data.data.rival.select)
+			var cb = create_complete_board(processor)
+			complete_board.append(cb)
+	return step
+
+func step_backward() -> int:
+	if step <= 0:
+		return step
+	step -= 1
+	emit_signal("recieved_complete_board",complete_board[step])
 	return step
 
 func emit_end_signal():
@@ -43,4 +76,20 @@ func _send_recovery_select(_round_count:int,_index:int,_hands_order:PoolIntArray
 func _send_surrender():
 	pass
 
+
+static func create_complete_board(processor : GameProcessor) -> IGameServer.CompleteData:
+	return IGameServer.CompleteData.new(processor.round_count,processor.phase,
+			create_complete_player_data(processor.player1),
+			create_complete_player_data(processor.player2))
+
+static func create_complete_player_data(player : MechanicsData.IPlayer) -> IGameServer.CompleteData.PlayerData:
+	var al = []
+	for i in player._get_deck_list():
+		al.append((i as MechanicsData.PlayerCard).affected)
+	
+	var ne = player._get_next_effect()
+	return IGameServer.CompleteData.PlayerData.new(player._get_hand(),player._get_played(),player._get_discard(),
+			player._get_stock_count(),player._get_life(),player._get_damage(),
+			IGameServer.CompleteData.Affected.new(ne.power,ne.hit,ne.block),
+			al,player._get_additional_deck())
 
