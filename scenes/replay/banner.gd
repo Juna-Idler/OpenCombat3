@@ -16,6 +16,7 @@ func initialize(m_log : MatchLog):
 		$LabelRound.text = "Round 0"
 	else:
 		$LabelRound.text = "Round %s" % (match_log.update_data.back() as MatchLog.TimedUpdateData).data.round_count
+	$LabelDateTime.text = match_log.datetime
 
 func _ready():
 	pass

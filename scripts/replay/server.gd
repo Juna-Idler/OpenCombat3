@@ -85,7 +85,8 @@ static func create_complete_board(processor : GameProcessor) -> IGameServer.Comp
 static func create_complete_player_data(player : MechanicsData.IPlayer) -> IGameServer.CompleteData.PlayerData:
 	var al = []
 	for i in player._get_deck_list():
-		al.append((i as MechanicsData.PlayerCard).affected)
+		var a = (i as MechanicsData.PlayerCard).affected
+		al.append(IGameServer.CompleteData.Affected.new(a.power,a.hit,a.block))
 	
 	var ne = player._get_next_effect()
 	return IGameServer.CompleteData.PlayerData.new(player._get_hand(),player._get_played(),player._get_discard(),

@@ -62,7 +62,7 @@ valign = 1
 [node name="LabelRegulation" type="Label" parent="."]
 anchor_left = 0.5
 anchor_right = 0.5
-margin_left = -192.0
+margin_left = -128.0
 margin_right = 192.0
 margin_bottom = 48.0
 grow_horizontal = 2
@@ -80,6 +80,15 @@ margin_bottom = 48.0
 grow_horizontal = 0
 text = "Round 00"
 align = 2
+valign = 1
+
+[node name="LabelDateTime" type="Label" parent="."]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 256.0
+margin_bottom = 48.0
+grow_horizontal = 0
+text = "date time"
 valign = 1
 
 [node name="Frame" type="Panel" parent="."]

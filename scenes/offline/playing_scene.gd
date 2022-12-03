@@ -30,13 +30,15 @@ class RandomCommander extends ICpuCommander:
 
 	func _combat_select(data : IGameServer.UpdateData)-> int:
 		var hand := PoolIntArray(data.myself.hand)
-		hand.remove(data.myself.select)
+		if data.myself.select >= 0:
+			hand.remove(data.myself.select)
 		hand.append_array(data.myself.draw)
 		return generator.randi_range(0,hand.size() - 1)
 
 	func _recover_select(data : IGameServer.UpdateData)-> int:
 		var hand := PoolIntArray(data.myself.hand)
-		hand.remove(data.myself.select)
+		if data.myself.select >= 0:
+			hand.remove(data.myself.select)
 		hand.append_array(data.myself.draw)
 		return generator.randi_range(0,hand.size() - 1)
 

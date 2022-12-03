@@ -48,7 +48,7 @@ class TimedSendSelect:
 		index = i
 		hands_order = h
 
-
+var datetime : String
 var end_msg : String
 var end_time : int
 var primary_data : IGameServer.PrimaryData
@@ -76,6 +76,7 @@ func set_primary_data(data:IGameServer.PrimaryData):
 	primary_data = data
 
 func set_first_data(data:IGameServer.FirstData):
+	datetime = Time.get_datetime_string_from_system(false,true)
 	first_data = data
 	_first_time = Time.get_ticks_msec()
 
@@ -90,6 +91,7 @@ func add_send_select(rc,i,ho):
 
 func to_json_dictionary() -> Dictionary:
 	var dic = {
+		"date":datetime,
 		"end":{"msg":end_msg,"time":end_time},
 		"pd":{
 			"name":primary_data.my_name,"deck":primary_data.my_deck_list,
@@ -110,6 +112,8 @@ func to_json_dictionary() -> Dictionary:
 	return dic
 	
 func from_json_dictionary(json : Dictionary) -> void:
+	if json.has("date"):
+		datetime = json["date"]
 	end_msg = json["end"]["msg"]
 	end_time = json["end"]["time"]
 	primary_data = IGameServer.PrimaryData.new(json["pd"]["name"],json["pd"]["deck"],

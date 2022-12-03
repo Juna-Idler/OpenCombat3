@@ -137,7 +137,7 @@ func _no_recover() -> void:
 	return
 	
 func _is_recovery() -> bool:
-	return step_data.select < 0
+	return step_data.damage == 0
 
 func _change_order(new_indexies : PoolIntArray) -> bool:
 	hand = Array(new_indexies)

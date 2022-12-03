@@ -101,11 +101,11 @@ func combat(index1 : int,index2 : int) -> void:
 		phase = Phase.RECOVERY
 
 func recover(index1:int,index2:int):
-	if player1._is_recovery():
+	if index1 < 0:
 		player1._no_recover()
 	else:
 		player1._recover(index1)
-	if player2._is_recovery():
+	if index2 < 0:
 		player2._no_recover()
 	else:
 		player2._recover(index2)
