@@ -3,9 +3,14 @@ class_name MechanicsData
 
 
 class Affected:
-	var power : int = 0
-	var hit : int = 0
-	var block : int = 0
+	var power : int
+	var hit : int
+	var block : int
+	
+	func _init(p = 0,h = 0,b = 0):
+		power = p
+		hit = h
+		block = b
 
 	func add(p:int,h:int,b:int):
 		power += p
@@ -18,6 +23,9 @@ class Affected:
 		power = 0
 		hit = 0
 		block = 0
+	
+	func duplicate() -> Affected:
+		return Affected.new(power,hit,block)
 
 
 class PlayerCard:

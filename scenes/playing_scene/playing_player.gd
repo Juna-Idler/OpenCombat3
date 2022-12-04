@@ -72,7 +72,8 @@ func _init(name : String,
 		pb_interface : CombatPowerBalance.Interface):
 	deck_list = []
 	for i in dl.size():
-		var c := CardScene.instance().initialize_card(i,Global.card_catalog.get_card_data(dl[i]),reverse) as Card
+		var c := CardScene.instance().initialize_card(i,
+				Global.card_catalog.get_card_data(dl[i]),reverse) as Card
 		deck_list.append(c)
 		c.position = s_pos
 		c.visible = false
@@ -224,9 +225,10 @@ func multiply_attribute(power : float, hit : float, block : float):
 		power_balance.set_my_power_tween_step_by_step(playing_card.get_current_power() * multiply_power,0.5)
 
 
+
 func reset_board(h_card:PoolIntArray,p_card:PoolIntArray,d_card:PoolIntArray,
 		s_count:int,l_count:int,d_count:int,
-		n_effect:IGameServer.CompleteData.Affected,a_list:Array):
+		n_effect:IGameServer.CompleteData.Affected,a_list:Array,tween : SceneTreeTween):
 	hand = Array(h_card)
 	played = Array(p_card)
 	discard = Array(d_card)
@@ -245,34 +247,42 @@ func reset_board(h_card:PoolIntArray,p_card:PoolIntArray,d_card:PoolIntArray,
 	for c_ in deck_list:
 		var c := c_ as Card
 		c.location = Card.Location.STOCK
-		c.position = stock_pos
-		c.visible = false
-		c.rotation = 0
+#		c.position = stock_pos
+		c.visible = true
+#		c.rotation = 0
 
 	for i in played.size():
 		var c := deck_list[played[i]] as Card
-		c.visible = true
 		c.z_index = i + 0
 		c.location = Card.Location.PLAYED
-		c.global_position = played_pos
-		c.rotation = PI/2
+#		c.global_position = played_pos
+#		c.rotation = PI/2
+		tween.tween_property(c,"global_position",played_pos,CARD_MOVE_DURATION)
+		tween.tween_property(c,"rotation",PI/2.0,CARD_MOVE_DURATION)
 	
 	for i in discard.size():
 		var c := deck_list[discard[i]] as Card
-		c.visible = true
 		c.z_index = i + 200
 		c.location = Card.Location.DISCARD
-		c.global_position = discard_pos
+#		c.global_position = discard_pos
+		tween.tween_property(c,"global_position",discard_pos,CARD_MOVE_DURATION)
+		tween.tween_property(c,"rotation",0.0,CARD_MOVE_DURATION)
 	
 	var cards := []
 	for i in hand.size():
 		var c := deck_list[hand[i]] as Card
-		c.visible = true
 		c.z_index = i + 100
 		c.location = Card.Location.HAND
+		tween.tween_property(c,"rotation",0.0,CARD_MOVE_DURATION)
 		cards.append(c)
 	hand_area.set_hand_card(cards)
-	hand_area.move_card(0)
+	hand_area.move_card(CARD_MOVE_DURATION)
+	
+	for c_ in deck_list:
+		var c := c_ as Card
+		if c.location == Card.Location.STOCK:
+			tween.tween_property(c,"position",stock_pos,CARD_MOVE_DURATION)
+			tween.tween_property(c,"rotation",0.0,CARD_MOVE_DURATION)
 
 	life_label.text = "%d / %d" % [life,stock_count]
 	damage_label.text = str(damage) if damage > 0 else ""

@@ -18,6 +18,7 @@ func initialize(name:String,deck:Array,
 		regulation :RegulationData.MatchRegulation,card_catalog : CardCatalog):
 	_player_name = name;
 	_commander = commander
+	commander._set_deck_list(PoolIntArray(cpu_deck),PoolIntArray(deck))
 	
 	var p1 := OfflinePlayer.new(deck,regulation.hand_count,card_catalog,true)
 	var p2 := OfflinePlayer.new(cpu_deck,regulation.hand_count,card_catalog,true)
@@ -57,17 +58,26 @@ func _send_combat_select(round_count:int,index:int,hands_order:PoolIntArray = []
 	var p1 := _create_update_playerData(_processor.player1)
 	var p2 := _create_update_playerData(_processor.player2)
 	var p1update := UpdateData.new(_processor.round_count,_processor.phase,_processor.situation,p1,p2)
-	var p2update := UpdateData.new(_processor.round_count,_processor.phase,-_processor.situation,p2,p1)
+#	var p2update := UpdateData.new(_processor.round_count,_processor.phase,-_processor.situation,p2,p1)
 	_processor.reset_select()
 
 	if _processor.phase == Phase.COMBAT:
-		_result = _commander._combat_select(p2update);
+		_result = _commander._combat_select(create_commander_player(_processor.player2),
+				create_commander_player(_processor.player1));
 	elif _processor.phase == Phase.RECOVERY:
 		if not _processor.player2._is_recovery():
-			_result = _commander._recover_select(p2update)
+			_result = _commander._recover_select(create_commander_player(_processor.player2),
+					create_commander_player(_processor.player1))
 		else:
 			_result = -1
 	emit_signal("recieved_combat_result", p1update)
+
+
+static func create_commander_player(player : MechanicsData.IPlayer) -> ICpuCommander.Player:
+	return ICpuCommander.Player.new(player._get_hand(),player._get_played(),
+			player._get_discard(),player._get_stock_count(),player._get_life(),
+			player._get_next_effect().duplicate())
+	
 
 
 func _send_recovery_select(round_count:int,index:int,hands_order:PoolIntArray = []):
@@ -85,14 +95,16 @@ func _send_recovery_select(round_count:int,index:int,hands_order:PoolIntArray = 
 	var p1 := _create_update_playerData(_processor.player1)
 	var p2 := _create_update_playerData(_processor.player2)
 	var p1update := UpdateData.new(_processor.round_count,_processor.phase,_processor.situation,p1,p2)
-	var p2update := UpdateData.new(_processor.round_count,_processor.phase,-_processor.situation,p2,p1)
+#	var p2update := UpdateData.new(_processor.round_count,_processor.phase,-_processor.situation,p2,p1)
 	_processor.reset_select()
 	
 	if _processor.phase == Phase.COMBAT:
-		_result = _commander._combat_select(p2update);
+		_result = _commander._combat_select(create_commander_player(_processor.player2),
+				create_commander_player(_processor.player1));
 	elif _processor.phase == Phase.RECOVERY:
 		if not _processor.player2._is_recovery():
-			_result = _commander._recover_select(p2update)
+			_result = _commander._recover_select(create_commander_player(_processor.player2),
+					create_commander_player(_processor.player1))
 		else:
 			_result = -1
 	emit_signal("recieved_recovery_result", p1update)

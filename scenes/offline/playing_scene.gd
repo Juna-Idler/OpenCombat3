@@ -22,25 +22,19 @@ class RandomCommander extends ICpuCommander:
 	var generator : RandomNumberGenerator
 	func _get_commander_name()-> String:
 		return "RandomCommander"
+	func _set_deck_list(_mydeck : PoolIntArray,_rivaldeck : PoolIntArray):
+		return
 
-	func _first_select(myhand : Array, _rivalhand : Array)-> int:
+	func _first_select(myhand : PoolIntArray, _rivalhand : PoolIntArray)-> int:
 		generator = RandomNumberGenerator.new()
 		generator.randomize()
 		return generator.randi_range(0,myhand.size() - 1)
 
-	func _combat_select(data : IGameServer.UpdateData)-> int:
-		var hand := PoolIntArray(data.myself.hand)
-		if data.myself.select >= 0:
-			hand.remove(data.myself.select)
-		hand.append_array(data.myself.draw)
-		return generator.randi_range(0,hand.size() - 1)
+	func _combat_select(myself : ICpuCommander.Player,_rival : ICpuCommander.Player)-> int:
+		return generator.randi_range(0,myself.hand.size() - 1)
 
-	func _recover_select(data : IGameServer.UpdateData)-> int:
-		var hand := PoolIntArray(data.myself.hand)
-		if data.myself.select >= 0:
-			hand.remove(data.myself.select)
-		hand.append_array(data.myself.draw)
-		return generator.randi_range(0,hand.size() - 1)
+	func _recover_select(myself : ICpuCommander.Player,_rival : ICpuCommander.Player)-> int:
+		return generator.randi_range(0,myself.hand.size() - 1)
 
 
 var commanders : Array = [

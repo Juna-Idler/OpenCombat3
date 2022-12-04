@@ -185,12 +185,14 @@ func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
 
 
 func _on_GameServer_recieved_complete_board(data:IGameServer.CompleteData)->void:
+	var tween = create_tween()
+	tween.set_parallel(true)
 	myself.reset_board(data.myself.hand,data.myself.played,data.myself.discard,
 			data.myself.stock,data.myself.life,data.myself.damage,
-			data.myself.next_effect,data.myself.affected_list)
+			data.myself.next_effect,data.myself.affected_list,tween)
 	rival.reset_board(data.rival.hand,data.rival.played,data.rival.discard,
 			data.rival.stock,data.rival.life,data.rival.damage,
-			data.rival.next_effect,data.rival.affected_list)
+			data.rival.next_effect,data.rival.affected_list,tween)
 	round_count = data.round_count
 	phase = data.next_phase
 	if (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0):
