@@ -15,6 +15,7 @@ var replay_mode : int = ReplayMode.NONE
 var performing : bool
 var time_start_perform : int
 var duration_last_performing : int
+var performing_durations : Array = []
 
 
 func _ready():
@@ -96,33 +97,15 @@ func _on_PlayingScene_ended(situation, msg):
 
 func _on_PlayingScene_performed():
 	duration_last_performing = ($TimerPerformingCounter.wait_time - $TimerPerformingCounter.time_left) * 1000
+	if replay_server.step == performing_durations.size():
+		performing_durations.append(duration_last_performing)
+	else:
+		performing_durations[replay_server.step] = duration_last_performing
 	$TimerPerformingCounter.stop()
 #	duration_last_performing = Time.get_ticks_msec() - time_start_perform
 	performing = false
+	start_auto_replay()
 
-	var step = replay_server.step
-
-	match replay_mode:
-		ReplayMode.AUTO:
-			if step < replay_server.match_log.update_data.size():
-				var duration = replay_server.match_log.update_data[step].time
-				if step > 0:
-					duration -= replay_server.match_log.update_data[step-1].time
-				duration -= duration_last_performing
-				$Timer.start(0.01 if duration <= 0 else duration / 1000.0)
-			else:
-				if replay_server.match_log.end_time > 0:
-					var duration = replay_server.match_log.end_time - replay_server.match_log.update_data.back().time
-					duration -= duration_last_performing
-					$Timer.start(0.01 if duration <= 0 else duration / 1000.0)
-		ReplayMode.NO_WAIT:
-			if step < replay_server.match_log.update_data.size():
-				performing = true
-				$TimerPerformingCounter.start()
-#				time_start_perform = Time.get_ticks_msec()
-				replay_server.step_forward()
-			else:
-				replay_server.emit_end_signal()
 
 
 func _on_ButtonNoWait_toggled(button_pressed:bool):
@@ -135,25 +118,7 @@ func _on_ButtonNoWait_toggled(button_pressed:bool):
 	replay_mode = ReplayMode.NO_WAIT if button_pressed else ReplayMode.AUTO
 
 	if not performing:
-		var step = replay_server.step
-		match replay_mode:
-			ReplayMode.AUTO:
-				if step < replay_server.match_log.update_data.size():
-					var duration = replay_server.match_log.update_data[step].time
-					if step > 0:
-						duration -= replay_server.match_log.update_data[step-1].time
-					duration -= duration_last_performing
-					$Timer.start(0.01 if duration <= 0 else duration / 1000.0)
-				else:
-					if replay_server.match_log.end_time > 0:
-						var duration = replay_server.match_log.end_time - replay_server.match_log.update_data.back().time
-						duration -= duration_last_performing
-						$Timer.start(0.01 if duration <= 0 else duration / 1000.0)
-			ReplayMode.NO_WAIT:
-				performing = true
-				$TimerPerformingCounter.start()
-#				time_start_perform = Time.get_ticks_msec()
-				replay_server.step_forward()
+		start_auto_replay()
 
 
 func _on_ReturnButton_pressed():
@@ -170,34 +135,16 @@ func _on_ButtonPause_toggled(button_pressed):
 		return
 
 	if button_pressed:
+		if replay_mode == ReplayMode.AUTO:
+			$Timer.stop()
 		replay_mode = ReplayMode.STEP
 		$CanvasLayer/Panel/TabContainer.current_tab = 1
 	else:
-		if replay_mode == ReplayMode.AUTO:
-			$Timer.stop()
 		replay_mode = ReplayMode.NO_WAIT if $"%ButtonNoWait".pressed else ReplayMode.AUTO
 		$CanvasLayer/Panel/TabContainer.current_tab = 0
 
 	if not performing:
-		var step = replay_server.step
-		match replay_mode:
-			ReplayMode.AUTO:
-				if step < replay_server.match_log.update_data.size():
-					var duration = replay_server.match_log.update_data[step].time
-					if step > 0:
-						duration -= replay_server.match_log.update_data[step-1].time
-					duration -= duration_last_performing
-					$Timer.start(0.01 if duration <= 0 else duration / 1000.0)
-				else:
-					if replay_server.match_log.end_time > 0:
-						var duration = replay_server.match_log.end_time - replay_server.match_log.update_data.back().time
-						duration -= duration_last_performing
-						$Timer.start(0.01 if duration <= 0 else duration / 1000.0)
-			ReplayMode.NO_WAIT:
-				performing = true
-				$TimerPerformingCounter.start()
-#				time_start_perform = Time.get_ticks_msec()
-				replay_server.step_forward()
+		start_auto_replay()
 
 
 func _on_SettingButton_pressed():
@@ -219,6 +166,26 @@ func _on_ButtonStepBack_pressed():
 	replay_server.step_backward()
 
 
-
+func start_auto_replay():
+	var step = replay_server.step
+	match replay_mode:
+		ReplayMode.AUTO:
+			if step < replay_server.match_log.update_data.size():
+				var duration = replay_server.match_log.update_data[step].time
+				if step > 0:
+					duration -= replay_server.match_log.update_data[step-1].time
+				duration -= performing_durations[step]
+				$Timer.start(0.01 if duration <= 0 else duration / 1000.0)
+			else:
+				if replay_server.match_log.end_time > 0:
+					var duration = replay_server.match_log.end_time - replay_server.match_log.update_data.back().time
+					duration -= duration_last_performing
+					$Timer.start(0.01 if duration <= 0 else duration / 1000.0)
+		ReplayMode.NO_WAIT:
+			performing = true
+			$TimerPerformingCounter.start()
+#			time_start_perform = Time.get_ticks_msec()
+			replay_server.step_forward()
+	
 
 
