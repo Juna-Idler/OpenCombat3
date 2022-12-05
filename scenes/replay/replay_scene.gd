@@ -70,7 +70,8 @@ func _on_Timer_timeout():
 		return
 	if replay_server.step < replay_server.match_log.update_data.size():
 		performing = true
-		time_start_perform = Time.get_ticks_msec()
+		$TimerPerformingCounter.start()
+#		time_start_perform = Time.get_ticks_msec()
 		replay_server.step_forward()
 	else:
 		replay_server.emit_end_signal()
@@ -98,7 +99,9 @@ func _on_PlayingScene_ended(situation, msg):
 	$PlayingScene.terminalize()
 
 func _on_PlayingScene_performed():
-	duration_last_performing = Time.get_ticks_msec() - time_start_perform
+	duration_last_performing = ($TimerPerformingCounter.wait_time - $TimerPerformingCounter.time_left) * 1000
+	$TimerPerformingCounter.stop()
+#	duration_last_performing = Time.get_ticks_msec() - time_start_perform
 	performing = false
 
 	var step = replay_server.step
@@ -117,7 +120,8 @@ func _on_PlayingScene_performed():
 		ReplayMode.NO_WAIT:
 			if step < replay_server.match_log.update_data.size():
 				performing = true
-				time_start_perform = Time.get_ticks_msec()
+				$TimerPerformingCounter.start()
+#				time_start_perform = Time.get_ticks_msec()
 				replay_server.step_forward()
 			else:
 				replay_server.emit_end_signal()
@@ -127,11 +131,8 @@ func _on_ButtonNoWait_toggled(button_pressed:bool):
 	if not $PlayingScene.game_server:
 		return
 
-	match replay_mode:
-		ReplayMode.AUTO:
-			$Timer.stop()
-		ReplayMode.NO_WAIT:
-			pass
+	if replay_mode == ReplayMode.AUTO:
+		$Timer.stop()
 
 	replay_mode = ReplayMode.NO_WAIT if button_pressed else ReplayMode.AUTO
 
@@ -150,7 +151,8 @@ func _on_ButtonNoWait_toggled(button_pressed:bool):
 						$Timer.start(0.01 if duration <= 0 else duration / 1000.0)
 			ReplayMode.NO_WAIT:
 				performing = true
-				time_start_perform = Time.get_ticks_msec()
+				$TimerPerformingCounter.start()
+#				time_start_perform = Time.get_ticks_msec()
 				replay_server.step_forward()
 
 
@@ -164,12 +166,36 @@ func _on_HSliderSpeed_value_changed(value):
 
 
 func _on_ButtonPause_toggled(button_pressed):
+	if not $PlayingScene.game_server:
+		return
+
 	if button_pressed:
-		$Timer.stop()
+		replay_mode = ReplayMode.STEP
 		$CanvasLayer/Panel/TabContainer.current_tab = 1
 	else:
-		$Timer.start(1)
+		if replay_mode == ReplayMode.AUTO:
+			$Timer.stop()
+		replay_mode = ReplayMode.NO_WAIT if $"%ButtonNoWait".pressed else ReplayMode.AUTO
 		$CanvasLayer/Panel/TabContainer.current_tab = 0
+
+	if not performing:
+		var step = replay_server.step
+		match replay_mode:
+			ReplayMode.AUTO:
+				if step < replay_server.match_log.update_data.size():
+					var duration = replay_server.match_log.update_data[step].time - replay_server.match_log.update_data[step-1].time
+					duration -= duration_last_performing
+					$Timer.start(0.01 if duration <= 0 else duration / 1000.0)
+				else:
+					if replay_server.match_log.end_time > 0:
+						var duration = replay_server.match_log.end_time - replay_server.match_log.update_data.back().time
+						duration -= duration_last_performing
+						$Timer.start(0.01 if duration <= 0 else duration / 1000.0)
+			ReplayMode.NO_WAIT:
+				performing = true
+				$TimerPerformingCounter.start()
+#				time_start_perform = Time.get_ticks_msec()
+				replay_server.step_forward()
 
 
 func _on_SettingButton_pressed():
@@ -180,7 +206,8 @@ func _on_ButtonStep_pressed():
 	if performing:
 		return
 	performing = true
-	time_start_perform = Time.get_ticks_msec()
+	$TimerPerformingCounter.start()
+#	time_start_perform = Time.get_ticks_msec()
 	replay_server.step_forward()
 
 

@@ -201,6 +201,9 @@ visible = false
 [node name="Timer" type="Timer" parent="."]
 one_shot = true
 
+[node name="TimerPerformingCounter" type="Timer" parent="."]
+wait_time = 4096.0
+
 [connection signal="ended" from="PlayingScene" to="." method="_on_PlayingScene_ended"]
 [connection signal="performed" from="PlayingScene" to="." method="_on_PlayingScene_performed"]
 [connection signal="pressed" from="CanvasLayer/Panel/SettingButton" to="." method="_on_SettingButton_pressed"]
