@@ -31,6 +31,7 @@ onready var exit_button : Button = $"%SettingsScene".get_node("ExitButton")
 
 var game_server : IGameServer = null
 
+var card_manipulation : bool
 
 var round_count = 0
 var phase : int = IGameServer.Phase.COMBAT
@@ -44,14 +45,17 @@ func _ready():
 	pass
 
 
-func initialize(server : IGameServer):
+func initialize(server : IGameServer,manipulation : bool = true):
 	game_server = server
 	game_server.connect("recieved_first_data",self,"_on_GameServer_recieved_first_data")
 	game_server.connect("recieved_combat_result",self,"_on_GameServer_recieved_combat_result")
 	game_server.connect("recieved_recovery_result",self,"_on_GameServer_recieved_recovery_result")
 	game_server.connect("recieved_end",self,"_on_GameServer_recieved_end")
 	game_server.connect("recieved_complete_board",self,"_on_GameServer_recieved_complete_board")
-	
+
+	card_manipulation = manipulation
+	if not card_manipulation:
+		$UILayer/MyField/HandArea.ban_drag(true)
 	
 	for c in $CardLayer.get_children():
 		$CardLayer.remove_child(c)
@@ -92,7 +96,6 @@ func initialize(server : IGameServer):
 
 func send_ready():
 	game_server._send_ready()
-
 
 
 func terminalize():
@@ -163,7 +166,8 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 	if (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0):
 		game_server._send_recovery_select(data.round_count,-1)
 	else:
-		$UILayer/MyField/HandArea.ban_drag(false)
+		if card_manipulation:
+			$UILayer/MyField/HandArea.ban_drag(false)
 	emit_signal("performed")
 
 
@@ -180,7 +184,8 @@ func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
 	if (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0):
 		game_server._send_recovery_select(data.round_count,-1)
 	else:
-		$UILayer/MyField/HandArea.ban_drag(false)
+		if card_manipulation:
+			$UILayer/MyField/HandArea.ban_drag(false)
 	emit_signal("performed")
 
 
@@ -196,10 +201,12 @@ func _on_GameServer_recieved_complete_board(data:IGameServer.CompleteData)->void
 	round_count = data.round_count
 	phase = data.next_phase
 	if (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0):
-		$UILayer/MyField/HandArea.ban_drag(true)
+		if card_manipulation:
+			$UILayer/MyField/HandArea.ban_drag(true)
 		game_server._send_recovery_select(data.round_count,-1)
 	else:
-		$UILayer/MyField/HandArea.ban_drag(false)
+		if card_manipulation:
+			$UILayer/MyField/HandArea.ban_drag(false)
 
 
 

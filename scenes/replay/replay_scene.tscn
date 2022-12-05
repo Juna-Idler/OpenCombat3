@@ -215,3 +215,4 @@ wait_time = 4096.0
 [connection signal="pressed" from="Panel/ResultOverlap/ReturnButton" to="." method="_on_ReturnButton_pressed"]
 [connection signal="back_pressed" from="Panel/ReplayMenu" to="." method="_on_ReplayMenu_back_pressed"]
 [connection signal="start_pressed" from="Panel/ReplayMenu" to="." method="_on_ReplayMenu_start_pressed"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

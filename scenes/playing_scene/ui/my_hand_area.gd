@@ -24,6 +24,7 @@ var controls : Array = []
 var hands : Array# of Card
 var distance : int
 var reorder : bool = false
+var drag_banned : bool = false
 
 
 func _init():
@@ -34,8 +35,9 @@ func _ready():
 	pass
 
 func ban_drag(b:bool):
-	for i in range(hands.size()):
-		controls[i].ban_drag = b
+	for c in controls:
+		c.ban_drag = b
+	drag_banned = b
 
 
 func set_hand_card(cards : Array):
@@ -51,6 +53,7 @@ func set_hand_card(cards : Array):
 			c.connect("held_card",self,"_on_held_card")
 			c.connect("clicked_card",self,"_on_clicked_card")
 			c.hold_timer = timer
+			c.ban_drag = drag_banned
 			controls.append(c)
 
 	if new_count > old_count:

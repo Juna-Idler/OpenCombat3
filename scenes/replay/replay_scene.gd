@@ -9,8 +9,8 @@ var scene_changer : ISceneChanger
 
 var replay_server : ReplayServer = ReplayServer.new()
 
-enum ReplayMode {AUTO,NO_WAIT,STEP}
-var replay_mode : int
+enum ReplayMode {NONE,AUTO,NO_WAIT,STEP}
+var replay_mode : int = ReplayMode.NONE
 
 var performing : bool
 var time_start_perform : int
@@ -18,11 +18,11 @@ var duration_last_performing : int
 
 
 func _ready():
-	$Timer.connect("timeout",self,"_on_Timer_timeout")
 	$PlayingScene.exit_button.connect("pressed",self,"_on_ExitButton_pressed")
 	$PlayingScene.exit_button.text = "EXIT"
 
 func _on_ExitButton_pressed():
+	replay_mode = ReplayMode.NONE
 	$Timer.stop()
 	Bgm.stop()
 	$PlayingScene.terminalize()
@@ -51,19 +51,15 @@ func _on_ReplayMenu_start_pressed(selected):
 	duration_last_performing = 0
 
 	replay_server.initialize(selected.match_log)
-	$PlayingScene.initialize(replay_server)
+	$PlayingScene.initialize(replay_server,false)
 	$"%ResultOverlap".hide()
 	$Panel/ReplayMenu.hide()
 	performing = true
+	$TimerPerformingCounter.start()
 	$PlayingScene.send_ready()
 	Bgm.stream = load("res://sound/魔王魂  ファンタジー11.ogg")
 	Bgm.play()
 	
-	if replay_server.match_log.update_data.empty():
-		yield(get_tree().create_timer(replay_server.match_log.end_time / 1000.0), "timeout")
-		replay_server.emit_end_signal()
-	else:
-		$Timer.start(replay_server.match_log.update_data[0].time / 1000.0)
 
 func _on_Timer_timeout():
 	if replay_mode != ReplayMode.AUTO:
@@ -109,7 +105,9 @@ func _on_PlayingScene_performed():
 	match replay_mode:
 		ReplayMode.AUTO:
 			if step < replay_server.match_log.update_data.size():
-				var duration = replay_server.match_log.update_data[step].time - replay_server.match_log.update_data[step-1].time
+				var duration = replay_server.match_log.update_data[step].time
+				if step > 0:
+					duration -= replay_server.match_log.update_data[step-1].time
 				duration -= duration_last_performing
 				$Timer.start(0.01 if duration <= 0 else duration / 1000.0)
 			else:
@@ -141,7 +139,9 @@ func _on_ButtonNoWait_toggled(button_pressed:bool):
 		match replay_mode:
 			ReplayMode.AUTO:
 				if step < replay_server.match_log.update_data.size():
-					var duration = replay_server.match_log.update_data[step].time - replay_server.match_log.update_data[step-1].time
+					var duration = replay_server.match_log.update_data[step].time
+					if step > 0:
+						duration -= replay_server.match_log.update_data[step-1].time
 					duration -= duration_last_performing
 					$Timer.start(0.01 if duration <= 0 else duration / 1000.0)
 				else:
@@ -183,7 +183,9 @@ func _on_ButtonPause_toggled(button_pressed):
 		match replay_mode:
 			ReplayMode.AUTO:
 				if step < replay_server.match_log.update_data.size():
-					var duration = replay_server.match_log.update_data[step].time - replay_server.match_log.update_data[step-1].time
+					var duration = replay_server.match_log.update_data[step].time
+					if step > 0:
+						duration -= replay_server.match_log.update_data[step-1].time
 					duration -= duration_last_performing
 					$Timer.start(0.01 if duration <= 0 else duration / 1000.0)
 				else:

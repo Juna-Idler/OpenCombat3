@@ -43,9 +43,11 @@ func _gui_input(event: InputEvent):
 			var point := (event as InputEventMouseButton).global_position
 			var relative := drag_limit(point - _drag_point)
 			if _drag_mode == DragMode.X:
-				emit_signal("slid_card",index,relative.x)
+				if not ban_drag:
+					emit_signal("slid_card",index,relative.x)
 			elif _drag_mode == DragMode.Y and relative.y == -drag_limit_top:
-				emit_signal("decided_card",index)
+				if not ban_drag:
+					emit_signal("decided_card",index)
 			else:
 				emit_signal("clicked_card",index)
 				card.position = _drag_card_pos
