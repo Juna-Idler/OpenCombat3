@@ -92,6 +92,7 @@ align = 1
 valign = 2
 
 [node name="ButtonPause" type="Button" parent="CanvasLayer/Panel"]
+unique_name_in_owner = true
 margin_left = 8.0
 margin_top = 120.0
 margin_right = 144.0
@@ -195,6 +196,7 @@ align = 1
 valign = 1
 
 [node name="ReplayMenu" parent="Panel" instance=ExtResource( 3 )]
+visible = false
 
 [node name="Timer" type="Timer" parent="."]
 one_shot = true

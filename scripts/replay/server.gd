@@ -31,26 +31,25 @@ func initialize(m_log : MatchLog):
 
 
 func step_forward() -> int:
-	if step < 0:
+	if step < 0 or step >= match_log.update_data.size():
 		return -1
-	if step < match_log.update_data.size():
-		var data := match_log.update_data[step] as MatchLog.TimedUpdateData
+	var data := match_log.update_data[step] as MatchLog.TimedUpdateData
+	if data.phase == Phase.COMBAT:
+		emit_signal("recieved_combat_result",data.data)
+	elif data.phase == Phase.RECOVERY:
+		emit_signal("recieved_recovery_result",data.data)
+	step += 1
+	if step >= complete_board.size():
+		player1.set_step(step)
+		player2.set_step(step)
+		processor.reorder_hand1(data.data.myself.hand)
+		processor.reorder_hand2(data.data.rival.hand)
 		if data.phase == Phase.COMBAT:
-			emit_signal("recieved_combat_result",data.data)
+			processor.combat(data.data.myself.select,data.data.rival.select)
 		elif data.phase == Phase.RECOVERY:
-			emit_signal("recieved_recovery_result",data.data)
-		step += 1
-		if step >= complete_board.size():
-			player1.set_step(step)
-			player2.set_step(step)
-			processor.reorder_hand1(data.data.myself.hand)
-			processor.reorder_hand2(data.data.rival.hand)
-			if data.phase == Phase.COMBAT:
-				processor.combat(data.data.myself.select,data.data.rival.select)
-			elif data.phase == Phase.RECOVERY:
-				processor.recover(data.data.myself.select,data.data.rival.select)
-			var cb = create_complete_board(processor)
-			complete_board.append(cb)
+			processor.recover(data.data.myself.select,data.data.rival.select)
+		var cb = create_complete_board(processor)
+		complete_board.append(cb)
 	return step
 
 func step_backward() -> int:

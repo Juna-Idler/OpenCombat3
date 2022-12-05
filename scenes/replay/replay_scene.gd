@@ -9,8 +9,12 @@ var scene_changer : ISceneChanger
 
 var replay_server : ReplayServer = ReplayServer.new()
 
+enum ReplayMode {AUTO,NO_WAIT,STEP}
+var replay_mode : int
 
 var performing : bool
+var time_start_perform : int
+var duration_last_performing : int
 
 
 func _ready():
@@ -42,7 +46,10 @@ func _on_ReplayMenu_start_pressed(selected):
 	$"%HSliderSpeed".value = 1
 	$"%HSliderSpeed".editable = true
 	$"%ButtonNoWait".pressed = false
-		
+	$"%ButtonPause".pressed = false
+	replay_mode = ReplayMode.AUTO
+	duration_last_performing = 0
+
 	replay_server.initialize(selected.match_log)
 	$PlayingScene.initialize(replay_server)
 	$"%ResultOverlap".hide()
@@ -59,17 +66,14 @@ func _on_ReplayMenu_start_pressed(selected):
 		$Timer.start(replay_server.match_log.update_data[0].time / 1000.0)
 
 func _on_Timer_timeout():
-	performing = true
-	var step = replay_server.step_forward()
-	if step < replay_server.match_log.update_data.size():
-		var duration = replay_server.match_log.update_data[step].time - replay_server.match_log.update_data[step-1].time
-		$Timer.start(duration / 1000.0)
+	if replay_mode != ReplayMode.AUTO:
+		return
+	if replay_server.step < replay_server.match_log.update_data.size():
+		performing = true
+		time_start_perform = Time.get_ticks_msec()
+		replay_server.step_forward()
 	else:
-		if replay_server.match_log.end_time > 0:
-			var duration = replay_server.match_log.end_time - replay_server.match_log.update_data.back().time
-			yield(get_tree().create_timer(duration / 1000.0), "timeout")
-			replay_server.emit_end_signal()
-
+		replay_server.emit_end_signal()
 
 func _on_PlayingScene_ended(situation, msg):
 	$"%ResultOverlap".show()
@@ -94,28 +98,61 @@ func _on_PlayingScene_ended(situation, msg):
 	$PlayingScene.terminalize()
 
 func _on_PlayingScene_performed():
+	duration_last_performing = Time.get_ticks_msec() - time_start_perform
 	performing = false
-	
-	if $"%ButtonNoWait".pressed:
-		if replay_server.step >= replay_server.match_log.update_data.size():
-			replay_server.emit_end_signal()
-		else:
-			performing = true
-			var _step = replay_server.step_forward()
-	$"%ButtonNoWait".disabled = false
+
+	var step = replay_server.step
+
+	match replay_mode:
+		ReplayMode.AUTO:
+			if step < replay_server.match_log.update_data.size():
+				var duration = replay_server.match_log.update_data[step].time - replay_server.match_log.update_data[step-1].time
+				duration -= duration_last_performing
+				$Timer.start(0.01 if duration <= 0 else duration / 1000.0)
+			else:
+				if replay_server.match_log.end_time > 0:
+					var duration = replay_server.match_log.end_time - replay_server.match_log.update_data.back().time
+					duration -= duration_last_performing
+					$Timer.start(0.01 if duration <= 0 else duration / 1000.0)
+		ReplayMode.NO_WAIT:
+			if step < replay_server.match_log.update_data.size():
+				performing = true
+				time_start_perform = Time.get_ticks_msec()
+				replay_server.step_forward()
+			else:
+				replay_server.emit_end_signal()
 
 
 func _on_ButtonNoWait_toggled(button_pressed:bool):
-	if $PlayingScene.game_server:
-		if button_pressed:
+	if not $PlayingScene.game_server:
+		return
+
+	match replay_mode:
+		ReplayMode.AUTO:
 			$Timer.stop()
-			if not performing:
+		ReplayMode.NO_WAIT:
+			pass
+
+	replay_mode = ReplayMode.NO_WAIT if button_pressed else ReplayMode.AUTO
+
+	if not performing:
+		var step = replay_server.step
+		match replay_mode:
+			ReplayMode.AUTO:
+				if step < replay_server.match_log.update_data.size():
+					var duration = replay_server.match_log.update_data[step].time - replay_server.match_log.update_data[step-1].time
+					duration -= duration_last_performing
+					$Timer.start(0.01 if duration <= 0 else duration / 1000.0)
+				else:
+					if replay_server.match_log.end_time > 0:
+						var duration = replay_server.match_log.end_time - replay_server.match_log.update_data.back().time
+						duration -= duration_last_performing
+						$Timer.start(0.01 if duration <= 0 else duration / 1000.0)
+			ReplayMode.NO_WAIT:
 				performing = true
+				time_start_perform = Time.get_ticks_msec()
 				replay_server.step_forward()
-		else:
-			$Timer.start(1)
-		$"%ButtonNoWait".disabled = true
-	
+
 
 func _on_ReturnButton_pressed():
 	$"%ResultOverlap".hide()
@@ -143,6 +180,7 @@ func _on_ButtonStep_pressed():
 	if performing:
 		return
 	performing = true
+	time_start_perform = Time.get_ticks_msec()
 	replay_server.step_forward()
 
 
