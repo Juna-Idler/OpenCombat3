@@ -4,7 +4,7 @@ extends Control
 func _ready():
 	$LineEditSave.text =  OS.get_user_data_dir()
 	$LineEditName.text = Global.game_settings.player_name
-	$OptionButtonOnline.selected = Global.game_settings.server_index
+	$ButtonOnlineServer.text = Global.game_settings.online_servers[Global.game_settings.server_index]
 	
 	set_sound("Master")
 	set_sound("BGM")
@@ -50,10 +50,8 @@ func _on_CheckBoxSE_toggled(button_pressed):
 	AudioServer.set_bus_mute(idx,button_pressed)
 
 
-
 func _on_LineEditName_text_changed(new_text):
 	Global.player_name = new_text
-
 
 
 func _on_ButtonSave_pressed():
@@ -61,5 +59,14 @@ func _on_ButtonSave_pressed():
 
 
 
-func _on_OptionButtonOnline_item_selected(index):
-	Global.game_settings.server_index = index
+var o_s_settings : Node
+func _on_ButtonOnlineServer_pressed():
+	o_s_settings = preload("res://scenes/settings/online_server.tscn").instance()
+	o_s_settings.connect("returned",self,"_on_OnlineServer_returned")
+	add_child(o_s_settings)
+
+func _on_OnlineServer_returned():
+	$ButtonOnlineServer.text = Global.game_settings.online_servers[Global.game_settings.server_index]
+	remove_child(o_s_settings)
+	o_s_settings.queue_free()
+	

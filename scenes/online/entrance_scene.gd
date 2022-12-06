@@ -21,7 +21,7 @@ func initialize(s : OnlineServer,changer : ISceneChanger):
 	server.connect("matched",self,"_on_Server_matched")
 	server.connect("disconnected",self,"_on_Server_disconnected")
 
-	var url : String = Global.game_settings.match_servers[Global.game_settings.server_index]
+	var url : String = Global.game_settings.online_servers[Global.game_settings.server_index]
 	$Panel/LabelUrl.text = url
 	if not server.is_ws_connected:
 		server.initialize(url,Global.card_catalog.version)

@@ -8,7 +8,7 @@ var config := ConfigFile.new()
 
 var player_name : String = "Unknown"
 
-var match_servers := [
+var online_servers := [
 	"wss://opencombat3.onrender.com",
 	"https://127.0.0.1:8080"
 ]
@@ -21,7 +21,7 @@ func load_config():
 	for i in AudioServer.bus_count:
 		_load_sound(AudioServer.get_bus_name(i))
 	player_name = config.get_value("Player","name")
-	match_servers = config.get_value("Server","servers",match_servers)
+	online_servers = config.get_value("Server","servers",online_servers)
 	server_index = config.get_value("Server","index",0)
 
 	
@@ -29,7 +29,7 @@ func save_config():
 	for i in AudioServer.bus_count:
 		_save_sound(AudioServer.get_bus_name(i))
 	config.set_value("Player","name",player_name)
-	config.set_value("Server","servers",match_servers)
+	config.set_value("Server","servers",online_servers)
 	config.set_value("Server","index",server_index)
 	
 # warning-ignore:return_value_discarded

@@ -1,0 +1,67 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scenes/settings/settings theme.tres" type="Theme" id=1]
+[ext_resource path="res://scenes/settings/online_server.gd" type="Script" id=2]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0, 0, 0, 0.9 )
+
+[node name="ServerSettings" type="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+custom_styles/panel = SubResource( 1 )
+script = ExtResource( 2 )
+
+[node name="BackButton" type="Button" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -200.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = 56.0
+text = "BACK"
+
+[node name="ItemList" type="ItemList" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 256.0
+margin_top = 192.0
+margin_right = -256.0
+margin_bottom = -208.0
+
+[node name="LineEdit" type="LineEdit" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 256.0
+margin_top = -192.0
+margin_right = -256.0
+margin_bottom = -144.0
+
+[node name="ButtonAdd" type="Button" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -248.0
+margin_top = -192.0
+margin_right = -80.0
+margin_bottom = -144.0
+text = "ADD"
+
+[node name="ButtonDelete" type="Button" parent="."]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -248.0
+margin_top = -24.0
+margin_right = -80.0
+margin_bottom = 24.0
+text = "DELETE"
+
+[connection signal="pressed" from="BackButton" to="." method="_on_BackButton_pressed"]
+[connection signal="item_selected" from="ItemList" to="." method="_on_ItemList_item_selected"]
+[connection signal="pressed" from="ButtonAdd" to="." method="_on_ButtonAdd_pressed"]
+[connection signal="pressed" from="ButtonDelete" to="." method="_on_ButtonDelete_pressed"]

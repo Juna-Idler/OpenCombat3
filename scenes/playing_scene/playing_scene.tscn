@@ -9,7 +9,7 @@
 [ext_resource path="res://scenes/playing_scene/ui/rival_hand_area.tscn" type="PackedScene" id=7]
 [ext_resource path="res://scenes/playing_scene/ui/my_hand_area.tscn" type="PackedScene" id=8]
 [ext_resource path="res://scenes/playing_scene/card_list.tscn" type="PackedScene" id=9]
-[ext_resource path="res://scenes/settings scene.tscn" type="PackedScene" id=10]
+[ext_resource path="res://scenes/settings/settings scene.tscn" type="PackedScene" id=10]
 [ext_resource path="res://scenes/playing_scene/next_effect.tscn" type="PackedScene" id=11]
 [ext_resource path="res://camera2d.tscn" type="PackedScene" id=12]
 
