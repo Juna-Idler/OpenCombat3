@@ -3,7 +3,8 @@ extends Control
 
 func _ready():
 	$LineEditSave.text =  OS.get_user_data_dir()
-	$LineEditName.text = Global.player_name
+	$LineEditName.text = Global.game_settings.player_name
+	$OptionButtonOnline.selected = Global.game_settings.server_index
 	
 	set_sound("Master")
 	set_sound("BGM")
@@ -58,3 +59,7 @@ func _on_LineEditName_text_changed(new_text):
 func _on_ButtonSave_pressed():
 	Global.game_settings.save_config()
 
+
+
+func _on_OptionButtonOnline_item_selected(index):
+	Global.game_settings.server_index = index

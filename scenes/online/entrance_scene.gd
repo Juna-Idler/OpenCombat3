@@ -21,9 +21,10 @@ func initialize(s : OnlineServer,changer : ISceneChanger):
 	server.connect("matched",self,"_on_Server_matched")
 	server.connect("disconnected",self,"_on_Server_disconnected")
 
-	$Panel/LabelUrl.text = Global.websocket_url
+	var url : String = Global.game_settings.match_servers[Global.game_settings.server_index]
+	$Panel/LabelUrl.text = url
 	if not server.is_ws_connected:
-		server.initialize(Global.websocket_url,Global.card_catalog.version)
+		server.initialize(url,Global.card_catalog.version)
 	else:
 		$Panel/Matching.disabled = false
 		
@@ -42,7 +43,7 @@ func _on_Matching_pressed():
 	var deck = $Panel/DeckBanner.get_deck_data()
 	var failed := deck_regulation.check_regulation(deck.cards,Global.card_catalog)
 	if failed.empty():
-		server.send_match(Global.player_name,deck.cards,"newbie")
+		server.send_match(Global.game_settings.player_name,deck.cards,"newbie")
 		$Panel/Matching.text = "マッチング待機中"
 		$Panel/Matching.disabled = true
 	else:

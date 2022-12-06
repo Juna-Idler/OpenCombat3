@@ -128,7 +128,7 @@ func _send_combat_select(round_count:int,index:int,hands_order:PoolIntArray = []
 	if not is_ws_connected:
 		return
 	var phase = round_count * 2
-	var hand := PoolStringArray(hands_order)
+	var hand := PoolStringArray(Array(hands_order))
 	var send := """{"type":"Select","data":{"p":%s,"i":%s,"h":[%s]}}"""\
 			% [phase,index,hand.join(",")]
 	_client.get_peer(1).put_packet(send.to_utf8())
@@ -139,7 +139,7 @@ func _send_recovery_select(round_count:int,index:int,hands_order:PoolIntArray = 
 	if index < 0:
 		return
 	var phase = round_count * 2 + 1
-	var hand := PoolStringArray(hands_order)
+	var hand := PoolStringArray(Array(hands_order))
 	var send := """{"type":"Select","data":{"p":%s,"i":%s,"h":[%s]}}"""\
 			% [phase,index,hand.join(",")]
 	_client.get_peer(1).put_packet(send.to_utf8())

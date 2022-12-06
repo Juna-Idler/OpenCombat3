@@ -1,11 +1,5 @@
 extends Node
 
-#var websocket_url := "https://127.0.0.1:8080"
-
-var websocket_url := "wss://opencombat3.onrender.com"
-
-
-var player_name : String = "Unknown"
 
 var card_catalog := CardCatalog.new()
 
@@ -19,6 +13,8 @@ var replay_log_list := MatchLogList.new("user://replay_log.json")
 
 
 var game_settings := GameSettings.new()
+
+	
 
 
 func _init():

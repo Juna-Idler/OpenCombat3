@@ -96,9 +96,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 margin_left = -320.0
-margin_top = 40.0
+margin_top = 32.0
 margin_right = 320.0
-margin_bottom = 104.0
+margin_bottom = 96.0
 grow_horizontal = 2
 grow_vertical = 2
 max_value = 80.0
@@ -130,9 +130,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 margin_left = -320.0
-margin_top = 120.0
+margin_top = 104.0
 margin_right = 320.0
-margin_bottom = 184.0
+margin_bottom = 168.0
 grow_horizontal = 2
 grow_vertical = 2
 max_value = 80.0
@@ -157,6 +157,23 @@ margin_top = 8.0
 margin_right = 768.0
 margin_bottom = 56.0
 text = "MUTE"
+
+[node name="OptionButtonOnline" type="OptionButton" parent="."]
+margin_left = 256.0
+margin_top = 592.0
+margin_right = 960.0
+margin_bottom = 640.0
+text = "wss://opencombat3.onrender.com"
+items = [ "wss://opencombat3.onrender.com", null, false, 0, null, "https://127.0.0.1:8080", null, false, 1, null ]
+selected = 0
+
+[node name="Label" type="Label" parent="OptionButtonOnline"]
+anchor_bottom = 1.0
+margin_left = -192.0
+margin_right = -8.0
+text = "ONLINE"
+align = 2
+valign = 1
 
 [node name="LineEditSave" type="LineEdit" parent="."]
 anchor_top = 1.0
@@ -194,4 +211,5 @@ text = "SAVE"
 [connection signal="toggled" from="HSliderBGM/CheckBoxBGM" to="." method="_on_CheckBoxBGM_toggled"]
 [connection signal="value_changed" from="HSliderSE" to="." method="_on_HSliderSE_value_changed"]
 [connection signal="toggled" from="HSliderSE/CheckBoxSE" to="." method="_on_CheckBoxSE_toggled"]
+[connection signal="item_selected" from="OptionButtonOnline" to="." method="_on_OptionButtonOnline_item_selected"]
 [connection signal="pressed" from="ButtonSave" to="." method="_on_ButtonSave_pressed"]

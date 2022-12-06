@@ -50,6 +50,7 @@ func _on_ReplayMenu_start_pressed(selected):
 	$"%ButtonPause".pressed = false
 	replay_mode = ReplayMode.AUTO
 	duration_last_performing = 0
+	performing_durations.clear()
 
 	replay_server.initialize(selected.match_log)
 	$PlayingScene.initialize(replay_server,false)
