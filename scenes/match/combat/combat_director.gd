@@ -7,13 +7,13 @@ class SkillOrder:
 	var priority : int
 	var index : int
 	var data
-	var myself : PlayingPlayer
-	var rival : PlayingPlayer
+	var myself : MatchPlayer
+	var rival : MatchPlayer
 	var situation : int
 	var situation_sign : int
 
 	func _init(l: IGameServer.UpdateData.SkillLog,
-			m:PlayingPlayer,r:PlayingPlayer,s : int = 0,s_sign : int = 0):
+			m:MatchPlayer,r:MatchPlayer,s : int = 0,s_sign : int = 0):
 		priority = l.priority
 		index = l.index
 		data = l.data
@@ -26,15 +26,15 @@ class SkillOrder:
 		return a.priority < b.priority
 
 
-var player1 : PlayingPlayer
-var player2 : PlayingPlayer
+var player1 : MatchPlayer
+var player2 : MatchPlayer
 var overlay : CombatOverlap
 var power_balance : CombatPowerBalance
 
 var named_skills := NamedSkillPerformer.new()
 
 
-func initialize(p1 : PlayingPlayer,p2 : PlayingPlayer,
+func initialize(p1 : MatchPlayer,p2 : MatchPlayer,
 		ol : CombatOverlap,pb : CombatPowerBalance):
 	player1 = p1
 	player2 = p2

@@ -1,7 +1,7 @@
 
 class_name CombatAvatarMagazine
 
-const CABScene = preload("res://scenes/playing_scene/combat/combat_avatar_bullet.tscn")
+const CABScene = preload("res://scenes/match/combat/combat_avatar_bullet.tscn")
 
 signal hit(bullet)
 

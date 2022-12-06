@@ -45,11 +45,11 @@ var commanders : Array = [
 
 
 func _ready():
-	$PlayingScene.exit_button.connect("pressed",self,"_on_ExitButton_pressed")
-	$PlayingScene.exit_button.text = "SURRENDER"
+	$MatchScene.exit_button.connect("pressed",self,"_on_ExitButton_pressed")
+	$MatchScene.exit_button.text = "SURRENDER"
 
 func _on_ExitButton_pressed():
-	$PlayingScene.game_server._send_surrender()
+	$MatchScene.game_server._send_surrender()
 
 
 func initialize(changer : ISceneChanger):
@@ -65,12 +65,12 @@ func initialize(changer : ISceneChanger):
 
 
 func _terminalize():
-	$PlayingScene.terminalize()
+	$MatchScene.terminalize()
 	if match_logger:
 		match_logger.terminalize()
 
 
-func _on_PlayingScene_ended(situation,msg):
+func _on_MatchScene_ended(situation, msg):
 	$"%ResultOverlap".show()
 	match situation:
 		1:
@@ -116,7 +116,7 @@ func _on_ButtonStart_pressed():
 	
 	var regulation = RegulationData.MatchRegulation.new(3,180,10,5)
 	var commander = commanders[$Panel/Panel/OptionCommander.selected]
-	offline_server.initialize(Global.player_name,deck.cards,commander,cpu_deck.cards,regulation,Global.card_catalog)
+	offline_server.initialize(Global.game_settings.player_name,deck.cards,commander,cpu_deck.cards,regulation,Global.card_catalog)
 
 	if match_logger:
 		match_logger.terminalize()
@@ -126,8 +126,8 @@ func _on_ButtonStart_pressed():
 	else:
 		match_logger = null
 	
-	$PlayingScene.initialize(match_logger as IGameServer if match_logger else offline_server as IGameServer)
-	$PlayingScene.send_ready()
+	$MatchScene.initialize(match_logger as IGameServer if match_logger else offline_server as IGameServer)
+	$MatchScene.send_ready()
 
 	Bgm.stream = load("res://sound/魔王魂  ファンタジー11.ogg")
 	Bgm.play()
@@ -182,4 +182,5 @@ func _on_RegulationSelect_return_button_pressed():
 
 func _on_OptionCommander_item_selected(_index):
 	pass # Replace with function body.
+
 

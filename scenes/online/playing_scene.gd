@@ -8,23 +8,23 @@ var scene_changer : ISceneChanger
 func initialize(server : IGameServer,changer : ISceneChanger):
 	
 	scene_changer = changer
-	$PlayingScene.initialize(server)
-	$PlayingScene.send_ready()
+	$MatchScene.initialize(server)
+	$MatchScene.send_ready()
 	$"%ResultOverlap".hide()
 
 func _terminalize():
-	$PlayingScene.terminalize()
+	$MatchScene.terminalize()
 
 
 func _ready():
-	$PlayingScene.exit_button.connect("pressed",self,"_on_ExitButton_pressed")
-	$PlayingScene.exit_button.text = "SURRENDER"
+	$MatchScene.exit_button.connect("pressed",self,"_on_ExitButton_pressed")
+	$MatchScene.exit_button.text = "SURRENDER"
 
 func _on_ExitButton_pressed():
-	$PlayingScene.game_server._send_surrender()
+	$MatchScene.game_server._send_surrender()
 
 
-func _on_PlayingScene_ended(situation,msg):
+func _on_MatchScene_ended(situation, msg):
 	$"%ResultOverlap".show()
 	match situation:
 		1:
@@ -45,3 +45,5 @@ func _on_PlayingScene_ended(situation,msg):
 
 func _on_ButtonBack_pressed():
 	scene_changer._goto_online_entrance_scene()
+
+

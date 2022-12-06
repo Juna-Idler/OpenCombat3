@@ -2,7 +2,7 @@
 
 extends Reference
 
-class_name PlayingPlayer
+class_name MatchPlayer
 
 const CardScene = preload("../card/card.tscn")
 

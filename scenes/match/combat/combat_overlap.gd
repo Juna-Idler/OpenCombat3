@@ -9,7 +9,7 @@ onready var p2_avatar := $Player2Avatar
 func _ready():
 	pass
 
-func initialize(p1 : PlayingPlayer,p2 : PlayingPlayer):
+func initialize(p1 : MatchPlayer,p2 : MatchPlayer):
 	var p1_card := p1.deck_list[p1.playing_card_id] as Card
 	var p2_card := p2.deck_list[p2.playing_card_id] as Card
 	p1_avatar.set_power(p1_card.get_current_power())

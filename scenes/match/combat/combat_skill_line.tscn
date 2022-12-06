@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=1]
-[ext_resource path="res://scenes/playing_scene/combat/combat_skill_line.gd" type="Script" id=2]
+[ext_resource path="res://scenes/match/combat/combat_skill_line.gd" type="Script" id=2]
 
 [sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 1, 1, 1, 0.878431 )

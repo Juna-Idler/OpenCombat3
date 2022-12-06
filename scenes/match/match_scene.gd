@@ -2,7 +2,7 @@
 
 extends Node
 
-class_name PlayingScene
+class_name MatchScene
 
 signal ended(situation,msg)
 
@@ -35,8 +35,8 @@ var card_manipulation : bool
 
 var round_count = 0
 var phase : int = IGameServer.Phase.COMBAT
-var myself : PlayingPlayer
-var rival : PlayingPlayer
+var myself : MatchPlayer
+var rival : MatchPlayer
 
 var combat_director : CombatDirector = CombatDirector.new()
 
@@ -62,7 +62,7 @@ func initialize(server : IGameServer,manipulation : bool = true):
 		c.queue_free()
 	
 	var pd := game_server._get_primary_data()
-	myself = PlayingPlayer.new(pd.my_name,
+	myself = MatchPlayer.new(pd.my_name,
 			pd.my_deck_list,false,$CardLayer,my_stock_pos,
 			$UILayer/MyField/HandArea,
 			my_combat_pos,
@@ -74,7 +74,7 @@ func initialize(server : IGameServer,manipulation : bool = true):
 			combat_overlap.p1_avatar,
 			$TopUILayer/Control/MyDamage,
 			CombatPowerBalance.Interface.new($BGLayer/PowerBalance,false))
-	rival = PlayingPlayer.new(pd.rival_name,
+	rival = MatchPlayer.new(pd.rival_name,
 			pd.rival_deck_list,true,$CardLayer,rival_stock_pos,
 			$UILayer/RivalField/HandArea,
 			rival_combat_pos,
@@ -118,7 +118,7 @@ func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
 	rival.standby(data.rival.life,Array(data.rival.hand))
 	phase = IGameServer.Phase.COMBAT
 	round_count = 1
-	yield(get_tree().create_timer(PlayingPlayer.CARD_MOVE_DURATION), "timeout")
+	yield(get_tree().create_timer(MatchPlayer.CARD_MOVE_DURATION), "timeout")
 	emit_signal("performed")
 
 func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
@@ -161,7 +161,7 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 	round_count = data.round_count
 	phase = data.next_phase
 	
-	yield(get_tree().create_timer(PlayingPlayer.CARD_MOVE_DURATION), "timeout")
+	yield(get_tree().create_timer(MatchPlayer.CARD_MOVE_DURATION), "timeout")
 	
 	if (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0):
 		game_server._send_recovery_select(data.round_count,-1)
@@ -179,7 +179,7 @@ func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
 	round_count = data.round_count
 	phase = data.next_phase
 	
-	yield(get_tree().create_timer(PlayingPlayer.CARD_MOVE_DURATION), "timeout")
+	yield(get_tree().create_timer(MatchPlayer.CARD_MOVE_DURATION), "timeout")
 
 	if (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0):
 		game_server._send_recovery_select(data.round_count,-1)

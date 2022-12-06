@@ -51,7 +51,7 @@ func _on_CheckBoxSE_toggled(button_pressed):
 
 
 func _on_LineEditName_text_changed(new_text):
-	Global.player_name = new_text
+	Global.game_settings.player_name = new_text
 
 
 func _on_ButtonSave_pressed():

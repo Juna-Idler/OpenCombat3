@@ -19,14 +19,14 @@ var performing_durations : Array = []
 
 
 func _ready():
-	$PlayingScene.exit_button.connect("pressed",self,"_on_ExitButton_pressed")
-	$PlayingScene.exit_button.text = "EXIT"
+	$MatchScene.exit_button.connect("pressed",self,"_on_ExitButton_pressed")
+	$MatchScene.exit_button.text = "EXIT"
 
 func _on_ExitButton_pressed():
 	replay_mode = ReplayMode.NONE
 	$Timer.stop()
 	Bgm.stop()
-	$PlayingScene.terminalize()
+	$MatchScene.terminalize()
 	$Panel/ReplayMenu.show()
 
 
@@ -38,7 +38,7 @@ func initialize(changer : ISceneChanger):
 	$"%ResultOverlap".hide()
 
 func _terminalize():
-	$PlayingScene.terminalize()
+	$MatchScene.terminalize()
 
 func _on_ReplayMenu_back_pressed():
 	scene_changer._goto_title_scene()
@@ -53,12 +53,12 @@ func _on_ReplayMenu_start_pressed(selected):
 	performing_durations.clear()
 
 	replay_server.initialize(selected.match_log)
-	$PlayingScene.initialize(replay_server,false)
+	$MatchScene.initialize(replay_server,false)
 	$"%ResultOverlap".hide()
 	$Panel/ReplayMenu.hide()
 	performing = true
 	$TimerPerformingCounter.start()
-	$PlayingScene.send_ready()
+	$MatchScene.send_ready()
 	Bgm.stream = load("res://sound/魔王魂  ファンタジー11.ogg")
 	Bgm.play()
 	
@@ -74,7 +74,9 @@ func _on_Timer_timeout():
 	else:
 		replay_server.emit_end_signal()
 
-func _on_PlayingScene_ended(situation, msg):
+
+
+func _on_MatchScene_ended(situation, msg):
 	$"%ResultOverlap".show()
 	match situation:
 		1:
@@ -94,9 +96,11 @@ func _on_PlayingScene_ended(situation, msg):
 	Bgm.stop()
 	$"%HSliderSpeed".value = 1
 	$"%HSliderSpeed".editable = false
-	$PlayingScene.terminalize()
+	$MatchScene.terminalize()
 
-func _on_PlayingScene_performed():
+
+
+func _on_MatchScene_performed():
 	duration_last_performing = ($TimerPerformingCounter.wait_time - $TimerPerformingCounter.time_left) * 1000
 	if replay_server.step == performing_durations.size():
 		performing_durations.append(duration_last_performing)
@@ -110,7 +114,7 @@ func _on_PlayingScene_performed():
 
 
 func _on_ButtonNoWait_toggled(button_pressed:bool):
-	if not $PlayingScene.game_server:
+	if not $MatchScene.game_server:
 		return
 
 	if replay_mode == ReplayMode.AUTO:
@@ -132,7 +136,7 @@ func _on_HSliderSpeed_value_changed(value):
 
 
 func _on_ButtonPause_toggled(button_pressed):
-	if not $PlayingScene.game_server:
+	if not $MatchScene.game_server:
 		return
 
 	if button_pressed:
@@ -149,7 +153,7 @@ func _on_ButtonPause_toggled(button_pressed):
 
 
 func _on_SettingButton_pressed():
-	$PlayingScene.get_node("SettingsLayer/SettingsScene").show()
+	$MatchScene.get_node("SettingsLayer/SettingsScene").show()
 
 
 func _on_ButtonStep_pressed():
@@ -188,5 +192,6 @@ func start_auto_replay():
 #			time_start_perform = Time.get_ticks_msec()
 			replay_server.step_forward()
 	
+
 
 

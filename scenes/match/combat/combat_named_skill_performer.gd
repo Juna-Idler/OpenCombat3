@@ -18,25 +18,25 @@ func get_skill(id : int) -> Skill:
 
 class Skill:
 	func _before(_tween : SceneTreeTween,_skill : SkillData.NamedSkill,_csl : CombatSkillLine,
-			_myself : PlayingPlayer,_rival : PlayingPlayer,_data) -> void:
+			_myself : MatchPlayer,_rival : MatchPlayer,_data) -> void:
 		return
 
 	func _engaged(_tween : SceneTreeTween,_skill : SkillData.NamedSkill,_csl : CombatSkillLine,
-			situation : int,_myself : PlayingPlayer,_rival : PlayingPlayer,_data) -> int:
+			situation : int,_myself : MatchPlayer,_rival : MatchPlayer,_data) -> int:
 		return situation
 		
 	func _after(_tween : SceneTreeTween,_skill : SkillData.NamedSkill,_csl : CombatSkillLine,
-			_situation : int,_myself : PlayingPlayer,_rival : PlayingPlayer,_data) -> void:
+			_situation : int,_myself : MatchPlayer,_rival : MatchPlayer,_data) -> void:
 		return
 		
 	func _end(_tween : SceneTreeTween,_skill : SkillData.NamedSkill,_csl : CombatSkillLine,
-			_situation : int,_myself : PlayingPlayer,_rival : PlayingPlayer,_data) -> void:
+			_situation : int,_myself : MatchPlayer,_rival : MatchPlayer,_data) -> void:
 		return
 
 class Reinforce extends Skill:
 
 	func _before(tween : SceneTreeTween,skill : SkillData.NamedSkill,csl : CombatSkillLine,
-			myself : PlayingPlayer,_rival : PlayingPlayer,_data) -> void:
+			myself : MatchPlayer,_rival : MatchPlayer,_data) -> void:
 		tween.tween_callback(csl,"succeeded")
 		var a := [0,0,0]
 		for p in skill.parameter[0].data as Array:
@@ -51,7 +51,7 @@ class Reinforce extends Skill:
 
 class Pierce extends Skill:
 	func _after(tween : SceneTreeTween,_skill : SkillData.NamedSkill,csl : CombatSkillLine,
-			_situation : int,myself : PlayingPlayer,rival : PlayingPlayer,data) -> void:
+			_situation : int,myself : MatchPlayer,rival : MatchPlayer,data) -> void:
 		if data > 0:
 			tween.tween_callback(csl,"succeeded")
 			myself.combat_avatar.attack_close(data,rival.combat_avatar,tween)
@@ -61,7 +61,7 @@ class Pierce extends Skill:
 
 class Charge extends Skill:
 	func _end(tween : SceneTreeTween,skill : SkillData.NamedSkill,csl : CombatSkillLine,
-			_situation : int,myself : PlayingPlayer,_rival : PlayingPlayer,data) -> void:
+			_situation : int,myself : MatchPlayer,_rival : MatchPlayer,data) -> void:
 		if data:
 			for p in skill.parameter[0].data as Array:
 				var e := p as EffectData.SkillEffect
@@ -84,14 +84,14 @@ class Charge extends Skill:
 
 class Isolate extends Skill:
 	func _engaged(tween : SceneTreeTween,_skill : SkillData.NamedSkill,csl : CombatSkillLine,
-			_situation : int,myself : PlayingPlayer,_rival : PlayingPlayer,_data) -> int:
+			_situation : int,myself : MatchPlayer,_rival : MatchPlayer,_data) -> int:
 		tween.tween_callback(csl,"succeeded")
 		tween.tween_callback(myself.combat_avatar,"add_damage",[1])
 		return 0
 
 class Absorb extends Skill:
 	func _before(tween : SceneTreeTween,skill : SkillData.NamedSkill,csl : CombatSkillLine,
-			myself : PlayingPlayer,_rival : PlayingPlayer,data) -> void:
+			myself : MatchPlayer,_rival : MatchPlayer,data) -> void:
 		if data < 0:
 			tween.tween_callback(csl,"failed")
 			return
