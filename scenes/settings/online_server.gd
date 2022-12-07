@@ -7,7 +7,7 @@ onready var list := $ItemList
 func _ready():
 	for i in Global.game_settings.online_servers:
 		list.add_item(i)
-	pass
+	list.select(Global.game_settings.server_index)
 
 
 func _on_ItemList_item_selected(index):

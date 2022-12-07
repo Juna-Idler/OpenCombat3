@@ -1,6 +1,61 @@
-[gd_resource type="Theme" load_steps=3 format=2]
+[gd_resource type="Theme" load_steps=11 format=2]
 
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=1]
+
+[sub_resource type="Gradient" id=11]
+offsets = PoolRealArray( 0.59322 )
+colors = PoolColorArray( 1, 0, 0, 0 )
+
+[sub_resource type="GradientTexture2D" id=12]
+gradient = SubResource( 11 )
+width = 4
+height = 24
+
+[sub_resource type="Gradient" id=13]
+offsets = PoolRealArray( 0.533898 )
+colors = PoolColorArray( 1, 0, 0, 0.501961 )
+
+[sub_resource type="GradientTexture2D" id=14]
+gradient = SubResource( 13 )
+width = 4
+height = 24
+
+[sub_resource type="Gradient" id=8]
+colors = PoolColorArray( 1, 1, 1, 0.501961, 1, 1, 1, 0.501961 )
+
+[sub_resource type="GradientTexture2D" id=9]
+gradient = SubResource( 8 )
+width = 2
+height = 26
+fill_to = Vector2( 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=7]
+bg_color = Color( 0.501961, 0.501961, 0.501961, 1 )
+border_width_left = 2
+border_width_top = 2
+border_width_bottom = 2
+border_color = Color( 0, 0, 0, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id=10]
+content_margin_top = 12.0
+content_margin_bottom = 12.0
+bg_color = Color( 0, 0, 0, 0.501961 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 1, 1, 1, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_bottom = 2.0
 
 [sub_resource type="DynamicFont" id=6]
 size = 24
@@ -8,3 +63,9 @@ font_data = ExtResource( 1 )
 
 [resource]
 default_font = SubResource( 6 )
+HSlider/icons/grabber = SubResource( 12 )
+HSlider/icons/grabber_highlight = SubResource( 14 )
+HSlider/icons/tick = SubResource( 9 )
+HSlider/styles/grabber_area = SubResource( 7 )
+HSlider/styles/grabber_area_highlight = SubResource( 7 )
+HSlider/styles/slider = SubResource( 10 )

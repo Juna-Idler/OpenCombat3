@@ -15,6 +15,7 @@ func initialize():
 	for i in inv:
 		var banner := preload("res://scenes/replay/banner.tscn").instance() as ReplayBanner
 		banner.initialize(i)
+# warning-ignore:return_value_discarded
 		banner.connect("clicked",self,"_on_Banner_clicked",[banner])
 		$"%Container".add_child(banner)
 
