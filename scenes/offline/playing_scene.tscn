@@ -165,7 +165,7 @@ text = "Random"
 items = [ "Zero", null, false, 0, null, "Random", null, false, 1, null ]
 selected = 1
 
-[node name="CheckBoxLog" type="CheckBox" parent="Panel/Panel"]
+[node name="CheckBoxLog" type="CheckButton" parent="Panel/Panel"]
 margin_left = 944.0
 margin_top = 384.0
 margin_right = 1216.0

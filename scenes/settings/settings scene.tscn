@@ -45,7 +45,7 @@ placeholder_text = "NAME"
 margin_left = -192.0
 margin_right = -8.0
 margin_bottom = 48.0
-text = "YOUR NAME:"
+text = "YOUR_NAME:"
 align = 2
 valign = 1
 

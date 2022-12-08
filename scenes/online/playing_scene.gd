@@ -56,6 +56,8 @@ func _on_Matching_pressed():
 		server.send_match(Global.game_settings.player_name,deck.cards,"newbie")
 		$CanvasLayer/Panel/Matching.text = "マッチング待機中"
 		$CanvasLayer/Panel/Matching.disabled = true
+		$CanvasLayer/Panel/ButtonRegulation.disabled = true
+		$CanvasLayer/Panel/DeckBanner/ButtonDeckChange.disabled = true
 	else:
 		pass
 
@@ -114,8 +116,10 @@ func _on_Server_matched():
 	$MatchScene.send_ready()
 	$"%ResultOverlap".hide()
 	$CanvasLayer/Panel.hide()
-	pass
+	$CanvasLayer/Panel/ButtonRegulation.disabled = false
+	$CanvasLayer/Panel/DeckBanner/ButtonDeckChange.disabled = false
 	
+
 func _on_Server_disconnected():
 	$CanvasLayer/Panel/Matching.disabled = true
 	pass
@@ -154,5 +158,10 @@ func _on_MatchScene_ended(situation, msg):
 func _on_ButtonReturn_pressed():
 	$"%ResultOverlap".hide()
 	$CanvasLayer/Panel.show()
+	if not server.is_ws_connected:
+		var url : String = Global.game_settings.online_servers[Global.game_settings.server_index]
+		server.initialize(url,Global.card_catalog.version)
+	else:
+		$CanvasLayer/Panel/Matching.disabled = false
 
 
