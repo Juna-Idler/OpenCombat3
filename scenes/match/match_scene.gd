@@ -93,6 +93,7 @@ func initialize(server : IGameServer,manipulation : bool = true):
 	combat_overlap.visible = false
 
 	$TopUILayer/Control/SettingButton.disabled = false
+	$"%SettingsScene".hide()
 	performing = false
 
 
@@ -138,6 +139,7 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 
 	if data.next_phase == IGameServer.Phase.GAME_END:
 		performing = false
+		emit_signal("performed")
 		round_count = data.round_count
 		phase = data.next_phase
 		

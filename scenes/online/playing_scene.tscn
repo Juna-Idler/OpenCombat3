@@ -105,12 +105,15 @@ margin_bottom = -120.0
 custom_fonts/font = SubResource( 2 )
 text = "再戦を申し込む"
 
-[node name="Panel" type="Panel" parent="CanvasLayer"]
+[node name="MenuLayer" type="CanvasLayer" parent="."]
+layer = 11
+
+[node name="Menu" type="Panel" parent="MenuLayer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = SubResource( 26 )
 
-[node name="Matching" type="Button" parent="CanvasLayer/Panel"]
+[node name="Matching" type="Button" parent="MenuLayer/Menu"]
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -122,27 +125,27 @@ margin_bottom = -56.0
 disabled = true
 text = "マッチング"
 
-[node name="ButtonBack" type="Button" parent="CanvasLayer/Panel"]
+[node name="ButtonBack" type="Button" parent="MenuLayer/Menu"]
 margin_left = 8.0
 margin_top = 8.0
 margin_right = 208.0
 margin_bottom = 64.0
 text = "BACK"
 
-[node name="ButtonRegulation" type="Button" parent="CanvasLayer/Panel"]
+[node name="ButtonRegulation" type="Button" parent="MenuLayer/Menu"]
 margin_left = 280.0
 margin_top = 72.0
 margin_right = 1000.0
 margin_bottom = 264.0
 
-[node name="Label" type="Label" parent="CanvasLayer/Panel/ButtonRegulation"]
+[node name="Label" type="Label" parent="MenuLayer/Menu/ButtonRegulation"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 text = "初級レギュレーション"
 align = 1
 valign = 1
 
-[node name="DeckBanner" parent="CanvasLayer/Panel" instance=ExtResource( 4 )]
+[node name="DeckBanner" parent="MenuLayer/Menu" instance=ExtResource( 4 )]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -152,12 +155,12 @@ margin_top = -72.0
 margin_right = 360.0
 margin_bottom = 144.0
 
-[node name="ButtonDeckChange" type="Button" parent="CanvasLayer/Panel/DeckBanner"]
+[node name="ButtonDeckChange" type="Button" parent="MenuLayer/Menu/DeckBanner"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 flat = true
 
-[node name="LabelUrl" type="Label" parent="CanvasLayer/Panel"]
+[node name="LabelUrl" type="Label" parent="MenuLayer/Menu"]
 margin_left = 256.0
 margin_top = 672.0
 margin_right = 1024.0
@@ -165,7 +168,7 @@ margin_bottom = 712.0
 align = 1
 valign = 1
 
-[node name="CheckButtonSaveLog" type="CheckButton" parent="CanvasLayer/Panel"]
+[node name="CheckButtonSaveLog" type="CheckButton" parent="MenuLayer/Menu"]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -178,19 +181,19 @@ pressed = true
 text = "SAVE_MATCH_LOG"
 align = 2
 
-[node name="BuildSelectScene" parent="CanvasLayer" instance=ExtResource( 5 )]
+[node name="BuildSelectScene" parent="MenuLayer" instance=ExtResource( 5 )]
 visible = false
 
-[node name="RegulationSelect" parent="CanvasLayer" instance=ExtResource( 6 )]
+[node name="RegulationSelect" parent="MenuLayer" instance=ExtResource( 6 )]
 visible = false
 
 [connection signal="ended" from="MatchScene" to="." method="_on_MatchScene_ended"]
 [connection signal="pressed" from="CanvasLayer/ResultOverlap/ButtonReturn" to="." method="_on_ButtonReturn_pressed"]
-[connection signal="pressed" from="CanvasLayer/Panel/Matching" to="." method="_on_Matching_pressed"]
-[connection signal="pressed" from="CanvasLayer/Panel/ButtonBack" to="." method="_on_ButtonBack_pressed"]
-[connection signal="pressed" from="CanvasLayer/Panel/ButtonRegulation" to="." method="_on_ButtonRegulation_pressed"]
-[connection signal="pressed" from="CanvasLayer/Panel/DeckBanner/ButtonDeckChange" to="." method="_on_ButtonDeckChange_pressed"]
-[connection signal="decided" from="CanvasLayer/BuildSelectScene" to="." method="_on_BuildSelectScene_decided"]
-[connection signal="return_button_pressed" from="CanvasLayer/BuildSelectScene" to="." method="_on_BuildSelectScene_return_button_pressed"]
-[connection signal="regulation_button_pressed" from="CanvasLayer/RegulationSelect" to="." method="_on_RegulationSelect_regulation_button_pressed"]
-[connection signal="return_button_pressed" from="CanvasLayer/RegulationSelect" to="." method="_on_RegulationSelect_return_button_pressed"]
+[connection signal="pressed" from="MenuLayer/Menu/Matching" to="." method="_on_Matching_pressed"]
+[connection signal="pressed" from="MenuLayer/Menu/ButtonBack" to="." method="_on_ButtonBack_pressed"]
+[connection signal="pressed" from="MenuLayer/Menu/ButtonRegulation" to="." method="_on_ButtonRegulation_pressed"]
+[connection signal="pressed" from="MenuLayer/Menu/DeckBanner/ButtonDeckChange" to="." method="_on_ButtonDeckChange_pressed"]
+[connection signal="decided" from="MenuLayer/BuildSelectScene" to="." method="_on_BuildSelectScene_decided"]
+[connection signal="return_button_pressed" from="MenuLayer/BuildSelectScene" to="." method="_on_BuildSelectScene_return_button_pressed"]
+[connection signal="regulation_button_pressed" from="MenuLayer/RegulationSelect" to="." method="_on_RegulationSelect_regulation_button_pressed"]
+[connection signal="return_button_pressed" from="MenuLayer/RegulationSelect" to="." method="_on_RegulationSelect_return_button_pressed"]

@@ -18,18 +18,18 @@ func initialize(s : OnlineServer,changer : ISceneChanger):
 	server = s
 	deck_regulation = Global.regulation_newbie
 	scene_changer = changer
-	$CanvasLayer/Panel/DeckBanner.set_deck_data(Global.deck_list["newbie"].get_select_deck())
+	$MenuLayer/Menu/DeckBanner.set_deck_data(Global.deck_list["newbie"].get_select_deck())
 	
 	server.connect("connected",self,"_on_Server_connected")
 	server.connect("matched",self,"_on_Server_matched")
 	server.connect("disconnected",self,"_on_Server_disconnected")
 
 	var url : String = Global.game_settings.online_servers[Global.game_settings.server_index]
-	$CanvasLayer/Panel/LabelUrl.text = url
+	$MenuLayer/Menu/LabelUrl.text = url
 	if not server.is_ws_connected:
 		server.initialize(url,Global.card_catalog.version)
 	else:
-		$CanvasLayer/Panel/Matching.disabled = false
+		$MenuLayer/Menu/Matching.disabled = false
 		
 	$MatchScene.exit_button.connect("pressed",self,"_on_ExitButton_pressed")
 	$MatchScene.exit_button.text = "SURRENDER"
@@ -50,46 +50,46 @@ func _ready():
 
 
 func _on_Matching_pressed():
-	var deck = $CanvasLayer/Panel/DeckBanner.get_deck_data()
+	var deck = $MenuLayer/Menu/DeckBanner.get_deck_data()
 	var failed := deck_regulation.check_regulation(deck.cards,Global.card_catalog)
 	if failed.empty():
 		server.send_match(Global.game_settings.player_name,deck.cards,"newbie")
-		$CanvasLayer/Panel/Matching.text = "マッチング待機中"
-		$CanvasLayer/Panel/Matching.disabled = true
-		$CanvasLayer/Panel/ButtonRegulation.disabled = true
-		$CanvasLayer/Panel/DeckBanner/ButtonDeckChange.disabled = true
+		$MenuLayer/Menu/Matching.text = "マッチング待機中"
+		$MenuLayer/Menu/Matching.disabled = true
+		$MenuLayer/Menu/ButtonRegulation.disabled = true
+		$MenuLayer/Menu/DeckBanner/ButtonDeckChange.disabled = true
 	else:
 		pass
 
 
 func _on_ButtonDeckChange_pressed():
-	$CanvasLayer/BuildSelectScene.initialize_select(Global.regulation_newbie)
-	$CanvasLayer/BuildSelectScene.show()
+	$MenuLayer/BuildSelectScene.initialize_select(Global.regulation_newbie)
+	$MenuLayer/BuildSelectScene.show()
 
 func _on_BuildSelectScene_decided(index):
 	if index >= 0 and index < Global.deck_list["newbie"].list.size():
 		Global.deck_list["newbie"].select = index
 		Global.deck_list["newbie"].save_deck_list()
-		$CanvasLayer/Panel/DeckBanner.set_deck_data(Global.deck_list["newbie"].get_select_deck())
-		$CanvasLayer/BuildSelectScene.hide()
+		$MenuLayer/Menu/DeckBanner.set_deck_data(Global.deck_list["newbie"].get_select_deck())
+		$MenuLayer/BuildSelectScene.hide()
 		
 func _on_BuildSelectScene_return_button_pressed():
-	$CanvasLayer/BuildSelectScene.hide()
+	$MenuLayer/BuildSelectScene.hide()
 
 
 func _on_ButtonRegulation_pressed():
-	$CanvasLayer/RegulationSelect.initialize()
-	$CanvasLayer/RegulationSelect.show()
+	$MenuLayer/RegulationSelect.initialize()
+	$MenuLayer/RegulationSelect.show()
 
 func _on_RegulationSelect_regulation_button_pressed(name):
 	if name == "newbie":
-		$CanvasLayer/Panel/ButtonRegulation.text = "初級レギュレーション"
+		$MenuLayer/Menu/ButtonRegulation.text = "初級レギュレーション"
 		deck_regulation = Global.regulation_newbie
-		$CanvasLayer/Panel/DeckBanner.set_deck_data(Global.deck_list[name].get_select_deck())
-		$CanvasLayer/RegulationSelect.hide()
+		$MenuLayer/Menu/DeckBanner.set_deck_data(Global.deck_list[name].get_select_deck())
+		$MenuLayer/RegulationSelect.hide()
 
 func _on_RegulationSelect_return_button_pressed():
-	$CanvasLayer/RegulationSelect.hide()
+	$MenuLayer/RegulationSelect.hide()
 
 
 
@@ -99,13 +99,13 @@ func _on_ButtonBack_pressed():
 
 
 func _on_Server_connected():
-	$CanvasLayer/Panel/Matching.disabled = false
+	$MenuLayer/Menu/Matching.disabled = false
 	pass
 	
 func _on_Server_matched():
 	if match_logger:
 		match_logger.terminalize()
-	if $CanvasLayer/Panel/CheckButtonSaveLog.pressed:
+	if $MenuLayer/Menu/CheckButtonSaveLog.pressed:
 		match_logger = MatchLogger.new()
 		match_logger.initialize(server)
 	else:
@@ -115,13 +115,13 @@ func _on_Server_matched():
 
 	$MatchScene.send_ready()
 	$"%ResultOverlap".hide()
-	$CanvasLayer/Panel.hide()
-	$CanvasLayer/Panel/ButtonRegulation.disabled = false
-	$CanvasLayer/Panel/DeckBanner/ButtonDeckChange.disabled = false
+	$MenuLayer/Menu.hide()
+	$MenuLayer/Menu/ButtonRegulation.disabled = false
+	$MenuLayer/Menu/DeckBanner/ButtonDeckChange.disabled = false
 	
 
 func _on_Server_disconnected():
-	$CanvasLayer/Panel/Matching.disabled = true
+	$MenuLayer/Menu/Matching.disabled = true
 	pass
 
 
@@ -157,11 +157,11 @@ func _on_MatchScene_ended(situation, msg):
 
 func _on_ButtonReturn_pressed():
 	$"%ResultOverlap".hide()
-	$CanvasLayer/Panel.show()
+	$MenuLayer/Menu.show()
 	if not server.is_ws_connected:
 		var url : String = Global.game_settings.online_servers[Global.game_settings.server_index]
 		server.initialize(url,Global.card_catalog.version)
 	else:
-		$CanvasLayer/Panel/Matching.disabled = false
+		$MenuLayer/Menu/Matching.disabled = false
 
 

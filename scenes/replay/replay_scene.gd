@@ -25,6 +25,12 @@ func _on_ExitButton_pressed():
 	replay_mode = ReplayMode.NONE
 	$Timer.stop()
 	Bgm.stop()
+	if $MatchScene.performing:
+ # 対戦中の演出表示を途中でキャンセル出来ればいいんだが
+ # yieldやTweenにキャンセル処理を仕込むのが面倒そうなので超加速で強引にかっ飛ばす
+		Engine.time_scale = 1000
+		yield($MatchScene,"performed")
+		Engine.time_scale = 1
 	$MatchScene.terminalize()
 	$Panel/ReplayMenu.show()
 

@@ -52,6 +52,7 @@ func _on_ExitButton_pressed():
 	$MatchScene.game_server._send_surrender()
 
 
+
 func initialize(changer : ISceneChanger):
 	scene_changer = changer
 	
@@ -59,8 +60,8 @@ func initialize(changer : ISceneChanger):
 
 	deck_regulation = Global.regulation_newbie
 	var deck_list = Global.deck_list[deck_regulation.name]
-	$Panel/Panel/CPUDeckBanner.set_deck_data(deck_list.get_select_deck())
-	$Panel/Panel/DeckBanner.set_deck_data(deck_list.get_select_deck())
+	$MenuLayer/Menu/CPUDeckBanner.set_deck_data(deck_list.get_select_deck())
+	$MenuLayer/Menu/DeckBanner.set_deck_data(deck_list.get_select_deck())
 
 
 
@@ -97,7 +98,7 @@ func _on_MatchScene_ended(situation, msg):
 
 func _on_ReturnButton_pressed():
 	$"%ResultOverlap".hide()
-	$Panel/Panel.show()
+	$MenuLayer/Menu.show()
 
 
 
@@ -107,20 +108,20 @@ func _on_ButtonBack_pressed():
 
 
 func _on_ButtonStart_pressed():
-	var deck = $Panel/Panel/DeckBanner.get_deck_data()
-	var cpu_deck = $Panel/Panel/CPUDeckBanner.get_deck_data()
+	var deck = $MenuLayer/Menu/DeckBanner.get_deck_data()
+	var cpu_deck = $MenuLayer/Menu/CPUDeckBanner.get_deck_data()
 	
 	if !deck_regulation.check_regulation(deck.cards,Global.card_catalog).empty() or \
 			!deck_regulation.check_regulation(cpu_deck.cards,Global.card_catalog).empty():
 		return
 	
 	var regulation = RegulationData.MatchRegulation.new(3,180,10,5)
-	var commander = commanders[$Panel/Panel/OptionCommander.selected]
+	var commander = commanders[$MenuLayer/Menu/OptionCommander.selected]
 	offline_server.initialize(Global.game_settings.player_name,deck.cards,commander,cpu_deck.cards,regulation,Global.card_catalog)
 
 	if match_logger:
 		match_logger.terminalize()
-	if $Panel/Panel/CheckBoxLog.pressed:
+	if $MenuLayer/Menu/CheckBoxLog.pressed:
 		match_logger = MatchLogger.new()
 		match_logger.initialize(offline_server)
 	else:
@@ -132,7 +133,7 @@ func _on_ButtonStart_pressed():
 	Bgm.stream = load("res://sound/魔王魂  ファンタジー11.ogg")
 	Bgm.play()
 	$"%ResultOverlap".hide()
-	$Panel/Panel.hide()
+	$MenuLayer/Menu.hide()
 
 
 
@@ -140,44 +141,44 @@ func _on_BuildSelectScene_decided(index):
 	var deck_list = Global.deck_list[deck_regulation.name]
 	if index >= 0 and index < deck_list.list.size():
 		if select_cpu_deck:
-			$Panel/Panel/CPUDeckBanner.set_deck_data(deck_list.list[index])
+			$MenuLayer/Menu/CPUDeckBanner.set_deck_data(deck_list.list[index])
 		else:
 			deck_list.select = index
 			deck_list.save_deck_list()
-			$Panel/Panel/DeckBanner.set_deck_data(deck_list.get_select_deck())
-		$Panel/Panel/BuildSelectScene.hide()
+			$MenuLayer/Menu/DeckBanner.set_deck_data(deck_list.get_select_deck())
+		$MenuLayer/Menu/BuildSelectScene.hide()
 
 func _on_BuildSelectScene_return_button_pressed():
-	$Panel/Panel/BuildSelectScene.hide()
+	$MenuLayer/Menu/BuildSelectScene.hide()
 
 func _on_ButtonDeckChange_pressed():
 	select_cpu_deck = false
-	$Panel/Panel/BuildSelectScene.initialize_select(deck_regulation)
-	$Panel/Panel/BuildSelectScene.show()
+	$MenuLayer/Menu/BuildSelectScene.initialize_select(deck_regulation)
+	$MenuLayer/Menu/BuildSelectScene.show()
 
 func _on_ButtonCPUDeckChange_pressed():
 	select_cpu_deck = true
-	$Panel/Panel/BuildSelectScene.initialize_select(deck_regulation)
-	$Panel/Panel/BuildSelectScene.show()
+	$MenuLayer/Menu/BuildSelectScene.initialize_select(deck_regulation)
+	$MenuLayer/Menu/BuildSelectScene.show()
 
 
 
 func _on_ButtonRegulation_pressed():
-	$Panel/Panel/RegulationSelect.initialize()
-	$Panel/Panel/RegulationSelect.show()
+	$MenuLayer/Menu/RegulationSelect.initialize()
+	$MenuLayer/Menu/RegulationSelect.show()
 
 
 func _on_RegulationSelect_regulation_button_pressed(name):
 	if name == "newbie" and deck_regulation.name != name:
-		$Panel/Panel/ButtonRegulation/Label.text = "初級レギュレーション"
+		$MenuLayer/Menu/ButtonRegulation/Label.text = "初級レギュレーション"
 		deck_regulation = Global.regulation_newbie
-		$Panel/Panel/DeckBanner.set_deck_data(Global.deck_list[name].get_select_deck())
-		$Panel/Panel/CPUDeckBanner.set_deck_data(Global.deck_list[name].get_select_deck())
-		$Panel/Panel/RegulationSelect.hide()
+		$MenuLayer/Menu/DeckBanner.set_deck_data(Global.deck_list[name].get_select_deck())
+		$MenuLayer/Menu/CPUDeckBanner.set_deck_data(Global.deck_list[name].get_select_deck())
+		$MenuLayer/Menu/RegulationSelect.hide()
 
 
 func _on_RegulationSelect_return_button_pressed():
-	$Panel/Panel/RegulationSelect.hide()
+	$MenuLayer/Menu/RegulationSelect.hide()
 
 
 func _on_OptionCommander_item_selected(_index):

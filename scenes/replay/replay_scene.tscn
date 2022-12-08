@@ -152,7 +152,7 @@ margin_bottom = 24.0
 text = ">>"
 
 [node name="Panel" type="CanvasLayer" parent="."]
-layer = 10
+layer = 11
 
 [node name="ResultOverlap" type="Control" parent="Panel"]
 unique_name_in_owner = true

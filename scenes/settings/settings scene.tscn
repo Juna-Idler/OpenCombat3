@@ -61,7 +61,9 @@ margin_bottom = 22.0
 grow_horizontal = 2
 grow_vertical = 2
 rect_pivot_offset = Vector2( 320, 32 )
-value = 100.0
+max_value = 1.0
+step = 0.01
+value = 1.0
 tick_count = 11
 
 [node name="CheckBoxMaster" type="CheckButton" parent="HSliderMaster"]
@@ -86,7 +88,9 @@ margin_right = 320.0
 margin_bottom = 96.0
 grow_horizontal = 2
 grow_vertical = 2
-value = 50.0
+max_value = 1.0
+step = 0.01
+value = 0.5
 tick_count = 11
 
 [node name="CheckBoxBGM" type="CheckButton" parent="HSliderBGM"]
@@ -108,7 +112,9 @@ margin_right = 320.0
 margin_bottom = 168.0
 grow_horizontal = 2
 grow_vertical = 2
-value = 90.0
+max_value = 1.0
+step = 0.01
+value = 0.8
 tick_count = 11
 
 [node name="CheckBoxSE" type="CheckButton" parent="HSliderSE"]

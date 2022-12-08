@@ -90,32 +90,35 @@ text = "Win"
 align = 1
 valign = 1
 
-[node name="Panel" type="Panel" parent="Panel"]
+[node name="MenuLayer" type="CanvasLayer" parent="."]
+layer = 11
+
+[node name="Menu" type="Panel" parent="MenuLayer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = SubResource( 24 )
 
-[node name="ButtonBack" type="Button" parent="Panel/Panel"]
+[node name="ButtonBack" type="Button" parent="MenuLayer/Menu"]
 margin_left = 8.0
 margin_top = 8.0
 margin_right = 208.0
 margin_bottom = 64.0
 text = "BACK"
 
-[node name="ButtonRegulation" type="Button" parent="Panel/Panel"]
+[node name="ButtonRegulation" type="Button" parent="MenuLayer/Menu"]
 margin_left = 64.0
 margin_top = 304.0
 margin_right = 480.0
 margin_bottom = 696.0
 
-[node name="Label" type="Label" parent="Panel/Panel/ButtonRegulation"]
+[node name="Label" type="Label" parent="MenuLayer/Menu/ButtonRegulation"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 text = "初級レギュレーション"
 align = 1
 valign = 1
 
-[node name="DeckBanner" parent="Panel/Panel" instance=ExtResource( 4 )]
+[node name="DeckBanner" parent="MenuLayer/Menu" instance=ExtResource( 4 )]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -125,12 +128,12 @@ margin_top = 136.0
 margin_right = 576.0
 margin_bottom = 352.0
 
-[node name="ButtonDeckChange" type="Button" parent="Panel/Panel/DeckBanner"]
+[node name="ButtonDeckChange" type="Button" parent="MenuLayer/Menu/DeckBanner"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 flat = true
 
-[node name="CPUDeckBanner" parent="Panel/Panel" instance=ExtResource( 4 )]
+[node name="CPUDeckBanner" parent="MenuLayer/Menu" instance=ExtResource( 4 )]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -140,12 +143,12 @@ margin_top = -288.0
 margin_right = 144.0
 margin_bottom = -72.0
 
-[node name="ButtonCPUDeckChange" type="Button" parent="Panel/Panel/CPUDeckBanner"]
+[node name="ButtonCPUDeckChange" type="Button" parent="MenuLayer/Menu/CPUDeckBanner"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 flat = true
 
-[node name="ButtonStart" type="Button" parent="Panel/Panel"]
+[node name="ButtonStart" type="Button" parent="MenuLayer/Menu"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -156,7 +159,7 @@ margin_right = 128.0
 margin_bottom = 88.0
 text = "START"
 
-[node name="OptionCommander" type="OptionButton" parent="Panel/Panel"]
+[node name="OptionCommander" type="OptionButton" parent="MenuLayer/Menu"]
 margin_left = 832.0
 margin_top = 144.0
 margin_right = 1184.0
@@ -165,7 +168,7 @@ text = "Random"
 items = [ "Zero", null, false, 0, null, "Random", null, false, 1, null ]
 selected = 1
 
-[node name="CheckBoxLog" type="CheckButton" parent="Panel/Panel"]
+[node name="CheckBoxLog" type="CheckButton" parent="MenuLayer/Menu"]
 margin_left = 944.0
 margin_top = 384.0
 margin_right = 1216.0
@@ -173,21 +176,21 @@ margin_bottom = 448.0
 pressed = true
 text = "プレイを記録する"
 
-[node name="BuildSelectScene" parent="Panel/Panel" instance=ExtResource( 5 )]
+[node name="BuildSelectScene" parent="MenuLayer/Menu" instance=ExtResource( 5 )]
 visible = false
 
-[node name="RegulationSelect" parent="Panel/Panel" instance=ExtResource( 6 )]
+[node name="RegulationSelect" parent="MenuLayer/Menu" instance=ExtResource( 6 )]
 visible = false
 
 [connection signal="ended" from="MatchScene" to="." method="_on_MatchScene_ended"]
 [connection signal="pressed" from="Panel/ResultOverlap/ReturnButton" to="." method="_on_ReturnButton_pressed"]
-[connection signal="pressed" from="Panel/Panel/ButtonBack" to="." method="_on_ButtonBack_pressed"]
-[connection signal="pressed" from="Panel/Panel/ButtonRegulation" to="." method="_on_ButtonRegulation_pressed"]
-[connection signal="pressed" from="Panel/Panel/DeckBanner/ButtonDeckChange" to="." method="_on_ButtonDeckChange_pressed"]
-[connection signal="pressed" from="Panel/Panel/CPUDeckBanner/ButtonCPUDeckChange" to="." method="_on_ButtonCPUDeckChange_pressed"]
-[connection signal="pressed" from="Panel/Panel/ButtonStart" to="." method="_on_ButtonStart_pressed"]
-[connection signal="item_selected" from="Panel/Panel/OptionCommander" to="." method="_on_OptionCommander_item_selected"]
-[connection signal="decided" from="Panel/Panel/BuildSelectScene" to="." method="_on_BuildSelectScene_decided"]
-[connection signal="return_button_pressed" from="Panel/Panel/BuildSelectScene" to="." method="_on_BuildSelectScene_return_button_pressed"]
-[connection signal="regulation_button_pressed" from="Panel/Panel/RegulationSelect" to="." method="_on_RegulationSelect_regulation_button_pressed"]
-[connection signal="return_button_pressed" from="Panel/Panel/RegulationSelect" to="." method="_on_RegulationSelect_return_button_pressed"]
+[connection signal="pressed" from="MenuLayer/Menu/ButtonBack" to="." method="_on_ButtonBack_pressed"]
+[connection signal="pressed" from="MenuLayer/Menu/ButtonRegulation" to="." method="_on_ButtonRegulation_pressed"]
+[connection signal="pressed" from="MenuLayer/Menu/DeckBanner/ButtonDeckChange" to="." method="_on_ButtonDeckChange_pressed"]
+[connection signal="pressed" from="MenuLayer/Menu/CPUDeckBanner/ButtonCPUDeckChange" to="." method="_on_ButtonCPUDeckChange_pressed"]
+[connection signal="pressed" from="MenuLayer/Menu/ButtonStart" to="." method="_on_ButtonStart_pressed"]
+[connection signal="item_selected" from="MenuLayer/Menu/OptionCommander" to="." method="_on_OptionCommander_item_selected"]
+[connection signal="decided" from="MenuLayer/Menu/BuildSelectScene" to="." method="_on_BuildSelectScene_decided"]
+[connection signal="return_button_pressed" from="MenuLayer/Menu/BuildSelectScene" to="." method="_on_BuildSelectScene_return_button_pressed"]
+[connection signal="regulation_button_pressed" from="MenuLayer/Menu/RegulationSelect" to="." method="_on_RegulationSelect_regulation_button_pressed"]
+[connection signal="return_button_pressed" from="MenuLayer/Menu/RegulationSelect" to="." method="_on_RegulationSelect_return_button_pressed"]
