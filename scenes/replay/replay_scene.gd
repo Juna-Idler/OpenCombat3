@@ -12,7 +12,6 @@ var replay_server : ReplayServer = ReplayServer.new()
 enum ReplayMode {NONE,AUTO,NO_WAIT,STEP}
 var replay_mode : int = ReplayMode.NONE
 
-var performing : bool
 var time_start_perform : int
 var duration_last_performing : int
 var performing_durations : Array = []
@@ -56,7 +55,6 @@ func _on_ReplayMenu_start_pressed(selected):
 	$MatchScene.initialize(replay_server,false)
 	$"%ResultOverlap".hide()
 	$Panel/ReplayMenu.hide()
-	performing = true
 	$TimerPerformingCounter.start()
 	$MatchScene.send_ready()
 	Bgm.stream = load("res://sound/魔王魂  ファンタジー11.ogg")
@@ -67,7 +65,6 @@ func _on_Timer_timeout():
 	if replay_mode != ReplayMode.AUTO:
 		return
 	if replay_server.step < replay_server.match_log.update_data.size():
-		performing = true
 		$TimerPerformingCounter.start()
 #		time_start_perform = Time.get_ticks_msec()
 		replay_server.step_forward()
@@ -108,7 +105,6 @@ func _on_MatchScene_performed():
 		performing_durations[replay_server.step] = duration_last_performing
 	$TimerPerformingCounter.stop()
 #	duration_last_performing = Time.get_ticks_msec() - time_start_perform
-	performing = false
 	start_auto_replay()
 
 
@@ -122,7 +118,7 @@ func _on_ButtonNoWait_toggled(button_pressed:bool):
 
 	replay_mode = ReplayMode.NO_WAIT if button_pressed else ReplayMode.AUTO
 
-	if not performing:
+	if not $MatchScene.performing:
 		start_auto_replay()
 
 
@@ -148,7 +144,7 @@ func _on_ButtonPause_toggled(button_pressed):
 		replay_mode = ReplayMode.NO_WAIT if $"%ButtonNoWait".pressed else ReplayMode.AUTO
 		$CanvasLayer/Panel/TabContainer.current_tab = 0
 
-	if not performing:
+	if not $MatchScene.performing:
 		start_auto_replay()
 
 
@@ -157,16 +153,15 @@ func _on_SettingButton_pressed():
 
 
 func _on_ButtonStep_pressed():
-	if performing:
+	if $MatchScene.performing:
 		return
-	performing = true
 	$TimerPerformingCounter.start()
 #	time_start_perform = Time.get_ticks_msec()
 	replay_server.step_forward()
 
 
 func _on_ButtonStepBack_pressed():
-	if performing:
+	if $MatchScene.performing:
 		return
 	replay_server.step_backward()
 
@@ -187,7 +182,6 @@ func start_auto_replay():
 					duration -= duration_last_performing
 					$Timer.start(0.01 if duration <= 0 else duration / 1000.0)
 		ReplayMode.NO_WAIT:
-			performing = true
 			$TimerPerformingCounter.start()
 #			time_start_perform = Time.get_ticks_msec()
 			replay_server.step_forward()

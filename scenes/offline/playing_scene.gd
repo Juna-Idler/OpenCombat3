@@ -1,6 +1,6 @@
 extends ISceneChanger.IScene
 
-class_name OfflinePlayingScene
+class_name OfflineScene
 
 var scene_changer : ISceneChanger
 

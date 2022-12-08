@@ -8,6 +8,7 @@ signal ended(situation,msg)
 
 signal performed()
 
+var performing : bool
 
 
 onready var my_combat_pos : Vector2 = $UILayer/MyField/Playing.rect_global_position + $UILayer/MyField/Playing.rect_size / 2
@@ -92,6 +93,7 @@ func initialize(server : IGameServer,manipulation : bool = true):
 	combat_overlap.visible = false
 
 	$TopUILayer/Control/SettingButton.disabled = false
+	performing = false
 
 
 func send_ready():
@@ -114,14 +116,17 @@ func _on_GameServer_recieved_end(msg:String)->void:
 	return
 
 func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
+	performing = true
 	myself.standby(data.myself.life,Array(data.myself.hand))
 	rival.standby(data.rival.life,Array(data.rival.hand))
 	phase = IGameServer.Phase.COMBAT
 	round_count = 1
 	yield(get_tree().create_timer(MatchPlayer.CARD_MOVE_DURATION), "timeout")
+	performing = false
 	emit_signal("performed")
 
 func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
+	performing = true
 	var tween := create_tween()
 	myself.play(data.myself.select,data.myself.hand,data.myself.damage,
 			Array(data.myself.draw),data.myself.skill_logs,tween)
@@ -132,6 +137,7 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 	yield(combat_director.perform(self,data.next_phase == IGameServer.Phase.GAME_END),"completed")
 
 	if data.next_phase == IGameServer.Phase.GAME_END:
+		performing = false
 		round_count = data.round_count
 		phase = data.next_phase
 		
@@ -168,11 +174,12 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 	else:
 		if card_manipulation:
 			$UILayer/MyField/HandArea.ban_drag(false)
+	performing = false
 	emit_signal("performed")
 
 
 func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
-	
+	performing = true
 	myself.recover(data.myself.select,data.myself.hand,data.myself.draw)
 	rival.recover(data.rival.select,data.rival.hand,data.rival.draw)
 
@@ -186,10 +193,12 @@ func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
 	else:
 		if card_manipulation:
 			$UILayer/MyField/HandArea.ban_drag(false)
+	performing = false
 	emit_signal("performed")
 
 
 func _on_GameServer_recieved_complete_board(data:IGameServer.CompleteData)->void:
+	performing = true
 	var tween = create_tween()
 	tween.set_parallel(true)
 	myself.reset_board(data.myself.hand,data.myself.played,data.myself.discard,
@@ -207,7 +216,9 @@ func _on_GameServer_recieved_complete_board(data:IGameServer.CompleteData)->void
 	else:
 		if card_manipulation:
 			$UILayer/MyField/HandArea.ban_drag(false)
-
+	yield(tween,"finished")
+	performing = false
+	emit_signal("performed")
 
 
 func _on_MyHandArea_decided_card(index:int,hands:Array):

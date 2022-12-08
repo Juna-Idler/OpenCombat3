@@ -25,8 +25,7 @@ class TimedUpdateData:
 
 	static func _update_player_to_json(player ) -> Dictionary:
 		var logs : Array = []
-		for _i in player.skill_logs:
-			var i = _i as IGameServer.UpdateData.SkillLog
+		for i in player.skill_logs:
 			logs.append({"i":i.index,"t":i.timing,"p":i.priority,"d":i.data})
 		return  {"h":player.hand,"i":player.select,"s":logs,"dc":player.draw,"d":player.damage,"l":player.life}
 	

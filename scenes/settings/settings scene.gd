@@ -16,7 +16,7 @@ func set_sound(bus_name:String):
 	var mute = AudioServer.is_bus_mute(idx)
 	var slider = get_node("HSlider" + bus_name) as HSlider
 	slider.value = volume
-	(slider.get_node("CheckBox" + bus_name) as CheckBox).pressed = not mute
+	slider.get_node("CheckBox" + bus_name).pressed = not mute
 
 func _on_BackButton_pressed():
 	hide()

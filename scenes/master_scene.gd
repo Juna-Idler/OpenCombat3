@@ -47,9 +47,9 @@ class SceneChanger extends ISceneChanger:
 		yield(fade_in(),"completed")
 		
 	
-	func _goto_offline_playing_scene():
+	func _goto_offline_scene():
 		yield(_goto_scene_before("res://scenes/offline/playing_scene.tscn"),"completed")
-		(current_scene as OfflinePlayingScene).initialize(self)
+		(current_scene as OfflineScene).initialize(self)
 		yield(_goto_scene_after(),"completed")
 
 	func _goto_title_scene():
@@ -62,15 +62,9 @@ class SceneChanger extends ISceneChanger:
 		(current_scene as BuildMenuScene).initialize(self)
 		yield(_goto_scene_after(),"completed")
 
-		
-	func _goto_online_entrance_scene():
-		yield(_goto_scene_before("res://scenes/online/entrance_scene.tscn"),"completed")
-		(current_scene as OnlineEntranceScene).initialize(master_scene.online_server,self)
-		yield(_goto_scene_after(),"completed")
-
-	func _goto_online_playing_scene(server : IGameServer):
+	func _goto_online_scene():
 		yield(_goto_scene_before("res://scenes/online/playing_scene.tscn"),"completed")
-		(current_scene as OnlinePlayingScene).initialize(server,self)
+		(current_scene as OnlineScene).initialize(master_scene.online_server,self)
 		yield(_goto_scene_after(),"completed")
 
 	func _goto_replay_scene():

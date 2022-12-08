@@ -21,10 +21,10 @@ func _terminalize():
 
 
 func _on_CpuButton_pressed():
-	scene_changer._goto_offline_playing_scene()
+	scene_changer._goto_offline_scene()
 
 func _on_ButtonVSOnline_pressed():
-	scene_changer._goto_online_entrance_scene()
+	scene_changer._goto_online_scene()
 
 func _on_BuildButton_pressed():
 	scene_changer._goto_build_scene()

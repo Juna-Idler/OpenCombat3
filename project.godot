@@ -210,7 +210,7 @@ _global_script_classes=[ {
 "path": "res://scripts/offline/player.gd"
 }, {
 "base": "",
-"class": "OfflinePlayingScene",
+"class": "OfflineScene",
 "language": "GDScript",
 "path": "res://scenes/offline/playing_scene.gd"
 }, {
@@ -220,12 +220,7 @@ _global_script_classes=[ {
 "path": "res://scripts/offline/server.gd"
 }, {
 "base": "",
-"class": "OnlineEntranceScene",
-"language": "GDScript",
-"path": "res://scenes/online/entrance_scene.gd"
-}, {
-"base": "",
-"class": "OnlinePlayingScene",
+"class": "OnlineScene",
 "language": "GDScript",
 "path": "res://scenes/online/playing_scene.gd"
 }, {
@@ -335,10 +330,9 @@ _global_script_class_icons={
 "NamedSkillPerformer": "",
 "NextEffectLabel": "",
 "OfflinePlayer": "",
-"OfflinePlayingScene": "",
+"OfflineScene": "",
 "OfflineServer": "",
-"OnlineEntranceScene": "",
-"OnlinePlayingScene": "",
+"OnlineScene": "",
 "OnlineServer": "",
 "PlainTextResource": "",
 "RegulationData": "",

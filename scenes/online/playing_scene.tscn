@@ -1,8 +1,11 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=1]
 [ext_resource path="res://scenes/match/match_scene.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/online/playing_scene.gd" type="Script" id=3]
+[ext_resource path="res://scenes/deck_scene/banner/banner.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/deck_scene/build_select_scene.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/deck_scene/regulation_select.tscn" type="PackedScene" id=6]
 
 [sub_resource type="Gradient" id=24]
 offsets = PoolRealArray( 0, 0.5, 1 )
@@ -29,28 +32,35 @@ font_data = ExtResource( 1 )
 size = 32
 font_data = ExtResource( 1 )
 
+[sub_resource type="DynamicFont" id=3]
+size = 24
+font_data = ExtResource( 1 )
+
+[sub_resource type="Theme" id=26]
+default_font = SubResource( 3 )
+
 [node name="OnlinePlayingScene" type="Node"]
 script = ExtResource( 3 )
 
 [node name="MatchScene" parent="." instance=ExtResource( 2 )]
 
-[node name="Panel" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = 10
 
-[node name="ResultOverlap" type="Control" parent="Panel"]
+[node name="ResultOverlap" type="Control" parent="CanvasLayer"]
 unique_name_in_owner = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 
-[node name="RivalVeil" type="TextureRect" parent="Panel/ResultOverlap"]
+[node name="RivalVeil" type="TextureRect" parent="CanvasLayer/ResultOverlap"]
 anchor_right = 1.0
 margin_bottom = 192.0
 mouse_filter = 2
 texture = SubResource( 20 )
 expand = true
 
-[node name="MyVeil" type="TextureRect" parent="Panel/ResultOverlap"]
+[node name="MyVeil" type="TextureRect" parent="CanvasLayer/ResultOverlap"]
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -59,7 +69,7 @@ mouse_filter = 2
 texture = SubResource( 21 )
 expand = true
 
-[node name="ResultLabel" type="Label" parent="Panel/ResultOverlap"]
+[node name="ResultLabel" type="Label" parent="CanvasLayer/ResultOverlap"]
 margin_left = 256.0
 margin_top = 32.0
 margin_right = 1024.0
@@ -70,7 +80,7 @@ text = "Win"
 align = 1
 valign = 1
 
-[node name="ButtonBack" type="Button" parent="Panel/ResultOverlap"]
+[node name="ButtonReturn" type="Button" parent="CanvasLayer/ResultOverlap"]
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -82,7 +92,7 @@ margin_bottom = -120.0
 custom_fonts/font = SubResource( 2 )
 text = "戻る"
 
-[node name="Button" type="Button" parent="Panel/ResultOverlap"]
+[node name="Button" type="Button" parent="CanvasLayer/ResultOverlap"]
 visible = false
 anchor_left = 0.5
 anchor_top = 1.0
@@ -95,5 +105,91 @@ margin_bottom = -120.0
 custom_fonts/font = SubResource( 2 )
 text = "再戦を申し込む"
 
+[node name="Panel" type="Panel" parent="CanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = SubResource( 26 )
+
+[node name="Matching" type="Button" parent="CanvasLayer/Panel"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -224.0
+margin_top = -192.0
+margin_right = 224.0
+margin_bottom = -56.0
+disabled = true
+text = "マッチング"
+
+[node name="ButtonBack" type="Button" parent="CanvasLayer/Panel"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 208.0
+margin_bottom = 64.0
+text = "BACK"
+
+[node name="ButtonRegulation" type="Button" parent="CanvasLayer/Panel"]
+margin_left = 280.0
+margin_top = 72.0
+margin_right = 1000.0
+margin_bottom = 264.0
+
+[node name="Label" type="Label" parent="CanvasLayer/Panel/ButtonRegulation"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "初級レギュレーション"
+align = 1
+valign = 1
+
+[node name="DeckBanner" parent="CanvasLayer/Panel" instance=ExtResource( 4 )]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -360.0
+margin_top = -72.0
+margin_right = 360.0
+margin_bottom = 144.0
+
+[node name="ButtonDeckChange" type="Button" parent="CanvasLayer/Panel/DeckBanner"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+flat = true
+
+[node name="LabelUrl" type="Label" parent="CanvasLayer/Panel"]
+margin_left = 256.0
+margin_top = 672.0
+margin_right = 1024.0
+margin_bottom = 712.0
+align = 1
+valign = 1
+
+[node name="CheckButtonSaveLog" type="CheckButton" parent="CanvasLayer/Panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -384.0
+margin_top = -112.0
+margin_right = -64.0
+margin_bottom = -64.0
+text = "SAVE_MATCH_LOG"
+align = 2
+
+[node name="BuildSelectScene" parent="CanvasLayer" instance=ExtResource( 5 )]
+visible = false
+
+[node name="RegulationSelect" parent="CanvasLayer" instance=ExtResource( 6 )]
+visible = false
+
 [connection signal="ended" from="MatchScene" to="." method="_on_MatchScene_ended"]
-[connection signal="pressed" from="Panel/ResultOverlap/ButtonBack" to="." method="_on_ButtonBack_pressed"]
+[connection signal="pressed" from="CanvasLayer/ResultOverlap/ButtonReturn" to="." method="_on_ButtonReturn_pressed"]
+[connection signal="pressed" from="CanvasLayer/Panel/Matching" to="." method="_on_Matching_pressed"]
+[connection signal="pressed" from="CanvasLayer/Panel/ButtonBack" to="." method="_on_ButtonBack_pressed"]
+[connection signal="pressed" from="CanvasLayer/Panel/ButtonRegulation" to="." method="_on_ButtonRegulation_pressed"]
+[connection signal="pressed" from="CanvasLayer/Panel/DeckBanner/ButtonDeckChange" to="." method="_on_ButtonDeckChange_pressed"]
+[connection signal="decided" from="CanvasLayer/BuildSelectScene" to="." method="_on_BuildSelectScene_decided"]
+[connection signal="return_button_pressed" from="CanvasLayer/BuildSelectScene" to="." method="_on_BuildSelectScene_return_button_pressed"]
+[connection signal="regulation_button_pressed" from="CanvasLayer/RegulationSelect" to="." method="_on_RegulationSelect_regulation_button_pressed"]
+[connection signal="return_button_pressed" from="CanvasLayer/RegulationSelect" to="." method="_on_RegulationSelect_return_button_pressed"]
