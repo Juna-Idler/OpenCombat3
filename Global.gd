@@ -3,7 +3,7 @@ extends Node
 
 var card_catalog := CardCatalog.new()
 
-var regulation_newbie := RegulationData.DeckRegulation.new("newbie",15,15,0,0,"1-31")
+var regulation_newbie := RegulationData.DeckRegulation.new(15,15,0,0,"1-31")
 
 var deck_list := {
 	"newbie":DeckList.new("user://deck_newbie.tsv")

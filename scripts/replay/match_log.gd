@@ -27,13 +27,13 @@ class TimedUpdateData:
 		var logs : Array = []
 		for i in player.skill_logs:
 			logs.append({"i":i.index,"t":i.timing,"p":i.priority,"d":i.data})
-		return  {"h":player.hand,"i":player.select,"s":logs,"dc":player.draw,"d":player.damage,"l":player.life}
+		return  {"h":player.hand,"i":player.select,"s":logs,"dc":player.draw,"d":player.damage,"l":player.life,"t":player.time}
 	
 	static func _update_player_from_json(json : Dictionary):# -> IGameServer.UpdateData.PlayerData:
 		var logs := []
 		for l in (json["s"] as Array):
 			logs.append(IGameServer.UpdateData.SkillLog.new(l["i"],l["t"],l["p"],l["d"]))
-		return IGameServer.UpdateData.PlayerData.new(json["h"],json["i"],logs,json["dc"],json["d"],json["l"])
+		return IGameServer.UpdateData.PlayerData.new(json["h"],json["i"],logs,json["dc"],json["d"],json["l"],json["t"])
 
 
 class TimedSendSelect:
@@ -95,7 +95,8 @@ func to_json_dictionary() -> Dictionary:
 		"pd":{
 			"name":primary_data.my_name,"deck":primary_data.my_deck_list,
 			"rname":primary_data.rival_name,"rdeck":primary_data.rival_deck_list,
-			"reg":primary_data.regulation
+			"dreg":primary_data.deck_regulation.to_regulation_string(),
+			"mreg":primary_data.match_regulation.to_regulation_string()
 		},
 		"fd":{
 			"hand":first_data.myself.hand,"life":first_data.myself.life,
@@ -116,7 +117,9 @@ func from_json_dictionary(json : Dictionary) -> void:
 	end_msg = json["end"]["msg"]
 	end_time = json["end"]["time"]
 	primary_data = IGameServer.PrimaryData.new(json["pd"]["name"],json["pd"]["deck"],
-			json["pd"]["rname"],json["pd"]["rdeck"],json["pd"]["reg"])
+			json["pd"]["rname"],json["pd"]["rdeck"],
+			RegulationData.DeckRegulation.create(json["pd"]["dreg"]),
+			RegulationData.MatchRegulation.create(json["pd"]["mreg"]))
 	first_data = IGameServer.FirstData.new(
 			IGameServer.FirstData.PlayerData.new(json["fd"]["hand"],json["fd"]["life"]),
 			IGameServer.FirstData.PlayerData.new(json["fd"]["rhand"],json["fd"]["rlife"]))

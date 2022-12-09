@@ -75,8 +75,11 @@ func _on_data():
 				terminalize()
 			
 		"Primary":
+#			var dr = RegulationData.DeckRegulation.new()
 			_primary_data = IGameServer.PrimaryData.new(data["name"],data["deck"],
-					data["rname"],data["rdeck"],data["regulation"])
+					data["rname"],data["rdeck"],
+					RegulationData.DeckRegulation.create(data["deck_regulation"]),
+					RegulationData.MatchRegulation.create(data["match_regulation"]))
 			emit_signal("matched")
 
 		"First":
@@ -94,16 +97,16 @@ func _on_data():
 				ys_logs.append(IGameServer.UpdateData.SkillLog.new(sl["i"],sl["t"],sl["p"],sl["d"]))
 			for sl in (r["s"] as Array):
 				rs_logs.append(IGameServer.UpdateData.SkillLog.new(sl["i"],sl["t"],sl["p"],sl["d"]))
-			var myself := IGameServer.UpdateData.PlayerData.new(y["h"],y["i"],ys_logs,y["dc"],y["d"],y["l"])
-			var rival := IGameServer.UpdateData.PlayerData.new(r["h"],r["i"],rs_logs,r["dc"],r["d"],r["l"])
+			var myself := IGameServer.UpdateData.PlayerData.new(y["h"],y["i"],ys_logs,y["dc"],y["d"],y["l"],y["t"])
+			var rival := IGameServer.UpdateData.PlayerData.new(r["h"],r["i"],rs_logs,r["dc"],r["d"],r["l"],r["t"])
 			var update := IGameServer.UpdateData.new(data["rc"],data["np"],data["ls"],myself,rival)
 			emit_signal("recieved_combat_result",update)
 				
 		"Recovery":
 			var y := data["y"] as Dictionary
 			var r := data["r"] as Dictionary
-			var myself := IGameServer.UpdateData.PlayerData.new(y["h"],y["i"],[],y["dc"],y["d"],y["l"])
-			var rival := IGameServer.UpdateData.PlayerData.new(r["h"],r["i"],[],r["dc"],r["d"],r["l"])
+			var myself := IGameServer.UpdateData.PlayerData.new(y["h"],y["i"],[],y["dc"],y["d"],y["l"],y["t"])
+			var rival := IGameServer.UpdateData.PlayerData.new(r["h"],r["i"],[],r["dc"],r["d"],r["l"],r["t"])
 			var update := IGameServer.UpdateData.new(data["rc"],data["np"],0,myself,rival)
 			emit_signal("recieved_recovery_result",update)
 				

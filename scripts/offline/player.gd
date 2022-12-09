@@ -76,7 +76,7 @@ func _get_skill_log() -> Array:
 	return skill_log
 
 	
-func _combat_start(i : int):
+func _combat_start(i : int) -> void:
 	playing_hand = hand.duplicate()
 	select = i
 	draw_indexes.resize(0)
@@ -111,7 +111,7 @@ func _damage_is_fatal() -> bool:
 		return true
 	return false
 	
-func _add_damage(d: int):
+func _add_damage(d: int) -> void:
 	damage += d
 	
 func _append_skill_log(s_log : MechanicsData.SkillLog):
@@ -148,34 +148,34 @@ func _no_recover() -> void:
 func _is_recovery() -> bool:
 	return damage == 0
 
-func _change_order(new_indexies : PoolIntArray) -> bool:
+func _change_order(new_indexies : PoolIntArray) -> void:
 	if new_indexies.size() != hand.size():
-		return false
+		return
 	for i in hand:
 		if not new_indexies.has(i):
-			return false
+			return
 	for i in range(hand.size()):
 		hand[i] = new_indexies[i]
-	return true
+	return
 
 
-func _reset_select():
+func _reset_select() -> void:
 	select = -1
 
-func _draw_card():
+func _draw_card() -> void:
 	if stock.empty():
 		return
 	var i := stock.pop_back() as int
 	hand.push_back(i)
 	draw_indexes.push_back(i)
 
-func _discard_card(i : int):
+func _discard_card(i : int) -> void:
 	var id := hand.pop_at(i) as int
 	_life -= deck_list[id].data.level
 	discard.push_back(id)
 
 
-func _hand_to_deck_bottom(i : int):
+func _hand_to_deck_bottom(i : int) -> void:
 	var id := hand.pop_at(i) as int
 	stock.push_front(id)
 

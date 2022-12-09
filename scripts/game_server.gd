@@ -31,14 +31,17 @@ class PrimaryData:
 	var rival_deck_list : PoolIntArray# of int
 	var my_name:String
 	var rival_name:String
-	var regulation :String
+	var deck_regulation : RegulationData.DeckRegulation
+	var match_regulation : RegulationData.MatchRegulation
 
-	func _init(name:String,deck:PoolIntArray,rname:String,rdeck:PoolIntArray,reg):
+	func _init(name:String,deck:PoolIntArray,rname:String,rdeck:PoolIntArray,
+			dr:RegulationData.DeckRegulation,mr:RegulationData.MatchRegulation):
 		my_deck_list = deck
 		rival_deck_list = rdeck
 		my_name = name
 		rival_name = rname
-		regulation = reg
+		deck_regulation = dr
+		match_regulation = mr
 
 
 class FirstData:
@@ -82,14 +85,16 @@ class UpdateData:
 		var draw:PoolIntArray # of int
 		var damage:int
 		var life:int
+		var time:int
 		
-		func _init(h,s,sl,dc,d,l):
+		func _init(h,s,sl,dc,d,l,t):
 			hand = h
 			select = s
 			skill_logs = sl
 			draw = dc
 			damage = d
 			life = l
+			time = t
 
 	var myself:PlayerData
 	var rival:PlayerData

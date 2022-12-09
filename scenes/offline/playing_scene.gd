@@ -59,7 +59,7 @@ func initialize(changer : ISceneChanger):
 	offline_server = OfflineServer.new()
 
 	deck_regulation = Global.regulation_newbie
-	var deck_list = Global.deck_list[deck_regulation.name]
+	var deck_list = Global.deck_list["newbie"]
 	$MenuLayer/Menu/CPUDeckBanner.set_deck_data(deck_list.get_select_deck())
 	$MenuLayer/Menu/DeckBanner.set_deck_data(deck_list.get_select_deck())
 
@@ -115,9 +115,10 @@ func _on_ButtonStart_pressed():
 			!deck_regulation.check_regulation(cpu_deck.cards,Global.card_catalog).empty():
 		return
 	
-	var regulation = RegulationData.MatchRegulation.new(3,180,10,5)
+	var regulation = RegulationData.MatchRegulation.new(3,120,10,5)
 	var commander = commanders[$MenuLayer/Menu/OptionCommander.selected]
-	offline_server.initialize(Global.game_settings.player_name,deck.cards,commander,cpu_deck.cards,regulation,Global.card_catalog)
+	offline_server.initialize(Global.game_settings.player_name,deck.cards,commander,cpu_deck.cards,
+			deck_regulation,regulation,Global.card_catalog)
 
 	if match_logger:
 		match_logger.terminalize()

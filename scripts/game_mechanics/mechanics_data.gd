@@ -104,7 +104,7 @@ class IPlayer:
 		return []
 
 
-	func _combat_start(_index : int):
+	func _combat_start(_index : int) -> void:
 		return
 
 	func _get_playing_card() -> PlayerCard:
@@ -122,10 +122,10 @@ class IPlayer:
 	func _damage_is_fatal() -> bool:
 		return false
 
-	func _add_damage(_d: int):
+	func _add_damage(_d: int) -> void:
 		return
 		
-	func _append_skill_log(_log : SkillLog):
+	func _append_skill_log(_log : SkillLog) -> void:
 		return
 
 	func _combat_end() -> void:
@@ -145,21 +145,21 @@ class IPlayer:
 		return true
 
 
-	func _change_order(_new_hand : PoolIntArray) -> bool:
-		return true
-
-
-	func _reset_select():
+	func _change_order(_new_hand : PoolIntArray) -> void:
 		return
 
 
-	func _draw_card():
+	func _reset_select() -> void:
 		return
 
-	func _discard_card(_index : int):
+
+	func _draw_card() -> void:
 		return
 
-	func _hand_to_deck_bottom(_index : int):
+	func _discard_card(_index : int) -> void:
+		return
+
+	func _hand_to_deck_bottom(_index : int) -> void:
 		return
 
 	func _get_additional_deck() -> PoolIntArray:

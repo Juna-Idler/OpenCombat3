@@ -39,6 +39,13 @@ func ban_drag(b:bool):
 		c.ban_drag = b
 	drag_banned = b
 
+func get_reorder_hand() -> Array:
+	var reorder_hand := []
+	if reorder:
+		for c in hands:
+			reorder_hand.append(c.id_in_deck)
+	return reorder_hand
+
 
 func set_hand_card(cards : Array):
 	var old_count := hands.size()

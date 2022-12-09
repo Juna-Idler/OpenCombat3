@@ -45,6 +45,10 @@ func _ready():
 	$"%CardList".large_card_view = $"%LargeCardView"
 	pass
 
+func _process(delta):
+	if not $LimitTimer.is_stopped():
+		$TopUILayer/Control/MyTimer.text = str(int($LimitTimer.time_left))
+
 
 func initialize(server : IGameServer,manipulation : bool = true):
 	game_server = server
@@ -100,6 +104,14 @@ func initialize(server : IGameServer,manipulation : bool = true):
 func send_ready():
 	game_server._send_ready()
 
+func decide_card(index:int,hand:Array):
+	$LimitTimer.stop()
+	$UILayer/MyField/HandArea.ban_drag(true)
+	if phase == IGameServer.Phase.COMBAT:
+		game_server._send_combat_select(round_count,index,hand)
+	elif phase == IGameServer.Phase.RECOVERY:
+		game_server._send_recovery_select(round_count,index,hand)
+		
 
 func terminalize():
 	if game_server:
@@ -117,6 +129,10 @@ func _on_GameServer_recieved_end(msg:String)->void:
 	return
 
 func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
+	var pd := game_server._get_primary_data()
+	$TopUILayer/Control/MyTimer.text = str(pd.match_regulation.thinking_time)
+	$TopUILayer/Control/RivalTimer.text = str(pd.match_regulation.thinking_time)
+	$LimitTimer.start(pd.match_regulation.thinking_time)
 	performing = true
 	myself.standby(data.myself.life,Array(data.myself.hand))
 	rival.standby(data.rival.life,Array(data.rival.hand))
@@ -127,6 +143,11 @@ func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
 	emit_signal("performed")
 
 func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
+	$TopUILayer/Control/MyTimer.text = str(data.myself.time/1000)
+	$TopUILayer/Control/RivalTimer.text = str(data.rival.time/1000)
+	if (not (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0)) and\
+			(not data.next_phase == IGameServer.Phase.GAME_END):
+		$LimitTimer.start(data.myself.time / 1000.0)
 	performing = true
 	var tween := create_tween()
 	myself.play(data.myself.select,data.myself.hand,data.myself.damage,
@@ -138,6 +159,7 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 	yield(combat_director.perform(self,data.next_phase == IGameServer.Phase.GAME_END),"completed")
 
 	if data.next_phase == IGameServer.Phase.GAME_END:
+		$LimitTimer.stop()
 		performing = false
 		emit_signal("performed")
 		round_count = data.round_count
@@ -181,6 +203,11 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 
 
 func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
+	$TopUILayer/Control/MyTimer.text = str(data.myself.time/1000)
+	$TopUILayer/Control/RivalTimer.text = str(data.rival.time/1000)
+	if (not (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0)) and\
+			(not data.next_phase == IGameServer.Phase.GAME_END):
+		$LimitTimer.start(data.myself.time / 1000.0)
 	performing = true
 	myself.recover(data.myself.select,data.myself.hand,data.myself.draw)
 	rival.recover(data.rival.select,data.rival.hand,data.rival.draw)
@@ -197,6 +224,13 @@ func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
 			$UILayer/MyField/HandArea.ban_drag(false)
 	performing = false
 	emit_signal("performed")
+
+
+func _on_LimitTimer_timeout():
+	if not card_manipulation:
+		return
+	var hand = $UILayer/MyField/HandArea.get_reorder_hand()
+	decide_card(0,hand)
 
 
 func _on_GameServer_recieved_complete_board(data:IGameServer.CompleteData)->void:
@@ -223,15 +257,8 @@ func _on_GameServer_recieved_complete_board(data:IGameServer.CompleteData)->void
 	emit_signal("performed")
 
 
-func _on_MyHandArea_decided_card(index:int,hands:Array):
-	$UILayer/MyField/HandArea.ban_drag(true)
-	
-	if phase == IGameServer.Phase.COMBAT:
-		game_server._send_combat_select(round_count,index,hands)
-	elif phase == IGameServer.Phase.RECOVERY:
-		game_server._send_recovery_select(round_count,index,hands)
-
-
+func _on_MyHandArea_decided_card(index:int,hand:Array):
+	decide_card(index,hand)
 
 
 func _on_MyHandArea_clicked_card(_index:int,_card:Card):
@@ -298,7 +325,6 @@ func _on_RivalDiscard_clicked():
 
 func _on_SettingButton_pressed():
 	$"%SettingsScene".show()
-
 
 
 

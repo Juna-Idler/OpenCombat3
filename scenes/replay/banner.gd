@@ -10,7 +10,7 @@ func initialize(m_log : MatchLog):
 	
 	$LabelPlayer1.text = match_log.primary_data.my_name
 	$LabelPlayer2.text = match_log.primary_data.rival_name
-	$LabelRegulation.text = match_log.primary_data.regulation
+	$LabelRegulation.text = match_log.primary_data.deck_regulation.to_regulation_string()
 
 	if match_log.update_data.empty():
 		$LabelRound.text = "Round 0"

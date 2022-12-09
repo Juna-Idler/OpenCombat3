@@ -34,7 +34,8 @@ func _init(match_log :MatchLog,rival : bool,card_catalog : CardCatalog) -> void:
 		var c := MechanicsData.PlayerCard.new(card_catalog.new_card_data(deck[i]),i)
 		deck_list.append(c);
 	var fd = match_log.first_data.rival if rival_side else match_log.first_data.myself
-	first_data = IGameServer.UpdateData.PlayerData.new(fd.hand,0,[],[],0,fd.life)
+	first_data = IGameServer.UpdateData.PlayerData.new(fd.hand,0,[],[],0,fd.life,
+			match_log.primary_data.match_regulation.thinking_time * 1000)
 	hand = Array(fd.hand)
 	stock_count = deck_list.size() - hand.size()
 	update_data = match_log.update_data
@@ -86,7 +87,7 @@ func _get_skill_log() -> Array:
 	return step_data.skill_logs
 
 	
-func _combat_start(i : int):
+func _combat_start(i : int) -> void:
 	select_card = deck_list[hand.pop_at(i)]
 	select_card.affected.add_other(next_effect)
 	next_effect.reset()
@@ -112,7 +113,7 @@ func _get_current_block() -> int:
 func _damage_is_fatal() -> bool:
 	return false
 	
-func _add_damage(_d: int):
+func _add_damage(_d: int) -> void:
 	return
 	
 func _append_skill_log(_s_log : MechanicsData.SkillLog):
@@ -139,26 +140,26 @@ func _no_recover() -> void:
 func _is_recovery() -> bool:
 	return step_data.damage == 0
 
-func _change_order(new_indexies : PoolIntArray) -> bool:
+func _change_order(new_indexies : PoolIntArray) -> void:
 	hand = Array(new_indexies)
-	return true
-
-
-func _reset_select():
 	return
 
-func _draw_card():
+
+func _reset_select() -> void:
+	return
+
+func _draw_card() -> void:
 	if not step_draw.empty():
 		hand.push_back(step_draw.pop_front())
 		stock_count -= 1
 
 
-func _discard_card(i : int):
+func _discard_card(i : int) -> void:
 	var id := hand.pop_at(i) as int
 	discard.push_back(id)
 
 
-func _hand_to_deck_bottom(i : int):
+func _hand_to_deck_bottom(i : int) -> void:
 	var _id := hand.pop_at(i) as int
 	stock_count += 1
 
