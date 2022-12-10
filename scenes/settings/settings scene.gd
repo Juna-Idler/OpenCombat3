@@ -5,7 +5,10 @@ func _ready():
 	$LineEditSave.text =  OS.get_user_data_dir()
 	$LineEditName.text = Global.game_settings.player_name
 	$ButtonOnlineServer.text = Global.game_settings.online_servers[Global.game_settings.server_index]
-	
+
+	$LoggingPanel/CheckButtonOffline.pressed = Global.game_settings.offline_logging
+	$LoggingPanel/CheckButtonOnline.pressed = Global.game_settings.online_logging
+
 	set_sound("Master")
 	set_sound("BGM")
 	set_sound("SE")
@@ -14,7 +17,7 @@ func set_sound(bus_name:String):
 	var idx = AudioServer.get_bus_index(bus_name)
 	var volume = db2linear(AudioServer.get_bus_volume_db(idx))
 	var mute = AudioServer.is_bus_mute(idx)
-	var slider = get_node("HSlider" + bus_name) as HSlider
+	var slider = $SoundVolume.get_node("HSlider" + bus_name) as HSlider
 	slider.value = volume
 	slider.get_node("CheckBox" + bus_name).pressed = not mute
 
@@ -72,3 +75,11 @@ func _on_OnlineServer_returned():
 	remove_child(o_s_settings)
 	o_s_settings.queue_free()
 	
+
+
+func _on_CheckButtonOffline_toggled(button_pressed : bool):
+	Global.game_settings.offline_logging = button_pressed
+
+
+func _on_CheckButtonOnline_toggled(button_pressed : bool):
+	Global.game_settings.online_logging = button_pressed

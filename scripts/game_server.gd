@@ -151,7 +151,7 @@ class CompleteData:
 		var stock:int
 		var life:int
 		var damage:int
-		var next_effect:Affected
+		var next_effect:CompleteData.Affected
 		var affected_list:Array
 		var additional_deck:PoolIntArray
 		

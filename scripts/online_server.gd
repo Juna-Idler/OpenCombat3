@@ -36,11 +36,11 @@ func initialize(url : String,ver : String, protocols = PoolStringArray()) -> boo
 func terminalize():
 	_client.disconnect_from_host()
 
-func send_match(name :String, deck :Array, regulation :String):
+func send_match(name :String, deck :Array, deck_regulation :String, match_regulation :String):
 	if not is_ws_connected:
 		emit_signal("recieved_end","disconnected")
-	var send := """{"type":"Match","data":{"regulation":"%s","name":"%s","deck":[%s]}}"""\
-			% [regulation,name,PoolStringArray(deck).join(",")]
+	var send := """{"type":"Match","data":{"deck_regulation":"%s","match_regulation":"%s","name":"%s","deck":[%s]}}"""\
+			% [deck_regulation,match_regulation,name,PoolStringArray(deck).join(",")]
 	_client.get_peer(1).put_packet(send.to_utf8())
 
 

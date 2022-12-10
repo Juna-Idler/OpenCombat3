@@ -1,10 +1,21 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://scenes/settings/settings scene.gd" type="Script" id=1]
 [ext_resource path="res://scenes/settings/settings theme.tres" type="Theme" id=2]
 
 [sub_resource type="StyleBoxFlat" id=4]
 bg_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="StyleBoxFlat" id=5]
+bg_color = Color( 0, 0, 0, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [node name="SettingsScene" type="Panel"]
 self_modulate = Color( 0, 0, 0, 0.752941 )
@@ -48,82 +59,6 @@ margin_bottom = 48.0
 text = "YOUR_NAME:"
 align = 2
 valign = 1
-
-[node name="HSliderMaster" type="HSlider" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -320.0
-margin_top = -42.0
-margin_right = 320.0
-margin_bottom = 22.0
-grow_horizontal = 2
-grow_vertical = 2
-rect_pivot_offset = Vector2( 320, 32 )
-max_value = 1.0
-step = 0.01
-value = 1.0
-tick_count = 11
-
-[node name="CheckBoxMaster" type="CheckButton" parent="HSliderMaster"]
-margin_left = -192.0
-margin_top = 10.0
-margin_right = -1.0
-margin_bottom = 58.0
-grow_horizontal = 0
-grow_vertical = 0
-pressed = true
-text = "MASTER"
-align = 2
-
-[node name="HSliderBGM" type="HSlider" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -320.0
-margin_top = 32.0
-margin_right = 320.0
-margin_bottom = 96.0
-grow_horizontal = 2
-grow_vertical = 2
-max_value = 1.0
-step = 0.01
-value = 0.5
-tick_count = 11
-
-[node name="CheckBoxBGM" type="CheckButton" parent="HSliderBGM"]
-margin_left = -192.0
-margin_top = 8.0
-margin_bottom = 56.0
-pressed = true
-text = "BGM"
-align = 2
-
-[node name="HSliderSE" type="HSlider" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -320.0
-margin_top = 104.0
-margin_right = 320.0
-margin_bottom = 168.0
-grow_horizontal = 2
-grow_vertical = 2
-max_value = 1.0
-step = 0.01
-value = 0.8
-tick_count = 11
-
-[node name="CheckBoxSE" type="CheckButton" parent="HSliderSE"]
-margin_left = -192.0
-margin_top = 8.0
-margin_bottom = 56.0
-pressed = true
-text = "SE"
-align = 2
 
 [node name="ButtonOnlineServer" type="Button" parent="."]
 anchor_top = 1.0
@@ -172,14 +107,143 @@ margin_right = 1272.0
 margin_bottom = 712.0
 text = "SAVE"
 
+[node name="SoundVolume" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 64.0
+margin_top = 128.0
+margin_right = -64.0
+margin_bottom = -368.0
+
+[node name="HSliderMaster" type="HSlider" parent="SoundVolume"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -320.0
+margin_top = -106.0
+margin_right = 320.0
+margin_bottom = -42.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_pivot_offset = Vector2( 320, 32 )
+max_value = 1.0
+step = 0.01
+value = 1.0
+tick_count = 11
+
+[node name="CheckBoxMaster" type="CheckButton" parent="SoundVolume/HSliderMaster"]
+margin_left = -192.0
+margin_top = 10.0
+margin_right = -1.0
+margin_bottom = 58.0
+grow_horizontal = 0
+grow_vertical = 0
+pressed = true
+text = "MASTER"
+align = 2
+
+[node name="HSliderBGM" type="HSlider" parent="SoundVolume"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -320.0
+margin_top = -32.0
+margin_right = 320.0
+margin_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+max_value = 1.0
+step = 0.01
+value = 0.5
+tick_count = 11
+
+[node name="CheckBoxBGM" type="CheckButton" parent="SoundVolume/HSliderBGM"]
+margin_left = -192.0
+margin_top = 8.0
+margin_bottom = 56.0
+pressed = true
+text = "BGM"
+align = 2
+
+[node name="HSliderSE" type="HSlider" parent="SoundVolume"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -320.0
+margin_top = 40.0
+margin_right = 320.0
+margin_bottom = 104.0
+grow_horizontal = 2
+grow_vertical = 2
+max_value = 1.0
+step = 0.01
+value = 0.8
+tick_count = 11
+
+[node name="CheckBoxSE" type="CheckButton" parent="SoundVolume/HSliderSE"]
+margin_left = -192.0
+margin_top = 8.0
+margin_bottom = 56.0
+pressed = true
+text = "SE"
+align = 2
+
+[node name="LoggingPanel" type="Panel" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -384.0
+margin_top = 156.0
+margin_right = 384.0
+margin_bottom = 212.0
+custom_styles/panel = SubResource( 5 )
+
+[node name="CheckButtonOffline" type="CheckButton" parent="LoggingPanel"]
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_left = 8.0
+margin_top = -24.0
+margin_right = 328.0
+margin_bottom = 24.0
+text = "OFFLINE_LOG"
+align = 2
+
+[node name="CheckButtonOnline" type="CheckButton" parent="LoggingPanel"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -328.0
+margin_top = -24.0
+margin_right = -8.0
+margin_bottom = 24.0
+text = "OFFLINE_LOG"
+align = 2
+
+[node name="Label" type="Label" parent="LoggingPanel"]
+anchor_bottom = 1.0
+margin_left = -192.0
+margin_right = -8.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "DEF_LOGGING"
+align = 2
+valign = 1
+
 [connection signal="pressed" from="BackButton" to="." method="_on_BackButton_pressed"]
 [connection signal="pressed" from="ExitButton" to="." method="_on_ExitButton_pressed"]
 [connection signal="text_changed" from="LineEditName" to="." method="_on_LineEditName_text_changed"]
-[connection signal="value_changed" from="HSliderMaster" to="." method="_on_HSliderMaster_value_changed"]
-[connection signal="toggled" from="HSliderMaster/CheckBoxMaster" to="." method="_on_CheckBoxMaster_toggled"]
-[connection signal="value_changed" from="HSliderBGM" to="." method="_on_HSliderBGM_value_changed"]
-[connection signal="toggled" from="HSliderBGM/CheckBoxBGM" to="." method="_on_CheckBoxBGM_toggled"]
-[connection signal="value_changed" from="HSliderSE" to="." method="_on_HSliderSE_value_changed"]
-[connection signal="toggled" from="HSliderSE/CheckBoxSE" to="." method="_on_CheckBoxSE_toggled"]
 [connection signal="pressed" from="ButtonOnlineServer" to="." method="_on_ButtonOnlineServer_pressed"]
 [connection signal="pressed" from="ButtonSave" to="." method="_on_ButtonSave_pressed"]
+[connection signal="value_changed" from="SoundVolume/HSliderMaster" to="." method="_on_HSliderMaster_value_changed"]
+[connection signal="toggled" from="SoundVolume/HSliderMaster/CheckBoxMaster" to="." method="_on_CheckBoxMaster_toggled"]
+[connection signal="value_changed" from="SoundVolume/HSliderBGM" to="." method="_on_HSliderBGM_value_changed"]
+[connection signal="toggled" from="SoundVolume/HSliderBGM/CheckBoxBGM" to="." method="_on_CheckBoxBGM_toggled"]
+[connection signal="value_changed" from="SoundVolume/HSliderSE" to="." method="_on_HSliderSE_value_changed"]
+[connection signal="toggled" from="SoundVolume/HSliderSE/CheckBoxSE" to="." method="_on_CheckBoxSE_toggled"]
+[connection signal="toggled" from="LoggingPanel/CheckButtonOffline" to="." method="_on_CheckButtonOffline_toggled"]
+[connection signal="toggled" from="LoggingPanel/CheckButtonOnline" to="." method="_on_CheckButtonOnline_toggled"]

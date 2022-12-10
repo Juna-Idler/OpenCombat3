@@ -63,6 +63,7 @@ func initialize(changer : ISceneChanger):
 	$MenuLayer/Menu/CPUDeckBanner.set_deck_data(deck_list.get_select_deck())
 	$MenuLayer/Menu/DeckBanner.set_deck_data(deck_list.get_select_deck())
 
+	$MenuLayer/Menu/CheckBoxLog.pressed = Global.game_settings.offline_logging
 
 
 func _terminalize():
@@ -139,7 +140,7 @@ func _on_ButtonStart_pressed():
 
 
 func _on_BuildSelectScene_decided(index):
-	var deck_list = Global.deck_list[deck_regulation.name]
+	var deck_list = Global.deck_list["newbie"]
 	if index >= 0 and index < deck_list.list.size():
 		if select_cpu_deck:
 			$MenuLayer/Menu/CPUDeckBanner.set_deck_data(deck_list.list[index])

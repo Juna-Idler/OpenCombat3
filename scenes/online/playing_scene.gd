@@ -17,12 +17,14 @@ var match_logger : MatchLogger
 func initialize(s : OnlineServer,changer : ISceneChanger):
 	server = s
 	deck_regulation = Global.regulation_newbie
+	match_regulation = RegulationData.MatchRegulation.create("3/60+10+5")
 	scene_changer = changer
 	$MenuLayer/Menu/DeckBanner.set_deck_data(Global.deck_list["newbie"].get_select_deck())
 	
 	server.connect("connected",self,"_on_Server_connected")
 	server.connect("matched",self,"_on_Server_matched")
 	server.connect("disconnected",self,"_on_Server_disconnected")
+	server.connect("recieved_end",self,"_on_Server_recieved_end")
 
 	var url : String = Global.game_settings.online_servers[Global.game_settings.server_index]
 	$MenuLayer/Menu/LabelUrl.text = url
@@ -30,7 +32,9 @@ func initialize(s : OnlineServer,changer : ISceneChanger):
 		server.initialize(url,Global.card_catalog.version)
 	else:
 		$MenuLayer/Menu/Matching.disabled = false
-		
+
+	$MenuLayer/Menu/CheckButtonSaveLog.pressed = Global.game_settings.online_logging
+	
 	$MatchScene.exit_button.connect("pressed",self,"_on_ExitButton_pressed")
 	$MatchScene.exit_button.text = "SURRENDER"
 	
@@ -39,6 +43,7 @@ func _terminalize():
 	server.disconnect("connected",self,"_on_Server_connected")
 	server.disconnect("matched",self,"_on_Server_matched")
 	server.disconnect("disconnected",self,"_on_Server_disconnected")
+	server.disconnect("recieved_end",self,"_on_Server_recieved_end")
 
 	$MatchScene.terminalize()
 	if match_logger:
@@ -53,8 +58,8 @@ func _on_Matching_pressed():
 	var deck = $MenuLayer/Menu/DeckBanner.get_deck_data()
 	var failed := deck_regulation.check_regulation(deck.cards,Global.card_catalog)
 	if failed.empty():
-		server.send_match(Global.game_settings.player_name,deck.cards,"newbie")
-		$MenuLayer/Menu/Matching.text = "マッチング待機中"
+		server.send_match(Global.game_settings.player_name,deck.cards,
+				deck_regulation.to_regulation_string(),match_regulation.to_regulation_string())
 		$MenuLayer/Menu/Matching.disabled = true
 		$MenuLayer/Menu/ButtonRegulation.disabled = true
 		$MenuLayer/Menu/DeckBanner/ButtonDeckChange.disabled = true
@@ -124,6 +129,11 @@ func _on_Server_disconnected():
 	$MenuLayer/Menu/Matching.disabled = true
 	pass
 
+func _on_Server_recieved_end():
+	if not $MatchScene.is_valid():
+		$MenuLayer/Menu/Matching.disabled = false
+		$MenuLayer/Menu/ButtonRegulation.disabled = false
+		$MenuLayer/Menu/DeckBanner/ButtonDeckChange.disabled = false
 
 func _on_ExitButton_pressed():
 	$MatchScene.game_server._send_surrender()

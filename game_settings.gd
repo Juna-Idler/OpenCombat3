@@ -14,6 +14,9 @@ var online_servers := [
 ]
 var server_index : int = 0
 
+var offline_logging : bool = false
+var online_logging : bool = false
+
 func load_config():
 	if config.load(path) != OK:
 		return
@@ -23,7 +26,8 @@ func load_config():
 	player_name = config.get_value("Player","name")
 	online_servers = config.get_value("Server","servers",online_servers)
 	server_index = config.get_value("Server","index",0)
-
+	offline_logging = config.get_value("Logging","offline",false)
+	online_logging = config.get_value("Logging","online",false)
 	
 func save_config():
 	for i in AudioServer.bus_count:
@@ -31,6 +35,8 @@ func save_config():
 	config.set_value("Player","name",player_name)
 	config.set_value("Server","servers",online_servers)
 	config.set_value("Server","index",server_index)
+	config.set_value("Logging","offline",offline_logging)
+	config.set_value("Logging","online",online_logging)
 	
 # warning-ignore:return_value_discarded
 	config.save(path)

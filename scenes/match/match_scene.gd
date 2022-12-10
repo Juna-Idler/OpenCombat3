@@ -49,6 +49,8 @@ func _process(delta):
 	if not $LimitTimer.is_stopped():
 		$TopUILayer/Control/MyTimer.text = str(int($LimitTimer.time_left))
 
+func is_valid() -> bool:
+	return game_server != null
 
 func initialize(server : IGameServer,manipulation : bool = true):
 	game_server = server
