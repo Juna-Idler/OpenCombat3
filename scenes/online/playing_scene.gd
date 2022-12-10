@@ -16,8 +16,8 @@ var match_logger : MatchLogger
 
 func initialize(s : OnlineServer,changer : ISceneChanger):
 	server = s
-	deck_regulation = Global.regulation_newbie
-	match_regulation = RegulationData.MatchRegulation.create("3/60+10+5")
+	deck_regulation = Global.deck_regulation_list[0]
+	match_regulation = Global.match_regulation_list[0]
 	scene_changer = changer
 	$MenuLayer/Menu/DeckBanner.set_deck_data(Global.deck_list["newbie"].get_select_deck())
 	
@@ -68,7 +68,7 @@ func _on_Matching_pressed():
 
 
 func _on_ButtonDeckChange_pressed():
-	$MenuLayer/BuildSelectScene.initialize_select(Global.regulation_newbie)
+	$MenuLayer/BuildSelectScene.initialize_select(Global.deck_regulation_list[0])
 	$MenuLayer/BuildSelectScene.show()
 
 func _on_BuildSelectScene_decided(index):
@@ -89,7 +89,7 @@ func _on_ButtonRegulation_pressed():
 func _on_RegulationSelect_regulation_button_pressed(name):
 	if name == "newbie":
 		$MenuLayer/Menu/ButtonRegulation.text = "初級レギュレーション"
-		deck_regulation = Global.regulation_newbie
+		deck_regulation = Global.deck_regulation_list[0]
 		$MenuLayer/Menu/DeckBanner.set_deck_data(Global.deck_list[name].get_select_deck())
 		$MenuLayer/RegulationSelect.hide()
 
@@ -118,6 +118,8 @@ func _on_Server_matched():
 	
 	$MatchScene.initialize(match_logger if match_logger else server as IGameServer)
 
+	Bgm.stream = load("res://sound/魔王魂  ファンタジー11.ogg")
+	Bgm.play()
 	$MatchScene.send_ready()
 	$"%ResultOverlap".hide()
 	$MenuLayer/Menu.hide()
@@ -156,6 +158,7 @@ func _on_MatchScene_ended(situation, msg):
 			$"%ResultOverlap".get_node("ResultLabel").text = "Lose"
 		-2:
 			$"%ResultOverlap".get_node("ResultLabel").text = msg
+	Bgm.stop()
 
 	$MatchScene.terminalize()
 	if match_logger:

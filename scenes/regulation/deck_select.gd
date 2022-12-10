@@ -19,3 +19,4 @@ func _on_ReturnButton_pressed():
 
 func _on_ButtonRegulation_pressed(name : String):
 	emit_signal("regulation_button_pressed",name)
+

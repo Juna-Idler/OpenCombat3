@@ -231,7 +231,7 @@ func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
 
 
 func _on_LimitTimer_timeout():
-	if not card_manipulation:
+	if not is_valid() or not card_manipulation:
 		return
 	var hand = $UILayer/MyField/HandArea.get_reorder_hand()
 	decide_card(0,hand)

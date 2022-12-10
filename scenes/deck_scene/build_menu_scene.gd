@@ -21,7 +21,7 @@ func _ready():
 func _on_RegulationSelect_regulation_button_pressed(name):
 	if name == "newbie":
 		$Cover.show()
-		$BuildSelectScene.initialize_build(Global.regulation_newbie)
+		$BuildSelectScene.initialize_build(Global.deck_regulation_list[0])
 		$BuildSelectScene.show()
 		var tween := create_tween()
 		tween.tween_property($RegulationSelect,"modulate:a",0.0,0.5)

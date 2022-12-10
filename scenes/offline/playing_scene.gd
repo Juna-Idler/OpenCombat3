@@ -168,21 +168,21 @@ func _on_ButtonCPUDeckChange_pressed():
 
 
 func _on_ButtonRegulation_pressed():
-	$MenuLayer/Menu/RegulationSelect.initialize()
-	$MenuLayer/Menu/RegulationSelect.show()
+	$MenuLayer/RegulationSelect.initialize()
+	$MenuLayer/RegulationSelect.show()
 
 
 func _on_RegulationSelect_regulation_button_pressed(name):
-	if name == "newbie" and deck_regulation.name != name:
+	if name == "newbie":
 		$MenuLayer/Menu/ButtonRegulation/Label.text = "初級レギュレーション"
-		deck_regulation = Global.regulation_newbie
+		deck_regulation = Global.deck_regulation_list[0]
 		$MenuLayer/Menu/DeckBanner.set_deck_data(Global.deck_list[name].get_select_deck())
 		$MenuLayer/Menu/CPUDeckBanner.set_deck_data(Global.deck_list[name].get_select_deck())
-		$MenuLayer/Menu/RegulationSelect.hide()
+		$MenuLayer/RegulationSelect.hide()
 
 
 func _on_RegulationSelect_return_button_pressed():
-	$MenuLayer/Menu/RegulationSelect.hide()
+	$MenuLayer/RegulationSelect.hide()
 
 
 func _on_OptionCommander_item_selected(_index):
