@@ -2,6 +2,7 @@
 class_name RegulationData
 
 class DeckRegulation:
+	var name : String
 	 # カード総数
 	var card_count : int
 	 # カード総コスト
@@ -14,7 +15,8 @@ class DeckRegulation:
 	 # 使用可能なカードのID 二つのintで範囲（両端含む）を表す
 	var card_pool : PoolIntArray #of int [1,27,28,30] id 1-27 and id 28-30
 
-	func _init(cc:int,tc:int,l2l:int,l3l:int,cp_string : String):
+	func _init(n:String,cc:int,tc:int,l2l:int,l3l:int,cp_string : String):
+		name = n
 		card_count = cc
 		total_cost = tc
 		level2_limit = l2l
@@ -31,11 +33,11 @@ class DeckRegulation:
 				card_pool[i*2] = int(r[0])
 				card_pool[i*2+1] = int(r[1])
 
-	static func create(regulation : String) -> DeckRegulation:
+	static func create(regulation : String,n : String = "") -> DeckRegulation:
 		var p = regulation.split("/")
 		if p.size() != 5:
 			return null
-		return DeckRegulation.new(int(p[0]),int(p[1]),int(p[2]),int(p[3]),p[4])
+		return DeckRegulation.new(n,int(p[0]),int(p[1]),int(p[2]),int(p[3]),p[4])
 		
 	func to_regulation_string() -> String:
 		var cp : PoolStringArray = []
@@ -100,6 +102,7 @@ class DeckRegulation:
 
 
 class MatchRegulation:
+	var name : String
 	
 	var hand_count : int
 	
@@ -107,20 +110,21 @@ class MatchRegulation:
 	var combat_additional_time : float
 	var recovery_additional_time : float
 	
-	func _init(hc:int,tt:float,cat:float,rat:float):
+	func _init(n:String,hc:int,tt:float,cat:float,rat:float):
+		name = n
 		hand_count = hc
 		thinking_time = tt
 		combat_additional_time = cat
 		recovery_additional_time = rat
 
-	static func create(regulation : String) -> MatchRegulation:
+	static func create(regulation : String,n : String = "") -> MatchRegulation:
 		var hand = regulation.split("/")
 		if hand.size() != 2:
 			return null
 		var time = (hand[1] as String).split("+")
 		if time.size() != 3:
-			return MatchRegulation.new(int(hand[0]),-1,-1,-1)
-		return MatchRegulation.new(int(hand[0]),float(time[0]),float(time[1]),float(time[2]))
+			return MatchRegulation.new(n,int(hand[0]),-1,-1,-1)
+		return MatchRegulation.new(n,int(hand[0]),float(time[0]),float(time[1]),float(time[2]))
 	
 	func to_regulation_string() -> String:
 		return "%s/%s+%s+%s" % [hand_count,thinking_time,combat_additional_time,recovery_additional_time]

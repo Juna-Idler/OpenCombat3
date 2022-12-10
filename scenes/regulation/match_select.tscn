@@ -1,0 +1,165 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://default_theme.tres" type="Theme" id=1]
+[ext_resource path="res://scenes/regulation/match_select.gd" type="Script" id=2]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0, 0, 0, 1 )
+
+[node name="MatchRegulationSelect" type="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+custom_styles/panel = SubResource( 1 )
+script = ExtResource( 2 )
+
+[node name="ButtonBack" type="Button" parent="."]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 208.0
+margin_bottom = 64.0
+text = "BACK"
+
+[node name="ButtonDecide" type="Button" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -216.0
+margin_top = -72.0
+margin_right = -16.0
+margin_bottom = -16.0
+text = "DECIDE"
+
+[node name="ItemList" type="ItemList" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 192.0
+margin_top = 192.0
+margin_right = -320.0
+margin_bottom = -336.0
+
+[node name="ButtonDelete" type="Button" parent="."]
+margin_left = 968.0
+margin_top = 256.0
+margin_right = 1152.0
+margin_bottom = 320.0
+text = "DELETE"
+
+[node name="Panel" type="Panel" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 192.0
+margin_top = -320.0
+margin_right = -320.0
+margin_bottom = -208.0
+
+[node name="LineEdit" type="LineEdit" parent="Panel"]
+margin_left = 8.0
+margin_top = 48.0
+margin_right = 176.0
+margin_bottom = 96.0
+
+[node name="Label" type="Label" parent="Panel/LineEdit"]
+anchor_right = 1.0
+margin_top = -40.0
+text = "REG_NAME"
+align = 1
+valign = 2
+
+[node name="SpinBoxHand" type="SpinBox" parent="Panel"]
+margin_left = 192.0
+margin_top = 48.0
+margin_right = 278.0
+margin_bottom = 96.0
+min_value = 1.0
+max_value = 5.0
+value = 3.0
+rounded = true
+align = 1
+
+[node name="Label" type="Label" parent="Panel/SpinBoxHand"]
+anchor_right = 1.0
+margin_top = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Hand"
+align = 1
+valign = 2
+
+[node name="SpinBoxTime" type="SpinBox" parent="Panel"]
+margin_left = 320.0
+margin_top = 48.0
+margin_right = 448.0
+margin_bottom = 96.0
+min_value = 15.0
+max_value = 180.0
+value = 60.0
+rounded = true
+align = 1
+
+[node name="Label" type="Label" parent="Panel/SpinBoxTime"]
+anchor_right = 1.0
+margin_left = -11.5
+margin_top = -40.0
+margin_right = 11.5
+grow_horizontal = 2
+grow_vertical = 0
+text = "INITIAL_TIME"
+align = 1
+valign = 2
+
+[node name="SpinBoxCA" type="SpinBox" parent="Panel"]
+margin_left = 488.0
+margin_top = 48.0
+margin_right = 584.0
+margin_bottom = 96.0
+max_value = 60.0
+value = 10.0
+rounded = true
+align = 1
+
+[node name="Label" type="Label" parent="Panel/SpinBoxCA"]
+anchor_right = 1.0
+margin_left = -2.0
+margin_top = -40.0
+margin_right = 2.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "CA_TIME"
+align = 1
+valign = 2
+
+[node name="SpinBoxRA" type="SpinBox" parent="Panel"]
+margin_left = 608.0
+margin_top = 48.0
+margin_right = 704.0
+margin_bottom = 96.0
+max_value = 30.0
+value = 5.0
+rounded = true
+align = 1
+
+[node name="Label" type="Label" parent="Panel/SpinBoxRA"]
+anchor_right = 1.0
+margin_left = -2.0
+margin_top = -40.0
+margin_right = 2.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "RA_TIME"
+align = 1
+valign = 2
+
+[node name="ButtonAdd" type="Button" parent="."]
+margin_left = 968.0
+margin_top = 424.0
+margin_right = 1152.0
+margin_bottom = 488.0
+text = "ADD"
+
+[connection signal="pressed" from="ButtonBack" to="." method="_on_ButtonBack_pressed"]
+[connection signal="pressed" from="ButtonDecide" to="." method="_on_ButtonDecide_pressed"]
+[connection signal="pressed" from="ButtonDelete" to="." method="_on_ButtonDelete_pressed"]
+[connection signal="pressed" from="ButtonAdd" to="." method="_on_ButtonAdd_pressed"]

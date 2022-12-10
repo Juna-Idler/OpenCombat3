@@ -5,7 +5,7 @@
 [ext_resource path="res://scenes/online/playing_scene.gd" type="Script" id=3]
 [ext_resource path="res://scenes/deck_scene/banner/banner.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scenes/deck_scene/build_select_scene.tscn" type="PackedScene" id=5]
-[ext_resource path="res://scenes/deck_scene/regulation_select.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scenes/regulation/deck_select.tscn" type="PackedScene" id=6]
 
 [sub_resource type="Gradient" id=24]
 offsets = PoolRealArray( 0, 0.5, 1 )

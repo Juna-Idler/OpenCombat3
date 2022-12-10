@@ -3,18 +3,22 @@ extends Node
 
 var card_catalog := CardCatalog.new()
 
-var regulation_newbie := RegulationData.DeckRegulation.new(15,15,0,0,"1-31")
+var deck_regulation_list := [
+	RegulationData.DeckRegulation.new("newbie",15,15,0,0,"1-31"),
+]
+var match_regulation_list := [
+	RegulationData.MatchRegulation.new("newbie",3,60,15,10),
+	RegulationData.MatchRegulation.new("practiced",4,60,15,5),
+]
 
 var deck_list := {
-	"newbie":DeckList.new("user://deck_newbie.tsv")
+	"newbie":DeckList.new("user://deck_newbie.tsv"),
 }
+
 
 var replay_log_list := MatchLogList.new("user://replay_log.json")
 
-
 var game_settings := GameSettings.new()
-
-	
 
 
 func _init():

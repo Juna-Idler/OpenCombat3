@@ -7,6 +7,7 @@ var scene_changer : ISceneChanger
 var offline_server : OfflineServer
 
 var deck_regulation : RegulationData.DeckRegulation
+var match_regulation : RegulationData.MatchRegulation
 
 var select_cpu_deck : bool
 
@@ -58,10 +59,12 @@ func initialize(changer : ISceneChanger):
 	
 	offline_server = OfflineServer.new()
 
-	deck_regulation = Global.regulation_newbie
-	var deck_list = Global.deck_list["newbie"]
+	deck_regulation = Global.deck_regulation_list[0]
+	var deck_list = Global.deck_list[deck_regulation.name]
 	$MenuLayer/Menu/CPUDeckBanner.set_deck_data(deck_list.get_select_deck())
 	$MenuLayer/Menu/DeckBanner.set_deck_data(deck_list.get_select_deck())
+	
+	match_regulation = Global.match_regulation_list[0]
 
 	$MenuLayer/Menu/CheckBoxLog.pressed = Global.game_settings.offline_logging
 
@@ -116,10 +119,9 @@ func _on_ButtonStart_pressed():
 			!deck_regulation.check_regulation(cpu_deck.cards,Global.card_catalog).empty():
 		return
 	
-	var regulation = RegulationData.MatchRegulation.new(3,120,10,5)
 	var commander = commanders[$MenuLayer/Menu/OptionCommander.selected]
 	offline_server.initialize(Global.game_settings.player_name,deck.cards,commander,cpu_deck.cards,
-			deck_regulation,regulation,Global.card_catalog)
+			deck_regulation,match_regulation,Global.card_catalog)
 
 	if match_logger:
 		match_logger.terminalize()
@@ -187,3 +189,13 @@ func _on_OptionCommander_item_selected(_index):
 	pass # Replace with function body.
 
 
+
+
+func _on_ButtonMatchRegulation_pressed():
+	$MenuLayer/MatchRegulationSelect.show()
+
+
+func _on_MatchRegulationSelect_decided(m_regulation):
+	match_regulation = m_regulation
+	$MenuLayer/Menu/ButtonMatchRegulation/Label.text =\
+			 "%s\n%s" % [match_regulation.name,match_regulation.to_regulation_string()]

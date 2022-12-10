@@ -45,7 +45,7 @@ func _ready():
 	$"%CardList".large_card_view = $"%LargeCardView"
 	pass
 
-func _process(delta):
+func _process(_delta):
 	if not $LimitTimer.is_stopped():
 		$TopUILayer/Control/MyTimer.text = str(int($LimitTimer.time_left))
 
@@ -145,8 +145,8 @@ func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
 	emit_signal("performed")
 
 func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
-	$TopUILayer/Control/MyTimer.text = str(data.myself.time/1000)
-	$TopUILayer/Control/RivalTimer.text = str(data.rival.time/1000)
+	$TopUILayer/Control/MyTimer.text = str(int(data.myself.time/1000.0))
+	$TopUILayer/Control/RivalTimer.text = str(int(data.rival.time/1000.0))
 	if (not (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0)) and\
 			(not data.next_phase == IGameServer.Phase.GAME_END):
 		$LimitTimer.start(data.myself.time / 1000.0)
@@ -205,8 +205,8 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 
 
 func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
-	$TopUILayer/Control/MyTimer.text = str(data.myself.time/1000)
-	$TopUILayer/Control/RivalTimer.text = str(data.rival.time/1000)
+	$TopUILayer/Control/MyTimer.text = str(int(data.myself.time/1000.0))
+	$TopUILayer/Control/RivalTimer.text = str(int(data.rival.time/1000.0))
 	if (not (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0)) and\
 			(not data.next_phase == IGameServer.Phase.GAME_END):
 		$LimitTimer.start(data.myself.time / 1000.0)

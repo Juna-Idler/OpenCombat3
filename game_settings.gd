@@ -17,6 +17,8 @@ var server_index : int = 0
 var offline_logging : bool = false
 var online_logging : bool = false
 
+
+
 func load_config():
 	if config.load(path) != OK:
 		return
