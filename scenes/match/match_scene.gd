@@ -141,6 +141,8 @@ func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
 	phase = IGameServer.Phase.COMBAT
 	round_count = 1
 	yield(get_tree().create_timer(MatchPlayer.CARD_MOVE_DURATION), "timeout")
+	if card_manipulation:
+		$UILayer/MyField/HandArea.ban_drag(false)
 	performing = false
 	emit_signal("performed")
 
