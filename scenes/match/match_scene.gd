@@ -30,7 +30,10 @@ onready var combat_overlap := $"%CombatOverlap"
 
 onready var exit_button : Button = $"%SettingsScene".get_node("ExitButton")
 
+
 var game_server : IGameServer = null
+var deck_regulation : RegulationData.DeckRegulation
+var match_regulation : RegulationData.MatchRegulation
 
 var card_manipulation : bool
 
@@ -41,13 +44,20 @@ var rival : MatchPlayer
 
 var combat_director : CombatDirector = CombatDirector.new()
 
+
+var delay_time : float
+
 func _ready():
 	$"%CardList".large_card_view = $"%LargeCardView"
 	pass
 
 func _process(_delta):
 	if not $LimitTimer.is_stopped():
-		$TopUILayer/Control/MyTimer.text = str(int($LimitTimer.time_left))
+		var elapsed =  $LimitTimer.wait_time - $LimitTimer.time_left
+		if elapsed < delay_time:
+			$TopUILayer/Control/MyTimer.text = "%s + %s" % [int($LimitTimer.wait_time - delay_time),int(delay_time - elapsed)]
+		else:
+			$TopUILayer/Control/MyTimer.text = str(int($LimitTimer.time_left))
 
 func is_valid() -> bool:
 	return game_server != null
@@ -69,6 +79,8 @@ func initialize(server : IGameServer,manipulation : bool = true):
 		c.queue_free()
 	
 	var pd := game_server._get_primary_data()
+	deck_regulation = pd.deck_regulation
+	match_regulation = pd.match_regulation
 	myself = MatchPlayer.new(pd.my_name,
 			pd.my_deck_list,false,$CardLayer,my_stock_pos,
 			$UILayer/MyField/HandArea,
@@ -131,10 +143,10 @@ func _on_GameServer_recieved_end(msg:String)->void:
 	return
 
 func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
-	var pd := game_server._get_primary_data()
-	$TopUILayer/Control/MyTimer.text = str(pd.match_regulation.thinking_time)
-	$TopUILayer/Control/RivalTimer.text = str(pd.match_regulation.thinking_time)
-	$LimitTimer.start(pd.match_regulation.thinking_time)
+	$TopUILayer/Control/MyTimer.text = str(match_regulation.thinking_time)
+	$TopUILayer/Control/RivalTimer.text = str(match_regulation.thinking_time)
+	delay_time = match_regulation.combat_time + 1
+	$LimitTimer.start(match_regulation.thinking_time + delay_time)
 	performing = true
 	myself.standby(data.myself.life,Array(data.myself.hand))
 	rival.standby(data.rival.life,Array(data.rival.hand))
@@ -151,7 +163,9 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 	$TopUILayer/Control/RivalTimer.text = str(int(data.rival.time/1000.0))
 	if (not (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0)) and\
 			(not data.next_phase == IGameServer.Phase.GAME_END):
-		$LimitTimer.start(data.myself.time / 1000.0)
+		var skill_count := data.myself.skill_logs.size() + data.rival.skill_logs.size()
+		delay_time = match_regulation.combat_time + skill_count * 1 + 5
+		$LimitTimer.start(data.myself.time / 1000.0 + delay_time)
 	performing = true
 	var tween := create_tween()
 	myself.play(data.myself.select,data.myself.hand,data.myself.damage,
@@ -209,9 +223,12 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
 	$TopUILayer/Control/MyTimer.text = str(int(data.myself.time/1000.0))
 	$TopUILayer/Control/RivalTimer.text = str(int(data.rival.time/1000.0))
-	if (not (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0)) and\
-			(not data.next_phase == IGameServer.Phase.GAME_END):
-		$LimitTimer.start(data.myself.time / 1000.0)
+	if data.next_phase == IGameServer.Phase.COMBAT:
+		delay_time = match_regulation.combat_time + 1
+		$LimitTimer.start(data.myself.time / 1000.0 + delay_time)
+	elif data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage > 0:
+		delay_time = match_regulation.recovery_time + 1
+		$LimitTimer.start(data.myself.time / 1000.0 + delay_time)
 	performing = true
 	myself.recover(data.myself.select,data.myself.hand,data.myself.draw)
 	rival.recover(data.rival.select,data.rival.hand,data.rival.draw)

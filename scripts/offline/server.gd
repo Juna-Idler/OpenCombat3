@@ -13,6 +13,7 @@ var _result:int
 
 var _player_time : int
 var _emit_time : int
+var _delay_time : int
 
 
 func _init():
@@ -54,13 +55,18 @@ func _send_ready():
 	_emit_time = Time.get_ticks_msec()
 	emit_signal("recieved_first_data", p1first)
 	_player_time = int(match_regulation.thinking_time * 1000)
+	_delay_time = match_regulation.combat_time * 1000 + 1000
 
 
 
 func _send_combat_select(round_count:int,index:int,hands_order:PoolIntArray = []):
 	var elapsed = Time.get_ticks_msec() - _emit_time
-	_player_time -= elapsed
-	_player_time += int(match_regulation.combat_time * 1000)
+	if elapsed > _delay_time:
+		_player_time -= elapsed - _delay_time
+		if _player_time < 0:
+			index = 0
+			hands_order = []
+			_player_time = 0
 
 	var index2 = _result
 # warning-ignore:integer_division
@@ -79,15 +85,19 @@ func _send_combat_select(round_count:int,index:int,hands_order:PoolIntArray = []
 #	var p2update := UpdateData.new(_processor.round_count,_processor.phase,-_processor.situation,p2,p1)
 	_processor.reset_select()
 
+	var skill_count := p1.skill_logs.size() + p2.skill_logs.size()
+	_delay_time = skill_count * 1000 + 5000
 	if _processor.phase == Phase.COMBAT:
 		_result = _commander._combat_select(create_commander_player(_processor.player2),
 				create_commander_player(_processor.player1));
+		_delay_time += match_regulation.combat_time * 1000
 	elif _processor.phase == Phase.RECOVERY:
 		if not _processor.player2._is_recovery():
 			_result = _commander._recover_select(create_commander_player(_processor.player2),
 					create_commander_player(_processor.player1))
 		else:
 			_result = -1
+		_delay_time += match_regulation.recovery_time * 1000
 	_emit_time = Time.get_ticks_msec()
 	emit_signal("recieved_combat_result", p1update)
 
@@ -102,8 +112,12 @@ static func create_commander_player(player : MechanicsData.IPlayer) -> ICpuComma
 func _send_recovery_select(round_count:int,index:int,hands_order:PoolIntArray = []):
 	if index >= 0:
 		var elapsed = Time.get_ticks_msec() - _emit_time
-		_player_time -= elapsed
-		_player_time += int(match_regulation.recovery_time * 1000)
+		if elapsed > _delay_time:
+			_player_time -= elapsed - _delay_time
+			if _player_time < 0:
+				index = 0
+				hands_order = []
+				_player_time = 0
 	
 	var index2 = _result
 # warning-ignore:integer_division
@@ -125,12 +139,15 @@ func _send_recovery_select(round_count:int,index:int,hands_order:PoolIntArray = 
 	if _processor.phase == Phase.COMBAT:
 		_result = _commander._combat_select(create_commander_player(_processor.player2),
 				create_commander_player(_processor.player1));
+		_delay_time = match_regulation.combat_time * 1000 + 1000
 	elif _processor.phase == Phase.RECOVERY:
 		if not _processor.player2._is_recovery():
 			_result = _commander._recover_select(create_commander_player(_processor.player2),
 					create_commander_player(_processor.player1))
 		else:
 			_result = -1
+		_delay_time = match_regulation.recovery_time * 1000 + 1000
+			
 	_emit_time = Time.get_ticks_msec()
 	emit_signal("recieved_recovery_result", p1update)
 

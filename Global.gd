@@ -7,8 +7,8 @@ var deck_regulation_list := [
 	RegulationData.DeckRegulation.new("newbie",15,15,0,0,"1-31"),
 ]
 var match_regulation_list := [
-	RegulationData.MatchRegulation.new("newbie",3,60,15,10),
-	RegulationData.MatchRegulation.new("practiced",4,60,15,5),
+	RegulationData.MatchRegulation.new("newbie",3,60,10,5),
+	RegulationData.MatchRegulation.new("practiced",4,120,10,5),
 ]
 
 var deck_list := {
