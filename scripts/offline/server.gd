@@ -60,7 +60,7 @@ func _send_ready():
 func _send_combat_select(round_count:int,index:int,hands_order:PoolIntArray = []):
 	var elapsed = Time.get_ticks_msec() - _emit_time
 	_player_time -= elapsed
-	_player_time += int(match_regulation.combat_additional_time * 1000)
+	_player_time += int(match_regulation.combat_time * 1000)
 
 	var index2 = _result
 # warning-ignore:integer_division
@@ -103,7 +103,7 @@ func _send_recovery_select(round_count:int,index:int,hands_order:PoolIntArray = 
 	if index >= 0:
 		var elapsed = Time.get_ticks_msec() - _emit_time
 		_player_time -= elapsed
-		_player_time += int(match_regulation.recovery_additional_time * 1000)
+		_player_time += int(match_regulation.recovery_time * 1000)
 	
 	var index2 = _result
 # warning-ignore:integer_division

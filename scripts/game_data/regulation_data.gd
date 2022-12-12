@@ -107,27 +107,24 @@ class MatchRegulation:
 	var hand_count : int
 	
 	var thinking_time : float
-	var combat_additional_time : float
-	var recovery_additional_time : float
+	var combat_time : float
+	var recovery_time : float
 	
-	func _init(n:String,hc:int,tt:float,cat:float,rat:float):
+	func _init(n:String,hc:int,tt:float,ct:float,rt:float):
 		name = n
 		hand_count = hc
 		thinking_time = tt
-		combat_additional_time = cat
-		recovery_additional_time = rat
+		combat_time = ct
+		recovery_time = rt
 
 	static func create(regulation : String,n : String = "") -> MatchRegulation:
-		var hand = regulation.split("/")
-		if hand.size() != 2:
+		var p = regulation.split("/")
+		if p.size() < 4:
 			return null
-		var time = (hand[1] as String).split("+")
-		if time.size() != 3:
-			return MatchRegulation.new(n,int(hand[0]),-1,-1,-1)
-		return MatchRegulation.new(n,int(hand[0]),float(time[0]),float(time[1]),float(time[2]))
+		return MatchRegulation.new(n,int(p[0]),float(p[1]),float(p[2]),float(p[3]))
 	
 	func to_regulation_string() -> String:
-		return "%s/%s+%s+%s" % [hand_count,thinking_time,combat_additional_time,recovery_additional_time]
+		return "%s/%s/%s/%s" % [hand_count,thinking_time,combat_time,recovery_time]
 
 	
 
