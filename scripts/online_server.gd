@@ -83,8 +83,8 @@ func _on_data():
 			emit_signal("matched")
 
 		"First":
-			var myself = IGameServer.FirstData.PlayerData.new(data["you"]["hand"],data["you"]["life"],data["you"]["time"])
-			var rival = IGameServer.FirstData.PlayerData.new(data["rival"]["hand"],data["rival"]["life"],data["rival"]["time"])
+			var myself = IGameServer.FirstData.PlayerData.new(data["you"]["hand"],data["you"]["life"],data["you"]["time"]/1000.0)
+			var rival = IGameServer.FirstData.PlayerData.new(data["rival"]["hand"],data["rival"]["life"],data["rival"]["time"]/1000.0)
 			var first = IGameServer.FirstData.new(myself,rival)
 			emit_signal("recieved_first_data",first)
 		
@@ -97,16 +97,16 @@ func _on_data():
 				ys_logs.append(IGameServer.UpdateData.SkillLog.new(sl["i"],sl["t"],sl["p"],sl["d"]))
 			for sl in (r["s"] as Array):
 				rs_logs.append(IGameServer.UpdateData.SkillLog.new(sl["i"],sl["t"],sl["p"],sl["d"]))
-			var myself := IGameServer.UpdateData.PlayerData.new(y["h"],y["i"],ys_logs,y["dc"],y["d"],y["l"],y["t"])
-			var rival := IGameServer.UpdateData.PlayerData.new(r["h"],r["i"],rs_logs,r["dc"],r["d"],r["l"],r["t"])
+			var myself := IGameServer.UpdateData.PlayerData.new(y["h"],y["i"],ys_logs,y["dc"],y["d"],y["l"],y["t"]/1000.0)
+			var rival := IGameServer.UpdateData.PlayerData.new(r["h"],r["i"],rs_logs,r["dc"],r["d"],r["l"],r["t"]/1000.0)
 			var update := IGameServer.UpdateData.new(data["rc"],data["np"],data["ls"],myself,rival)
 			emit_signal("recieved_combat_result",update)
 				
 		"Recovery":
 			var y := data["y"] as Dictionary
 			var r := data["r"] as Dictionary
-			var myself := IGameServer.UpdateData.PlayerData.new(y["h"],y["i"],[],y["dc"],y["d"],y["l"],y["t"])
-			var rival := IGameServer.UpdateData.PlayerData.new(r["h"],r["i"],[],r["dc"],r["d"],r["l"],r["t"])
+			var myself := IGameServer.UpdateData.PlayerData.new(y["h"],y["i"],[],y["dc"],y["d"],y["l"],y["t"]/1000.0)
+			var rival := IGameServer.UpdateData.PlayerData.new(r["h"],r["i"],[],r["dc"],r["d"],r["l"],r["t"]/1000.0)
 			var update := IGameServer.UpdateData.new(data["rc"],data["np"],0,myself,rival)
 			emit_signal("recieved_recovery_result",update)
 				

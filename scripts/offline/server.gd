@@ -71,8 +71,8 @@ func _send_combat_select(round_count:int,index:int,hands_order:PoolIntArray = []
 	if elapsed > _delay_time:
 		_player_time -= elapsed - _delay_time
 		if _player_time < 0:
-			index = 0
-			hands_order = []
+#			index = 0
+#			hands_order = []
 			_player_time = 0
 
 	var index2 = _result
@@ -122,8 +122,8 @@ func _send_recovery_select(round_count:int,index:int,hands_order:PoolIntArray = 
 		if elapsed > _delay_time:
 			_player_time -= elapsed - _delay_time
 			if _player_time < 0:
-				index = 0
-				hands_order = []
+#				index = 0
+#				hands_order = []
 				_player_time = 0
 	
 	var index2 = _result

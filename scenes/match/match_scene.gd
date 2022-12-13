@@ -60,9 +60,9 @@ func _process(_delta):
 	if not $LimitTimer.is_stopped():
 		var elapsed =  $LimitTimer.wait_time - $LimitTimer.time_left
 		if elapsed < delay_time:
-			$TopUILayer/Control/MyTimer.text = "%s + %s" % [int($LimitTimer.wait_time - delay_time),int(delay_time - elapsed)]
+			$TopUILayer/Control/MyTimer.text = "%s +%.1f" % [int($LimitTimer.wait_time - delay_time),delay_time - elapsed]
 		else:
-			$TopUILayer/Control/MyTimer.text = str(int($LimitTimer.time_left))
+			$TopUILayer/Control/MyTimer.text = "%.1f" % $LimitTimer.time_left
 
 func is_valid() -> bool:
 	return game_server != null
@@ -171,13 +171,19 @@ func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
 	emit_signal("performed")
 
 func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
-	if (not (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0)) and\
-			(not data.next_phase == IGameServer.Phase.GAME_END) and data.myself.time >= 0:
+	if data.myself.time >= 0:
 		var skill_count := data.myself.skill_logs.size() + data.rival.skill_logs.size()
-		delay_time = match_regulation.combat_time + skill_count * COMBAT_SKILL_DELAY + COMBAT_RESULT_DELAY
-		$LimitTimer.start(data.myself.time + delay_time)
-	elif data.rival.time >= 0:
-		$TopUILayer/Control/RivalTimer.text = str(data.rival.time)
+		var result_delay := skill_count * COMBAT_SKILL_DELAY + COMBAT_RESULT_DELAY
+		if data.next_phase == IGameServer.Phase.COMBAT:
+			delay_time = match_regulation.combat_time + result_delay
+			$LimitTimer.start(data.myself.time + delay_time)
+		elif data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage > 0:
+			delay_time = match_regulation.recovery_time + result_delay
+			$LimitTimer.start(data.myself.time + delay_time)
+		else:
+			$TopUILayer/Control/MyTimer.text = "%.1f" % data.myself.time
+	if data.rival.time >= 0:
+		$TopUILayer/Control/RivalTimer.text = "%.1f" % data.rival.time
 	performing = true
 	var tween := create_tween()
 	myself.play(data.myself.select,data.myself.hand,data.myself.damage,
@@ -222,6 +228,10 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 	phase = data.next_phase
 	
 	yield(get_tree().create_timer(MatchPlayer.CARD_MOVE_DURATION), "timeout")
+
+# yield中にgame_serverが消えた場合。（もうちょっとやりようがありそうだがとりあえず暫定措置）
+	if not is_valid():
+		return
 	
 	if (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0):
 		game_server._send_recovery_select(data.round_count,-1)
@@ -240,8 +250,10 @@ func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
 		elif data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage > 0:
 			delay_time = match_regulation.recovery_time + RECOVER_RESULT_DELAY
 			$LimitTimer.start(data.myself.time + delay_time)
+		else:
+			$TopUILayer/Control/MyTimer.text = "%.1f" % data.myself.time
 	if data.rival.time >= 0:
-		$TopUILayer/Control/RivalTimer.text = str(int(data.rival.time))
+		$TopUILayer/Control/RivalTimer.text = "%.1f" % data.rival.time
 
 	performing = true
 	myself.recover(data.myself.select,data.myself.hand,data.myself.draw)
@@ -251,6 +263,9 @@ func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
 	phase = data.next_phase
 	
 	yield(get_tree().create_timer(MatchPlayer.CARD_MOVE_DURATION), "timeout")
+# yield中にgame_serverが消えた場合。（もうちょっとやりようがありそうだがとりあえず暫定措置）
+	if not is_valid():
+		return
 
 	if (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0):
 		game_server._send_recovery_select(data.round_count,-1)
