@@ -14,7 +14,8 @@ class TimedUpdateData:
 	func to_json_dictionary() -> Dictionary:
 		var m = _update_player_to_json(data.myself)
 		var r = _update_player_to_json(data.rival)
-		return {"t":time,"p":phase,"d":{"rc":data.round_count,"np":data.next_phase,"ls":data.situation,"m":m,"r":r}}
+		return {"t":time,"p":phase,"d":{"rc":data.round_count,
+				"np":data.next_phase,"ls":data.situation,"m":m,"r":r}}
 
 	static func from_json_dictionary(json : Dictionary) -> TimedUpdateData:
 		var d : Dictionary = json["d"]
@@ -27,13 +28,15 @@ class TimedUpdateData:
 		var logs : Array = []
 		for i in player.skill_logs:
 			logs.append({"i":i.index,"t":i.timing,"p":i.priority,"d":i.data})
-		return  {"h":player.hand,"i":player.select,"s":logs,"dc":player.draw,"d":player.damage,"l":player.life,"t":player.time}
+		return {"h":player.hand,"i":player.select,"s":logs,"dc":player.draw,
+				"d":player.damage,"l":player.life,"t":player.time}
 	
 	static func _update_player_from_json(json : Dictionary):# -> IGameServer.UpdateData.PlayerData:
 		var logs := []
 		for l in (json["s"] as Array):
 			logs.append(IGameServer.UpdateData.SkillLog.new(l["i"],l["t"],l["p"],l["d"]))
-		return IGameServer.UpdateData.PlayerData.new(json["h"],json["i"],logs,json["dc"],json["d"],json["l"],json["t"])
+		return IGameServer.UpdateData.PlayerData.new(json["h"],json["i"],logs,
+				json["dc"],json["d"],json["l"],json["t"])
 
 
 class TimedSendSelect:
@@ -99,8 +102,8 @@ func to_json_dictionary() -> Dictionary:
 			"mreg":primary_data.match_regulation.to_regulation_string()
 		},
 		"fd":{
-			"hand":first_data.myself.hand,"life":first_data.myself.life,
-			"rhand":first_data.rival.hand,"rlife":first_data.rival.life
+			"hand":first_data.myself.hand,"life":first_data.myself.life,"time":first_data.myself.time,
+			"rhand":first_data.rival.hand,"rlife":first_data.rival.life,"rtime":first_data.rival.time
 		},
 		"ud":[]
 	}
@@ -121,8 +124,8 @@ func from_json_dictionary(json : Dictionary) -> void:
 			RegulationData.DeckRegulation.create(json["pd"]["dreg"]),
 			RegulationData.MatchRegulation.create(json["pd"]["mreg"]))
 	first_data = IGameServer.FirstData.new(
-			IGameServer.FirstData.PlayerData.new(json["fd"]["hand"],json["fd"]["life"]),
-			IGameServer.FirstData.PlayerData.new(json["fd"]["rhand"],json["fd"]["rlife"]))
+			IGameServer.FirstData.PlayerData.new(json["fd"]["hand"],json["fd"]["life"],json["fd"]["time"]),
+			IGameServer.FirstData.PlayerData.new(json["fd"]["rhand"],json["fd"]["rlife"],json["fd"]["rtime"]))
 	update_data = []
 	for u in json["ud"]:
 		update_data.append(TimedUpdateData.from_json_dictionary(u))

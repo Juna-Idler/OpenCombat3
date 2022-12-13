@@ -76,10 +76,10 @@ func _send_surrender():
 	pass
 
 
-static func create_complete_board(processor : GameProcessor) -> IGameServer.CompleteData:
-	return IGameServer.CompleteData.new(processor.round_count,processor.phase,
-			create_complete_player_data(processor.player1),
-			create_complete_player_data(processor.player2))
+static func create_complete_board(p : GameProcessor) -> IGameServer.CompleteData:
+	return IGameServer.CompleteData.new(p.round_count,p.phase,
+			create_complete_player_data(p.player1),
+			create_complete_player_data(p.player2))
 
 static func create_complete_player_data(player : MechanicsData.IPlayer) -> IGameServer.CompleteData.PlayerData:
 	var al = []

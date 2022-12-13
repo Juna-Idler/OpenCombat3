@@ -83,8 +83,8 @@ func _on_data():
 			emit_signal("matched")
 
 		"First":
-			var myself = IGameServer.FirstData.PlayerData.new(data["you"]["hand"],data["you"]["life"])
-			var rival = IGameServer.FirstData.PlayerData.new(data["rival"]["hand"],data["rival"]["life"])
+			var myself = IGameServer.FirstData.PlayerData.new(data["you"]["hand"],data["you"]["life"],data["you"]["time"])
+			var rival = IGameServer.FirstData.PlayerData.new(data["rival"]["hand"],data["rival"]["life"],data["rival"]["time"])
 			var first = IGameServer.FirstData.new(myself,rival)
 			emit_signal("recieved_first_data",first)
 		

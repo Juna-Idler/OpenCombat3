@@ -48,10 +48,12 @@ class FirstData:
 	class PlayerData:
 		var hand : PoolIntArray # of int
 		var life : int
+		var time : float # thinking time
 		
-		func _init(h : PoolIntArray,l : int):
+		func _init(h : PoolIntArray,l : int,t : float):
 			hand = h
 			life = l
+			time = t
 
 	var myself:PlayerData
 	var rival:PlayerData
@@ -85,7 +87,7 @@ class UpdateData:
 		var draw:PoolIntArray # of int
 		var damage:int
 		var life:int
-		var time:int
+		var time:float # remain time
 		
 		func _init(h,s,sl,dc,d,l,t):
 			hand = h

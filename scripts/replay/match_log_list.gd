@@ -1,7 +1,7 @@
 
 class_name MatchLogList
 
-const FILE_VERSION = "Ver.regulation"
+const FILE_VERSION = "Ver.first_time"
 
 var file_path : String
 

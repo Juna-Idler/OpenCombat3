@@ -11,6 +11,11 @@ signal performed()
 var performing : bool
 
 
+const COMBAT_RESULT_DELAY = 5.0
+const COMBAT_SKILL_DELAY = 1.0
+const RECOVER_RESULT_DELAY = 1.0
+
+
 onready var my_combat_pos : Vector2 = $UILayer/MyField/Playing.rect_global_position + $UILayer/MyField/Playing.rect_size / 2
 onready var rival_combat_pos : Vector2 = $UILayer/RivalField/Playing.rect_global_position + $UILayer/RivalField/Playing.rect_size / 2
 
@@ -143,10 +148,17 @@ func _on_GameServer_recieved_end(msg:String)->void:
 	return
 
 func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
-	$TopUILayer/Control/MyTimer.text = str(match_regulation.thinking_time)
-	$TopUILayer/Control/RivalTimer.text = str(match_regulation.thinking_time)
-	delay_time = match_regulation.combat_time + 1
-	$LimitTimer.start(match_regulation.thinking_time + delay_time)
+	if data.myself.time >= 0:
+		$TopUILayer/Control/MyTimer.text = str(data.myself.time)
+		delay_time = match_regulation.combat_time + 1
+		$LimitTimer.start(data.myself.time + delay_time)
+	else:
+		$TopUILayer/Control/MyTimer.text = "∞"
+	if data.rival.time >= 0:
+		$TopUILayer/Control/RivalTimer.text = str(data.rival.time)
+	else:
+		$TopUILayer/Control/RivalTimer.text = "∞"
+	
 	performing = true
 	myself.standby(data.myself.life,Array(data.myself.hand))
 	rival.standby(data.rival.life,Array(data.rival.hand))
@@ -159,13 +171,13 @@ func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
 	emit_signal("performed")
 
 func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
-	$TopUILayer/Control/MyTimer.text = str(int(data.myself.time/1000.0))
-	$TopUILayer/Control/RivalTimer.text = str(int(data.rival.time/1000.0))
 	if (not (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0)) and\
-			(not data.next_phase == IGameServer.Phase.GAME_END):
+			(not data.next_phase == IGameServer.Phase.GAME_END) and data.myself.time >= 0:
 		var skill_count := data.myself.skill_logs.size() + data.rival.skill_logs.size()
-		delay_time = match_regulation.combat_time + skill_count * 1 + 5
-		$LimitTimer.start(data.myself.time / 1000.0 + delay_time)
+		delay_time = match_regulation.combat_time + skill_count * COMBAT_SKILL_DELAY + COMBAT_RESULT_DELAY
+		$LimitTimer.start(data.myself.time + delay_time)
+	elif data.rival.time >= 0:
+		$TopUILayer/Control/RivalTimer.text = str(data.rival.time)
 	performing = true
 	var tween := create_tween()
 	myself.play(data.myself.select,data.myself.hand,data.myself.damage,
@@ -221,14 +233,16 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 
 
 func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
-	$TopUILayer/Control/MyTimer.text = str(int(data.myself.time/1000.0))
-	$TopUILayer/Control/RivalTimer.text = str(int(data.rival.time/1000.0))
-	if data.next_phase == IGameServer.Phase.COMBAT:
-		delay_time = match_regulation.combat_time + 1
-		$LimitTimer.start(data.myself.time / 1000.0 + delay_time)
-	elif data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage > 0:
-		delay_time = match_regulation.recovery_time + 1
-		$LimitTimer.start(data.myself.time / 1000.0 + delay_time)
+	if data.myself.time >= 0:
+		if data.next_phase == IGameServer.Phase.COMBAT:
+			delay_time = match_regulation.combat_time + RECOVER_RESULT_DELAY
+			$LimitTimer.start(data.myself.time + delay_time)
+		elif data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage > 0:
+			delay_time = match_regulation.recovery_time + RECOVER_RESULT_DELAY
+			$LimitTimer.start(data.myself.time + delay_time)
+	if data.rival.time >= 0:
+		$TopUILayer/Control/RivalTimer.text = str(int(data.rival.time))
+
 	performing = true
 	myself.recover(data.myself.select,data.myself.hand,data.myself.draw)
 	rival.recover(data.rival.select,data.rival.hand,data.rival.draw)
