@@ -1,15 +1,13 @@
 extends Control
 
 
-class_name CardFront
-
 var data : CardData = null
 
 
-const CardSkillLine = preload("card_skill_line.tscn")
+const CardSkillLine = preload("res://scenes/card/card_skill_line.tscn")
 
 
-func initialize_card(cd : CardData,rotate := false) -> CardFront:
+func initialize_card(cd : CardData,rotate := false):
 	for c in $Skills.get_children():
 		$Skills.remove_child(c)
 		c.queue_free()
@@ -54,7 +52,6 @@ func initialize_card(cd : CardData,rotate := false) -> CardFront:
 		$BlockLabel.rect_position += Vector2(0,0)
 		$LevelLabel.rect_rotation = 180
 
-	return self
 
 
 func _ready():

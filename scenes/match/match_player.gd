@@ -8,6 +8,8 @@ const CardScene = preload("../card/card.tscn")
 
 const CARD_MOVE_DURATION : float = 1.0
 
+const ALWAYS_CARD_VISIBLE = false
+
 var deck_list : Array # of Card
 
 var hand : Array = [] # of int
@@ -76,7 +78,7 @@ func _init(name : String,
 				Global.card_catalog.get_card_data(dl[i]),reverse) as Card
 		deck_list.append(c)
 		c.position = s_pos
-		c.visible = false
+		c.visible = ALWAYS_CARD_VISIBLE
 		card_layer.add_child(c)
 			
 	player_name = name
@@ -157,7 +159,7 @@ func play_end():
 
 func _set_played_visible():
 	if played.size() >= 2:
-		deck_list[played[played.size()-2]].hide()
+		deck_list[played[played.size()-2]].visible = ALWAYS_CARD_VISIBLE
 	
 
 func recover(hand_select : int,new_hand : Array,draw_indexes : Array):
@@ -202,7 +204,7 @@ func discard_card(hand_index : int,duration : float):
 
 func _set_discard_visible():
 	if discard.size() >= 2:
-		deck_list[discard[discard.size()-2]].hide()
+		deck_list[discard[discard.size()-2]].visible = ALWAYS_CARD_VISIBLE
 
 
 func set_next_effect_label():
@@ -269,7 +271,7 @@ func reset_board(h_card:PoolIntArray,p_card:PoolIntArray,d_card:PoolIntArray,
 
 	for i in played.size():
 		var c := deck_list[played[i]] as Card
-		c.visible = i >= played.size() - 1
+		c.visible = ALWAYS_CARD_VISIBLE or i >= played.size() - 1
 		c.z_index = i + 0
 		c.location = Card.Location.PLAYED
 		tween.tween_property(c,"global_position",played_pos,CARD_MOVE_DURATION)
@@ -277,7 +279,7 @@ func reset_board(h_card:PoolIntArray,p_card:PoolIntArray,d_card:PoolIntArray,
 	
 	for i in discard.size():
 		var c := deck_list[discard[i]] as Card
-		c.visible = i >= discard.size() - 1
+		c.visible = ALWAYS_CARD_VISIBLE or i >= discard.size() - 1
 		c.z_index = i + 200
 		c.location = Card.Location.DISCARD
 		tween.tween_property(c,"global_position",discard_pos,CARD_MOVE_DURATION)
@@ -286,7 +288,7 @@ func reset_board(h_card:PoolIntArray,p_card:PoolIntArray,d_card:PoolIntArray,
 	var cards := []
 	for i in hand.size():
 		var c := deck_list[hand[i]] as Card
-		c.show()
+		c.visible = true
 		c.z_index = i + 100
 		c.location = Card.Location.HAND
 		tween.tween_property(c,"rotation",0.0,CARD_MOVE_DURATION)
@@ -304,13 +306,16 @@ func reset_board(h_card:PoolIntArray,p_card:PoolIntArray,d_card:PoolIntArray,
 	for c_ in deck_list:
 		var c := c_ as Card
 		if c.location == Card.Location.STOCK:
-			tween.tween_callback(c,"hide")
+			if not ALWAYS_CARD_VISIBLE:
+				tween.tween_callback(c,"hide")
 		elif c.location == Card.Location.PLAYED:
 			if c.id_in_deck != played.back():
-				tween.tween_callback(c,"hide")
+				if not ALWAYS_CARD_VISIBLE:
+					tween.tween_callback(c,"hide")
 		elif c.location == Card.Location.DISCARD:
 			if c.id_in_deck != discard.back():
-				tween.tween_callback(c,"hide")
+				if not ALWAYS_CARD_VISIBLE:
+					tween.tween_callback(c,"hide")
 
 	life_label.text = "%d / %d" % [life,stock_count]
 	damage_label.text = str(damage) if damage > 0 else ""

@@ -4,12 +4,6 @@
 [ext_resource path="res://scenes/card/card_front.gd" type="Script" id=2]
 [ext_resource path="res://scenes/card/card_frame.png" type="Texture" id=4]
 
-[sub_resource type="DynamicFont" id=1]
-size = 10
-outline_size = 1
-outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 1 )
-
 [sub_resource type="DynamicFont" id=3]
 size = 22
 outline_size = 2
@@ -24,6 +18,11 @@ font_data = ExtResource( 1 )
 
 [sub_resource type="DynamicFont" id=2]
 size = 15
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=1]
+size = 10
+outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 1 )
 
 [node name="CardFront" type="Control"]
@@ -64,6 +63,122 @@ mouse_filter = 2
 custom_constants/separation = 4
 alignment = 2
 
+[node name="Power" type="Polygon2D" parent="."]
+position = Vector2( 18, 18 )
+polygon = PoolVector2Array( -10, -14, -14, -10, -14, 10, -10, 14, 10, 14, 14, 10, 14, -10, 10, -14 )
+
+[node name="Line2D" type="Line2D" parent="Power"]
+visible = false
+self_modulate = Color( 0, 0, 0, 0.501961 )
+points = PoolVector2Array( 0, -14, -10, -14, -14, -10, -14, 10, -10, 14, 10, 14, 14, 10, 14, -10, 10, -14, 0, -14 )
+width = 1.0
+default_color = Color( 1, 1, 1, 1 )
+antialiased = true
+
+[node name="Hit" type="Polygon2D" parent="."]
+position = Vector2( 18, 49 )
+polygon = PoolVector2Array( 0, -16, -12, 4, -4, 12, 4, 12, 12, 4 )
+
+[node name="Line2D" type="Line2D" parent="Hit"]
+visible = false
+self_modulate = Color( 0, 0, 0, 0.501961 )
+points = PoolVector2Array( 0, 12, 4, 12, 12, 4, 0, -16, -12, 4, -4, 12, 0, 12 )
+width = 0.5
+default_color = Color( 1, 1, 1, 1 )
+antialiased = true
+
+[node name="Block" type="Polygon2D" parent="."]
+position = Vector2( 18, 76 )
+polygon = PoolVector2Array( 4, 12, 12, 0, 8, -12, -8, -12, -12, 0, -4, 12 )
+
+[node name="Line2D" type="Line2D" parent="Block"]
+visible = false
+self_modulate = Color( 0, 0, 0, 0.501961 )
+points = PoolVector2Array( 0, -12, 8, -12, 12, 0, 4, 12, -4, 12, -12, 0, -8, -12, 0, -12 )
+width = 0.5
+default_color = Color( 1, 1, 1, 1 )
+joint_mode = 2
+antialiased = true
+
+[node name="Level" type="Polygon2D" parent="."]
+position = Vector2( 128, 16 )
+polygon = PoolVector2Array( 2, -12, 7, -10, 10, -7, 12, -2, 12, 2, 10, 7, 7, 10, 2, 12, -2, 12, -7, 10, -10, 7, -12, 2, -12, -2, -10, -7, -7, -10, -2, -12 )
+
+[node name="Line2D" type="Line2D" parent="Level"]
+visible = false
+self_modulate = Color( 0, 0, 0, 0.501961 )
+points = PoolVector2Array( 0, -12, 2, -12, 7, -10, 10, -7, 12, -2, 12, 2, 10, 7, 7, 10, 2, 12, -2, 12, -7, 10, -10, 7, -12, 2, -12, -2, -10, -7, -7, -10, -2, -12, 0, -12 )
+width = 1.0
+default_color = Color( 1, 1, 1, 1 )
+antialiased = true
+
+[node name="PowerLabel" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -74.0
+margin_top = -110.0
+margin_right = -34.0
+margin_bottom = -70.0
+rect_pivot_offset = Vector2( 20, 20 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "1"
+align = 1
+valign = 1
+
+[node name="HitLabel" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -70.0
+margin_top = -75.0
+margin_right = -38.0
+margin_bottom = -43.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_pivot_offset = Vector2( 16, 16 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "1"
+align = 1
+valign = 1
+
+[node name="BlockLabel" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -70.0
+margin_top = -48.0
+margin_right = -38.0
+margin_bottom = -16.0
+rect_pivot_offset = Vector2( 16, 16 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "0"
+align = 1
+valign = 1
+max_lines_visible = 1
+
+[node name="LevelLabel" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 44.0
+margin_top = -104.0
+margin_right = 68.0
+margin_bottom = -80.0
+rect_pivot_offset = Vector2( 12, 12 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 2 )
+text = "1"
+align = 1
+valign = 1
+
 [node name="Name" type="Label" parent="."]
 anchor_top = 1.0
 anchor_right = 1.0
@@ -79,115 +194,3 @@ text = "Card Name"
 align = 1
 valign = 1
 max_lines_visible = 1
-
-[node name="Power" type="Polygon2D" parent="."]
-position = Vector2( 18, 18 )
-polygon = PoolVector2Array( -10, -14, -14, -10, -14, 10, -10, 14, 10, 14, 14, 10, 14, -10, 10, -14 )
-
-[node name="Line2D" type="Line2D" parent="Power"]
-self_modulate = Color( 0, 0, 0, 0.501961 )
-points = PoolVector2Array( 0, -14, -10, -14, -14, -10, -14, 10, -10, 14, 10, 14, 14, 10, 14, -10, 10, -14, 0, -14 )
-width = 1.0
-default_color = Color( 1, 1, 1, 1 )
-antialiased = true
-
-[node name="Label" type="Label" parent="Power"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -20.0
-margin_top = -20.0
-margin_right = 20.0
-margin_bottom = 20.0
-rect_pivot_offset = Vector2( 20, 20 )
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_fonts/font = SubResource( 3 )
-text = "1"
-align = 1
-valign = 1
-
-[node name="Hit" type="Polygon2D" parent="."]
-position = Vector2( 18, 49 )
-polygon = PoolVector2Array( 0, -16, -12, 4, -4, 12, 4, 12, 12, 4 )
-
-[node name="Line2D" type="Line2D" parent="Hit"]
-self_modulate = Color( 0, 0, 0, 0.501961 )
-points = PoolVector2Array( 0, 12, 4, 12, 12, 4, 0, -16, -12, 4, -4, 12, 0, 12 )
-width = 0.5
-default_color = Color( 1, 1, 1, 1 )
-antialiased = true
-
-[node name="Label" type="Label" parent="Hit"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -16.0
-margin_top = -16.0
-margin_right = 16.0
-margin_bottom = 16.0
-grow_horizontal = 2
-grow_vertical = 2
-rect_pivot_offset = Vector2( 16, 16 )
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_fonts/font = SubResource( 4 )
-text = "1"
-align = 1
-valign = 1
-
-[node name="Block" type="Polygon2D" parent="."]
-position = Vector2( 18, 76 )
-polygon = PoolVector2Array( 4, 12, 12, 0, 8, -12, -8, -12, -12, 0, -4, 12 )
-
-[node name="Line2D" type="Line2D" parent="Block"]
-self_modulate = Color( 0, 0, 0, 0.501961 )
-points = PoolVector2Array( 0, -12, 8, -12, 12, 0, 4, 12, -4, 12, -12, 0, -8, -12, 0, -12 )
-width = 0.5
-default_color = Color( 1, 1, 1, 1 )
-joint_mode = 2
-antialiased = true
-
-[node name="Label" type="Label" parent="Block"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -16.0
-margin_top = -16.0
-margin_right = 16.0
-margin_bottom = 16.0
-rect_pivot_offset = Vector2( 16, 16 )
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_fonts/font = SubResource( 4 )
-text = "0"
-align = 1
-valign = 1
-max_lines_visible = 1
-
-[node name="Level" type="Polygon2D" parent="."]
-position = Vector2( 128, 16 )
-polygon = PoolVector2Array( 2, -12, 7, -10, 10, -7, 12, -2, 12, 2, 10, 7, 7, 10, 2, 12, -2, 12, -7, 10, -10, 7, -12, 2, -12, -2, -10, -7, -7, -10, -2, -12 )
-
-[node name="Line2D" type="Line2D" parent="Level"]
-self_modulate = Color( 0, 0, 0, 0.501961 )
-points = PoolVector2Array( 0, -12, 2, -12, 7, -10, 10, -7, 12, -2, 12, 2, 10, 7, 7, 10, 2, 12, -2, 12, -7, 10, -10, 7, -12, 2, -12, -2, -10, -7, -7, -10, -2, -12, 0, -12 )
-width = 1.0
-default_color = Color( 1, 1, 1, 1 )
-antialiased = true
-
-[node name="Label" type="Label" parent="Level"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -12.0
-margin_top = -12.0
-margin_right = 12.0
-margin_bottom = 12.0
-rect_pivot_offset = Vector2( 12, 12 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 2 )
-text = "1"
-align = 1
-valign = 1

@@ -285,7 +285,6 @@ func _on_LimitTimer_timeout():
 
 func _on_GameServer_recieved_complete_board(data:IGameServer.CompleteData)->void:
 	performing = true
-	var tween = create_tween()
 	myself.reset_board(data.myself.hand,data.myself.played,data.myself.discard,
 			data.myself.stock,data.myself.life,data.myself.damage,
 			data.myself.next_effect,data.myself.affected_list)

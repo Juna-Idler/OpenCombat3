@@ -5,7 +5,7 @@
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=3]
 
 [sub_resource type="StyleBoxFlat" id=8]
-bg_color = Color( 1, 1, 1, 0.752941 )
+bg_color = Color( 1, 1, 1, 0.9 )
 
 [sub_resource type="Theme" id=7]
 RichTextLabel/colors/default_color = Color( 0, 0, 0, 1 )
@@ -14,7 +14,6 @@ TooltipLabel/fonts/font = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=9]
 size = 11
-outline_size = 1
 font_data = ExtResource( 3 )
 
 [node name="SkillLine" type="Panel"]
