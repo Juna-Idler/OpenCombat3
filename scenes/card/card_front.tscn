@@ -67,50 +67,46 @@ alignment = 2
 position = Vector2( 18, 18 )
 polygon = PoolVector2Array( -10, -14, -14, -10, -14, 10, -10, 14, 10, 14, 14, 10, 14, -10, 10, -14 )
 
-[node name="Line2D" type="Line2D" parent="Power"]
-visible = false
-self_modulate = Color( 0, 0, 0, 0.501961 )
-points = PoolVector2Array( 0, -14, -10, -14, -14, -10, -14, 10, -10, 14, 10, 14, 14, 10, 14, -10, 10, -14, 0, -14 )
-width = 1.0
-default_color = Color( 1, 1, 1, 1 )
-antialiased = true
-
 [node name="Hit" type="Polygon2D" parent="."]
 position = Vector2( 18, 49 )
 polygon = PoolVector2Array( 0, -16, -12, 4, -4, 12, 4, 12, 12, 4 )
-
-[node name="Line2D" type="Line2D" parent="Hit"]
-visible = false
-self_modulate = Color( 0, 0, 0, 0.501961 )
-points = PoolVector2Array( 0, 12, 4, 12, 12, 4, 0, -16, -12, 4, -4, 12, 0, 12 )
-width = 0.5
-default_color = Color( 1, 1, 1, 1 )
-antialiased = true
 
 [node name="Block" type="Polygon2D" parent="."]
 position = Vector2( 18, 76 )
 polygon = PoolVector2Array( 4, 12, 12, 0, 8, -12, -8, -12, -12, 0, -4, 12 )
 
-[node name="Line2D" type="Line2D" parent="Block"]
-visible = false
-self_modulate = Color( 0, 0, 0, 0.501961 )
-points = PoolVector2Array( 0, -12, 8, -12, 12, 0, 4, 12, -4, 12, -12, 0, -8, -12, 0, -12 )
-width = 0.5
-default_color = Color( 1, 1, 1, 1 )
-joint_mode = 2
-antialiased = true
-
 [node name="Level" type="Polygon2D" parent="."]
 position = Vector2( 128, 16 )
 polygon = PoolVector2Array( 2, -12, 7, -10, 10, -7, 12, -2, 12, 2, 10, 7, 7, 10, 2, 12, -2, 12, -7, 10, -10, 7, -12, 2, -12, -2, -10, -7, -7, -10, -2, -12 )
 
-[node name="Line2D" type="Line2D" parent="Level"]
-visible = false
+[node name="PowerLine2D" type="Line2D" parent="."]
 self_modulate = Color( 0, 0, 0, 0.501961 )
+position = Vector2( 18, 18 )
+points = PoolVector2Array( 0, -14, -10, -14, -14, -10, -14, 10, -10, 14, 10, 14, 14, 10, 14, -10, 10, -14, 0, -14 )
+width = 1.0
+default_color = Color( 1, 1, 1, 1 )
+
+[node name="HitLine2D" type="Line2D" parent="."]
+self_modulate = Color( 0, 0, 0, 0.501961 )
+position = Vector2( 18, 49 )
+points = PoolVector2Array( 0, 12, 4, 12, 12, 4, 0, -16, -12, 4, -4, 12, 0, 12 )
+width = 0.5
+default_color = Color( 1, 1, 1, 1 )
+
+[node name="BlockLine2D" type="Line2D" parent="."]
+self_modulate = Color( 0, 0, 0, 0.501961 )
+position = Vector2( 18, 76 )
+points = PoolVector2Array( 0, -12, 8, -12, 12, 0, 4, 12, -4, 12, -12, 0, -8, -12, 0, -12 )
+width = 0.5
+default_color = Color( 1, 1, 1, 1 )
+joint_mode = 2
+
+[node name="LevelLine2D" type="Line2D" parent="."]
+self_modulate = Color( 0, 0, 0, 0.501961 )
+position = Vector2( 128, 16 )
 points = PoolVector2Array( 0, -12, 2, -12, 7, -10, 10, -7, 12, -2, 12, 2, 10, 7, 7, 10, 2, 12, -2, 12, -7, 10, -10, 7, -12, 2, -12, -2, -10, -7, -7, -10, -2, -12, 0, -12 )
 width = 1.0
 default_color = Color( 1, 1, 1, 1 )
-antialiased = true
 
 [node name="PowerLabel" type="Label" parent="."]
 anchor_left = 0.5
