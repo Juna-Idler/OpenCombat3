@@ -143,6 +143,7 @@ func terminalize():
 
 
 func _on_GameServer_recieved_end(msg:String)->void:
+	$LimitTimer.stop()
 	emit_signal("ended",-2,msg)
 	$TopUILayer/Control/SettingButton.disabled = true
 	return
@@ -212,17 +213,16 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 		$TopUILayer/Control/SettingButton.disabled = true
 		return
 
-	tween = create_tween()
-	myself.play_end(tween)
-	rival.play_end(tween)
+	myself.play_end()
+	rival.play_end()
 	
 	myself.set_next_effect_label()
 	rival.set_next_effect_label()
+	tween = create_tween()
 	tween.parallel()
 	tween.tween_property(myself.next_effect_label,"modulate:a",1.0,0.5)
 	tween.parallel()
 	tween.tween_property(rival.next_effect_label,"modulate:a",1.0,0.5)
-
 	
 	round_count = data.round_count
 	phase = data.next_phase
@@ -286,13 +286,18 @@ func _on_LimitTimer_timeout():
 func _on_GameServer_recieved_complete_board(data:IGameServer.CompleteData)->void:
 	performing = true
 	var tween = create_tween()
-	tween.set_parallel(true)
 	myself.reset_board(data.myself.hand,data.myself.played,data.myself.discard,
 			data.myself.stock,data.myself.life,data.myself.damage,
-			data.myself.next_effect,data.myself.affected_list,tween)
+			data.myself.next_effect,data.myself.affected_list)
 	rival.reset_board(data.rival.hand,data.rival.played,data.rival.discard,
 			data.rival.stock,data.rival.life,data.rival.damage,
-			data.rival.next_effect,data.rival.affected_list,tween)
+			data.rival.next_effect,data.rival.affected_list)
+
+	yield(get_tree().create_timer(MatchPlayer.CARD_MOVE_DURATION), "timeout")
+# yield中にgame_serverが消えた場合。（もうちょっとやりようがありそうだがとりあえず暫定措置）
+	if not is_valid():
+		return
+			
 	round_count = data.round_count
 	phase = data.next_phase
 	if (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0):
@@ -302,7 +307,6 @@ func _on_GameServer_recieved_complete_board(data:IGameServer.CompleteData)->void
 	else:
 		if card_manipulation:
 			$UILayer/MyField/HandArea.ban_drag(false)
-	yield(tween,"finished")
 	performing = false
 	emit_signal("performed")
 

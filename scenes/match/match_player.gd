@@ -137,21 +137,27 @@ func play(hand_select : int,new_hand : Array,d : int,draw_indexes : Array,s_log 
 	multiply_hit = 1
 	multiply_block = 1
 
-func play_end(tween : SceneTreeTween):
+func play_end():
 	played.append(playing_card_id)
 	playing_card.z_index = played.size() + 0
 	playing_card.location = Card.Location.PLAYED
+	var tween := playing_card.create_tween()
 	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 	tween.parallel()
 	tween.tween_property(playing_card,"global_position",played_pos,0.5)
 	tween.parallel()
 	tween.tween_property(playing_card,"rotation",PI/2,0.5)
+	tween.tween_callback(self,"_set_played_visible")
 	draw_all_card()
 	life_label.text = "%d / %d" % [life,stock_count]
 	damage_label.text = str(damage) if damage > 0 else ""
 
 	playing_card_id = -1
 	playing_card = null
+
+func _set_played_visible():
+	if played.size() >= 2:
+		deck_list[played[played.size()-2]].hide()
 	
 
 func recover(hand_select : int,new_hand : Array,draw_indexes : Array):
@@ -192,6 +198,12 @@ func discard_card(hand_index : int,duration : float):
 	card.location = Card.Location.DISCARD
 	var tween := card.create_tween()
 	tween.tween_property(card,"global_position",discard_pos,duration)
+	tween.tween_callback(self,"_set_discard_visible")
+
+func _set_discard_visible():
+	if discard.size() >= 2:
+		deck_list[discard[discard.size()-2]].hide()
+
 
 func set_next_effect_label():
 	next_effect_label.set_effect(next_effect)
@@ -228,7 +240,7 @@ func multiply_attribute(power : float, hit : float, block : float):
 
 func reset_board(h_card:PoolIntArray,p_card:PoolIntArray,d_card:PoolIntArray,
 		s_count:int,l_count:int,d_count:int,
-		n_effect:IGameServer.CompleteData.Affected,a_list:Array,tween : SceneTreeTween):
+		n_effect:IGameServer.CompleteData.Affected,a_list:Array):
 	hand = Array(h_card)
 	played = Array(p_card)
 	discard = Array(d_card)
@@ -246,31 +258,35 @@ func reset_board(h_card:PoolIntArray,p_card:PoolIntArray,d_card:PoolIntArray,
 
 	for c_ in deck_list:
 		var c := c_ as Card
+		if c.location != Card.Location.STOCK:
+			c.show()
 		c.location = Card.Location.STOCK
 #		c.position = stock_pos
-		c.visible = true
 #		c.rotation = 0
+
+	var tween := (deck_list[0] as Node).create_tween()
+	tween.set_parallel(true)
 
 	for i in played.size():
 		var c := deck_list[played[i]] as Card
+		c.visible = i >= played.size() - 1
 		c.z_index = i + 0
 		c.location = Card.Location.PLAYED
-#		c.global_position = played_pos
-#		c.rotation = PI/2
 		tween.tween_property(c,"global_position",played_pos,CARD_MOVE_DURATION)
 		tween.tween_property(c,"rotation",PI/2.0,CARD_MOVE_DURATION)
 	
 	for i in discard.size():
 		var c := deck_list[discard[i]] as Card
+		c.visible = i >= discard.size() - 1
 		c.z_index = i + 200
 		c.location = Card.Location.DISCARD
-#		c.global_position = discard_pos
 		tween.tween_property(c,"global_position",discard_pos,CARD_MOVE_DURATION)
 		tween.tween_property(c,"rotation",0.0,CARD_MOVE_DURATION)
 	
 	var cards := []
 	for i in hand.size():
 		var c := deck_list[hand[i]] as Card
+		c.show()
 		c.z_index = i + 100
 		c.location = Card.Location.HAND
 		tween.tween_property(c,"rotation",0.0,CARD_MOVE_DURATION)
@@ -283,6 +299,18 @@ func reset_board(h_card:PoolIntArray,p_card:PoolIntArray,d_card:PoolIntArray,
 		if c.location == Card.Location.STOCK:
 			tween.tween_property(c,"position",stock_pos,CARD_MOVE_DURATION)
 			tween.tween_property(c,"rotation",0.0,CARD_MOVE_DURATION)
+
+	tween.set_parallel(false)
+	for c_ in deck_list:
+		var c := c_ as Card
+		if c.location == Card.Location.STOCK:
+			tween.tween_callback(c,"hide")
+		elif c.location == Card.Location.PLAYED:
+			if c.id_in_deck != played.back():
+				tween.tween_callback(c,"hide")
+		elif c.location == Card.Location.DISCARD:
+			if c.id_in_deck != discard.back():
+				tween.tween_callback(c,"hide")
 
 	life_label.text = "%d / %d" % [life,stock_count]
 	damage_label.text = str(damage) if damage > 0 else ""

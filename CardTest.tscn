@@ -1,8 +1,8 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://scenes/deck_scene/theme.tres" type="Theme" id=1]
 [ext_resource path="res://CardTest.gd" type="Script" id=2]
-[ext_resource path="res://images/triangle.png" type="Texture" id=3]
+[ext_resource path="res://scenes/card/card.tscn" type="PackedScene" id=3]
 
 [sub_resource type="StyleBoxFlat" id=1]
 draw_center = false
@@ -36,20 +36,11 @@ fill = 1
 fill_from = Vector2( 0.5, 0.5 )
 repeat = 2
 
-[sub_resource type="CanvasItemMaterial" id=7]
-blend_mode = 1
-
-[sub_resource type="Curve" id=8]
-_data = [ Vector2( 0, 1 ), 0.0, 0.0855005, 0, 0, Vector2( 0.543933, 0.619318 ), -0.488863, -0.488863, 0, 0, Vector2( 1, 0 ), -4.37014, 0.0, 0, 0 ]
-
-[sub_resource type="Gradient" id=9]
-offsets = PoolRealArray( 0.638889, 1 )
-colors = PoolColorArray( 1, 1, 1, 1, 0, 0, 0, 0 )
-
 [node name="Node" type="Node"]
 script = ExtResource( 2 )
 
 [node name="Panel" type="Panel" parent="."]
+visible = false
 margin_left = 696.0
 margin_top = 72.0
 margin_right = 888.0
@@ -69,10 +60,11 @@ margin_right = 533.0
 margin_bottom = 192.0
 theme = ExtResource( 1 )
 bbcode_enabled = true
-bbcode_text = "bbcodeてｓきすががががががが"
+bbcode_text = "bbcodeてｓ[color=red]き[/color]すががががががが"
 text = "bbcodeてｓきすががががががが"
 
 [node name="TabContainer" type="TabContainer" parent="Panel2"]
+visible = false
 margin_left = 29.0
 margin_top = 120.0
 margin_right = 482.0
@@ -82,7 +74,7 @@ margin_bottom = 328.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
-margin_top = 24.0
+margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
 
@@ -96,27 +88,16 @@ margin_right = -4.0
 margin_bottom = -4.0
 
 [node name="Sprite" type="Sprite" parent="."]
+visible = false
 position = Vector2( 992, 352 )
 texture = SubResource( 4 )
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
+visible = false
 position = Vector2( 832, 272 )
 texture = SubResource( 6 )
 polygon = PoolVector2Array( -8, -8, 32, -88, 72, -8, 144, 32, 72, 72, 32, 128, -8, 72, -80, 32 )
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
-material = SubResource( 7 )
-position = Vector2( 744, 344 )
-amount = 16
-draw_order = 1
-texture = ExtResource( 3 )
-flag_align_y = true
-spread = 180.0
-gravity = Vector2( 0, 0 )
-initial_velocity = 100.0
-scale_amount = 0.05
-scale_amount_curve = SubResource( 8 )
-color = Color( 1, 0, 0, 1 )
-color_ramp = SubResource( 9 )
-hue_variation = 1.0
-hue_variation_random = 1.0
+[node name="Card" parent="." instance=ExtResource( 3 )]
+visible = false
+position = Vector2( 584, 336 )

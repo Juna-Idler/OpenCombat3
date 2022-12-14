@@ -98,6 +98,7 @@ func _on_MatchScene_ended(situation, msg):
 	if match_logger:
 		Global.replay_log_list.append(match_logger.match_log)
 		Global.replay_log_list.save_list()
+	$MatchScene.terminalize()
 
 
 func _on_ReturnButton_pressed():
@@ -150,20 +151,20 @@ func _on_BuildSelectScene_decided(index):
 			deck_list.select = index
 			deck_list.save_deck_list()
 			$MenuLayer/Menu/DeckBanner.set_deck_data(deck_list.get_select_deck())
-		$MenuLayer/Menu/BuildSelectScene.hide()
+		$MenuLayer/BuildSelectScene.hide()
 
 func _on_BuildSelectScene_return_button_pressed():
-	$MenuLayer/Menu/BuildSelectScene.hide()
+	$MenuLayer/BuildSelectScene.hide()
 
 func _on_ButtonDeckChange_pressed():
 	select_cpu_deck = false
-	$MenuLayer/Menu/BuildSelectScene.initialize_select(deck_regulation)
-	$MenuLayer/Menu/BuildSelectScene.show()
+	$MenuLayer/BuildSelectScene.initialize_select(deck_regulation)
+	$MenuLayer/BuildSelectScene.show()
 
 func _on_ButtonCPUDeckChange_pressed():
 	select_cpu_deck = true
-	$MenuLayer/Menu/BuildSelectScene.initialize_select(deck_regulation)
-	$MenuLayer/Menu/BuildSelectScene.show()
+	$MenuLayer/BuildSelectScene.initialize_select(deck_regulation)
+	$MenuLayer/BuildSelectScene.show()
 
 
 

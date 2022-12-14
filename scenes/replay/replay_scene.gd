@@ -53,6 +53,7 @@ func _on_ReplayMenu_start_pressed(selected):
 	$"%HSliderSpeed".editable = true
 	$"%ButtonNoWait".pressed = false
 	$"%ButtonPause".pressed = false
+	$CanvasLayer/Panel/TabContainer.current_tab = 0
 	replay_mode = ReplayMode.AUTO
 	duration_last_performing = 0
 	performing_durations.clear()

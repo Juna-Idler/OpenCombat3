@@ -92,7 +92,7 @@ func restore_card():
 
 func reset_card(ci):
 	ci.card.z_index = ci.o_z_index
-	ci.visible = ci.o_visible
+	ci.card.visible = ci.o_visible
 
 
 func _on_ListItem_clicked(_self):

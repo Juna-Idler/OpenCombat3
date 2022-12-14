@@ -131,7 +131,7 @@ func _on_Server_disconnected():
 	$MenuLayer/Menu/Matching.disabled = true
 	pass
 
-func _on_Server_recieved_end():
+func _on_Server_recieved_end(_msg:String):
 	if not $MatchScene.is_valid():
 		$MenuLayer/Menu/Matching.disabled = false
 		$MenuLayer/Menu/ButtonRegulation.disabled = false
