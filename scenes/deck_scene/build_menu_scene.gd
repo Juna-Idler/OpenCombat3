@@ -9,7 +9,7 @@ var scene_changer : ISceneChanger
 
 func initialize(changer : ISceneChanger):
 	scene_changer = changer
-	$RegulationSelect.initialize()
+	$RegulationSelect.initialize(0)
 
 func _terminalize():
 	pass
@@ -18,10 +18,10 @@ func _ready():
 	pass
 
 
-func _on_RegulationSelect_regulation_button_pressed(name):
-	if name == "newbie":
+func _on_RegulationSelect_decide_button_pressed():
+	if $RegulationSelect.deck_regulation:
 		$Cover.show()
-		$BuildSelectScene.initialize_build(Global.deck_regulation_list[0])
+		$BuildSelectScene.initialize_build($RegulationSelect.deck_regulation)
 		$BuildSelectScene.show()
 		var tween := create_tween()
 		tween.tween_property($RegulationSelect,"modulate:a",0.0,0.5)
@@ -41,4 +41,5 @@ func _on_BuildSelectScene_return_button_pressed():
 	tween.tween_property($RegulationSelect,"modulate:a",1.0,0.5)
 	tween.tween_callback($BuildSelectScene,"hide")
 	tween.tween_callback($Cover,"hide")
+
 

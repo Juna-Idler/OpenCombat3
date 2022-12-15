@@ -58,7 +58,7 @@ margin_bottom = -208.0
 [node name="LineEdit" type="LineEdit" parent="Panel"]
 margin_left = 8.0
 margin_top = 48.0
-margin_right = 176.0
+margin_right = 184.0
 margin_bottom = 96.0
 
 [node name="Label" type="Label" parent="Panel/LineEdit"]
@@ -69,9 +69,9 @@ align = 1
 valign = 2
 
 [node name="SpinBoxHand" type="SpinBox" parent="Panel"]
-margin_left = 192.0
+margin_left = 200.0
 margin_top = 48.0
-margin_right = 278.0
+margin_right = 286.0
 margin_bottom = 96.0
 min_value = 1.0
 max_value = 5.0
@@ -84,7 +84,7 @@ anchor_right = 1.0
 margin_top = -40.0
 grow_horizontal = 2
 grow_vertical = 0
-text = "Hand"
+text = "HAND"
 align = 1
 valign = 2
 
@@ -111,9 +111,9 @@ align = 1
 valign = 2
 
 [node name="SpinBoxCA" type="SpinBox" parent="Panel"]
-margin_left = 488.0
+margin_left = 496.0
 margin_top = 48.0
-margin_right = 584.0
+margin_right = 592.0
 margin_bottom = 96.0
 max_value = 60.0
 value = 10.0
@@ -132,9 +132,9 @@ align = 1
 valign = 2
 
 [node name="SpinBoxRA" type="SpinBox" parent="Panel"]
-margin_left = 608.0
+margin_left = 640.0
 margin_top = 48.0
-margin_right = 704.0
+margin_right = 736.0
 margin_bottom = 96.0
 max_value = 30.0
 value = 5.0

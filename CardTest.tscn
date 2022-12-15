@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://scenes/deck_scene/theme.tres" type="Theme" id=1]
 [ext_resource path="res://CardTest.gd" type="Script" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://scenes/card/card_frame.png" type="Texture" id=5]
 [ext_resource path="res://test_font.tres" type="DynamicFont" id=6]
 [ext_resource path="res://scenes/card/card_front.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Number.png" type="Texture" id=8]
 
 [sub_resource type="StyleBoxFlat" id=1]
 draw_center = false
@@ -149,18 +150,6 @@ mouse_filter = 2
 texture = ExtResource( 5 )
 stretch_mode = 6
 
-[node name="Skills" type="VBoxContainer" parent="CardFront"]
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 7.0
-margin_top = -116.0
-margin_right = -7.0
-margin_bottom = -24.0
-mouse_filter = 2
-custom_constants/separation = 4
-alignment = 2
-
 [node name="Power" type="Polygon2D" parent="CardFront"]
 position = Vector2( 18, 18 )
 polygon = PoolVector2Array( -10, -14, -14, -10, -14, 10, -10, 14, 10, 14, 14, 10, 14, -10, 10, -14 )
@@ -178,42 +167,35 @@ position = Vector2( 128, 16 )
 polygon = PoolVector2Array( 2, -12, 7, -10, 10, -7, 12, -2, 12, 2, 10, 7, 7, 10, 2, 12, -2, 12, -7, 10, -10, 7, -12, 2, -12, -2, -10, -7, -7, -10, -2, -12 )
 
 [node name="Line2DPower" type="Line2D" parent="CardFront"]
-visible = false
 position = Vector2( 18, 18 )
 points = PoolVector2Array( 0, -14, -10, -14, -14, -10, -14, 10, -10, 14, 10, 14, 14, 10, 14, -10, 10, -14, 0, -14 )
-width = 1.0
+width = 1.5
 default_color = Color( 0, 0, 0, 1 )
-antialiased = true
 
 [node name="Line2DHit" type="Line2D" parent="CardFront"]
-visible = false
 self_modulate = Color( 0, 0, 0, 0.501961 )
 position = Vector2( 18, 49 )
 points = PoolVector2Array( 0, 12, 4, 12, 12, 4, 0, -16, -12, 4, -4, 12, 0, 12 )
-width = 0.5
+width = 2.0
 default_color = Color( 1, 1, 1, 1 )
-antialiased = true
 
 [node name="Line2DBlock" type="Line2D" parent="CardFront"]
-visible = false
 self_modulate = Color( 0, 0, 0, 0.501961 )
 position = Vector2( 18, 76 )
 points = PoolVector2Array( 0, -12, 8, -12, 12, 0, 4, 12, -4, 12, -12, 0, -8, -12, 0, -12 )
-width = 0.5
+width = 2.0
 default_color = Color( 1, 1, 1, 1 )
 joint_mode = 2
-antialiased = true
 
 [node name="Line2DLevel" type="Line2D" parent="CardFront"]
-visible = false
 self_modulate = Color( 0, 0, 0, 0.501961 )
 position = Vector2( 128, 16 )
 points = PoolVector2Array( 0, -12, 2, -12, 7, -10, 10, -7, 12, -2, 12, 2, 10, 7, 7, 10, 2, 12, -2, 12, -7, 10, -10, 7, -12, 2, -12, -2, -10, -7, -7, -10, -2, -12, 0, -12 )
-width = 1.0
+width = 2.0
 default_color = Color( 1, 1, 1, 1 )
-antialiased = true
 
 [node name="PowerLabel" type="Label" parent="CardFront"]
+visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -229,6 +211,7 @@ align = 1
 valign = 1
 
 [node name="HitLabel" type="Label" parent="CardFront"]
+visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -247,6 +230,7 @@ align = 1
 valign = 1
 
 [node name="BlockLabel" type="Label" parent="CardFront"]
+visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -279,6 +263,18 @@ text = "1"
 align = 1
 valign = 1
 
+[node name="Skills" type="VBoxContainer" parent="CardFront"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 7.0
+margin_top = -116.0
+margin_right = -7.0
+margin_bottom = -24.0
+mouse_filter = 2
+custom_constants/separation = 4
+alignment = 2
+
 [node name="Name" type="Label" parent="CardFront"]
 anchor_top = 1.0
 anchor_right = 1.0
@@ -294,3 +290,23 @@ text = "Card Name"
 align = 1
 valign = 1
 max_lines_visible = 1
+
+[node name="Number" type="Sprite" parent="."]
+position = Vector2( 18, 18 )
+scale = Vector2( 0.16, 0.16 )
+texture = ExtResource( 8 )
+hframes = 10
+
+[node name="Number2" type="Sprite" parent="."]
+position = Vector2( 18, 49 )
+scale = Vector2( 0.12, 0.12 )
+texture = ExtResource( 8 )
+hframes = 10
+frame = 1
+
+[node name="Number3" type="Sprite" parent="."]
+position = Vector2( 18, 75 )
+scale = Vector2( 0.12, 0.12 )
+texture = ExtResource( 8 )
+hframes = 10
+frame = 1

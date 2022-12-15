@@ -34,13 +34,13 @@ gradient = SubResource( 19 )
 fill_to = Vector2( 0, 1 )
 
 [sub_resource type="DynamicFont" id=22]
-size = 80
-outline_size = 5
+size = 64
+outline_size = 4
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=23]
-size = 140
+size = 128
 outline_size = 5
 font_data = ExtResource( 2 )
 
@@ -87,7 +87,7 @@ margin_top = -24.0
 margin_right = 136.0
 margin_bottom = 1.0
 grow_vertical = 0
-text = "Game Speed"
+text = "GAME_SPEED"
 align = 1
 valign = 2
 
@@ -182,7 +182,7 @@ margin_top = 576.0
 margin_right = 896.0
 margin_bottom = 701.0
 custom_fonts/font = SubResource( 22 )
-text = "Return"
+text = "BACK"
 
 [node name="ResultLabel" type="Label" parent="Panel/ResultOverlap"]
 margin_left = 256.0

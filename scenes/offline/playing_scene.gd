@@ -63,10 +63,16 @@ func initialize(changer : ISceneChanger):
 	var deck_list = Global.deck_list[deck_regulation.name]
 	$MenuLayer/Menu/CPUDeckBanner.set_deck_data(deck_list.get_select_deck())
 	$MenuLayer/Menu/DeckBanner.set_deck_data(deck_list.get_select_deck())
+	$MenuLayer/Menu/ButtonRegulation.text = deck_regulation.name
 	
 	match_regulation = Global.match_regulation_list[0]
+	$MenuLayer/Menu/ButtonMatchRegulation.text =\
+			 "%s %s" % [match_regulation.name,match_regulation.to_regulation_string()]
 
 	$MenuLayer/Menu/CheckBoxLog.pressed = Global.game_settings.offline_logging
+
+	$"%ResultOverlap".hide()
+	$MenuLayer/Menu.show()
 
 
 func _terminalize():
@@ -143,7 +149,7 @@ func _on_ButtonStart_pressed():
 
 
 func _on_BuildSelectScene_decided(index):
-	var deck_list = Global.deck_list["newbie"]
+	var deck_list = Global.deck_list[deck_regulation.name]
 	if index >= 0 and index < deck_list.list.size():
 		if select_cpu_deck:
 			$MenuLayer/Menu/CPUDeckBanner.set_deck_data(deck_list.list[index])
@@ -169,27 +175,22 @@ func _on_ButtonCPUDeckChange_pressed():
 
 
 func _on_ButtonRegulation_pressed():
-	$MenuLayer/RegulationSelect.initialize()
+	$MenuLayer/RegulationSelect.initialize(0)
 	$MenuLayer/RegulationSelect.show()
 
 
-func _on_RegulationSelect_regulation_button_pressed(name):
-	if name == "newbie":
-		$MenuLayer/Menu/ButtonRegulation/Label.text = "初級レギュレーション"
-		deck_regulation = Global.deck_regulation_list[0]
-		$MenuLayer/Menu/DeckBanner.set_deck_data(Global.deck_list[name].get_select_deck())
-		$MenuLayer/Menu/CPUDeckBanner.set_deck_data(Global.deck_list[name].get_select_deck())
+func _on_RegulationSelect_decide_button_pressed():
+	var reg = $MenuLayer/RegulationSelect.deck_regulation
+	if reg:
+		$MenuLayer/Menu/ButtonRegulation.text = reg.name
+		deck_regulation = reg
+		$MenuLayer/Menu/DeckBanner.set_deck_data(Global.deck_list[reg.name].get_select_deck())
+		$MenuLayer/Menu/CPUDeckBanner.set_deck_data(Global.deck_list[reg.name].get_select_deck())
 		$MenuLayer/RegulationSelect.hide()
 
 
 func _on_RegulationSelect_return_button_pressed():
 	$MenuLayer/RegulationSelect.hide()
-
-
-func _on_OptionCommander_item_selected(_index):
-	pass # Replace with function body.
-
-
 
 
 func _on_ButtonMatchRegulation_pressed():
@@ -198,5 +199,6 @@ func _on_ButtonMatchRegulation_pressed():
 
 func _on_MatchRegulationSelect_decided(m_regulation):
 	match_regulation = m_regulation
-	$MenuLayer/Menu/ButtonMatchRegulation/Label.text =\
-			 "%s\n%s" % [match_regulation.name,match_regulation.to_regulation_string()]
+	$MenuLayer/Menu/ButtonMatchRegulation.text =\
+			 "%s %s" % [match_regulation.name,match_regulation.to_regulation_string()]
+

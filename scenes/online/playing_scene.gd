@@ -19,7 +19,9 @@ func initialize(s : OnlineServer,changer : ISceneChanger):
 	deck_regulation = Global.deck_regulation_list[0]
 	match_regulation = Global.match_regulation_list[0]
 	scene_changer = changer
-	$MenuLayer/Menu/DeckBanner.set_deck_data(Global.deck_list["newbie"].get_select_deck())
+
+	$MenuLayer/Menu/ButtonRegulation.text = deck_regulation.name
+	$MenuLayer/Menu/DeckBanner.set_deck_data(Global.deck_list[deck_regulation.name].get_select_deck())
 	
 	server.connect("connected",self,"_on_Server_connected")
 	server.connect("matched",self,"_on_Server_matched")
@@ -34,10 +36,13 @@ func initialize(s : OnlineServer,changer : ISceneChanger):
 		$MenuLayer/Menu/Matching.disabled = false
 
 	$MenuLayer/Menu/CheckButtonSaveLog.pressed = Global.game_settings.online_logging
-	
+
 	$MatchScene.exit_button.connect("pressed",self,"_on_ExitButton_pressed")
 	$MatchScene.exit_button.text = "SURRENDER"
-	
+
+	$"%ResultOverlap".hide()
+	$MenuLayer/Menu.show()
+
 
 func _terminalize():
 	server.disconnect("connected",self,"_on_Server_connected")
@@ -72,10 +77,10 @@ func _on_ButtonDeckChange_pressed():
 	$MenuLayer/BuildSelectScene.show()
 
 func _on_BuildSelectScene_decided(index):
-	if index >= 0 and index < Global.deck_list["newbie"].list.size():
-		Global.deck_list["newbie"].select = index
-		Global.deck_list["newbie"].save_deck_list()
-		$MenuLayer/Menu/DeckBanner.set_deck_data(Global.deck_list["newbie"].get_select_deck())
+	if index >= 0 and index < Global.deck_list[deck_regulation.name].list.size():
+		Global.deck_list[deck_regulation.name].select = index
+		Global.deck_list[deck_regulation.name].save_deck_list()
+		$MenuLayer/Menu/DeckBanner.set_deck_data(Global.deck_list[deck_regulation.name].get_select_deck())
 		$MenuLayer/BuildSelectScene.hide()
 		
 func _on_BuildSelectScene_return_button_pressed():
@@ -83,15 +88,18 @@ func _on_BuildSelectScene_return_button_pressed():
 
 
 func _on_ButtonRegulation_pressed():
-	$MenuLayer/RegulationSelect.initialize()
+	$MenuLayer/RegulationSelect.initialize(0)
 	$MenuLayer/RegulationSelect.show()
 
-func _on_RegulationSelect_regulation_button_pressed(name):
-	if name == "newbie":
-		$MenuLayer/Menu/ButtonRegulation.text = "初級レギュレーション"
-		deck_regulation = Global.deck_regulation_list[0]
-		$MenuLayer/Menu/DeckBanner.set_deck_data(Global.deck_list[name].get_select_deck())
+
+func _on_RegulationSelect_decide_button_pressed():
+	var dr = $MenuLayer/RegulationSelect.deck_regulation
+	if dr:
+		$MenuLayer/Menu/ButtonRegulation.text = dr.name
+		deck_regulation = dr
+		$MenuLayer/Menu/DeckBanner.set_deck_data(Global.deck_list[dr.name].get_select_deck())
 		$MenuLayer/RegulationSelect.hide()
+
 
 func _on_RegulationSelect_return_button_pressed():
 	$MenuLayer/RegulationSelect.hide()

@@ -25,13 +25,13 @@ gradient = SubResource( 26 )
 fill_to = Vector2( 0, 1 )
 
 [sub_resource type="DynamicFont" id=22]
-size = 80
-outline_size = 5
+size = 64
+outline_size = 4
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 1 )
 
 [sub_resource type="DynamicFont" id=23]
-size = 140
+size = 128
 outline_size = 5
 font_data = ExtResource( 1 )
 
@@ -78,7 +78,7 @@ margin_top = 576.0
 margin_right = 896.0
 margin_bottom = 701.0
 custom_fonts/font = SubResource( 22 )
-text = "Return"
+text = "BACK"
 
 [node name="ResultLabel" type="Label" parent="Panel/ResultOverlap"]
 margin_left = 256.0
@@ -112,26 +112,11 @@ margin_top = 304.0
 margin_right = 448.0
 margin_bottom = 448.0
 
-[node name="Label" type="Label" parent="MenuLayer/Menu/ButtonRegulation"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-text = "初級レギュレーション"
-align = 1
-valign = 1
-
 [node name="ButtonMatchRegulation" type="Button" parent="MenuLayer/Menu"]
 margin_left = 64.0
 margin_top = 464.0
 margin_right = 448.0
 margin_bottom = 608.0
-
-[node name="Label" type="Label" parent="MenuLayer/Menu/ButtonMatchRegulation"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-text = "手札枚数
-制限時間"
-align = 1
-valign = 1
 
 [node name="DeckBanner" parent="MenuLayer/Menu" instance=ExtResource( 4 )]
 anchor_left = 0.5
@@ -184,12 +169,14 @@ items = [ "Zero", null, false, 0, null, "Random", null, false, 1, null ]
 selected = 1
 
 [node name="CheckBoxLog" type="CheckButton" parent="MenuLayer/Menu"]
-margin_left = 944.0
+margin_left = 943.0
 margin_top = 384.0
-margin_right = 1216.0
+margin_right = 1215.0
 margin_bottom = 448.0
+grow_horizontal = 0
 pressed = true
-text = "プレイを記録する"
+text = "RECORD_LOG"
+align = 2
 
 [node name="BuildSelectScene" parent="MenuLayer" instance=ExtResource( 5 )]
 visible = false
@@ -208,9 +195,8 @@ visible = false
 [connection signal="pressed" from="MenuLayer/Menu/DeckBanner/ButtonDeckChange" to="." method="_on_ButtonDeckChange_pressed"]
 [connection signal="pressed" from="MenuLayer/Menu/CPUDeckBanner/ButtonCPUDeckChange" to="." method="_on_ButtonCPUDeckChange_pressed"]
 [connection signal="pressed" from="MenuLayer/Menu/ButtonStart" to="." method="_on_ButtonStart_pressed"]
-[connection signal="item_selected" from="MenuLayer/Menu/OptionCommander" to="." method="_on_OptionCommander_item_selected"]
 [connection signal="decided" from="MenuLayer/BuildSelectScene" to="." method="_on_BuildSelectScene_decided"]
 [connection signal="return_button_pressed" from="MenuLayer/BuildSelectScene" to="." method="_on_BuildSelectScene_return_button_pressed"]
-[connection signal="regulation_button_pressed" from="MenuLayer/RegulationSelect" to="." method="_on_RegulationSelect_regulation_button_pressed"]
+[connection signal="decide_button_pressed" from="MenuLayer/RegulationSelect" to="." method="_on_RegulationSelect_decide_button_pressed"]
 [connection signal="return_button_pressed" from="MenuLayer/RegulationSelect" to="." method="_on_RegulationSelect_return_button_pressed"]
 [connection signal="decided" from="MenuLayer/MatchRegulationSelect" to="." method="_on_MatchRegulationSelect_decided"]

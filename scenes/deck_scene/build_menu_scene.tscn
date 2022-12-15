@@ -18,5 +18,5 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [connection signal="return_button_pressed" from="BuildSelectScene" to="." method="_on_BuildSelectScene_return_button_pressed"]
-[connection signal="regulation_button_pressed" from="RegulationSelect" to="." method="_on_RegulationSelect_regulation_button_pressed"]
+[connection signal="decide_button_pressed" from="RegulationSelect" to="." method="_on_RegulationSelect_decide_button_pressed"]
 [connection signal="return_button_pressed" from="RegulationSelect" to="." method="_on_RegulationSelect_return_button_pressed"]

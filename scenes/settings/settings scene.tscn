@@ -53,10 +53,10 @@ align = 1
 placeholder_text = "NAME"
 
 [node name="Label" type="Label" parent="LineEditName"]
-margin_left = -192.0
-margin_right = -8.0
+margin_left = -200.0
+margin_right = -16.0
 margin_bottom = 48.0
-text = "YOUR_NAME:"
+text = "YOUR_NAME"
 align = 2
 valign = 1
 
@@ -209,7 +209,7 @@ margin_left = 8.0
 margin_top = -24.0
 margin_right = 328.0
 margin_bottom = 24.0
-text = "OFFLINE_LOG"
+text = "VS_CPU"
 align = 2
 
 [node name="CheckButtonOnline" type="CheckButton" parent="LoggingPanel"]
@@ -221,7 +221,7 @@ margin_left = -328.0
 margin_top = -24.0
 margin_right = -8.0
 margin_bottom = 24.0
-text = "OFFLINE_LOG"
+text = "VS_ONLINE"
 align = 2
 
 [node name="Label" type="Label" parent="LoggingPanel"]
@@ -230,7 +230,7 @@ margin_left = -192.0
 margin_right = -8.0
 grow_horizontal = 0
 grow_vertical = 2
-text = "DEF_LOGGING"
+text = "RECORD_LOG"
 align = 2
 valign = 1
 

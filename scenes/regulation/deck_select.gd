@@ -1,22 +1,42 @@
 extends Panel
 
 signal return_button_pressed()
-signal regulation_button_pressed(name)
+signal decide_button_pressed()
 
 
-func initialize():
-	pass
+var deck_regulation : RegulationData.DeckRegulation
+
+func initialize(index : int):
+	deck_regulation = Global.deck_regulation_list[index]
+	_set_label()
 
 func _ready():
-# warning-ignore:return_value_discarded
-	$ButtonNewbie.connect("pressed",self,"_on_ButtonRegulation_pressed",["newbie"])
-	pass
+	for i in Global.deck_regulation_list:
+		var r := (i as RegulationData.DeckRegulation)
+		var b := Button.new()
+		b.text = r.name
+		b.rect_min_size = Vector2(320,128)
+		b.connect("pressed",self,"_on_ButtonRegulation_pressed",[r])
+		$ScrollContainer/HBoxContainer.add_child(b)
+
+
+func _on_ButtonRegulation_pressed(dr : RegulationData.DeckRegulation):
+	deck_regulation = dr
+	_set_label()
 
 
 func _on_ReturnButton_pressed():
 	emit_signal("return_button_pressed")
 
+func _on_ButtonDecide_pressed():
+	emit_signal("decide_button_pressed")
 
-func _on_ButtonRegulation_pressed(name : String):
-	emit_signal("regulation_button_pressed",name)
+func _set_label():
+	$LabelInformation.text =\
+		tr("CARDS") + " : %s\n" % deck_regulation.card_count +\
+		tr("COST") + " ： %s\n" % deck_regulation.total_cost +\
+		tr("LEVEL2") + " ： %s\n" % deck_regulation.level2_limit +\
+		tr("LELEL3") + " ： %s\n" % deck_regulation.level3_limit +\
+		tr("CARD_ID") + " ： %s\n" % deck_regulation.card_pool_string()
 
+	

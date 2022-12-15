@@ -40,13 +40,16 @@ class DeckRegulation:
 		return DeckRegulation.new(n,int(p[0]),int(p[1]),int(p[2]),int(p[3]),p[4])
 		
 	func to_regulation_string() -> String:
+		return "%s/%s/%s/%s/%s" % [card_count,total_cost,level2_limit,level3_limit,card_pool_string()]
+
+	func card_pool_string():
 		var cp : PoolStringArray = []
 		for i in card_pool.size()/2:
 			if card_pool[i*2] == card_pool[i*2+1]:
 				cp.append(str(card_pool[i*2]))
 			else:
 				cp.append("%s-%s" % [card_pool[i*2],card_pool[i*2+1]])
-		return "%s/%s/%s/%s/%s" % [card_count,total_cost,level2_limit,level3_limit,cp.join(" ")]
+		return cp.join(" ")
 
 	enum Regulation_Failed {
 		CARD_COUNT,

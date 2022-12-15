@@ -24,3 +24,23 @@ NO_COLOR,無色,No Color
 RED,赤,Red
 GREEN,緑,Green
 BLUE,青,Blue
+REPLAY,リプレイ,Replay
+RECORD_LOG,リプレイログ保存,Record Log
+ONLINE_SERVER,対戦サーバアドレス,Match Server URL
+SAVE_DIR,保存ディレクトリ,Save Directory
+ADD,追加,Add
+START,開始,Start
+LEVEL2,レベル2,Level2
+LEVEL3,レベル3,Level3
+CARD_ID,カードプールID,Card Pool ID
+DECIDE,決定,Decide
+REG_NAME,名前,Name
+HAND,手札,Hand
+INITIAL_TIME,初期時間,Initial Time
+CA_TIME,コンバット,Combat
+RA_TIME,リカバリー,Recovery
+YOUR_NAME,名前,Name
+PAUSE,停止,Pause
+NO_WAIT,スキップ,No Wait
+EXIT,終了,Exit
+GAME_SPEED,再生スピード,Game Speed
