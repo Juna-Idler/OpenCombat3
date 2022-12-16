@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://scenes/deck_scene/theme.tres" type="Theme" id=1]
 [ext_resource path="res://CardTest.gd" type="Script" id=2]
@@ -8,6 +8,8 @@
 [ext_resource path="res://test_font.tres" type="DynamicFont" id=6]
 [ext_resource path="res://scenes/card/card_front.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Number.png" type="Texture" id=8]
+[ext_resource path="res://fonts/dynamicfont.tres" type="DynamicFont" id=9]
+[ext_resource path="res://scenes/card/card_skill_line.gd" type="Script" id=10]
 
 [sub_resource type="StyleBoxFlat" id=1]
 draw_center = false
@@ -52,6 +54,15 @@ font_data = ExtResource( 4 )
 size = 10
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 4 )
+
+[sub_resource type="Theme" id=10]
+RichTextLabel/colors/default_color = Color( 0, 0, 0, 1 )
+RichTextLabel/fonts/normal_font = ExtResource( 9 )
+TooltipLabel/fonts/font = ExtResource( 9 )
+
+[sub_resource type="DynamicFont" id=9]
+size = 11
 font_data = ExtResource( 4 )
 
 [node name="Node" type="Node"]
@@ -118,12 +129,17 @@ texture = SubResource( 6 )
 polygon = PoolVector2Array( -8, -8, 32, -88, 72, -8, 144, 32, 72, 72, 32, 128, -8, 72, -80, 32 )
 
 [node name="CardFront2" parent="." instance=ExtResource( 7 )]
-visible = false
 margin_left = 192.0
 margin_right = 336.0
 margin_bottom = 216.0
 
+[node name="CardFront3" parent="." instance=ExtResource( 7 )]
+margin_left = 376.0
+margin_right = 520.0
+margin_bottom = 216.0
+
 [node name="CardFront" type="Control" parent="."]
+visible = false
 rect_min_size = Vector2( 144, 216 )
 rect_pivot_offset = Vector2( 72, 108 )
 rect_clip_content = true
@@ -194,6 +210,32 @@ points = PoolVector2Array( 0, -12, 2, -12, 7, -10, 10, -7, 12, -2, 12, 2, 10, 7,
 width = 2.0
 default_color = Color( 1, 1, 1, 1 )
 
+[node name="Polygon2D2" type="Polygon2D" parent="CardFront"]
+position = Vector2( 74, 12 )
+texture = ExtResource( 8 )
+texture_offset = Vector2( 50, 0 )
+polygon = PoolVector2Array( -50, 0, 50, 0, 50, 160, -50, 160 )
+
+[node name="Number" type="Sprite" parent="CardFront"]
+position = Vector2( 18, 18 )
+scale = Vector2( 0.16, 0.16 )
+texture = ExtResource( 8 )
+hframes = 10
+
+[node name="Number2" type="Sprite" parent="CardFront"]
+position = Vector2( 18, 49 )
+scale = Vector2( 0.12, 0.12 )
+texture = ExtResource( 8 )
+hframes = 10
+frame = 1
+
+[node name="Number3" type="Sprite" parent="CardFront"]
+position = Vector2( 18, 75 )
+scale = Vector2( 0.12, 0.12 )
+texture = ExtResource( 8 )
+hframes = 10
+frame = 1
+
 [node name="PowerLabel" type="Label" parent="CardFront"]
 visible = false
 anchor_left = 0.5
@@ -248,6 +290,7 @@ valign = 1
 max_lines_visible = 1
 
 [node name="LevelLabel" type="Label" parent="CardFront"]
+visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -264,6 +307,7 @@ align = 1
 valign = 1
 
 [node name="Skills" type="VBoxContainer" parent="CardFront"]
+visible = false
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -276,6 +320,7 @@ custom_constants/separation = 4
 alignment = 2
 
 [node name="Name" type="Label" parent="CardFront"]
+visible = false
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -291,22 +336,43 @@ align = 1
 valign = 1
 max_lines_visible = 1
 
-[node name="Number" type="Sprite" parent="."]
-position = Vector2( 18, 18 )
-scale = Vector2( 0.16, 0.16 )
-texture = ExtResource( 8 )
-hframes = 10
+[node name="SkillLine" type="ColorRect" parent="."]
+visible = false
+margin_right = 130.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 0, 20 )
+rect_pivot_offset = Vector2( 65, 10 )
+mouse_filter = 2
+color = Color( 1, 1, 1, 0.9 )
+script = ExtResource( 10 )
 
-[node name="Number2" type="Sprite" parent="."]
-position = Vector2( 18, 49 )
-scale = Vector2( 0.12, 0.12 )
-texture = ExtResource( 8 )
-hframes = 10
-frame = 1
+[node name="Label" type="Label" parent="SkillLine"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_right = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_pivot_offset = Vector2( 55, 10 )
+theme = SubResource( 10 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 9 )
+text = "強化(力+1 打+1 突+1)"
 
-[node name="Number3" type="Sprite" parent="."]
-position = Vector2( 18, 75 )
-scale = Vector2( 0.12, 0.12 )
-texture = ExtResource( 8 )
-hframes = 10
-frame = 1
+[node name="ColorRectLeft" type="ColorRect" parent="SkillLine"]
+anchor_bottom = 1.0
+margin_left = -2.0
+margin_top = 3.0
+margin_right = 8.0
+margin_bottom = -3.0
+mouse_filter = 2
+
+[node name="ColorRectRight" type="ColorRect" parent="SkillLine"]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -8.0
+margin_top = 5.0
+margin_right = 6.0
+margin_bottom = -5.0
+mouse_filter = 2

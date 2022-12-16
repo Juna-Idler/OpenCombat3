@@ -1,24 +1,10 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=1]
 [ext_resource path="res://scenes/card/card_front.gd" type="Script" id=2]
+[ext_resource path="res://scenes/card/NumberOL.png" type="Texture" id=3]
 [ext_resource path="res://scenes/card/card_frame.png" type="Texture" id=4]
-
-[sub_resource type="DynamicFont" id=3]
-size = 22
-outline_size = 2
-outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 1 )
-
-[sub_resource type="DynamicFont" id=4]
-size = 18
-outline_size = 2
-outline_color = Color( 0, 0, 0, 0.752941 )
-font_data = ExtResource( 1 )
-
-[sub_resource type="DynamicFont" id=2]
-size = 15
-font_data = ExtResource( 1 )
+[ext_resource path="res://scenes/card/Number.png" type="Texture" id=5]
 
 [sub_resource type="DynamicFont" id=1]
 size = 10
@@ -50,18 +36,6 @@ anchor_bottom = 1.0
 mouse_filter = 2
 texture = ExtResource( 4 )
 stretch_mode = 6
-
-[node name="Skills" type="VBoxContainer" parent="."]
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 7.0
-margin_top = -116.0
-margin_right = -7.0
-margin_bottom = -24.0
-mouse_filter = 2
-custom_constants/separation = 4
-alignment = 2
 
 [node name="Power" type="Polygon2D" parent="."]
 position = Vector2( 18, 18 )
@@ -108,72 +82,38 @@ points = PoolVector2Array( 0, -12, 2, -12, 7, -10, 10, -7, 12, -2, 12, 2, 10, 7,
 width = 1.0
 default_color = Color( 1, 1, 1, 1 )
 
-[node name="PowerLabel" type="Label" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -74.0
-margin_top = -110.0
-margin_right = -34.0
-margin_bottom = -70.0
-rect_pivot_offset = Vector2( 20, 20 )
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_fonts/font = SubResource( 3 )
-text = "1"
-align = 1
-valign = 1
+[node name="SpriteLevel" type="Sprite" parent="."]
+self_modulate = Color( 0, 0, 0, 1 )
+position = Vector2( 128, 16 )
+texture = ExtResource( 5 )
+hframes = 10
 
-[node name="HitLabel" type="Label" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -70.0
-margin_top = -75.0
-margin_right = -38.0
-margin_bottom = -43.0
-grow_horizontal = 2
-grow_vertical = 2
-rect_pivot_offset = Vector2( 16, 16 )
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_fonts/font = SubResource( 4 )
-text = "1"
-align = 1
-valign = 1
+[node name="SpritePower" type="Sprite" parent="."]
+position = Vector2( 18, 18 )
+texture = ExtResource( 3 )
+hframes = 10
 
-[node name="BlockLabel" type="Label" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -70.0
-margin_top = -48.0
-margin_right = -38.0
-margin_bottom = -16.0
-rect_pivot_offset = Vector2( 16, 16 )
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_fonts/font = SubResource( 4 )
-text = "0"
-align = 1
-valign = 1
-max_lines_visible = 1
+[node name="SpriteHit" type="Sprite" parent="."]
+position = Vector2( 18, 49 )
+texture = ExtResource( 3 )
+hframes = 10
 
-[node name="LevelLabel" type="Label" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = 44.0
-margin_top = -104.0
-margin_right = 68.0
-margin_bottom = -80.0
-rect_pivot_offset = Vector2( 12, 12 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 2 )
-text = "1"
-align = 1
-valign = 1
+[node name="SpriteBlock" type="Sprite" parent="."]
+position = Vector2( 18, 75 )
+texture = ExtResource( 3 )
+hframes = 10
+
+[node name="Skills" type="VBoxContainer" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 7.0
+margin_top = -116.0
+margin_right = -7.0
+margin_bottom = -24.0
+mouse_filter = 2
+custom_constants/separation = 4
+alignment = 2
 
 [node name="Name" type="Label" parent="."]
 anchor_top = 1.0

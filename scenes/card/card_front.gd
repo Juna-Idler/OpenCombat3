@@ -16,10 +16,10 @@ func initialize_card(cd : CardData,rotate := false) -> CardFront:
 
 	data = cd
 	if cd == null:
-		$PowerLabel.text = ""
-		$HitLabel.text = ""
-		$BlockLabel.text = ""
-		$LevelLabel.text = ""
+		$SpritePower.frame = 0
+		$SpriteHit.frame = 0
+		$SpriteBlock.frame = 0
+		$SpriteLevel.frame = 0
 		$Name.text = ""
 		$Picture.texture = null
 		$Frame.self_modulate = Color.white
@@ -28,10 +28,10 @@ func initialize_card(cd : CardData,rotate := false) -> CardFront:
 		$Block.self_modulate = Color.white
 		return self
 
-	$PowerLabel.text = str(data.power)
-	$HitLabel.text = str(data.hit)
-	$BlockLabel.text = str(data.block)
-	$LevelLabel.text = str(data.level)
+	$SpritePower.frame = data.power
+	$SpriteHit.frame = data.hit
+	$SpriteBlock.frame = data.block
+	$SpriteLevel.frame = data.level
 	$Name.text = data.name
 #	ResourceLoader.load_interactive
 	$Picture.texture = load("res://card_images/"+ data.image +".png")
@@ -47,12 +47,10 @@ func initialize_card(cd : CardData,rotate := false) -> CardFront:
 	if rotate:
 		rect_rotation = 180
 		$Name.rect_rotation = 180
-		$PowerLabel.rect_rotation = 180
-		$HitLabel.rect_rotation = 180
-		$HitLabel.rect_position += Vector2(0,0)
-		$BlockLabel.rect_rotation = 180
-		$BlockLabel.rect_position += Vector2(0,0)
-		$LevelLabel.rect_rotation = 180
+		$SpritePower.rotation_degrees = 180
+		$SpriteHit.rotation_degrees = 180
+		$SpriteBlock.rotation_degrees = 180
+		$SpriteLevel.rotation_degrees = 180
 
 	return self
 

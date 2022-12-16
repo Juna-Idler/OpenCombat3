@@ -1,0 +1,19 @@
+[remap]
+
+importer="texture_atlas"
+type="Texture"
+path="res://.import/NumberOL.png-dd58a83a58b34623503eb7346c41dcd2.res"
+group_file="res://scenes/card/card_parts.png"
+valid=true
+[deps]
+
+
+source_file="res://scenes/card/NumberOL.png"
+dest_files=[ "res://.import/NumberOL.png-dd58a83a58b34623503eb7346c41dcd2.res" ]
+
+[params]
+
+atlas_file="res://scenes/card/card_parts.png"
+import_mode=0
+crop_to_region=false
+trim_alpha_border_from_region=true

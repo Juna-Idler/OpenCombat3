@@ -8,6 +8,7 @@ func _ready():
 	$CardFront.initialize_card(card)
 
 	$CardFront2.initialize_card(card)
+	$CardFront3.initialize_card(card,true)
 
 func _on_Button_pressed():
 

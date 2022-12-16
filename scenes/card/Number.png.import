@@ -1,0 +1,19 @@
+[remap]
+
+importer="texture_atlas"
+type="Texture"
+path="res://.import/Number.png-97cadb95f89b80dd3d6f9e95dd6d221d.res"
+group_file="res://scenes/card/card_parts.png"
+valid=true
+[deps]
+
+
+source_file="res://scenes/card/Number.png"
+dest_files=[ "res://.import/Number.png-97cadb95f89b80dd3d6f9e95dd6d221d.res" ]
+
+[params]
+
+atlas_file="res://scenes/card/card_parts.png"
+import_mode=0
+crop_to_region=false
+trim_alpha_border_from_region=true
