@@ -1,16 +1,13 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://scenes/deck_scene/banner/banner.tscn" type="PackedScene" id=2]
-[ext_resource path="res://scenes/deck_scene/banner/banner_editor.gd" type="Script" id=3]
-[ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=4]
-
-[sub_resource type="DynamicFont" id=12]
-size = 24
-font_data = ExtResource( 4 )
+[ext_resource path="res://default_theme.tres" type="Theme" id=1]
+[ext_resource path="res://scenes/deck/banner/banner.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/deck/banner/banner_editor.gd" type="Script" id=3]
 
 [node name="BannerEditor" type="Panel"]
 anchor_right = 1.0
 margin_bottom = 320.0
+theme = ExtResource( 1 )
 script = ExtResource( 3 )
 
 [node name="Banner" parent="." instance=ExtResource( 2 )]
@@ -29,7 +26,6 @@ margin_left = -360.0
 margin_top = 16.0
 margin_right = 360.0
 margin_bottom = 72.0
-custom_fonts/font = SubResource( 12 )
 text = "デフォルトデッキ名がはいってるんじゃないの"
 
 [connection signal="card_clicked" from="Banner" to="." method="_on_Banner_card_clicked"]

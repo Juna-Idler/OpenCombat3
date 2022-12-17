@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://scenes/match/match_scene.gd" type="Script" id=1]
 [ext_resource path="res://scenes/settings/settings scene.tscn" type="PackedScene" id=2]
@@ -12,30 +12,6 @@
 [ext_resource path="res://scenes/match/combat/combat_overlap.tscn" type="PackedScene" id=10]
 [ext_resource path="res://scenes/ui/clickable_control.gd" type="Script" id=11]
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=12]
-
-[sub_resource type="StyleBoxFlat" id=4]
-bg_color = Color( 1, 1, 1, 0.498039 )
-
-[sub_resource type="StyleBoxFlat" id=2]
-bg_color = Color( 1, 1, 1, 0.247059 )
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
-[sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 1, 1, 1, 0.247059 )
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
-[sub_resource type="StyleBoxFlat" id=3]
-bg_color = Color( 1, 1, 1, 0.247059 )
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
 
 [sub_resource type="DynamicFont" id=9]
 size = 40
@@ -81,7 +57,7 @@ follow_viewport_enable = true
 
 [node name="MyField" type="Node" parent="UILayer"]
 
-[node name="Stock" type="Panel" parent="UILayer/MyField"]
+[node name="Stock" type="ReferenceRect" parent="UILayer/MyField"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -91,7 +67,6 @@ margin_top = 136.0
 margin_right = 624.0
 margin_bottom = 352.0
 rect_pivot_offset = Vector2( 72, 108 )
-custom_styles/panel = SubResource( 4 )
 script = ExtResource( 11 )
 
 [node name="HandArea" parent="UILayer/MyField" instance=ExtResource( 7 )]
@@ -99,7 +74,6 @@ margin_left = -400.0
 margin_top = 112.0
 margin_right = 400.0
 margin_bottom = 352.0
-custom_styles/panel = SubResource( 2 )
 timer_path = NodePath("../../../MouseHoldTimer")
 
 [node name="Playing" type="ReferenceRect" parent="UILayer/MyField"]
@@ -112,7 +86,7 @@ margin_top = -108.0
 margin_right = 216.0
 margin_bottom = 108.0
 
-[node name="Played" type="Panel" parent="UILayer/MyField"]
+[node name="Played" type="ReferenceRect" parent="UILayer/MyField"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -122,11 +96,10 @@ margin_top = -44.0
 margin_right = 446.0
 margin_bottom = 100.0
 rect_pivot_offset = Vector2( 108, 72 )
-custom_styles/panel = SubResource( 1 )
 script = ExtResource( 11 )
 timer_path = NodePath("../../../MouseHoldTimer")
 
-[node name="Discard" type="Panel" parent="UILayer/MyField"]
+[node name="Discard" type="ReferenceRect" parent="UILayer/MyField"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -136,12 +109,11 @@ margin_top = -96.0
 margin_right = 624.0
 margin_bottom = 120.0
 rect_pivot_offset = Vector2( 72, 108 )
-custom_styles/panel = SubResource( 4 )
 script = ExtResource( 11 )
 
 [node name="RivalField" type="Node" parent="UILayer"]
 
-[node name="Stock" type="Panel" parent="UILayer/RivalField"]
+[node name="Stock" type="ReferenceRect" parent="UILayer/RivalField"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -151,7 +123,6 @@ margin_top = -352.0
 margin_right = -480.0
 margin_bottom = -136.0
 rect_pivot_offset = Vector2( 72, 108 )
-custom_styles/panel = SubResource( 4 )
 script = ExtResource( 11 )
 
 [node name="HandArea" parent="UILayer/RivalField" instance=ExtResource( 3 )]
@@ -159,7 +130,6 @@ margin_left = -400.0
 margin_top = -352.0
 margin_right = 400.0
 margin_bottom = -112.0
-custom_styles/panel = SubResource( 3 )
 timer_path = NodePath("../../../MouseHoldTimer")
 
 [node name="Playing" type="ReferenceRect" parent="UILayer/RivalField"]
@@ -172,7 +142,7 @@ margin_top = -108.0
 margin_right = -72.0
 margin_bottom = 108.0
 
-[node name="Played" type="Panel" parent="UILayer/RivalField"]
+[node name="Played" type="ReferenceRect" parent="UILayer/RivalField"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -182,11 +152,10 @@ margin_top = -100.0
 margin_right = -230.0
 margin_bottom = 44.0
 rect_pivot_offset = Vector2( 108, 72 )
-custom_styles/panel = SubResource( 1 )
 script = ExtResource( 11 )
 timer_path = NodePath("../../../MouseHoldTimer")
 
-[node name="Discard" type="Panel" parent="UILayer/RivalField"]
+[node name="Discard" type="ReferenceRect" parent="UILayer/RivalField"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -196,7 +165,6 @@ margin_top = -120.0
 margin_right = -480.0
 margin_bottom = 96.0
 rect_pivot_offset = Vector2( 72, 108 )
-custom_styles/panel = SubResource( 4 )
 script = ExtResource( 11 )
 
 [node name="BGLayer" type="CanvasLayer" parent="."]

@@ -144,6 +144,7 @@ func perform(node : Node,lethal : bool):
 	tween.set_parallel(false)
 	tween.tween_callback(overlay,"hide")
 	tween.tween_callback(power_balance,"hide")
+	tween.tween_callback(overlay,"change_timing_label",[CombatOverlap.CombatTiming.NoTiming])
 
 	if lethal:
 		Engine.time_scale = 1.0

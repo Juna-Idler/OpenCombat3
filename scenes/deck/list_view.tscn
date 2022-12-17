@@ -2,7 +2,7 @@
 
 [ext_resource path="res://scenes/card/card_front.tscn" type="PackedScene" id=1]
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=2]
-[ext_resource path="res://scenes/deck_scene/list_view.gd" type="Script" id=3]
+[ext_resource path="res://scenes/deck/list_view.gd" type="Script" id=3]
 [ext_resource path="res://scenes/card/large_card_view.tscn" type="PackedScene" id=4]
 
 [sub_resource type="StyleBoxFlat" id=2]

@@ -23,9 +23,9 @@ text = "BACK"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 margin_left = 192.0
-margin_top = 96.0
+margin_top = 376.0
 margin_right = 1088.0
-margin_bottom = 256.0
+margin_bottom = 480.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer"]
 custom_constants/separation = 12
@@ -36,9 +36,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 margin_left = -448.0
-margin_top = -88.0
+margin_top = -248.0
 margin_right = 448.0
-margin_bottom = 168.0
+margin_bottom = 8.0
 custom_styles/normal = SubResource( 1 )
 
 [node name="ButtonDecide" type="Button" parent="."]
@@ -47,7 +47,7 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_left = -192.0
-margin_top = -160.0
+margin_top = -176.0
 margin_right = 192.0
 margin_bottom = -80.0
 text = "DECIDE"

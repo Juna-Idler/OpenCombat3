@@ -12,12 +12,12 @@ _global_script_classes=[ {
 "base": "",
 "class": "BuildMenuScene",
 "language": "GDScript",
-"path": "res://scenes/deck_scene/build_menu_scene.gd"
+"path": "res://scenes/deck/build_menu_scene.gd"
 }, {
 "base": "Control",
 "class": "BuildSelectScene",
 "language": "GDScript",
-"path": "res://scenes/deck_scene/build_select_scene.gd"
+"path": "res://scenes/deck/select_scene.gd"
 }, {
 "base": "Node2D",
 "class": "Card",
@@ -92,7 +92,7 @@ _global_script_classes=[ {
 "base": "Control",
 "class": "DeckBanner",
 "language": "GDScript",
-"path": "res://scenes/deck_scene/banner/banner.gd"
+"path": "res://scenes/deck/banner/banner.gd"
 }, {
 "base": "Reference",
 "class": "DeckData",

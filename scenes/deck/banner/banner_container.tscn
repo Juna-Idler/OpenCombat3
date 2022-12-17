@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://scenes/deck_scene/banner/banner_container.gd" type="Script" id=1]
+[ext_resource path="res://scenes/deck/banner/banner_container.gd" type="Script" id=1]
 
 [sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 0.752941, 0.752941, 0.752941, 1 )

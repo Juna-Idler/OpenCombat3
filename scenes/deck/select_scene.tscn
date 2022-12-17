@@ -1,11 +1,11 @@
 [gd_scene load_steps=11 format=2]
 
-[ext_resource path="res://scenes/deck_scene/banner/banner_container.tscn" type="PackedScene" id=1]
-[ext_resource path="res://scenes/deck_scene/banner/banner.tscn" type="PackedScene" id=2]
-[ext_resource path="res://scenes/deck_scene/build_scene.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/deck/banner/banner_container.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/deck/banner/banner.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/deck/build_scene.tscn" type="PackedScene" id=3]
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=4]
-[ext_resource path="res://scenes/deck_scene/build_select_scene.gd" type="Script" id=5]
-[ext_resource path="res://scenes/deck_scene/theme.tres" type="Theme" id=6]
+[ext_resource path="res://scenes/deck/select_scene.gd" type="Script" id=5]
+[ext_resource path="res://scenes/deck/theme.tres" type="Theme" id=6]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0, 0, 0, 1 )
@@ -125,17 +125,6 @@ margin_right = 224.0
 margin_bottom = 672.0
 custom_fonts/font = SubResource( 9 )
 custom_styles/normal = SubResource( 10 )
-text = "枚数:
-
-コスト:
-
-レベル2:
-
-レベル3:
-
-プール:
-
-"
 autowrap = true
 clip_text = true
 
