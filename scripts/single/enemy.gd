@@ -21,18 +21,15 @@ var draw_indexes : PoolIntArray = []
 var select_card : MechanicsData.PlayerCard = null
 var skill_log : Array = [] # of SkillLog
 
-var multiply_power : float = 1.0
-var multiply_hit : float = 1.0
-var multiply_block : float = 1.0
 
 
-func _init(deck : Array,hand_count : int,
+func _init(deck : Array,hand_count : int,hp : int,
 		card_catalog : CardCatalog,shuffle : bool = true) -> void:
 	for i in range(deck.size()):
 		var c := MechanicsData.PlayerCard.new(card_catalog.new_card_data(deck[i]),i)
 		deck_list.append(c);
 		stock.append(i);
-		_life += c.data.level
+	_life = hp
 	if shuffle:
 		stock.shuffle()
 	for _i in range(hand_count):
@@ -84,9 +81,6 @@ func _combat_start(i : int):
 	_life -= select_card.data.level
 	select_card.affected.add_other(next_effect)
 	next_effect.reset()
-	multiply_power = 1.0
-	multiply_hit = 1.0
-	multiply_block = 1.0
 	return
 	
 
@@ -97,17 +91,18 @@ func _get_link_color() -> int:
 
 	
 func _get_current_power() -> int:
-	return int(select_card.get_current_power() * multiply_power)
+	return int(select_card.get_current_power())
 func _get_current_hit() -> int:
-	return int(select_card.get_current_hit() * multiply_hit)
+	return int(select_card.get_current_hit())
 func _get_current_block() -> int:
-	return int(select_card.get_current_block() * multiply_block)
+	return int(select_card.get_current_block())
 
 func _damage_is_fatal() -> bool:
 	var total_damage := damage - _get_current_block()
 	damage = 0 if total_damage < 0 else total_damage
-	if _life <= damage:
+	if _life <= damage or stock.size() + hand.size() == 0:
 		return true
+	_life -= damage
 	return false
 	
 func _add_damage(d: int):
@@ -122,21 +117,12 @@ func _combat_end() -> void:
 
 func _supply() -> void:
 	_draw_card()
-	if damage > 0:
-		_draw_card()
 	
-func _recover(index : int) -> void:
-	playing_hand = hand.duplicate()
-	select = index
+func _recover(_index : int) -> void:
+	playing_hand = hand
+	select = -1
 	draw_indexes.resize(0)
 	skill_log.clear()
-	select_card = deck_list[hand[index]]
-	_discard_card(index)
-	if damage <= select_card.data.level:
-		damage = 0
-		return
-	damage -= select_card.data.level
-	_draw_card()
 
 func _no_recover() -> void:
 	playing_hand = hand
@@ -145,18 +131,16 @@ func _no_recover() -> void:
 	skill_log.clear()
 	
 func _is_recovery() -> bool:
-	return damage == 0
-
-func _change_order(new_indexies : PoolIntArray) -> bool:
-	if new_indexies.size() != hand.size():
-		return false
-	for i in hand:
-		if not new_indexies.has(i):
-			return false
-	for i in range(hand.size()):
-		hand[i] = new_indexies[i]
 	return true
 
+func _change_order(new_hand : PoolIntArray) -> void:
+	if new_hand.size() != hand.size():
+		return
+	for i in hand:
+		if not new_hand.has(i):
+			return
+	for i in range(hand.size()):
+		hand[i] = new_hand[i]
 
 func _reset_select():
 	select = -1
@@ -170,9 +154,7 @@ func _draw_card():
 
 func _discard_card(i : int):
 	var id := hand.pop_at(i) as int
-	_life -= deck_list[id].data.level
 	discard.push_back(id)
-
 
 func _hand_to_deck_bottom(i : int):
 	var id := hand.pop_at(i) as int

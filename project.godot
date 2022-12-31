@@ -259,15 +259,25 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/replay/server.gd"
 }, {
+"base": "Reference",
+"class": "Ruby",
+"language": "GDScript",
+"path": "res://addons/ruby_label/ruby_string.gd"
+}, {
+"base": "Control",
+"class": "RubyLabel",
+"language": "GDScript",
+"path": "res://addons/ruby_label/ruby_label.gd"
+}, {
 "base": "",
 "class": "SinglePlayerEnemy",
 "language": "GDScript",
-"path": "res://scripts/single_player/enemy.gd"
+"path": "res://scripts/single/enemy.gd"
 }, {
 "base": "IGameServer",
 "class": "SinglePlayerServer",
 "language": "GDScript",
-"path": "res://scripts/single_player/server.gd"
+"path": "res://scripts/single/server.gd"
 }, {
 "base": "Reference",
 "class": "SkillData",
@@ -283,6 +293,11 @@ _global_script_classes=[ {
 "class": "TitleScene",
 "language": "GDScript",
 "path": "res://scenes/title_scene.gd"
+}, {
+"base": "TextureRect",
+"class": "TransitionFade",
+"language": "GDScript",
+"path": "res://scenes/ui/fade/transition_fade.gd"
 }, {
 "base": "Control",
 "class": "VBoxLayout",
@@ -340,11 +355,14 @@ _global_script_class_icons={
 "ReplayPlayer": "",
 "ReplayScene": "",
 "ReplayServer": "",
+"Ruby": "",
+"RubyLabel": "res://addons/ruby_label/icon.png",
 "SinglePlayerEnemy": "",
 "SinglePlayerServer": "",
 "SkillData": "",
 "SkillProcessor": "",
 "TitleScene": "",
+"TransitionFade": "",
 "VBoxLayout": ""
 }
 
@@ -370,6 +388,10 @@ window/stretch/aspect="keep"
 
 version_control_autoload_on_startup=true
 version_control_plugin_name="GitAPI"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/ruby_label/plugin.cfg" )
 
 [gdnative]
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://scenes/deck/theme.tres" type="Theme" id=1]
 [ext_resource path="res://CardTest.gd" type="Script" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://Number.png" type="Texture" id=8]
 [ext_resource path="res://fonts/dynamicfont.tres" type="DynamicFont" id=9]
 [ext_resource path="res://scenes/card/card_skill_line.gd" type="Script" id=10]
+[ext_resource path="res://scenes/card/NumberOL.png" type="Texture" id=11]
 
 [sub_resource type="StyleBoxFlat" id=1]
 draw_center = false
@@ -65,6 +66,12 @@ TooltipLabel/fonts/font = ExtResource( 9 )
 size = 11
 font_data = ExtResource( 4 )
 
+[sub_resource type="CanvasItemMaterial" id=11]
+particles_animation = true
+particles_anim_h_frames = 10
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
 [node name="Node" type="Node"]
 script = ExtResource( 2 )
 
@@ -118,7 +125,6 @@ margin_right = -4.0
 margin_bottom = -4.0
 
 [node name="Sprite" type="Sprite" parent="."]
-visible = false
 position = Vector2( 992, 352 )
 texture = SubResource( 4 )
 
@@ -131,15 +137,12 @@ polygon = PoolVector2Array( -8, -8, 32, -88, 72, -8, 144, 32, 72, 72, 32, 128, -
 [node name="CardFront2" parent="." instance=ExtResource( 7 )]
 margin_left = 192.0
 margin_right = 336.0
-margin_bottom = 216.0
 
 [node name="CardFront3" parent="." instance=ExtResource( 7 )]
 margin_left = 376.0
 margin_right = 520.0
-margin_bottom = 216.0
 
 [node name="CardFront" type="Control" parent="."]
-visible = false
 rect_min_size = Vector2( 144, 216 )
 rect_pivot_offset = Vector2( 72, 108 )
 rect_clip_content = true
@@ -376,3 +379,10 @@ margin_top = 5.0
 margin_right = 6.0
 margin_bottom = -5.0
 mouse_filter = 2
+
+[node name="Particles2D" type="CPUParticles2D" parent="."]
+material = SubResource( 11 )
+position = Vector2( 696, 368 )
+texture = ExtResource( 11 )
+anim_offset = 1.0
+anim_offset_random = 1.0

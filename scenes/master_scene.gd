@@ -4,37 +4,25 @@ class_name MasterScene
 
 class SceneChanger extends ISceneChanger:
 	var master_scene : MasterScene
-	var fade : ColorRect
+	var fade : TransitionFade
 	var current_scene : ISceneChanger.IScene
 	
 	var fade_in_duration : float = 0.5
 	var fade_out_duration : float = 0.5
 	
-	func _init(n : Node,f : ColorRect,c : Node):
+	func _init(n : Node,f : TransitionFade,c : Node):
 		master_scene = n
 		fade = f
 		current_scene = c
 		
 		randomize()
 		
-		
-	func fade_out():
-		fade.color.a = 0.0
-		fade.show()
-		var tween := master_scene.create_tween()
-# warning-ignore:return_value_discarded
-		tween.tween_property(fade,"color:a",1.0,fade_out_duration)
-		yield(tween,"finished")
-		
-	func fade_in():
-		var tween = master_scene.create_tween()
-		tween.tween_property(fade,"color:a",0.0,fade_in_duration)
-		yield(tween,"finished")
-		fade.hide()
-	
 	
 	func _goto_scene_before(tscn_path : String):
-		yield(fade_out(),"completed")
+		fade.show()
+#		fade.invert = false
+		fade.fade_out(fade_out_duration)
+		yield(fade,"fade_finished")
 		if current_scene != null:
 			current_scene._terminalize()
 			master_scene.remove_child(current_scene)
@@ -44,7 +32,10 @@ class SceneChanger extends ISceneChanger:
 		master_scene.move_child(current_scene,0)
 	
 	func _goto_scene_after():
-		yield(fade_in(),"completed")
+#		fade.invert = true
+		fade.fade_in(fade_in_duration)
+		yield(fade,"fade_finished")
+		fade.hide()
 		
 	
 	func _goto_offline_scene():
@@ -58,7 +49,7 @@ class SceneChanger extends ISceneChanger:
 		yield(_goto_scene_after(),"completed")
 
 	func _goto_build_scene():
-		yield(_goto_scene_before("res://scenes/deck_scene/build_menu_scene.tscn"),"completed")
+		yield(_goto_scene_before("res://scenes/deck/build_menu_scene.tscn"),"completed")
 		(current_scene as BuildMenuScene).initialize(self)
 		yield(_goto_scene_after(),"completed")
 

@@ -1,9 +1,35 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scenes/title_scene.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/online_node.gd" type="Script" id=2]
 [ext_resource path="res://scenes/master_scene.gd" type="Script" id=3]
 [ext_resource path="res://camera2d.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/ui/fade/transition_fade.gdshader" type="Shader" id=5]
+[ext_resource path="res://scenes/ui/fade/transition_fade.gd" type="Script" id=7]
+
+[sub_resource type="Gradient" id=10]
+offsets = PoolRealArray( 0, 0.800926 )
+colors = PoolColorArray( 1, 1, 1, 1, 0, 0, 0, 1 )
+
+[sub_resource type="GradientTexture2D" id=11]
+gradient = SubResource( 10 )
+fill = 1
+fill_from = Vector2( 0.5, 0.483333 )
+
+[sub_resource type="ShaderMaterial" id=9]
+shader = ExtResource( 5 )
+shader_param/rate = 1.0
+shader_param/invert = true
+shader_param/rule = SubResource( 11 )
+
+[sub_resource type="Gradient" id=5]
+offsets = PoolRealArray( 1 )
+colors = PoolColorArray( 0, 0, 0, 1 )
+
+[sub_resource type="GradientTexture2D" id=6]
+gradient = SubResource( 5 )
+fill_from = Vector2( 0.895833, 0.915625 )
+fill_to = Vector2( 0.266667, 0.303125 )
 
 [node name="MasterScene" type="Node"]
 script = ExtResource( 3 )
@@ -14,12 +40,19 @@ unique_name_in_owner = true
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = 128
 
-[node name="SceneFade" type="ColorRect" parent="CanvasLayer"]
+[node name="SceneFade" type="TextureRect" parent="CanvasLayer"]
 unique_name_in_owner = true
-visible = false
+material = SubResource( 9 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0, 0, 0, 1 )
+margin_top = 1.0
+margin_bottom = 1.0
+texture = SubResource( 6 )
+expand = true
+script = ExtResource( 7 )
+rate = 1.0
+rule = SubResource( 11 )
+invert = true
 
 [node name="OnlineNode" type="Node" parent="."]
 script = ExtResource( 2 )

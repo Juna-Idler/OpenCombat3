@@ -20,6 +20,7 @@ func _ready():
 		b.text = r.name
 		b.rect_min_size = Vector2(320,64)
 		b.toggle_mode = true
+# warning-ignore:return_value_discarded
 		b.connect("pressed",self,"_on_ButtonRegulation_pressed",[r])
 		container.add_child(b)
 
