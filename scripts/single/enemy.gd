@@ -108,8 +108,8 @@ func _damage_is_fatal() -> bool:
 func _add_damage(d: int):
 	damage += d
 	
-func _append_skill_log(s_log : MechanicsData.SkillLog):
-	skill_log.append(s_log)
+func _append_skill_log(index : int,timing : int,priority : int,data) -> void:
+	skill_log.append(MechanicsData.SkillLog.new(index,timing,priority,data))
 	
 func _combat_end() -> void:
 	played.push_back(select_card.id_in_deck)

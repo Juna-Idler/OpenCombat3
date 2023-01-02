@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Reference",
+"class": "AttributeData",
+"language": "GDScript",
+"path": "res://scripts/game_data/attribute_data.gd"
+}, {
 "base": "",
 "class": "BuildMenuScene",
 "language": "GDScript",
@@ -105,11 +110,6 @@ _global_script_classes=[ {
 "path": "res://scripts/game_data/deck_list.gd"
 }, {
 "base": "Reference",
-"class": "EffectData",
-"language": "GDScript",
-"path": "res://scripts/game_data/effect_data.gd"
-}, {
-"base": "Reference",
 "class": "GameProcessor",
 "language": "GDScript",
 "path": "res://scripts/game_mechanics/processor.gd"
@@ -199,7 +199,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scenes/match/combat/combat_named_skill_performer.gd"
 }, {
-"base": "Reference",
+"base": "Label",
 "class": "NextEffectLabel",
 "language": "GDScript",
 "path": "res://scenes/match/next_effect.gd"
@@ -284,10 +284,20 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/game_data/skill_data.gd"
 }, {
+"base": "",
+"class": "SkillFactory",
+"language": "GDScript",
+"path": "res://scripts/game_mechanics/skill_factory.gd"
+}, {
 "base": "Reference",
 "class": "SkillProcessor",
 "language": "GDScript",
 "path": "res://scripts/game_mechanics/skill_processor.gd"
+}, {
+"base": "Reference",
+"class": "StateProcessor",
+"language": "GDScript",
+"path": "res://scripts/game_mechanics/state_processor.gd"
 }, {
 "base": "",
 "class": "TitleScene",
@@ -305,6 +315,7 @@ _global_script_classes=[ {
 "path": "res://scenes/ui/v_box_layout.gd"
 } ]
 _global_script_class_icons={
+"AttributeData": "",
 "BuildMenuScene": "",
 "BuildSelectScene": "",
 "Card": "",
@@ -324,7 +335,6 @@ _global_script_class_icons={
 "DeckBanner": "",
 "DeckData": "",
 "DeckList": "",
-"EffectData": "",
 "GameProcessor": "",
 "GameSettings": "",
 "GitAPI": "",
@@ -360,7 +370,9 @@ _global_script_class_icons={
 "SinglePlayerEnemy": "",
 "SinglePlayerServer": "",
 "SkillData": "",
+"SkillFactory": "",
 "SkillProcessor": "",
+"StateProcessor": "",
 "TitleScene": "",
 "TransitionFade": "",
 "VBoxLayout": ""

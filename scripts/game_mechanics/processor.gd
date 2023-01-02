@@ -11,7 +11,7 @@ var player2 : MechanicsData.IPlayer
 
 var situation : int
 
-var _skill_processor := SkillProcessor.new()
+#var _skill_processor := SkillProcessor.new()
 
 
 class SkillOrder:
@@ -127,81 +127,81 @@ func reset_select():
 
 func _before_process(p1_link_color : int, p2_link_color):
 	var skill_order := []
-	for i in player1._get_playing_card().data.skills.size():
-		var s := player1._get_playing_card().data.skills[i] as SkillData.NamedSkill
-		if s.test_condition(player2._get_playing_card().data.color,p1_link_color):
-			var priority = _skill_processor.get_skill(s.data.id)._before_priority()
+	for i in player1._get_playing_card().skills.size():
+		var s := player1._get_playing_card().skills[i] as MechanicsData.ISkill
+		if s._get_skill().test_condition(player2._get_playing_card().data.color,p1_link_color):
+			var priority = s._before_priority()
 			for p in priority:
 				skill_order.append(SkillOrder.new(p,i,player1,player2))
 	for i in player2._get_playing_card().data.skills.size():
-		var s := player2._get_playing_card().data.skills[i] as SkillData.NamedSkill
-		if s.test_condition(player1._get_playing_card().data.color,p2_link_color):
-			var priority = _skill_processor.get_skill(s.data.id)._before_priority()
+		var s := player2._get_playing_card().skills[i] as MechanicsData.ISkill
+		if s._get_skill().test_condition(player1._get_playing_card().data.color,p2_link_color):
+			var priority = s._before_priority()
 			for p in priority:
 				skill_order.append(SkillOrder.new(p,i,player2,player1))
 	skill_order.sort_custom(SkillOrder,"custom_compare")
 	for s in skill_order:
-		var skill := s.myself._get_playing_card().data.skills[s.skill_index] as SkillData.NamedSkill
-		_skill_processor.get_skill(skill.data.id)._process_before(s.skill_index,s.priority,s.myself,s.rival)
+		var skill := s.myself._get_playing_card().skills[s.skill_index] as MechanicsData.ISkill
+		skill._process_before(s.skill_index,s.priority,s.myself,s.rival)
 
 
 func _engaged_process(p1_link_color : int, p2_link_color: int):
 	var skill_order := []
 	for i in player1._get_playing_card().data.skills.size():
-		var s := player1._get_playing_card().data.skills[i] as SkillData.NamedSkill
-		if s.test_condition(player2._get_playing_card().data.color,p1_link_color):
-			var priority = _skill_processor.get_skill(s.data.id)._engaged_priority()
+		var s := player1._get_playing_card().skills[i] as MechanicsData.ISkill
+		if s._get_skill().test_condition(player2._get_playing_card().data.color,p1_link_color):
+			var priority = s._engaged_priority()
 			for p in priority:
 				skill_order.append(SkillOrder.new(p,i,player1,player2,situation,1))
 	for i in player2._get_playing_card().data.skills.size():
-		var s := player2._get_playing_card().data.skills[i] as SkillData.NamedSkill
-		if s.test_condition(player1._get_playing_card().data.color,p2_link_color):
-			var priority = _skill_processor.get_skill(s.data.id)._engaged_priority()
+		var s := player2._get_playing_card().skills[i] as MechanicsData.ISkill
+		if s._get_skill().test_condition(player1._get_playing_card().data.color,p2_link_color):
+			var priority = s._engaged_priority()
 			for p in priority:
 				skill_order.append(SkillOrder.new(p,i,player2,player1,-situation,-1))
 	skill_order.sort_custom(SkillOrder,"custom_compare")
 	for s in skill_order:
-		var skill := s.myself._get_playing_card().data.skills[s.skill_index] as SkillData.NamedSkill
-		situation = _skill_processor.get_skill(skill.data.id)._process_engaged(
-				s.skill_index,s.priority,s.situation,s.myself,s.rival) * s.situation_sign
+		var skill := s.myself._get_playing_card().skills[s.skill_index] as MechanicsData.ISkill
+		situation = skill._process_engaged(s.skill_index,s.priority,
+				s.situation,s.myself,s.rival) * s.situation_sign
 
 
 func _after_process(p1_link_color : int, p2_link_color: int):
 	var skill_order := []
 	for i in player1._get_playing_card().data.skills.size():
-		var s := player1._get_playing_card().data.skills[i] as SkillData.NamedSkill
-		if s.test_condition(player2._get_playing_card().data.color,p1_link_color):
-			var priority = _skill_processor.get_skill(s.data.id)._after_priority()
+		var s := player1._get_playing_card().skills[i] as MechanicsData.ISkill
+		if s._get_skill().test_condition(player2._get_playing_card().data.color,p1_link_color):
+			var priority = s._after_priority()
 			for p in priority:
 				skill_order.append(SkillOrder.new(p,i,player1,player2,situation,1))
 	for i in player2._get_playing_card().data.skills.size():
-		var s := player2._get_playing_card().data.skills[i] as SkillData.NamedSkill
-		if s.test_condition(player1._get_playing_card().data.color,p2_link_color):
-			var priority = _skill_processor.get_skill(s.data.id)._after_priority()
+		var s := player2._get_playing_card().skills[i] as MechanicsData.ISkill
+		if s._get_skill().test_condition(player1._get_playing_card().data.color,p2_link_color):
+			var priority = s._after_priority()
 			for p in priority:
 				skill_order.append(SkillOrder.new(p,i,player2,player1,-situation,-1))
 	skill_order.sort_custom(SkillOrder,"custom_compare")
 	for s in skill_order:
-		var skill := s.myself._get_playing_card().data.skills[s.skill_index] as SkillData.NamedSkill
-		_skill_processor.get_skill(skill.data.id)._process_after(s.skill_index,s.priority,s.situation,s.myself,s.rival)
+		var skill := s.myself._get_playing_card().skills[s.skill_index] as MechanicsData.ISkill
+		skill._process_after(s.skill_index,s.priority,s.situation,s.myself,s.rival)
 
 
 func _end_process(p1_link_color : int, p2_link_color: int):
 	var skill_order := []
 	for i in player1._get_playing_card().data.skills.size():
-		var s := player1._get_playing_card().data.skills[i] as SkillData.NamedSkill
-		if s.test_condition(player2._get_playing_card().data.color,p1_link_color):
-			var priority = _skill_processor.get_skill(s.data.id)._end_priority()
+		var s := player1._get_playing_card().skills[i] as MechanicsData.ISkill
+		if s._get_skill().test_condition(player2._get_playing_card().data.color,p1_link_color):
+			var priority = s._end_priority()
 			for p in priority:
 				skill_order.append(SkillOrder.new(p,i,player1,player2,situation,1))
 	for i in player2._get_playing_card().data.skills.size():
-		var s := player2._get_playing_card().data.skills[i] as SkillData.NamedSkill
-		if s.test_condition(player1._get_playing_card().data.color,p2_link_color):
-			var priority = _skill_processor.get_skill(s.data.id)._end_priority()
+		var s := player2._get_playing_card().skills[i] as MechanicsData.ISkill
+		if s._get_skill().test_condition(player1._get_playing_card().data.color,p2_link_color):
+			var priority = s._end_priority()
 			for p in priority:
 				skill_order.append(SkillOrder.new(p,i,player2,player1,-situation,-1))
 	skill_order.sort_custom(SkillOrder,"custom_compare")
 	for s in skill_order:
-		var skill := s.myself._get_playing_card().data.skills[s.skill_index] as SkillData.NamedSkill
-		_skill_processor.get_skill(skill.data.id)._process_end(s.skill_index,s.priority,s.situation,s.myself,s.rival)
+		var skill := s.myself._get_playing_card().skills[s.skill_index] as MechanicsData.ISkill
+		skill._process_end(s.skill_index,s.priority,s.situation,s.myself,s.rival)
 

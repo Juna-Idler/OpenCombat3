@@ -16,7 +16,7 @@ enum ColorCondition {
 enum ParamType {
 	VOID = 0,
 	INTEGER = 1,
-	EFFECTS = 2,
+	ATTRIBUTES = 2,
 	COLOR = 3,
 }
 

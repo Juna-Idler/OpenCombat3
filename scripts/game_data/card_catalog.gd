@@ -3,13 +3,8 @@ class_name CardCatalog
 var _card_catalog : Dictionary = {}
 var _skill_catalog : Dictionary = {}
 
-var _effect_catalog : Array = []
+var _attribute_catalog : Array = []
 
-enum EffectAttribute {
-	POWER = 1,
-	HIT,
-	BLOCK,
-}
 
 var version : String
 
@@ -21,28 +16,28 @@ func _init():
 	load_catalog()
 
 func load_catalog():
-	_load_effect_data()
+	_load_attribute_data()
 	_load_skill_data()
 	_load_card_data()
 	
 
-func get_effect_data(id:int) -> EffectData.SkillEffectData:
-	return _effect_catalog[id]
+func get_attribute_data(id:int) -> AttributeData.CardAttributeData:
+	return _attribute_catalog[id]
 
 func get_skill_param(param_type : int,param : String) -> SkillData.SkillParameter:
 	match param_type:
 		SkillData.ParamType.INTEGER:
 			return SkillData.SkillParameter.new(param,param,int(param))
-		SkillData.ParamType.EFFECTS:
-			var effects = []
+		SkillData.ParamType.ATTRIBUTES:
+			var attributes = []
 			var e_string : PoolStringArray = []
 			var e_s_string : PoolStringArray = []
 			for e in param.split(" "):
-				var effect = EffectData.create_effect(e,_effect_catalog)
-				effects.append(effect)
-				e_string.append(effect.data.name + "%+d" % effect.parameter)
-				e_s_string.append(effect.data.short_name + "%+d" % effect.parameter)
-			return SkillData.SkillParameter.new(e_string.join(" "),e_s_string.join(" "),effects)
+				var attribute = AttributeData.create_attribute(e,_attribute_catalog)
+				attributes.append(attribute)
+				e_string.append(attribute.data.name + "%+d" % attribute.parameter)
+				e_s_string.append(attribute.data.short_name + "%+d" % attribute.parameter)
+			return SkillData.SkillParameter.new(e_string.join(" "),e_s_string.join(" "),attributes)
 		SkillData.ParamType.COLOR:
 			var ColorName := [tr("NO_COLOR"),tr("RED"),tr("GREEN"),tr("BLUE")]
 			return SkillData.SkillParameter.new(ColorName[int(param)],ColorName[int(param)],int(param))
@@ -78,25 +73,25 @@ func get_deck_face(deck : DeckData) -> DeckData.DeckFace:
 	return DeckData.DeckFace.new(deck.name,deck.key_cards,deck.cards.size(),cost,level,rgb)
 
 
-func _load_effect_data():
-	var effect_resource = preload("res://card_data/skill_effect_catalog.txt")
-	var effects = effect_resource.text.split("\n")
-	_effect_catalog.resize(effects.size())
-	_effect_catalog[0] = EffectData.SkillEffectData.new(0,"","","","")
-	for s in effects:
+func _load_attribute_data():
+	var attribute_resource = preload("res://card_data/attribute_catalog.txt")
+	var attributes = attribute_resource.text.split("\n")
+	_attribute_catalog.resize(attributes.size())
+	_attribute_catalog[0] = AttributeData.CardAttributeData.new(0,"","","","")
+	for s in attributes:
 		var csv = s.split("\t")
 		var id := int(csv[0])
-		_effect_catalog[id] = EffectData.SkillEffectData.new(id,csv[1],csv[2],csv[3],csv[4])
+		_attribute_catalog[id] = AttributeData.CardAttributeData.new(id,csv[1],csv[2],csv[3],csv[4])
 
 	if translation.find("ja") != 0:
-		var trans_res = load("res://card_data/skill_effect_" + translation + ".txt")
+		var trans_res = load("res://card_data/attribute_" + translation + ".txt")
 		if not trans_res:
-			trans_res = load("res://card_data/skill_effect_en.txt")
+			trans_res = load("res://card_data/attribute_en.txt")
 		var trans = trans_res.text.split("\n")
 		for i in trans.size():
 			var tsv = trans[i].split("\t")
 			var id := int(tsv[0])
-			var data = _effect_catalog[id] as EffectData.SkillEffectData
+			var data = _attribute_catalog[id] as AttributeData.CardAttributeData
 			data.name = tsv[1]
 			data.short_name = tsv[2]
 			data.text = tsv[3]

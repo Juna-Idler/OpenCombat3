@@ -29,8 +29,9 @@ var multiply_block : float = 1.0
 
 func _init(deck : Array,hand_count : int,
 		card_catalog : CardCatalog,shuffle : bool = true) -> void:
+	var s_factory = SkillFactory.new()
 	for i in range(deck.size()):
-		var c := MechanicsData.PlayerCard.new(card_catalog.new_card_data(deck[i]),i)
+		var c := MechanicsData.PlayerCard.new(card_catalog.new_card_data(deck[i]),i,s_factory)
 		deck_list.append(c);
 		stock.append(i);
 		_life += c.data.level
@@ -114,8 +115,8 @@ func _damage_is_fatal() -> bool:
 func _add_damage(d: int) -> void:
 	damage += d
 	
-func _append_skill_log(s_log : MechanicsData.SkillLog):
-	skill_log.append(s_log)
+func _append_skill_log(index : int,timing : int,priority : int,data) -> void:
+	skill_log.append(MechanicsData.SkillLog.new(index,timing,priority,data))
 	
 func _combat_end() -> void:
 	played.push_back(select_card.id_in_deck)

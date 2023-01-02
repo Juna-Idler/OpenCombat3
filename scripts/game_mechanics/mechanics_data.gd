@@ -31,12 +31,15 @@ class Affected:
 class PlayerCard:
 	var data : CardData = null
 	var id_in_deck : int = 0
+	var skills : Array # of ISkill
 
 	var affected := Affected.new()
 
-	func _init(cd : CardData,iid : int):
+	func _init(cd : CardData,iid : int,factory : ISkillFactory):
 		data = cd
 		id_in_deck = iid
+		for s in cd.skills:
+			skills.append(factory._create(s))
 #	var additional_skills : Array
 #	var addtional_changes : Dictionary = {}
 
@@ -125,7 +128,7 @@ class IPlayer:
 	func _add_damage(_d: int) -> void:
 		return
 		
-	func _append_skill_log(_log : SkillLog) -> void:
+	func _append_skill_log(_index : int,_timing : int,_priority : int,_data) -> void:
 		return
 
 	func _combat_end() -> void:
@@ -164,4 +167,52 @@ class IPlayer:
 
 	func _get_additional_deck() -> PoolIntArray:
 		return PoolIntArray()
+
+
+class IEffect:
+	func _serialize() -> Array:
+		return []
+	
+	func _before_priority() -> Array:
+		return []
+	func _process_before(_index : int,_priority : int,
+			_myself : IPlayer,_rival : IPlayer) -> void:
+		pass
+		
+	func _engaged_priority() -> Array:
+		return []
+	func _process_engaged(_index : int,_priority : int,situation : int,
+			_myself : IPlayer,_rival : IPlayer) -> int:
+		return situation
+		
+	func _after_priority() -> Array:
+		return []
+	func _process_after(_index : int,_priority : int,_situation : int,
+			_myself : IPlayer,_rival : IPlayer) -> void:
+		pass
+		
+	func _end_priority() -> Array:
+		return []
+	func _process_end(_index : int,_priority : int,_situation : int,
+			_myself : IPlayer,_rival : IPlayer) -> void:
+		pass
+
+
+
+class ISkill extends IEffect:
+#	func _init(_data : SkillData.NamedSkill):
+
+	func _get_skill() -> SkillData.NamedSkill:
+		return null
+
+
+
+class IState extends IEffect:
+	func is_removed() -> bool:
+		return false
+
+
+class ISkillFactory:
+	func _create(_skill : SkillData.NamedSkill) -> ISkill:
+		return null
 

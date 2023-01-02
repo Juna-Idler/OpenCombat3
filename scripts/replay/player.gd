@@ -28,10 +28,12 @@ var step_draw : Array
 var first_data : IGameServer.UpdateData.PlayerData
 
 func _init(match_log :MatchLog,rival : bool,card_catalog : CardCatalog) -> void:
+	var s_factory = SkillFactory.new()
+	
 	rival_side = rival
 	var deck = match_log.primary_data.rival_deck_list if rival_side else match_log.primary_data.my_deck_list
 	for i in range(deck.size()):
-		var c := MechanicsData.PlayerCard.new(card_catalog.new_card_data(deck[i]),i)
+		var c := MechanicsData.PlayerCard.new(card_catalog.new_card_data(deck[i]),i,s_factory)
 		deck_list.append(c);
 	var fd = match_log.first_data.rival if rival_side else match_log.first_data.myself
 	first_data = IGameServer.UpdateData.PlayerData.new(fd.hand,0,[],[],0,fd.life,
@@ -115,10 +117,10 @@ func _damage_is_fatal() -> bool:
 	
 func _add_damage(_d: int) -> void:
 	return
-	
-func _append_skill_log(_s_log : MechanicsData.SkillLog):
+
+func _append_skill_log(_index : int,_timing : int,_priority : int,_data) -> void:
 	return
-	
+
 func _combat_end() -> void:
 	played.push_back(select_card.id_in_deck)
 

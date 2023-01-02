@@ -1,13 +1,13 @@
 
-class_name EffectData
+class_name AttributeData
 
-enum Attribute {
+enum AttributeType {
 	POWER = 1,
 	HIT,
 	BLOCK,
 }
 
-class SkillEffectData:
+class CardAttributeData:
 	var id : int
 	var pid : String
 	var name : String
@@ -22,20 +22,20 @@ class SkillEffectData:
 		text = t
 
 
-class SkillEffect:
-	var data : SkillEffectData
+class CardAttribute:
+	var data : CardAttributeData
 	var parameter : int
 
-	func _init(d : SkillEffectData,p : int):
+	func _init(d : CardAttributeData,p : int):
 		data = d
 		parameter = p
 
 
-static func create_effect(text : String, catalog : Array) -> SkillEffect:
+static func create_attribute(text : String, catalog : Array) -> CardAttribute:
 	for d in catalog:
-		var data := d as SkillEffectData
+		var data := d as CardAttributeData
 		if text.find(data.pid) == 0:
-			return SkillEffect.new(data,int(text.substr(data.pid.length())))
+			return CardAttribute.new(data,int(text.substr(data.pid.length())))
 	return null
 
 

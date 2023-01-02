@@ -8,24 +8,24 @@ export(bool) onready var opponent_layout : bool = false setget set_opponent_layo
 
 
 static func _get_effect_short_name(id : int)->String:
-	return Global.card_catalog.get_effect_data(id).short_name
+	return Global.card_catalog.get_attribute_data(id).short_name
 
 func set_effect(effect : Card.Affected):
 	var output : PoolStringArray = []
 	if opponent_layout:
 		if effect.block != 0:
-			output.append(_get_effect_short_name(EffectData.Attribute.BLOCK) + "%+d" % effect.block)
+			output.append(_get_effect_short_name(AttributeData.AttributeType.BLOCK) + "%+d" % effect.block)
 		if effect.hit != 0:
-			output.append(_get_effect_short_name(EffectData.Attribute.HIT) + "%+d" % effect.hit)
+			output.append(_get_effect_short_name(AttributeData.AttributeType.HIT) + "%+d" % effect.hit)
 		if effect.power != 0:
-			output.append(_get_effect_short_name(EffectData.Attribute.POWER) + "%+d" % effect.power)
+			output.append(_get_effect_short_name(AttributeData.AttributeType.POWER) + "%+d" % effect.power)
 	else:
 		if effect.power != 0:
-			output.append(_get_effect_short_name(EffectData.Attribute.POWER) + "%+d" % effect.power)
+			output.append(_get_effect_short_name(AttributeData.AttributeType.POWER) + "%+d" % effect.power)
 		if effect.hit != 0:
-			output.append(_get_effect_short_name(EffectData.Attribute.HIT) + "%+d" % effect.hit)
+			output.append(_get_effect_short_name(AttributeData.AttributeType.HIT) + "%+d" % effect.hit)
 		if effect.block != 0:
-			output.append(_get_effect_short_name(EffectData.Attribute.BLOCK) + "%+d" % effect.block)
+			output.append(_get_effect_short_name(AttributeData.AttributeType.BLOCK) + "%+d" % effect.block)
 	text = output.join("\n")
 
 func set_opponent_layout(value):

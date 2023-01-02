@@ -40,7 +40,7 @@ class Reinforce extends Skill:
 		tween.tween_callback(csl,"succeeded")
 		var a := [0,0,0]
 		for p in skill.parameter[0].data as Array:
-			var e := p as EffectData.SkillEffect
+			var e := p as AttributeData.CardAttribute
 			a[e.data.id - 1] += e.parameter
 		tween.tween_callback(myself,"add_attribute",[a[0],a[1],a[2]])
 		tween.tween_callback(myself.combat_avatar,"play_sound",[load("res://sound/ステータス上昇魔法2.mp3")])
@@ -64,15 +64,15 @@ class Charge extends Skill:
 			_situation : int,myself : MatchPlayer,_rival : MatchPlayer,data) -> void:
 		if data:
 			for p in skill.parameter[0].data as Array:
-				var e := p as EffectData.SkillEffect
+				var e := p as AttributeData.CardAttribute
 				match e.data.id:
-					EffectData.Attribute.POWER:
+					AttributeData.AttributeType.POWER:
 						myself.next_effect.power += e.parameter
 						pass
-					EffectData.Attribute.HIT:
+					AttributeData.AttributeType.HIT:
 						myself.next_effect.hit += e.parameter
 						pass
-					EffectData.Attribute.BLOCK:
+					AttributeData.AttributeType.BLOCK:
 						myself.next_effect.block += e.parameter
 						pass
 				pass
@@ -102,7 +102,7 @@ class Absorb extends Skill:
 		var card := myself.deck_list[myself.hand[hand_index]] as Card
 		var a := [0,0,0]
 		for p in skill.parameter[1].data as Array:
-			var e := p as EffectData.SkillEffect
+			var e := p as AttributeData.CardAttribute
 			a[e.data.id - 1] += e.parameter * card.front.data.level
 		
 		tween.tween_callback(myself,"discard_card",[hand_index,0.5])
