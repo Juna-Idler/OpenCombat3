@@ -314,23 +314,23 @@ func _on_MyHandArea_decided_card(index:int,hand:Array):
 	decide_card(index,hand)
 
 
-func _on_MyHandArea_clicked_card(_index:int,_card:Card):
+func _on_MyHandArea_clicked_card(_index:int,_card:MatchCard):
 	pass # Replace with function body.
 
 
-func _on_RivalHandArea_clicked_card(_index:int,_card:Card):
+func _on_RivalHandArea_clicked_card(_index:int,_card:MatchCard):
 	pass # Replace with function body.
 
 
-func _on_MyHandArea_held_card(_index:int,card:Card):
+func _on_MyHandArea_held_card(_index:int,card:MatchCard):
 	if card != null:
 		$"%LargeCardView".show_layer(card.get_card_data())
 
-func _on_RivalHandArea_held_card(_index:int,card:Card):
+func _on_RivalHandArea_held_card(_index:int,card:MatchCard):
 	if card != null:
 		$"%LargeCardView".show_layer(card.get_card_data())
 
-func _on_held_card(card:Card):
+func _on_held_card(card:MatchCard):
 	if card != null:
 		$"%LargeCardView".show_layer(card.get_card_data())
 

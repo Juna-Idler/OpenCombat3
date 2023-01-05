@@ -12,7 +12,7 @@ const control_height := 216
 const control_space := 10
 
 var controls : Array = []
-var hands : Array# of Card
+var hands : Array# of MatchCard
 
 export var timer_path: NodePath
 onready var _timer := get_node(timer_path) as Timer
@@ -68,16 +68,16 @@ func move_card(sec : float):
 	var tween := create_tween()
 	for i in range(hands.size()):
 		var c := controls[i] as Control
-		var h := hands[i] as Card
+		var h := hands[i] as MatchCard
 		var pos := c.rect_global_position + c.rect_size / 2
 		tween.parallel()
 		tween.tween_property(h,"global_position",pos,sec)
 
-func _on_clicked_card(card : Card):
+func _on_clicked_card(card : MatchCard):
 	var i := hands.find(card)
 	emit_signal("clicked_card",i,card)
 
-func _on_held_card(card : Card):
+func _on_held_card(card : MatchCard):
 	var i := hands.find(card)
 	emit_signal("held_card",i,card)
 

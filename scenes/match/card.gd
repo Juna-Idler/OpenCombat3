@@ -1,6 +1,6 @@
 extends Node2D
 
-class_name Card
+class_name MatchCard
 
 
 enum Location{
@@ -37,7 +37,7 @@ class Affected:
 		block = 0
 
 
-func initialize_card(id:int,cd : CardData,rotate := false) -> Card:
+func initialize_card(id:int,cd : CardData,rotate := false) -> MatchCard:
 	id_in_deck = id
 	location = Location.STOCK
 	front = $CardFront.initialize_card(cd,rotate)

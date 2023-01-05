@@ -30,7 +30,7 @@ func set_card_list(list : Array,deck_list : Array):
 			container.add_child(ci)
 	
 	for i in list.size():
-		var c := deck_list[list[i]] as Card
+		var c := deck_list[list[i]] as MatchCard
 		var ci = container.get_child(i)
 		ci.visible = true
 		ci.initialize(c,c.global_position,c.z_index,c.scale,c.rotation,c.visible,c.get_parent())
@@ -60,7 +60,7 @@ func set_card_list(list : Array,deck_list : Array):
 	for i in range(list.size()):
 		var ci := container.get_child(i)
 		var pos : Vector2 = ci.rect_global_position - Vector2(-72,-108)
-		var c := ci.card as Card
+		var c := ci.card as MatchCard
 		ci.o_parent_node.remove_child(c)
 		add_child(c)
 		tween.set_parallel(true)
@@ -77,7 +77,7 @@ func restore_card():
 	for ci in container.get_children():
 		if not ci.visible:
 			break
-		var c := ci.card as Card
+		var c := ci.card as MatchCard
 		remove_child(c)
 		ci.o_parent_node.add_child(c)
 		tween.tween_property(c,"rotation",ci.o_rotation,0.5)

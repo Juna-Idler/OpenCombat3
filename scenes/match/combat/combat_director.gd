@@ -50,8 +50,8 @@ func perform(node : Node,lethal : bool):
 	
 	overlay.initialize(player1,player2)
 	power_balance.initialize()
-	var p1_card := player1.deck_list[player1.playing_card_id] as Card
-	var p2_card := player2.deck_list[player2.playing_card_id] as Card
+	var p1_card := player1.deck_list[player1.playing_card_id] as MatchCard
+	var p2_card := player2.deck_list[player2.playing_card_id] as MatchCard
 
 	overlay.modulate = Color(1,1,1,0)
 	overlay.visible = true

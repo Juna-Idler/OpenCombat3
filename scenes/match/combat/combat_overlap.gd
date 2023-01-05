@@ -10,8 +10,8 @@ func _ready():
 	pass
 
 func initialize(p1 : MatchPlayer,p2 : MatchPlayer):
-	var p1_card := p1.deck_list[p1.playing_card_id] as Card
-	var p2_card := p2.deck_list[p2.playing_card_id] as Card
+	var p1_card := p1.deck_list[p1.playing_card_id] as MatchCard
+	var p2_card := p2.deck_list[p2.playing_card_id] as MatchCard
 	p1_avatar.set_power(p1_card.get_current_power())
 	p1_avatar.set_hit(p1_card.get_current_hit())
 	p1_avatar.set_block(p1_card.get_current_block())

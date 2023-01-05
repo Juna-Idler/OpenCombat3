@@ -1,7 +1,7 @@
 extends Node
 
 
-const Card := preload("res://scenes/card/card.tscn")
+const MatchCard := preload("res://scenes/card/card.tscn")
 
 func _ready():
 	var card = Global.card_catalog.get_card_data(4)

@@ -21,7 +21,7 @@ onready var timer := get_node(timer_path) as Timer
 
 
 var controls : Array = []
-var hands : Array# of Card
+var hands : Array# of MatchCard
 var distance : int
 var reorder : bool = false
 var drag_banned : bool = false
@@ -93,7 +93,7 @@ func move_card(sec : float):
 	var tween := create_tween()
 	for i in range(hands.size()):
 		var c := controls[i] as Control
-		var h := hands[i] as Card
+		var h := hands[i] as MatchCard
 		var pos := c.rect_global_position + c.rect_size / 2
 		tween.parallel().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 		tween.tween_property(h,"global_position",pos,sec)

@@ -10,7 +10,7 @@ export(bool) onready var opponent_layout : bool = false setget set_opponent_layo
 static func _get_effect_short_name(id : int)->String:
 	return Global.card_catalog.get_attribute_data(id).short_name
 
-func set_effect(effect : Card.Affected):
+func set_effect(effect : MatchCard.Affected):
 	var output : PoolStringArray = []
 	if opponent_layout:
 		if effect.block != 0:

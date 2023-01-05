@@ -7,7 +7,7 @@ signal held_card(card)
 export var timer_path: NodePath
 onready var _timer := (get_node(timer_path) if timer_path else _timer) as Timer
 
-var card : Card
+var card : MatchCard
 
 var _holding := false
 

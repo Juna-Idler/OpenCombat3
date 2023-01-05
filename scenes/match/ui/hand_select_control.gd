@@ -7,7 +7,7 @@ signal held_card(index)
 signal clicked_card(index)
 
 var index : int
-var card : Card
+var card : MatchCard
 
 var _draging := false
 var _drag_point : Vector2

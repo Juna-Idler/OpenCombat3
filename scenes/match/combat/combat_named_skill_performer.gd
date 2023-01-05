@@ -99,7 +99,7 @@ class Absorb extends Skill:
 		tween.tween_callback(csl,"succeeded")
 		var hand_index := data as int
 #		var draw := data[1] as int
-		var card := myself.deck_list[myself.hand[hand_index]] as Card
+		var card := myself.deck_list[myself.hand[hand_index]] as MatchCard
 		var a := [0,0,0]
 		for p in skill.parameter[1].data as Array:
 			var e := p as AttributeData.CardAttribute

@@ -10,7 +10,7 @@ const CARD_MOVE_DURATION : float = 1.0
 
 const ALWAYS_CARD_VISIBLE = false
 
-var deck_list : Array # of Card
+var deck_list : Array # of MatchCard
 
 var hand : Array = [] # of int
 var played : Array = [] # of int
@@ -21,7 +21,7 @@ var damage : int = 0
 var draw : Array = [] # of int
 var effect_logs : Array = [] # of IGameServer.UpdateData.EffectLog
 
-var next_effect := Card.Affected.new(0,0,0)
+var next_effect := MatchCard.Affected.new(0,0,0)
 
 var multiply_power = 1
 var multiply_hit = 1
@@ -29,7 +29,7 @@ var multiply_block = 1
 
 
 var playing_card_id : int = -1
-var playing_card : Card = null
+var playing_card : MatchCard = null
 
 var player_name : String
 
@@ -53,7 +53,7 @@ var power_balance : CombatPowerBalance.Interface
 func get_link_color() -> int:
 	if played.empty():
 		return 0
-	return (deck_list[played.back()] as Card).front.data.color
+	return (deck_list[played.back()] as MatchCard).front.data.color
 
 
 
@@ -75,7 +75,7 @@ func _init(name : String,
 	deck_list = []
 	for i in dl.size():
 		var c := CardScene.instance().initialize_card(i,
-				Global.card_catalog.get_card_data(dl[i]),reverse) as Card
+				Global.card_catalog.get_card_data(dl[i]),reverse) as MatchCard
 		deck_list.append(c)
 		c.position = s_pos
 		c.visible = ALWAYS_CARD_VISIBLE
@@ -96,8 +96,8 @@ func _init(name : String,
 	
 	stock_count = deck_list.size()
 	for i_ in deck_list:
-		var i := i_ as Card
-		i.location = Card.Location.STOCK
+		var i := i_ as MatchCard
+		i.location = MatchCard.Location.STOCK
 	name_lable.set_message_translation(false)
 	name_lable.notification(Node.NOTIFICATION_TRANSLATION_CHANGED)
 	name_lable.text = player_name
@@ -113,10 +113,10 @@ func set_hand(new_hand_indexes:Array):
 	hand = new_hand_indexes
 	var cards := []
 	for i in hand.size():
-		var c := deck_list[hand[i]] as Card
+		var c := deck_list[hand[i]] as MatchCard
 		c.visible = true
 		c.z_index = i + 100
-		c.location = Card.Location.HAND
+		c.location = MatchCard.Location.HAND
 		cards.append(c)
 	hand_area.set_hand_card(cards)
 	hand_area.move_card(CARD_MOVE_DURATION)
@@ -142,7 +142,7 @@ func play(hand_select : int,new_hand : Array,d : int,draw_indexes : Array,s_log 
 func play_end():
 	played.append(playing_card_id)
 	playing_card.z_index = played.size() + 0
-	playing_card.location = Card.Location.PLAYED
+	playing_card.location = MatchCard.Location.PLAYED
 	var tween := playing_card.create_tween()
 	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 	tween.parallel()
@@ -167,7 +167,7 @@ func recover(hand_select : int,new_hand : Array,draw_indexes : Array):
 	draw = draw_indexes
 	if hand_select >= 0:
 		var select_id = hand[hand_select]
-		var recovery_card := deck_list[select_id] as Card
+		var recovery_card := deck_list[select_id] as MatchCard
 		discard_card(hand_select,CARD_MOVE_DURATION)
 		damage -= recovery_card.front.data.level
 		damage_label.text = str(damage) if damage > 0 else ""
@@ -194,10 +194,10 @@ func discard_card(hand_index : int,duration : float):
 	var select_id = hand[hand_index]
 	hand.remove(hand_index)
 	discard.append(select_id)
-	var card := deck_list[select_id] as Card
+	var card := deck_list[select_id] as MatchCard
 	life -= card.get_card_data().level
 	card.z_index = discard.size() + 200
-	card.location = Card.Location.DISCARD
+	card.location = MatchCard.Location.DISCARD
 	var tween := card.create_tween()
 	tween.tween_property(card,"global_position",discard_pos,duration)
 	tween.tween_callback(self,"_set_discard_visible")
@@ -249,10 +249,10 @@ func reset_board(h_card:PoolIntArray,p_card:PoolIntArray,d_card:PoolIntArray,
 		deck_list[i].affected.block = a_list[i].block
 
 	for c_ in deck_list:
-		var c := c_ as Card
-		if c.location != Card.Location.STOCK:
+		var c := c_ as MatchCard
+		if c.location != MatchCard.Location.STOCK:
 			c.show()
-		c.location = Card.Location.STOCK
+		c.location = MatchCard.Location.STOCK
 #		c.position = stock_pos
 #		c.rotation = 0
 
@@ -260,49 +260,49 @@ func reset_board(h_card:PoolIntArray,p_card:PoolIntArray,d_card:PoolIntArray,
 	tween.set_parallel(true)
 
 	for i in played.size():
-		var c := deck_list[played[i]] as Card
+		var c := deck_list[played[i]] as MatchCard
 		c.visible = ALWAYS_CARD_VISIBLE or i >= played.size() - 1
 		c.z_index = i + 0
-		c.location = Card.Location.PLAYED
+		c.location = MatchCard.Location.PLAYED
 		tween.tween_property(c,"global_position",played_pos,CARD_MOVE_DURATION)
 		tween.tween_property(c,"rotation",PI/2.0,CARD_MOVE_DURATION)
 	
 	for i in discard.size():
-		var c := deck_list[discard[i]] as Card
+		var c := deck_list[discard[i]] as MatchCard
 		c.visible = ALWAYS_CARD_VISIBLE or i >= discard.size() - 1
 		c.z_index = i + 200
-		c.location = Card.Location.DISCARD
+		c.location = MatchCard.Location.DISCARD
 		tween.tween_property(c,"global_position",discard_pos,CARD_MOVE_DURATION)
 		tween.tween_property(c,"rotation",0.0,CARD_MOVE_DURATION)
 	
 	var cards := []
 	for i in hand.size():
-		var c := deck_list[hand[i]] as Card
+		var c := deck_list[hand[i]] as MatchCard
 		c.visible = true
 		c.z_index = i + 100
-		c.location = Card.Location.HAND
+		c.location = MatchCard.Location.HAND
 		tween.tween_property(c,"rotation",0.0,CARD_MOVE_DURATION)
 		cards.append(c)
 	hand_area.set_hand_card(cards)
 	hand_area.move_card(CARD_MOVE_DURATION)
 	
 	for c_ in deck_list:
-		var c := c_ as Card
-		if c.location == Card.Location.STOCK:
+		var c := c_ as MatchCard
+		if c.location == MatchCard.Location.STOCK:
 			tween.tween_property(c,"position",stock_pos,CARD_MOVE_DURATION)
 			tween.tween_property(c,"rotation",0.0,CARD_MOVE_DURATION)
 
 	tween.set_parallel(false)
 	for c_ in deck_list:
-		var c := c_ as Card
-		if c.location == Card.Location.STOCK:
+		var c := c_ as MatchCard
+		if c.location == MatchCard.Location.STOCK:
 			if not ALWAYS_CARD_VISIBLE:
 				tween.tween_callback(c,"hide")
-		elif c.location == Card.Location.PLAYED:
+		elif c.location == MatchCard.Location.PLAYED:
 			if c.id_in_deck != played.back():
 				if not ALWAYS_CARD_VISIBLE:
 					tween.tween_callback(c,"hide")
-		elif c.location == Card.Location.DISCARD:
+		elif c.location == MatchCard.Location.DISCARD:
 			if c.id_in_deck != discard.back():
 				if not ALWAYS_CARD_VISIBLE:
 					tween.tween_callback(c,"hide")
