@@ -23,9 +23,7 @@ var effect_logs : Array = [] # of IGameServer.UpdateData.EffectLog
 
 var next_effect := MatchCard.Affected.new(0,0,0)
 
-var multiply_power = 1
-var multiply_hit = 1
-var multiply_block = 1
+var states : Array = [] # of MatchEffect.IState
 
 
 var playing_card_id : int = -1
@@ -50,6 +48,7 @@ var damage_label : Label
 
 var power_balance : CombatPowerBalance.Interface
 
+
 func get_link_color() -> int:
 	if played.empty():
 		return 0
@@ -59,6 +58,7 @@ func get_link_color() -> int:
 
 func _init(name : String,
 		dl:Array,
+		skill_factory : MatchEffect.ISkillFactory,
 		reverse : bool,
 		card_layer:Node,
 		s_pos : Vector2,
@@ -75,7 +75,7 @@ func _init(name : String,
 	deck_list = []
 	for i in dl.size():
 		var c := CardScene.instance().initialize_card(i,
-				Global.card_catalog.get_card_data(dl[i]),reverse) as MatchCard
+				Global.card_catalog.get_card_data(dl[i]),skill_factory,reverse) as MatchCard
 		deck_list.append(c)
 		c.position = s_pos
 		c.visible = ALWAYS_CARD_VISIBLE
@@ -135,9 +135,6 @@ func play(hand_select : int,new_hand : Array,d : int,draw_indexes : Array,s_log 
 	tween.parallel()
 	tween.tween_property(playing_card,"global_position",combat_pos,0.5)\
 			.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
-	multiply_power = 1
-	multiply_hit = 1
-	multiply_block = 1
 
 func play_end():
 	played.append(playing_card_id)
@@ -212,11 +209,11 @@ func set_next_effect_label():
 
 
 func get_current_power() -> int:
-	return int(playing_card.get_current_power() * multiply_power)
+	return playing_card.get_current_power()
 func get_current_hit() -> int:
-	return int(playing_card.get_current_hit() * multiply_hit)
+	return playing_card.get_current_hit()
 func get_current_block() -> int:
-	return int(playing_card.get_current_block() * multiply_block)
+	return playing_card.get_current_block()
 
 func add_attribute(power :int,hit : int,block : int):
 	playing_card.affected.power += power
@@ -226,7 +223,7 @@ func add_attribute(power :int,hit : int,block : int):
 	combat_avatar.set_hit(playing_card.get_current_hit())
 	combat_avatar.set_block(playing_card.get_current_block())
 	if power != 0:
-		power_balance.set_my_power_tween_step_by_step(playing_card.get_current_power() * multiply_power,0.5)
+		power_balance.set_my_power_tween_step_by_step(playing_card.get_current_power(),0.5)
 
 
 

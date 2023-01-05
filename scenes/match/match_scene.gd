@@ -83,11 +83,12 @@ func initialize(server : IGameServer,manipulation : bool = true):
 		$CardLayer.remove_child(c)
 		c.queue_free()
 	
+	var skill_factory = MatchCardSkillFactory.new()
 	var pd := game_server._get_primary_data()
 	deck_regulation = pd.deck_regulation
 	match_regulation = pd.match_regulation
 	myself = MatchPlayer.new(pd.my_name,
-			pd.my_deck_list,false,$CardLayer,my_stock_pos,
+			pd.my_deck_list,skill_factory,false,$CardLayer,my_stock_pos,
 			$UILayer/MyField/HandArea,
 			my_combat_pos,
 			my_played_pos,
@@ -99,7 +100,7 @@ func initialize(server : IGameServer,manipulation : bool = true):
 			$TopUILayer/Control/MyDamage,
 			CombatPowerBalance.Interface.new($BGLayer/PowerBalance,false))
 	rival = MatchPlayer.new(pd.rival_name,
-			pd.rival_deck_list,true,$CardLayer,rival_stock_pos,
+			pd.rival_deck_list,skill_factory,true,$CardLayer,rival_stock_pos,
 			$UILayer/RivalField/HandArea,
 			rival_combat_pos,
 			rival_played_pos,
@@ -193,7 +194,7 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 			Array(data.rival.draw),data.rival.effect_logs,tween)
 	yield(tween,"finished")
 
-	yield(combat_director.perform(self,data.next_phase == IGameServer.Phase.GAME_END),"completed")
+	yield(combat_director.perform(data.next_phase == IGameServer.Phase.GAME_END),"completed")
 
 	if data.next_phase == IGameServer.Phase.GAME_END:
 		$LimitTimer.stop()

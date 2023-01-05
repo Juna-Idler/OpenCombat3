@@ -11,7 +11,12 @@ onready var avatar := $Image
 onready var skills := $SkillList.get_children()
 # [$SkillList/Skill1, $SkillList/Skill2,$SkillList/Skill3,$SkillList/Skill4]
 
+onready var states
+
+
 export(bool) onready var opponent_layout : bool = false setget set_opponent_layout
+
+var current_effect_line : CombatSkillLine
 
 var power : int
 var hit : int
@@ -78,6 +83,11 @@ func initialize(cd : CardData,vs_color : int,link_color : int):
 func _ready():
 	pass
 
+func set_effect_line(i : int):
+	if i >= 0:
+		current_effect_line = skills[i]
+	else:
+		current_effect_line = states[-i-1]
 
 func set_power(p : int):
 	power = p

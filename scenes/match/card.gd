@@ -10,12 +10,6 @@ enum Location{
 	DISCARD,
 }
 
-var id_in_deck:int
-var location : int
-
-var front : CardFront = null
-
-var affected := Affected.new(0,0,0)
 class Affected:
 	var power : int
 	var hit : int
@@ -37,10 +31,23 @@ class Affected:
 		block = 0
 
 
-func initialize_card(id:int,cd : CardData,rotate := false) -> MatchCard:
+var id_in_deck:int
+var location : int
+
+var skills : Array # of MatchEffect.IEffect
+
+var front : CardFront = null
+
+var affected := Affected.new(0,0,0)
+
+
+
+func initialize_card(id:int,cd : CardData,skill_factory : MatchEffect.ISkillFactory,rotate := false) -> MatchCard:
 	id_in_deck = id
 	location = Location.STOCK
 	front = $CardFront.initialize_card(cd,rotate)
+	for i in front.data.skills:
+		skills.append(skill_factory._create(i))
 
 	return self
 

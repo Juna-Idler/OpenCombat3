@@ -69,10 +69,10 @@ class UpdateData:
 	var situation : int
 
 	class EffectLog:
-		var index : int # select card skill index
+		var index : int # (plus) select card skill index  or (minus) state index in this timing
 		var timing : int
 		var priority : int
-		var data # skill proper data
+		var data # proper data
 		
 		func _init(i,t,p,d):
 			index = i
