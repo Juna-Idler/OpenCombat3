@@ -4,7 +4,7 @@ extends Reference
 
 class_name MatchPlayer
 
-const CardScene = preload("../card/card.tscn")
+const CardScene = preload("card.tscn")
 
 const CARD_MOVE_DURATION : float = 1.0
 
@@ -19,7 +19,7 @@ var stock_count : int
 var life : int = 0
 var damage : int = 0
 var draw : Array = [] # of int
-var skill_logs : Array = [] # of IGameServer.UpdateData.SkillLog
+var effect_logs : Array = [] # of IGameServer.UpdateData.EffectLog
 
 var next_effect := Card.Affected.new(0,0,0)
 
@@ -126,7 +126,7 @@ func play(hand_select : int,new_hand : Array,d : int,draw_indexes : Array,s_log 
 	hand = new_hand
 	damage = d
 	draw = draw_indexes
-	skill_logs = s_log
+	effect_logs = s_log
 	playing_card_id = hand[hand_select]
 	playing_card = deck_list[playing_card_id]
 	hand.remove(hand_select)
@@ -226,16 +226,6 @@ func add_attribute(power :int,hit : int,block : int):
 	combat_avatar.set_hit(playing_card.get_current_hit())
 	combat_avatar.set_block(playing_card.get_current_block())
 	if power != 0:
-		power_balance.set_my_power_tween_step_by_step(playing_card.get_current_power() * multiply_power,0.5)
-
-func multiply_attribute(power : float, hit : float, block : float):
-	multiply_power *= power
-	multiply_hit *= hit
-	multiply_block *= block
-	combat_avatar.set_power(int(playing_card.get_current_power() * multiply_power))
-	combat_avatar.set_hit(int(playing_card.get_current_hit() * multiply_hit))
-	combat_avatar.set_block(int(playing_card.get_current_block() * multiply_block))
-	if power != 1:
 		power_balance.set_my_power_tween_step_by_step(playing_card.get_current_power() * multiply_power,0.5)
 
 

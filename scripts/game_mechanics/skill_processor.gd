@@ -1,15 +1,8 @@
 
 class_name SkillProcessor
 
-class BaseSkill extends MechanicsData.ISkill:
-	var _skill : SkillData.NamedSkill
-	func _init(data : SkillData.NamedSkill):
-		_skill = data
-	func _get_skill() -> SkillData.NamedSkill:
-		return _skill
 
-
-class Reinforce extends BaseSkill:
+class Reinforce extends MechanicsData.BasicSkill:
 	const PRIORITY = 1
 	func _init(data : SkillData.NamedSkill).(data):
 		pass
@@ -28,10 +21,10 @@ class Reinforce extends BaseSkill:
 					affected.hit += e.parameter
 				AttributeData.AttributeType.BLOCK:
 					affected.block += e.parameter
-		myself._append_skill_log(index,MechanicsData.SkillTiming.BEFORE,PRIORITY,true)
+		myself._append_effect_log(index,MechanicsData.EffectTiming.BEFORE,PRIORITY,true)
 
 
-class Pierce extends BaseSkill:
+class Pierce extends MechanicsData.BasicSkill:
 	const PRIORITY = 1
 	func _init(data : SkillData.NamedSkill).(data):
 		pass
@@ -45,10 +38,10 @@ class Pierce extends BaseSkill:
 # warning-ignore:integer_division
 			damage = (rival._get_current_block() + 1) / 2
 			rival._add_damage(damage)
-		myself._append_skill_log(index,MechanicsData.SkillTiming.AFTER,PRIORITY,damage)
+		myself._append_effect_log(index,MechanicsData.EffectTiming.AFTER,PRIORITY,damage)
 
 
-class Charge extends BaseSkill:
+class Charge extends MechanicsData.BasicSkill:
 	const PRIORITY = 1
 	func _init(data : SkillData.NamedSkill).(data):
 		pass
@@ -69,12 +62,12 @@ class Charge extends BaseSkill:
 					AttributeData.AttributeType.BLOCK:
 						affected.block += e.parameter
 			myself._add_next_effect(affected)
-			myself._append_skill_log(index,MechanicsData.SkillTiming.END,PRIORITY,true)
+			myself._append_effect_log(index,MechanicsData.EffectTiming.END,PRIORITY,true)
 		else:
-			myself._append_skill_log(index,MechanicsData.SkillTiming.END,PRIORITY,false)
+			myself._append_effect_log(index,MechanicsData.EffectTiming.END,PRIORITY,false)
 
 
-class Isolate extends BaseSkill:
+class Isolate extends MechanicsData.BasicSkill:
 	const PRIORITY = 255
 	func _init(data : SkillData.NamedSkill).(data):
 		pass
@@ -84,10 +77,10 @@ class Isolate extends BaseSkill:
 	func _process_engaged(index : int,_priority : int,_situation : int,
 			myself : MechanicsData.IPlayer,_rival : MechanicsData.IPlayer) -> int:
 		myself._add_damage(1)
-		myself._append_skill_log(index,MechanicsData.SkillTiming.ENGAGED,PRIORITY,true)
+		myself._append_effect_log(index,MechanicsData.EffectTiming.ENGAGED,PRIORITY,true)
 		return 0
 
-class Absorb extends BaseSkill:
+class Absorb extends MechanicsData.BasicSkill:
 	const PRIORITY = 1
 	func _init(data : SkillData.NamedSkill).(data):
 		pass
@@ -116,5 +109,5 @@ class Absorb extends BaseSkill:
 					affected.hit += e.parameter * level
 				AttributeData.AttributeType.BLOCK:
 					affected.block += e.parameter * level
-		myself._append_skill_log(index,MechanicsData.SkillTiming.BEFORE,PRIORITY,data)
+		myself._append_effect_log(index,MechanicsData.EffectTiming.BEFORE,PRIORITY,data)
 	

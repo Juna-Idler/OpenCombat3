@@ -12,7 +12,7 @@ class SkillOrder:
 	var situation : int
 	var situation_sign : int
 
-	func _init(l: IGameServer.UpdateData.SkillLog,
+	func _init(l: IGameServer.UpdateData.EffectLog,
 			m:MatchPlayer,r:MatchPlayer,s : int = 0,s_sign : int = 0):
 		priority = l.priority
 		index = l.index
@@ -154,13 +154,13 @@ func perform(node : Node,lethal : bool):
 
 func _before_skills_effect(tween : SceneTreeTween):
 	var skill_order := []
-	for _l in player1.skill_logs:
-		var l := _l as IGameServer.UpdateData.SkillLog
-		if l.timing == IGameServer.SkillTiming.BEFORE:
+	for _l in player1.effect_logs:
+		var l := _l as IGameServer.UpdateData.EffectLog
+		if l.timing == IGameServer.EffectTiming.BEFORE:
 			skill_order.append(SkillOrder.new(l,player1,player2))
-	for _l in player2.skill_logs:
-		var l := _l as IGameServer.UpdateData.SkillLog
-		if l.timing == IGameServer.SkillTiming.BEFORE:
+	for _l in player2.effect_logs:
+		var l := _l as IGameServer.UpdateData.EffectLog
+		if l.timing == IGameServer.EffectTiming.BEFORE:
 			skill_order.append(SkillOrder.new(l,player2,player1))
 
 	skill_order.sort_custom(SkillOrder,"custom_compare")
@@ -172,13 +172,13 @@ func _before_skills_effect(tween : SceneTreeTween):
 
 func _engaged_skills_effect(tween : SceneTreeTween,situation : int) -> int:
 	var skill_order := []
-	for _l in player1.skill_logs:
-		var l := _l as IGameServer.UpdateData.SkillLog
-		if l.timing == IGameServer.SkillTiming.ENGAGED:
+	for _l in player1.effect_logs:
+		var l := _l as IGameServer.UpdateData.EffectLog
+		if l.timing == IGameServer.EffectTiming.ENGAGED:
 			skill_order.append(SkillOrder.new(l,player1,player2,situation,1))
-	for _l in player2.skill_logs:
-		var l := _l as IGameServer.UpdateData.SkillLog
-		if l.timing == IGameServer.SkillTiming.ENGAGED:
+	for _l in player2.effect_logs:
+		var l := _l as IGameServer.UpdateData.EffectLog
+		if l.timing == IGameServer.EffectTiming.ENGAGED:
 			skill_order.append(SkillOrder.new(l,player2,player1,-situation,-1))
 
 	skill_order.sort_custom(SkillOrder,"custom_compare")
@@ -191,13 +191,13 @@ func _engaged_skills_effect(tween : SceneTreeTween,situation : int) -> int:
 
 func _after_skills_effect(tween : SceneTreeTween,situation : int):
 	var skill_order := []
-	for _l in player1.skill_logs:
-		var l := _l as IGameServer.UpdateData.SkillLog
-		if l.timing == IGameServer.SkillTiming.AFTER:
+	for _l in player1.effect_logs:
+		var l := _l as IGameServer.UpdateData.EffectLog
+		if l.timing == IGameServer.EffectTiming.AFTER:
 			skill_order.append(SkillOrder.new(l,player1,player2,situation,1))
-	for _l in player2.skill_logs:
-		var l := _l as IGameServer.UpdateData.SkillLog
-		if l.timing == IGameServer.SkillTiming.AFTER:
+	for _l in player2.effect_logs:
+		var l := _l as IGameServer.UpdateData.EffectLog
+		if l.timing == IGameServer.EffectTiming.AFTER:
 			skill_order.append(SkillOrder.new(l,player2,player1,-situation,-1))
 
 	skill_order.sort_custom(SkillOrder,"custom_compare")
@@ -209,13 +209,13 @@ func _after_skills_effect(tween : SceneTreeTween,situation : int):
 
 func _end_skills_effect(tween : SceneTreeTween,situation : int):
 	var skill_order := []
-	for _l in player1.skill_logs:
-		var l := _l as IGameServer.UpdateData.SkillLog
-		if l.timing == IGameServer.SkillTiming.END:
+	for _l in player1.effect_logs:
+		var l := _l as IGameServer.UpdateData.EffectLog
+		if l.timing == IGameServer.EffectTiming.END:
 			skill_order.append(SkillOrder.new(l,player1,player2,situation,1))
-	for _l in player2.skill_logs:
-		var l := _l as IGameServer.UpdateData.SkillLog
-		if l.timing == IGameServer.SkillTiming.END:
+	for _l in player2.effect_logs:
+		var l := _l as IGameServer.UpdateData.EffectLog
+		if l.timing == IGameServer.EffectTiming.END:
 			skill_order.append(SkillOrder.new(l,player2,player1,-situation,-1))
 
 	skill_order.sort_custom(SkillOrder,"custom_compare")

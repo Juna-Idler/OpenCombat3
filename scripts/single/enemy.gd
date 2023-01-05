@@ -19,7 +19,7 @@ var select : int = -1
 var damage : int = 0
 var draw_indexes : PoolIntArray = []
 var select_card : MechanicsData.PlayerCard = null
-var skill_log : Array = [] # of SkillLog
+var skill_log : Array = [] # of EffectLog
 
 
 
@@ -68,7 +68,7 @@ func _get_damage() -> int:
 func _get_draw() -> PoolIntArray:
 	return draw_indexes
 	
-func _get_skill_log() -> Array:
+func _get_effect_log() -> Array:
 	return skill_log
 
 	
@@ -108,8 +108,8 @@ func _damage_is_fatal() -> bool:
 func _add_damage(d: int):
 	damage += d
 	
-func _append_skill_log(index : int,timing : int,priority : int,data) -> void:
-	skill_log.append(MechanicsData.SkillLog.new(index,timing,priority,data))
+func _append_effect_log(index : int,timing : int,priority : int,data) -> void:
+	skill_log.append(MechanicsData.EffectLog.new(index,timing,priority,data))
 	
 func _combat_end() -> void:
 	played.push_back(select_card.id_in_deck)

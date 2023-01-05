@@ -23,7 +23,7 @@ signal recieved_complete_board(data)
 enum  Phase {GAME_END = -1,COMBAT = 0,RECOVERY = 1}
 enum  Situation {INFERIOR = -1,EVEN = 0,SUPERIOR = 1}
 
-enum SkillTiming {BEFORE = 0,ENGAGED = 1,AFTER = 2,END = 3}
+enum EffectTiming {BEFORE = 0,ENGAGED = 1,AFTER = 2,END = 3}
 
 
 class PrimaryData:
@@ -68,7 +68,7 @@ class UpdateData:
 	var next_phase : int
 	var situation : int
 
-	class SkillLog:
+	class EffectLog:
 		var index : int # select card skill index
 		var timing : int
 		var priority : int
@@ -83,7 +83,7 @@ class UpdateData:
 	class PlayerData:
 		var hand:PoolIntArray # of int
 		var select:int
-		var skill_logs:Array # of SkillLog
+		var effect_logs:Array # of EffectLog
 		var draw:PoolIntArray # of int
 		var damage:int
 		var life:int
@@ -92,7 +92,7 @@ class UpdateData:
 		func _init(h,s,sl,dc,d,l,t):
 			hand = h
 			select = s
-			skill_logs = sl
+			effect_logs = sl
 			draw = dc
 			damage = d
 			life = l

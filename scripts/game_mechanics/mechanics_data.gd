@@ -55,9 +55,9 @@ class PlayerCard:
 		return int_max(data.block + affected.block,0)
 
 
-enum SkillTiming {BEFORE = 0,ENGAGED = 1,AFTER = 2,END = 3}
+enum EffectTiming {BEFORE = 0,ENGAGED = 1,AFTER = 2,END = 3}
 
-class SkillLog:
+class EffectLog:
 	var index : int # skill index of playing card 
 	var timing : int
 	var priority : int
@@ -86,6 +86,9 @@ class IPlayer:
 	func _get_life() -> int:
 		return 0
 
+	func _get_states() -> Array:
+		return []
+
 	func _get_next_effect() -> Affected:
 		return null
 	func _add_next_effect(_add : Affected):
@@ -103,7 +106,7 @@ class IPlayer:
 	func _get_draw() -> PoolIntArray:
 		return PoolIntArray()
 
-	func _get_skill_log() -> Array:
+	func _get_effect_log() -> Array:
 		return []
 
 
@@ -128,7 +131,7 @@ class IPlayer:
 	func _add_damage(_d: int) -> void:
 		return
 		
-	func _append_skill_log(_index : int,_timing : int,_priority : int,_data) -> void:
+	func _append_effect_log(_index : int,_timing : int,_priority : int,_data) -> void:
 		return
 
 	func _combat_end() -> void:
@@ -169,10 +172,9 @@ class IPlayer:
 		return PoolIntArray()
 
 
+
+
 class IEffect:
-	func _serialize() -> Array:
-		return []
-	
 	func _before_priority() -> Array:
 		return []
 	func _process_before(_index : int,_priority : int,
@@ -200,19 +202,34 @@ class IEffect:
 
 
 class ISkill extends IEffect:
-#	func _init(_data : SkillData.NamedSkill):
-
 	func _get_skill() -> SkillData.NamedSkill:
 		return null
 
-
-
-class IState extends IEffect:
-	func is_removed() -> bool:
-		return false
+class BasicSkill extends ISkill:
+	var _skill : SkillData.NamedSkill
+	func _init(skill : SkillData.NamedSkill):
+		_skill = skill
+		
+	func _get_skill() -> SkillData.NamedSkill:
+		return _skill
 
 
 class ISkillFactory:
 	func _create(_skill : SkillData.NamedSkill) -> ISkill:
 		return null
+
+
+
+class IState extends IEffect:
+	func _serialize() -> String:
+		return ""
+
+class BasicState extends IState:
+	var _container : Array
+	func _init(container : Array):
+		_container = container
+		_container.append(self)
+
+	func _remove_self() -> void:
+		_container.erase(self)
 

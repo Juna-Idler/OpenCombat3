@@ -15,3 +15,8 @@ func _on_Button_pressed():
 
 	print("button")
 	pass # Replace with function body.
+
+
+func _on_RichTextLabel_meta_clicked(meta):
+	print(meta)
+	pass # Replace with function body.

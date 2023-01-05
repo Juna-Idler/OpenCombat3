@@ -92,7 +92,7 @@ func _send_combat_select(round_count:int,index:int,hands_order:PoolIntArray = []
 #	var p2update := UpdateData.new(_processor.round_count,_processor.phase,-_processor.situation,p2,p1)
 	_processor.reset_select()
 
-	var skill_count := p1.skill_logs.size() + p2.skill_logs.size()
+	var skill_count := p1.effect_logs.size() + p2.effect_logs.size()
 	_delay_time = skill_count * COMBAT_SKILL_DELAY + COMBAT_RESULT_DELAY
 	if _processor.phase == Phase.COMBAT:
 		_result = _commander._combat_select(create_commander_player(_processor.player2),
@@ -166,10 +166,10 @@ func _send_surrender():
 
 
 static func _create_update_playerData(player : MechanicsData.IPlayer,time : float) -> UpdateData.PlayerData:
-	var skilllog = []
-	for sl in player._get_skill_log():
-		var s := sl as MechanicsData.SkillLog
-		skilllog.append(IGameServer.UpdateData.SkillLog.new(s.index,s.timing,s.priority,s.data))
-	var p = IGameServer.UpdateData.PlayerData.new(player._get_playing_hand(),player._get_select(),skilllog,
+	var effect_log = []
+	for sl in player._get_effect_log():
+		var s := sl as MechanicsData.EffectLog
+		effect_log.append(IGameServer.UpdateData.EffectLog.new(s.index,s.timing,s.priority,s.data))
+	var p = IGameServer.UpdateData.PlayerData.new(player._get_playing_hand(),player._get_select(),effect_log,
 			player._get_draw(),player._get_damage(),player._get_life(),time)
 	return p;

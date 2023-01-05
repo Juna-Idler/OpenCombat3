@@ -85,8 +85,8 @@ func _get_damage() -> int:
 func _get_draw() -> PoolIntArray:
 	return step_data.draw
 	
-func _get_skill_log() -> Array:
-	return step_data.skill_logs
+func _get_effect_log() -> Array:
+	return step_data.effect_logs
 
 	
 func _combat_start(i : int) -> void:
@@ -118,7 +118,7 @@ func _damage_is_fatal() -> bool:
 func _add_damage(_d: int) -> void:
 	return
 
-func _append_skill_log(_index : int,_timing : int,_priority : int,_data) -> void:
+func _append_effect_log(_index : int,_timing : int,_priority : int,_data) -> void:
 	return
 
 func _combat_end() -> void:

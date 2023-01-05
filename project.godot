@@ -27,7 +27,7 @@ _global_script_classes=[ {
 "base": "Node2D",
 "class": "Card",
 "language": "GDScript",
-"path": "res://scenes/card/card.gd"
+"path": "res://scenes/match/card.gd"
 }, {
 "base": "Reference",
 "class": "CardCatalog",
@@ -295,6 +295,11 @@ _global_script_classes=[ {
 "path": "res://scripts/game_mechanics/skill_processor.gd"
 }, {
 "base": "Reference",
+"class": "StateData",
+"language": "GDScript",
+"path": "res://scripts/game_data/state_data.gd"
+}, {
+"base": "Reference",
 "class": "StateProcessor",
 "language": "GDScript",
 "path": "res://scripts/game_mechanics/state_processor.gd"
@@ -372,6 +377,7 @@ _global_script_class_icons={
 "SkillData": "",
 "SkillFactory": "",
 "SkillProcessor": "",
+"StateData": "",
 "StateProcessor": "",
 "TitleScene": "",
 "TransitionFade": "",

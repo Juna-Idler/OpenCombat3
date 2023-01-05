@@ -76,12 +76,20 @@ particles_anim_loop = false
 script = ExtResource( 2 )
 
 [node name="Panel" type="Panel" parent="."]
-visible = false
 margin_left = 696.0
 margin_top = 72.0
 margin_right = 888.0
 margin_bottom = 328.0
 custom_styles/panel = SubResource( 1 )
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel"]
+margin_left = 24.0
+margin_top = 32.0
+margin_right = 160.0
+margin_bottom = 160.0
+bbcode_enabled = true
+bbcode_text = "BBCodeText [url]url[/url]"
+text = "BBCodeText url"
 
 [node name="Panel2" type="Panel" parent="."]
 visible = false
@@ -386,3 +394,5 @@ position = Vector2( 696, 368 )
 texture = ExtResource( 11 )
 anim_offset = 1.0
 anim_offset_random = 1.0
+
+[connection signal="meta_clicked" from="Panel/RichTextLabel" to="." method="_on_RichTextLabel_meta_clicked"]

@@ -99,10 +99,10 @@ func _send_surrender():
 
 
 static func _create_update_playerData(player : MechanicsData.IPlayer) -> UpdateData.PlayerData:
-	var skilllog = []
-	for sl in player._get_skill_log():
-		var s := sl as MechanicsData.SkillLog
-		skilllog.append(IGameServer.UpdateData.SkillLog.new(s.index,s.timing,s.priority,s.data))
-	var p = IGameServer.UpdateData.PlayerData.new(player._get_playing_hand(),player._get_select(),skilllog,
+	var effect_log = []
+	for sl in player._get_effect_log():
+		var s := sl as MechanicsData.EffectLog
+		effect_log.append(IGameServer.UpdateData.EffectLog.new(s.index,s.timing,s.priority,s.data))
+	var p = IGameServer.UpdateData.PlayerData.new(player._get_playing_hand(),player._get_select(),effect_log,
 			player._get_draw(),player._get_damage(),player._get_life(),-1)
 	return p;

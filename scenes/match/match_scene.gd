@@ -173,7 +173,7 @@ func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
 
 func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 	if data.myself.time >= 0:
-		var skill_count := data.myself.skill_logs.size() + data.rival.skill_logs.size()
+		var skill_count := data.myself.effect_logs.size() + data.rival.effect_logs.size()
 		var result_delay := skill_count * COMBAT_SKILL_DELAY + COMBAT_RESULT_DELAY
 		if data.next_phase == IGameServer.Phase.COMBAT:
 			delay_time = match_regulation.combat_time + result_delay
@@ -188,9 +188,9 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 	performing = true
 	var tween := create_tween()
 	myself.play(data.myself.select,data.myself.hand,data.myself.damage,
-			Array(data.myself.draw),data.myself.skill_logs,tween)
+			Array(data.myself.draw),data.myself.effect_logs,tween)
 	rival.play(data.rival.select,data.rival.hand,data.rival.damage,
-			Array(data.rival.draw),data.rival.skill_logs,tween)
+			Array(data.rival.draw),data.rival.effect_logs,tween)
 	yield(tween,"finished")
 
 	yield(combat_director.perform(self,data.next_phase == IGameServer.Phase.GAME_END),"completed")

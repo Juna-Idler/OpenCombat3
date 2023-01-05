@@ -26,7 +26,7 @@ class TimedUpdateData:
 
 	static func _update_player_to_json(player ) -> Dictionary:
 		var logs : Array = []
-		for i in player.skill_logs:
+		for i in player.effect_logs:
 			logs.append({"i":i.index,"t":i.timing,"p":i.priority,"d":i.data})
 		return {"h":player.hand,"i":player.select,"s":logs,"dc":player.draw,
 				"d":player.damage,"l":player.life,"t":player.time}
@@ -34,7 +34,7 @@ class TimedUpdateData:
 	static func _update_player_from_json(json : Dictionary):# -> IGameServer.UpdateData.PlayerData:
 		var logs := []
 		for l in (json["s"] as Array):
-			logs.append(IGameServer.UpdateData.SkillLog.new(l["i"],l["t"],l["p"],l["d"]))
+			logs.append(IGameServer.UpdateData.EffectLog.new(l["i"],l["t"],l["p"],l["d"]))
 		return IGameServer.UpdateData.PlayerData.new(json["h"],json["i"],logs,
 				json["dc"],json["d"],json["l"],json["t"])
 
