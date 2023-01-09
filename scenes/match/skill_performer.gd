@@ -47,6 +47,8 @@ class Charge extends MatchEffect.ISkill:
 	
 	func _end(_priority : int,_situation : int,myself : MatchPlayer,_rival : MatchPlayer,data) -> void:
 		if data:
+			
+			
 			myself.next_effect.power += attributes[0]
 			myself.next_effect.hit += attributes[1]
 			myself.next_effect.block += attributes[2]

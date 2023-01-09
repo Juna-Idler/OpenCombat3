@@ -17,5 +17,6 @@ visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 
+[connection signal="return_button_pressed" from="DeckSelectScene" to="." method="_on_DeckSelectScene_return_button_pressed"]
 [connection signal="decide_button_pressed" from="RegulationSelect" to="." method="_on_RegulationSelect_decide_button_pressed"]
 [connection signal="return_button_pressed" from="RegulationSelect" to="." method="_on_RegulationSelect_return_button_pressed"]

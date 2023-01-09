@@ -58,10 +58,10 @@ class PlayerCard:
 enum EffectTiming {BEFORE = 0,ENGAGED = 1,AFTER = 2,END = 3}
 
 class EffectLog:
-	var index : int # skill index of playing card 
+	var index : int # (plus) select card skill index  or (minus) state index in this timing
 	var timing : int
 	var priority : int
-	var data # skill proper data
+	var data # fit data
 	
 	func _init(i,t,p,d):
 		index = i
@@ -221,8 +221,8 @@ class ISkillFactory:
 
 
 class IState extends IEffect:
-	func _serialize() -> String:
-		return ""
+	func _serialize() -> Array: # [id,fit_data]
+		return [0,null]
 
 class BasicState extends IState:
 	var _container : Array
@@ -230,6 +230,5 @@ class BasicState extends IState:
 		_container = container
 		_container.append(self)
 
-	func _remove_self() -> void:
+	func remove_self() -> void:
 		_container.erase(self)
-

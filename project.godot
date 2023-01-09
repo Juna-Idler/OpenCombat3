@@ -205,6 +205,11 @@ _global_script_classes=[ {
 "path": "res://scenes/match/skill_performer.gd"
 }, {
 "base": "Reference",
+"class": "MatchStatePerformer",
+"language": "GDScript",
+"path": "res://scenes/match/state_performer.gd"
+}, {
+"base": "Reference",
 "class": "MechanicsData",
 "language": "GDScript",
 "path": "res://scripts/game_mechanics/mechanics_data.gd"
@@ -309,6 +314,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/game_data/state_data.gd"
 }, {
+"base": "",
+"class": "StateDeserializer",
+"language": "GDScript",
+"path": "res://scenes/match/state_deserializer.gd"
+}, {
 "base": "Reference",
 "class": "StateProcessor",
 "language": "GDScript",
@@ -369,6 +379,7 @@ _global_script_class_icons={
 "MatchPlayer": "",
 "MatchScene": "",
 "MatchSkillPerformer": "",
+"MatchStatePerformer": "",
 "MechanicsData": "",
 "NextEffectLabel": "",
 "OfflinePlayer": "",
@@ -390,6 +401,7 @@ _global_script_class_icons={
 "SkillFactory": "",
 "SkillProcessor": "",
 "StateData": "",
+"StateDeserializer": "",
 "StateProcessor": "",
 "TitleScene": "",
 "TransitionFade": "",

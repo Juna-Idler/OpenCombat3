@@ -4,6 +4,7 @@ class_name StateProcessor
 
 
 class Reinforce extends MechanicsData.BasicState:
+	const STATE_ID = 1
 	const PRIORITY = 1
 	var power: int
 	var hit : int
@@ -20,3 +21,7 @@ class Reinforce extends MechanicsData.BasicState:
 		var affected := myself._get_playing_card().affected
 		affected.add(power,hit,block)
 		myself._append_effect_log(index,MechanicsData.EffectTiming.BEFORE,PRIORITY,true)
+		remove_self()
+
+	func _serialize() -> Array: # [id,fit_data]
+		return [STATE_ID,[power,hit,block]]

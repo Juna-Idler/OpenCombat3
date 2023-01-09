@@ -63,6 +63,9 @@ class Charge extends MechanicsData.BasicSkill:
 						affected.block += e.parameter
 			myself._add_next_effect(affected)
 			myself._append_effect_log(index,MechanicsData.EffectTiming.END,PRIORITY,true)
+			
+#			var state = StateProcessor.Reinforce.new(affected.power,affected.hit,affected.block,myself._get_states())
+#			myself._get_states().append(state)
 		else:
 			myself._append_effect_log(index,MechanicsData.EffectTiming.END,PRIORITY,false)
 

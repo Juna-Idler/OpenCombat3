@@ -72,7 +72,7 @@ class UpdateData:
 		var index : int # (plus) select card skill index  or (minus) state index in this timing
 		var timing : int
 		var priority : int
-		var data # proper data
+		var data # fit data
 		
 		func _init(i,t,p,d):
 			index = i

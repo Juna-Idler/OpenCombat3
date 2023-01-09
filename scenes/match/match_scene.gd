@@ -196,6 +196,9 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 
 	yield(combat_director.perform(data.next_phase == IGameServer.Phase.GAME_END),"completed")
 
+	$"%MyStatesPanel".set_states(myself.states)
+	$"%RivalStatesPanel".set_states((rival.states))
+	
 	if data.next_phase == IGameServer.Phase.GAME_END:
 		$LimitTimer.stop()
 		performing = false

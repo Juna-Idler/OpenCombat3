@@ -23,19 +23,26 @@ class ISkillFactory:
 
 
 class IState extends IEffect:
-	func _serialize() -> String:
+	func _get_caption() -> String:
+		return ""
+	func _get_short_caption() -> String:
+		return ""
+	func _get_description() -> String:
 		return ""
 
 class BasicState extends IState:
+	var _state : StateData.PlayerStateData
 	var _container : Array
-	func _init(container : Array):
+	func _init(state : StateData.PlayerStateData,container : Array):
+		_state = state
 		_container = container
 		_container.append(self)
 
-	func _remove_self() -> void:
+	func remove_self() -> void:
 		_container.erase(self)
 
-class IStateFactory:
-	func _create() -> IState:
+
+class IStateDeserializer:
+	func _deserialize(_state : StateData.PlayerStateData,_data,_container : Array) -> IState:
 		return null
 

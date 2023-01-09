@@ -6,11 +6,11 @@ extends Node2D
 class_name CombatSkillLine
 
 
-const long_margin = 4
-const short_margin = 8
+const LONG_MARGIN = 4
+const SHORT_MARGIN = 8
 
-const long_size = 24
-const short_size = 16
+const LONG_SIZE = 24
+const SHORT_SIZE = 16
 
 export(bool) onready var opponent_layout : bool = false setget set_opponent_layout
 
@@ -99,34 +99,34 @@ func set_opponent_layout(value):
 		left.anchor_right = 1.0
 		left.anchor_top = 1.0
 		left.anchor_bottom = 1.0
-		left.margin_left = -(short_margin + short_size)
-		left.margin_top = -(long_margin + long_size)
-		left.margin_right = -short_margin
-		left.margin_bottom = -long_margin
+		left.margin_left = -(SHORT_MARGIN + SHORT_SIZE)
+		left.margin_top = -(LONG_MARGIN + LONG_SIZE)
+		left.margin_right = -SHORT_MARGIN
+		left.margin_bottom = -LONG_MARGIN
 
 		right.anchor_left = 0
 		right.anchor_right = 0
 		right.anchor_top = 0
 		right.anchor_bottom = 0
-		right.margin_left = long_margin
-		right.margin_top = short_margin
-		right.margin_right = long_margin + long_size
-		right.margin_bottom = short_margin + short_size
+		right.margin_left = LONG_MARGIN
+		right.margin_top = SHORT_MARGIN
+		right.margin_right = LONG_MARGIN + LONG_SIZE
+		right.margin_bottom = SHORT_MARGIN + SHORT_SIZE
 	else:
 		left.anchor_left = 0.0
 		left.anchor_right = 0.0
 		left.anchor_top = 0.0
 		left.anchor_bottom = 0.0
-		left.margin_left = short_margin
-		left.margin_top = long_margin
-		left.margin_right = short_margin + short_size
-		left.margin_bottom = long_margin + long_size
+		left.margin_left = SHORT_MARGIN
+		left.margin_top = LONG_MARGIN
+		left.margin_right = SHORT_MARGIN + SHORT_SIZE
+		left.margin_bottom = LONG_MARGIN + LONG_SIZE
 
 		right.anchor_left = 1.0
 		right.anchor_right = 1.0
 		right.anchor_top = 1.0
 		right.anchor_bottom = 1.0
-		right.margin_left = -(long_margin + long_size)
-		right.margin_top = -(short_margin + short_size)
-		right.margin_right = -long_margin
-		right.margin_bottom = -short_margin
+		right.margin_left = -(LONG_MARGIN + LONG_SIZE)
+		right.margin_top = -(SHORT_MARGIN + SHORT_SIZE)
+		right.margin_right = -LONG_MARGIN
+		right.margin_bottom = -SHORT_MARGIN

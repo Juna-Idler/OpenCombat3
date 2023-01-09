@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://scenes/match/match_scene.gd" type="Script" id=1]
 [ext_resource path="res://scenes/settings/settings scene.tscn" type="PackedScene" id=2]
@@ -12,6 +12,7 @@
 [ext_resource path="res://scenes/match/combat/combat_overlap.tscn" type="PackedScene" id=10]
 [ext_resource path="res://scenes/ui/clickable_control.gd" type="Script" id=11]
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=12]
+[ext_resource path="res://scenes/match/states_panel.tscn" type="PackedScene" id=13]
 
 [sub_resource type="DynamicFont" id=9]
 size = 40
@@ -247,10 +248,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -632.0
-margin_top = -312.0
-margin_right = -568.0
-margin_bottom = -248.0
+margin_left = -672.0
+margin_top = -280.0
+margin_right = -608.0
+margin_bottom = -216.0
 custom_colors/font_color = Color( 1, 0, 0, 1 )
 custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 15 )
@@ -270,10 +271,10 @@ margin_right = -1120.0
 margin_bottom = -496.0
 
 [node name="RivalDamage" type="Label" parent="TopUILayer/Control"]
-margin_left = 568.0
-margin_top = 248.0
-margin_right = 632.0
-margin_bottom = 312.0
+margin_left = 608.0
+margin_top = 216.0
+margin_right = 672.0
+margin_bottom = 280.0
 custom_colors/font_color = Color( 1, 0, 0, 1 )
 custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 15 )
@@ -333,6 +334,29 @@ margin_right = -80.0
 text = ""
 align = 2
 valign = 0
+
+[node name="MyStatesPanel" parent="TopUILayer/Control" instance=ExtResource( 13 )]
+unique_name_in_owner = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 16.0
+margin_top = -96.0
+margin_right = 216.0
+margin_bottom = 104.0
+
+[node name="RivalStatesPanel" parent="TopUILayer/Control" instance=ExtResource( 13 )]
+unique_name_in_owner = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -216.0
+margin_top = -104.0
+margin_right = -16.0
+margin_bottom = 96.0
+opponent_layout = true
 
 [node name="OverlapLayer" type="CanvasLayer" parent="."]
 layer = 4

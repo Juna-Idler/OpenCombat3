@@ -21,8 +21,8 @@ func _ready():
 func _on_RegulationSelect_decide_button_pressed():
 	if $RegulationSelect.deck_regulation:
 		$Cover.show()
-		$BuildSelectScene.initialize_build($RegulationSelect.deck_regulation)
-		$BuildSelectScene.show()
+		$DeckSelectScene.initialize_build($RegulationSelect.deck_regulation)
+		$DeckSelectScene.show()
 		var tween := create_tween()
 		tween.tween_property($RegulationSelect,"modulate:a",0.0,0.5)
 		tween.tween_callback($RegulationSelect,"hide")
@@ -34,12 +34,12 @@ func _on_RegulationSelect_return_button_pressed():
 	scene_changer._goto_title_scene()
 
 
-func _on_BuildSelectScene_return_button_pressed():
+func _on_DeckSelectScene_return_button_pressed():
 	$Cover.show()
 	$RegulationSelect.show()
 	var tween := create_tween()
 	tween.tween_property($RegulationSelect,"modulate:a",1.0,0.5)
-	tween.tween_callback($BuildSelectScene,"hide")
+	tween.tween_callback($DeckSelectScene,"hide")
 	tween.tween_callback($Cover,"hide")
 
 
