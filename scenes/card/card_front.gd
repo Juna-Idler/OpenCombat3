@@ -28,9 +28,9 @@ func initialize_card(cd : CardData,rotate := false) -> CardFront:
 		$Block.self_modulate = Color.white
 		return self
 
-	$SpritePower.frame = data.power
-	$SpriteHit.frame = data.hit
-	$SpriteBlock.frame = data.block
+	$SpritePower.frame = data.stats.power
+	$SpriteHit.frame = data.stats.hit
+	$SpriteBlock.frame = data.stats.block
 	$SpriteLevel.frame = data.level
 	$Name.text = data.name
 #	ResourceLoader.load_interactive

@@ -55,13 +55,13 @@ func get_card_data() -> CardData:
 	return front.data
 
 func get_current_power() -> int:
-	return front.data.power + affected.power
+	return front.data.stats.power + affected.power
 	
 func get_current_hit() -> int:
-	return front.data.hit + affected.hit
+	return front.data.stats.hit + affected.hit
 	
 func get_current_block() -> int:
-	return front.data.block + affected.block
+	return front.data.stats.block + affected.block
 
 func _ready():
 	pass # Replace with function body.

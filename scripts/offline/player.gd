@@ -31,7 +31,7 @@ func _init(deck : Array,hand_count : int,
 		card_catalog : CardCatalog,shuffle : bool = true) -> void:
 	var s_factory = SkillFactory.new()
 	for i in range(deck.size()):
-		var c := MechanicsData.PlayerCard.new(card_catalog.new_card_data(deck[i]),i,s_factory)
+		var c := MechanicsData.PlayerCard.new(card_catalog.get_card_data(deck[i]),i,s_factory)
 		deck_list.append(c);
 		stock.append(i);
 		_life += c.data.level

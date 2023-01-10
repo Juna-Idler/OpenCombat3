@@ -12,15 +12,10 @@ class Reinforce extends MechanicsData.BasicSkill:
 	func _process_before(index : int,_priority : int,
 			myself : MechanicsData.IPlayer,_rival : MechanicsData.IPlayer) -> void:
 		var affected := myself._get_playing_card().affected
-		for p in _skill.parameter[0].data:
-			var e := p as AttributeData.CardAttribute
-			match e.data.id:
-				AttributeData.AttributeType.POWER:
-					affected.power += e.parameter
-				AttributeData.AttributeType.HIT:
-					affected.hit += e.parameter
-				AttributeData.AttributeType.BLOCK:
-					affected.block += e.parameter
+		var effect := _skill.parameter[0].data as CardData.Stats
+		affected.power += effect.power
+		affected.hit += effect.hit
+		affected.block += effect.block
 		myself._append_effect_log(index,MechanicsData.EffectTiming.BEFORE,PRIORITY,true)
 
 
@@ -52,15 +47,10 @@ class Charge extends MechanicsData.BasicSkill:
 			myself : MechanicsData.IPlayer,_rival : MechanicsData.IPlayer) -> void:
 		if myself._is_recovery():
 			var affected := MechanicsData.Affected.new()
-			for p in _skill.parameter[0].data as Array:
-				var e := p as AttributeData.CardAttribute
-				match e.data.id:
-					AttributeData.AttributeType.POWER:
-						affected.power += e.parameter
-					AttributeData.AttributeType.HIT:
-						affected.hit += e.parameter
-					AttributeData.AttributeType.BLOCK:
-						affected.block += e.parameter
+			var effect := _skill.parameter[0].data as CardData.Stats
+			affected.power += effect.power
+			affected.hit += effect.hit
+			affected.block += effect.block
 			myself._add_next_effect(affected)
 			myself._append_effect_log(index,MechanicsData.EffectTiming.END,PRIORITY,true)
 			
@@ -103,14 +93,9 @@ class Absorb extends MechanicsData.BasicSkill:
 				data = i
 				break
 		var affected := myself._get_playing_card().affected
-		for p in _skill.parameter[1].data as Array:
-			var e := p as AttributeData.CardAttribute
-			match e.data.id:
-				AttributeData.AttributeType.POWER:
-					affected.power += e.parameter * level
-				AttributeData.AttributeType.HIT:
-					affected.hit += e.parameter * level
-				AttributeData.AttributeType.BLOCK:
-					affected.block += e.parameter * level
+		var effect := _skill.parameter[1].data as CardData.Stats
+		affected.power += effect.power * level
+		affected.hit += effect.hit * level
+		affected.block += effect.block * level
 		myself._append_effect_log(index,MechanicsData.EffectTiming.BEFORE,PRIORITY,data)
 	

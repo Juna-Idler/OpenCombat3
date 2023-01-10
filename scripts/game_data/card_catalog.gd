@@ -5,7 +5,7 @@ var _skill_catalog : Dictionary = {}
 
 var _state_catalog : Dictionary = {}
 
-var _attribute_catalog : Array = []
+var stats_names := CardData.StatsNames.new()
 
 
 var version : String
@@ -23,16 +23,12 @@ func load_catalog():
 	_load_card_data()
 	
 
-
 func get_max_card_id() -> int:
 	return _card_catalog.size() - 1
 
 func get_card_data(id : int) -> CardData:
 	return _card_catalog[id]
 
-func new_card_data(id : int) -> CardData:
-	var c := _card_catalog[id] as CardData
-	return CardData.new(c.id,c.name,c.short_name,c.color,c.level,c.power,c.hit,c.block,c.skills,c.text,c.image)
 	
 func set_card_data(card : CardData, id : int):
 	CardData.copy(card,get_card_data(id))
@@ -40,9 +36,6 @@ func set_card_data(card : CardData, id : int):
 
 func get_skill_data(id : int) -> SkillData.NamedSkillData:
 	return _skill_catalog[id]
-	
-func get_attribute_data(id:int) -> AttributeData.CardAttributeData:
-	return _attribute_catalog[id]
 
 
 func get_skill_param(param_type : int,param : String) -> SkillData.SkillParameter:
@@ -50,15 +43,8 @@ func get_skill_param(param_type : int,param : String) -> SkillData.SkillParamete
 		SkillData.ParamType.INTEGER:
 			return SkillData.SkillParameter.new(param,param,int(param))
 		SkillData.ParamType.ATTRIBUTES:
-			var attributes = []
-			var e_string : PoolStringArray = []
-			var e_s_string : PoolStringArray = []
-			for e in param.split(" "):
-				var attribute = AttributeData.create_attribute(e,_attribute_catalog)
-				attributes.append(attribute)
-				e_string.append(attribute.data.name + "%+d" % attribute.parameter)
-				e_s_string.append(attribute.data.short_name + "%+d" % attribute.parameter)
-			return SkillData.SkillParameter.new(e_string.join(" "),e_s_string.join(" "),attributes)
+			var stats = CardData.Stats.create_from_param_string(param,stats_names)
+			return SkillData.SkillParameter.new(stats.get_effect_string(stats_names),stats.get_short_effect_string(stats_names),stats)
 		SkillData.ParamType.COLOR:
 			var ColorName := [tr("NO_COLOR"),tr("RED"),tr("GREEN"),tr("BLUE")]
 			return SkillData.SkillParameter.new(ColorName[int(param)],ColorName[int(param)],int(param))
@@ -146,12 +132,22 @@ func _load_skill_data():
 func _load_attribute_data():
 	var attribute_resource = preload("res://card_data/attribute_catalog.txt")
 	var attributes = attribute_resource.text.split("\n")
-	_attribute_catalog.resize(attributes.size())
-	_attribute_catalog[0] = AttributeData.CardAttributeData.new(0,"","","","")
 	for s in attributes:
-		var csv = s.split("\t")
-		var id := int(csv[0])
-		_attribute_catalog[id] = AttributeData.CardAttributeData.new(id,csv[1],csv[2],csv[3],csv[4])
+		var tsv = s.split("\t")
+		var id := int(tsv[0])
+		match id:
+			1:
+				stats_names.param_power = tsv[1]
+				stats_names.power = tsv[2]
+				stats_names.short_power = tsv[3]
+			2:
+				stats_names.param_hit = tsv[1]
+				stats_names.hit = tsv[2]
+				stats_names.short_hit = tsv[3]
+			3:
+				stats_names.param_block = tsv[1]
+				stats_names.block = tsv[2]
+				stats_names.short_block = tsv[3]
 
 	if translation.find("ja") != 0:
 		var trans_res = load("res://card_data/attribute_" + translation + ".txt")
@@ -161,7 +157,13 @@ func _load_attribute_data():
 		for i in trans.size():
 			var tsv = trans[i].split("\t")
 			var id := int(tsv[0])
-			var data = _attribute_catalog[id] as AttributeData.CardAttributeData
-			data.name = tsv[1]
-			data.short_name = tsv[2]
-			data.text = tsv[3]
+			match id:
+				1:
+					stats_names.power = tsv[1]
+					stats_names.short_power = tsv[2]
+				2:
+					stats_names.hit = tsv[1]
+					stats_names.short_hit = tsv[2]
+				3:
+					stats_names.block = tsv[1]
+					stats_names.short_blcok = tsv[2]

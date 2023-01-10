@@ -53,7 +53,7 @@ class SkillParameter:
 class NamedSkill:
 	var data : NamedSkillData
 	var condition : int
-	var parameter : Array
+	var parameter : Array # of SkillParameter
 	var text : String
 	
 	func _init(sd:NamedSkillData,c:int,p : Array):

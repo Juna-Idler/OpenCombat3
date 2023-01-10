@@ -62,7 +62,7 @@ func initialize(cd : CardData,vs_color : int,link_color : int):
 	$Image/Image/Picture.texture = load("res://card_images/"+ cd.image +".png")
 	$Image/Image/Frame.self_modulate = CardData.RGB[cd.color]
 	
-	attack_type = AttackType.SHOOTING if cd.hit > 0 else AttackType.IMMOBILE
+	attack_type = AttackType.SHOOTING if cd.stats.hit > 0 else AttackType.IMMOBILE
 	damage = 0;
 	$Image/BlockDamage/Label.text = ""
 	$Image/Damage/Label.text = ""
