@@ -10,26 +10,6 @@ enum Location{
 	DISCARD,
 }
 
-class Affected:
-	var power : int
-	var hit : int
-	var block : int
-	
-	func _init(p,h,b):
-		power = p
-		hit= h
-		block = b
-	
-	func add(other : Affected):
-		power += other.power
-		hit += other.hit
-		block += other.block
-	
-	func reset():
-		power = 0
-		hit = 0
-		block = 0
-
 
 var id_in_deck:int
 var location : int
@@ -38,7 +18,7 @@ var skills : Array # of MatchEffect.IEffect
 
 var front : CardFront = null
 
-var affected := Affected.new(0,0,0)
+var affected := CardData.Stats.new(0,0,0)
 
 
 

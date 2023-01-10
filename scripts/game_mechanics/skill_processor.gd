@@ -46,12 +46,8 @@ class Charge extends MechanicsData.BasicSkill:
 	func _process_end(index : int,_priority : int,_situation : int,
 			myself : MechanicsData.IPlayer,_rival : MechanicsData.IPlayer) -> void:
 		if myself._is_recovery():
-			var affected := MechanicsData.Affected.new()
 			var effect := _skill.parameter[0].data as CardData.Stats
-			affected.power += effect.power
-			affected.hit += effect.hit
-			affected.block += effect.block
-			myself._add_next_effect(affected)
+			myself._add_next_effect(effect)
 			myself._append_effect_log(index,MechanicsData.EffectTiming.END,PRIORITY,true)
 			
 #			var state = StateProcessor.Reinforce.new(affected.power,affected.hit,affected.block,myself._get_states())

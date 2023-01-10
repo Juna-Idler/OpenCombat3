@@ -43,8 +43,8 @@ func get_skill_param(param_type : int,param : String) -> SkillData.SkillParamete
 		SkillData.ParamType.INTEGER:
 			return SkillData.SkillParameter.new(param,param,int(param))
 		SkillData.ParamType.ATTRIBUTES:
-			var stats = CardData.Stats.create_from_param_string(param,stats_names)
-			return SkillData.SkillParameter.new(stats.get_effect_string(stats_names),stats.get_short_effect_string(stats_names),stats)
+			var stats = stats_names.create_stats_from_param_string(param)
+			return SkillData.SkillParameter.new(stats_names.get_effect_string(stats),stats_names.get_short_effect_string(stats),stats)
 		SkillData.ParamType.COLOR:
 			var ColorName := [tr("NO_COLOR"),tr("RED"),tr("GREEN"),tr("BLUE")]
 			return SkillData.SkillParameter.new(ColorName[int(param)],ColorName[int(param)],int(param))

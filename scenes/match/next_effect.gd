@@ -8,23 +8,8 @@ export(bool) onready var opponent_layout : bool = false setget set_opponent_layo
 
 
 
-func set_effect(effect : MatchCard.Affected):
-	var output : PoolStringArray = []
-	if opponent_layout:
-		if effect.block != 0:
-			output.append(Global.card_catalog.stats_names.short_block + "%+d" % effect.block)
-		if effect.hit != 0:
-			output.append(Global.card_catalog.stats_names.short_hit + "%+d" % effect.hit)
-		if effect.power != 0:
-			output.append(Global.card_catalog.stats_names.short_power + "%+d" % effect.power)
-	else:
-		if effect.power != 0:
-			output.append(Global.card_catalog.stats_names.short_power + "%+d" % effect.power)
-		if effect.hit != 0:
-			output.append(Global.card_catalog.stats_names.short_hit + "%+d" % effect.hit)
-		if effect.block != 0:
-			output.append(Global.card_catalog.stats_names.short_block + "%+d" % effect.block)
-	text = output.join("\n")
+func set_effect(effect : CardData.Stats):
+	text = Global.card_catalog.stats_names.get_short_effect_string(effect)
 
 func set_opponent_layout(value):
 	opponent_layout = value

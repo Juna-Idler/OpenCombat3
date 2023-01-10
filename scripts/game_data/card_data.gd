@@ -15,6 +15,39 @@ class StatsNames:
 	var param_hit : String
 	var param_block : String
 
+	func get_effect_string(stats : Stats) -> String:
+		var texts : PoolStringArray = []
+		if stats.power != 0:
+			texts.append(power + "%+d" % stats.power)
+		if stats.hit != 0:
+			texts.append(hit + "%+d" % stats.hit)
+		if stats.block != 0:
+			texts.append(block + "%+d" % stats.block)
+		return texts.join(" ")
+	
+	func get_short_effect_string(stats : Stats) -> String:
+		var texts : PoolStringArray = []
+		if stats.power != 0:
+			texts.append(short_power + "%+d" % stats.power)
+		if stats.hit != 0:
+			texts.append(short_hit + "%+d" % stats.hit)
+		if stats.block != 0:
+			texts.append(short_block + "%+d" % stats.block)
+		return texts.join(" ")
+
+	func create_stats_from_param_string(param : String) -> Stats:
+		var r := Stats.new(0,0,0)
+		for e in param.split(" "):
+			if e.find(param_power) == 0:
+				r.power = int(e.substr(param_power.length()))
+			elif e.find(param_hit) == 0:
+				r.hit = int(e.substr(param_hit.length()))
+			elif e.find(param_block) == 0:
+				r.block = int(e.substr(param_block.length()))
+		return r
+
+
+
 class Stats:
 	var power : int
 	var hit : int
@@ -28,36 +61,15 @@ class Stats:
 	func duplicate() -> Stats:
 		return Stats.new(power,hit,block)
 
-	func get_effect_string(names : StatsNames) -> String:
-		var texts : PoolStringArray = []
-		if power != 0:
-			texts.append(names.power + "%+d" % power)
-		if hit != 0:
-			texts.append(names.hit + "%+d" % hit)
-		if block != 0:
-			texts.append(names.block + "%+d" % block)
-		return texts.join(" ")
+	func add(other : Stats):
+		power += other.power
+		hit += other.hit
+		block += other.block
 	
-	func get_short_effect_string(names : StatsNames) -> String:
-		var texts : PoolStringArray = []
-		if power != 0:
-			texts.append(names.short_power + "%+d" % power)
-		if hit != 0:
-			texts.append(names.short_hit + "%+d" % hit)
-		if block != 0:
-			texts.append(names.short_block + "%+d" % block)
-		return texts.join(" ")
-
-	static func create_from_param_string(param : String,names : StatsNames) -> Stats:
-		var r := Stats.new(0,0,0)
-		for e in param.split(" "):
-			if e.find(names.param_power) == 0:
-				r.power = int(e.substr(names.param_power.length()))
-			elif e.find(names.param_hit) == 0:
-				r.hit = int(e.substr(names.param_hit.length()))
-			elif e.find(names.param_block) == 0:
-				r.block = int(e.substr(names.param_block.length()))
-		return r
+	func set_stats(p:int,h:int,b:int):
+		power = p
+		hit = h
+		block = b
 
 
 enum CardColors {NOCOLOR = 0,RED,GREEN,BLUE}

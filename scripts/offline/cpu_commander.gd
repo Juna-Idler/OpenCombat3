@@ -8,7 +8,7 @@ class Player:
 	
 	var stock_count : int
 	var life : int
-	var next_effect : MechanicsData.Affected
+	var next_effect : CardData.Stats
 	
 	func _init(h,p,d,s,l,n):
 		hand = h

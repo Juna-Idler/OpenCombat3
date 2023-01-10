@@ -21,7 +21,7 @@ var damage : int = 0
 var draw : Array = [] # of int
 var effect_logs : Array = [] # of IGameServer.UpdateData.EffectLog
 
-var next_effect := MatchCard.Affected.new(0,0,0)
+var next_effect := CardData.Stats.new(0,0,0)
 
 var states : Array = [] # of MatchEffect.IState
 

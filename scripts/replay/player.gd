@@ -12,7 +12,7 @@ var stock_count : int
 var played : PoolIntArray = []
 var discard : PoolIntArray = []
 
-var next_effect := MechanicsData.Affected.new()
+var next_effect := CardData.Stats.new(0,0,0)
 
 var select_card : MechanicsData.PlayerCard = null
 
@@ -68,10 +68,10 @@ func _get_stock_count() -> int:
 func _get_life() -> int:
 	return step_data.life
 
-func _get_next_effect() -> MechanicsData.Affected:
+func _get_next_effect() -> CardData.Stats:
 	return next_effect
-func _add_next_effect(add : MechanicsData.Affected):
-	next_effect.add_other(add)
+func _add_next_effect(add : CardData.Stats):
+	next_effect.add(add)
 
 func _get_playing_hand() -> PoolIntArray:
 	return step_data.hand

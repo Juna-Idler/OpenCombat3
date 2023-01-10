@@ -2,38 +2,13 @@
 class_name MechanicsData
 
 
-class Affected:
-	var power : int
-	var hit : int
-	var block : int
-	
-	func _init(p = 0,h = 0,b = 0):
-		power = p
-		hit = h
-		block = b
-
-	func add(p:int,h:int,b:int):
-		power += p
-		hit += h
-		block += b
-	func add_other(v : Affected):
-		add(v.power,v.hit,v.block)
-		
-	func reset():
-		power = 0
-		hit = 0
-		block = 0
-	
-	func duplicate() -> Affected:
-		return Affected.new(power,hit,block)
-
 
 class PlayerCard:
 	var data : CardData = null
 	var id_in_deck : int = 0
 	var skills : Array # of ISkill
 
-	var affected := Affected.new()
+	var affected := CardData.Stats.new(0,0,0)
 
 	func _init(cd : CardData,iid : int,factory : ISkillFactory):
 		data = cd
@@ -89,9 +64,9 @@ class IPlayer:
 	func _get_states() -> Array:
 		return []
 
-	func _get_next_effect() -> Affected:
+	func _get_next_effect() -> CardData.Stats:
 		return null
-	func _add_next_effect(_add : Affected):
+	func _add_next_effect(_add : CardData.Stats):
 		return
 
 	func _get_playing_hand() -> PoolIntArray:
