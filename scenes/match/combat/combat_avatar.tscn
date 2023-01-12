@@ -223,5 +223,8 @@ target_position = Vector2( 880, 360 )
 position = Vector2( 0, 120 )
 target_position = Vector2( 880, 360 )
 
+[node name="StateList" type="Node2D" parent="."]
+position = Vector2( 240, -136 )
+
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 bus = "SE"

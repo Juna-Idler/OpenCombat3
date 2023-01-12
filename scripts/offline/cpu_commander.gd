@@ -8,15 +8,15 @@ class Player:
 	
 	var stock_count : int
 	var life : int
-	var next_effect : CardData.Stats
+	var states : Array
 	
-	func _init(h,p,d,s,l,n):
+	func _init(h,p,d,s,l,st):
 		hand = h
 		played = p
 		discard = d
 		stock_count = s
 		life = l
-		next_effect = n
+		states = st
 
 
 func _get_commander_name()-> String:

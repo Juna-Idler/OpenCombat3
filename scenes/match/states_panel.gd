@@ -1,6 +1,8 @@
 tool
 extends Control
 
+class_name StatesPanel
+
 export(bool) onready var opponent_layout : bool = false setget set_opponent_layout
 
 func set_opponent_layout(value):
@@ -20,7 +22,7 @@ func _ready():
 
 func set_states(states : Array):
 	var size := states.size()
-	var pool : PoolStringArray
+	var pool : PoolStringArray = []
 	if size > 6:
 		pool.resize(6)
 		pool[0] = "..."

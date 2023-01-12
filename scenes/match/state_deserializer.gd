@@ -9,7 +9,7 @@ const states := [
 ]
 
 
-func _deserialize(state : StateData.PlayerStateData,data,container : Array) -> MatchEffect.IState:
-	return states[state.id].new(data,container)
+func _deserialize(id : int,data,container : Array) -> MatchEffect.IState:
+	return states[id].new(data,container)
 
 

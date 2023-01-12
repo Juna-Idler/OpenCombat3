@@ -95,7 +95,7 @@ func initialize(server : IGameServer,manipulation : bool = true):
 			my_discard_pos,
 			$TopUILayer/Control/MyName,
 			my_life,
-			$"%MyNextEffect",
+			$"%MyStatesPanel",
 			combat_overlap.p1_avatar,
 			$TopUILayer/Control/MyDamage,
 			CombatPowerBalance.Interface.new($BGLayer/PowerBalance,false))
@@ -107,7 +107,7 @@ func initialize(server : IGameServer,manipulation : bool = true):
 			rival_discard_pos,
 			$TopUILayer/Control/RivalName,
 			rival_life,
-			$"%RivalNextEffect",
+			$"%RivalStatesPanel",
 			combat_overlap.p2_avatar,
 			$TopUILayer/Control/RivalDamage,
 			CombatPowerBalance.Interface.new($BGLayer/PowerBalance,true))
@@ -115,6 +115,9 @@ func initialize(server : IGameServer,manipulation : bool = true):
 	combat_director.initialize(myself,rival,
 			combat_overlap,$BGLayer/PowerBalance)
 	combat_overlap.visible = false
+	
+	$"%MyStatesPanel".set_states(myself.states)
+	$"%RivalStatesPanel".set_states(rival.states)
 
 	$TopUILayer/Control/SettingButton.disabled = false
 	$"%SettingsScene".hide()
@@ -220,14 +223,6 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 	myself.play_end()
 	rival.play_end()
 	
-	myself.set_next_effect_label()
-	rival.set_next_effect_label()
-	tween = create_tween()
-	tween.parallel()
-	tween.tween_property(myself.next_effect_label,"modulate:a",1.0,0.5)
-	tween.parallel()
-	tween.tween_property(rival.next_effect_label,"modulate:a",1.0,0.5)
-	
 	round_count = data.round_count
 	phase = data.next_phase
 	
@@ -289,12 +284,14 @@ func _on_LimitTimer_timeout():
 
 func _on_GameServer_recieved_complete_board(data:IGameServer.CompleteData)->void:
 	performing = true
+	
+	var state_deserializer := StateDeserializer.new()
 	myself.reset_board(data.myself.hand,data.myself.played,data.myself.discard,
 			data.myself.stock,data.myself.life,data.myself.damage,
-			data.myself.next_effect,data.myself.affected_list)
+			data.myself.states,data.myself.affected_list,state_deserializer)
 	rival.reset_board(data.rival.hand,data.rival.played,data.rival.discard,
 			data.rival.stock,data.rival.life,data.rival.damage,
-			data.rival.next_effect,data.rival.affected_list)
+			data.rival.states,data.rival.affected_list,state_deserializer)
 
 	yield(get_tree().create_timer(MatchPlayer.CARD_MOVE_DURATION), "timeout")
 # yield中にgame_serverが消えた場合。（もうちょっとやりようがありそうだがとりあえず暫定措置）

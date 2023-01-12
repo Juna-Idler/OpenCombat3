@@ -15,12 +15,12 @@ func initialize(p1 : MatchPlayer,p2 : MatchPlayer):
 	p1_avatar.set_power(p1_card.get_current_power())
 	p1_avatar.set_hit(p1_card.get_current_hit())
 	p1_avatar.set_block(p1_card.get_current_block())
-	p1_avatar.initialize(p1_card.front.data,p2_card.front.data.color,p1.get_link_color())
+	p1_avatar.initialize(p1_card.front.data,p2_card.front.data.color,p1.get_link_color(),p1.states)
 
 	p2_avatar.set_power(p2_card.get_current_power())
 	p2_avatar.set_hit(p2_card.get_current_hit())
 	p2_avatar.set_block(p2_card.get_current_block())
-	p2_avatar.initialize(p2_card.front.data,p1_card.front.data.color,p2.get_link_color())
+	p2_avatar.initialize(p2_card.front.data,p1_card.front.data.color,p2.get_link_color(),p2.states)
 
 
 enum CombatTiming {NoTiming,Before,Engagement,After,Damage,End,}

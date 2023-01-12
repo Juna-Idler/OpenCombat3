@@ -137,15 +137,6 @@ class CompleteData:
 	var round_count : int
 	var next_phase : int
 
-	class Affected:
-		var power : int
-		var hit : int
-		var block : int
-		func _init(p,h,b):
-			power = p
-			hit = h
-			block = b
-
 	class PlayerData:
 		var hand:PoolIntArray
 		var played:PoolIntArray
@@ -153,18 +144,18 @@ class CompleteData:
 		var stock:int
 		var life:int
 		var damage:int
-		var next_effect:CompleteData.Affected
-		var affected_list:Array
+		var states:Array # of Array [id,data]
+		var affected_list:Array # CardData.Stats
 		var additional_deck:PoolIntArray
 		
-		func _init(hc,pc,dc,s,l,d,ne,al,ad):
+		func _init(hc,pc,dc,s,l,d,st,al,ad):
 			hand = hc
 			played = pc
 			discard = dc
 			stock = s
 			life = l
 			damage = d
-			next_effect = ne
+			states = st
 			affected_list = al
 			additional_deck = ad
 

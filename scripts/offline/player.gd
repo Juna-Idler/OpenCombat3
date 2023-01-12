@@ -13,7 +13,7 @@ var played : PoolIntArray = []
 var discard : PoolIntArray = []
 var _life : int = 0
 
-var next_effect := CardData.Stats.new(0,0,0)
+var state : Array = []
 
 var playing_hand : PoolIntArray = []
 var select : int = -1
@@ -21,10 +21,6 @@ var damage : int = 0
 var draw_indexes : PoolIntArray = []
 var select_card : MechanicsData.PlayerCard = null
 var skill_log : Array = [] # of EffectLog
-
-var multiply_power : float = 1.0
-var multiply_hit : float = 1.0
-var multiply_block : float = 1.0
 
 
 func _init(deck : Array,hand_count : int,
@@ -56,10 +52,9 @@ func _get_stock_count() -> int:
 func _get_life() -> int:
 	return _life
 
-func _get_next_effect() -> CardData.Stats:
-	return next_effect
-func _add_next_effect(add : CardData.Stats):
-	next_effect.add(add)
+func _get_states() -> Array:
+	return state
+
 
 func _get_playing_hand() -> PoolIntArray:
 	return playing_hand
@@ -84,11 +79,6 @@ func _combat_start(i : int) -> void:
 	skill_log.clear()
 	select_card = deck_list[hand.pop_at(i)]
 	_life -= select_card.data.level
-	select_card.affected.add(next_effect)
-	next_effect.set_stats(0,0,0)
-	multiply_power = 1.0
-	multiply_hit = 1.0
-	multiply_block = 1.0
 	return
 	
 
@@ -99,11 +89,11 @@ func _get_link_color() -> int:
 
 	
 func _get_current_power() -> int:
-	return int(select_card.get_current_power() * multiply_power)
+	return select_card.get_current_power()
 func _get_current_hit() -> int:
-	return int(select_card.get_current_hit() * multiply_hit)
+	return select_card.get_current_hit()
 func _get_current_block() -> int:
-	return int(select_card.get_current_block() * multiply_block)
+	return select_card.get_current_block()
 
 func _damage_is_fatal() -> bool:
 	var total_damage := damage - _get_current_block()

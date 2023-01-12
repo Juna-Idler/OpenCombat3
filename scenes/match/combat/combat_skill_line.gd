@@ -1,7 +1,7 @@
 # warning-ignore-all:return_value_discarded
 
 tool
-extends Node2D
+extends CombatEffectLine
 
 class_name CombatSkillLine
 

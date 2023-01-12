@@ -84,12 +84,12 @@ static func create_complete_board(p : GameProcessor) -> IGameServer.CompleteData
 static func create_complete_player_data(player : MechanicsData.IPlayer) -> IGameServer.CompleteData.PlayerData:
 	var al = []
 	for i in player._get_deck_list():
-		var a = (i as MechanicsData.PlayerCard).affected
-		al.append(IGameServer.CompleteData.Affected.new(a.power,a.hit,a.block))
+		al.append(i.affected)
+	var states = []
+	for i in player._get_states():
+		states.append((i as MechanicsData.IState)._serialize())
 	
-	var ne = player._get_next_effect()
 	return IGameServer.CompleteData.PlayerData.new(player._get_hand(),player._get_played(),player._get_discard(),
 			player._get_stock_count(),player._get_life(),player._get_damage(),
-			IGameServer.CompleteData.Affected.new(ne.power,ne.hit,ne.block),
-			al,player._get_additional_deck())
+			states,al,player._get_additional_deck())
 

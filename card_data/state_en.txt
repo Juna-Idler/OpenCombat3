@@ -1,0 +1,1 @@
+1	Reinforce	Reinforce	Stats	Before.  Add {Stats} to combat card. And remove this state.

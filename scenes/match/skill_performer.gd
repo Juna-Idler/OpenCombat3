@@ -39,9 +39,6 @@ class Pierce extends MatchEffect.ISkill:
 
 class Charge extends MatchEffect.ISkill:
 	var stats : CardData.Stats
-	var power : int
-	var hit : int
-	var block : int
 	
 	func _init(skill : SkillData.NamedSkill):
 		var effect := skill.parameter[0].data as CardData.Stats
@@ -49,13 +46,7 @@ class Charge extends MatchEffect.ISkill:
 	
 	func _end(_priority : int,_situation : int,myself : MatchPlayer,_rival : MatchPlayer,data) -> void:
 		if data:
-			
-			
-			
-			myself.next_effect.power += stats.power
-			myself.next_effect.hit += stats.hit
-			myself.next_effect.block += stats.block
-			
+			MatchStatePerformer.ReinForce.new([stats.power,stats.hit,stats.block],myself.states)
 			myself.combat_avatar.current_effect_line.succeeded()
 			myself.combat_avatar.play_sound(load("res://sound/オーラ2.mp3"))
 			var tween = myself.combat_avatar.create_tween()

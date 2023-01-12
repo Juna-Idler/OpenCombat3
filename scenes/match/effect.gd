@@ -31,10 +31,8 @@ class IState extends IEffect:
 		return ""
 
 class BasicState extends IState:
-	var _state : StateData.PlayerStateData
 	var _container : Array
-	func _init(state : StateData.PlayerStateData,container : Array):
-		_state = state
+	func _init(container : Array):
 		_container = container
 		_container.append(self)
 
@@ -43,6 +41,6 @@ class BasicState extends IState:
 
 
 class IStateDeserializer:
-	func _deserialize(_state : StateData.PlayerStateData,_data,_container : Array) -> IState:
+	func _deserialize(_id : int,_data,_container : Array) -> IState:
 		return null
 

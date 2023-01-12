@@ -64,21 +64,8 @@ func perform(lethal : bool):
 			[p1_card.get_current_power(),p2_card.get_current_power(),0.5])
 	tween.tween_property(p1_card,"modulate:a",0.0,0.5)
 	tween.tween_property(p2_card,"modulate:a",0.0,0.5)
-	tween.tween_property(player1.next_effect_label,"modulate:a",0.0,0.5)
-	tween.tween_property(player2.next_effect_label,"modulate:a",0.0,0.5)
 	tween.set_parallel(false)
-
-	tween.tween_callback(player1,"add_attribute",
-			[player1.next_effect.power,player1.next_effect.hit,player1.next_effect.block])
-	if player1.next_effect.power != 0:
-		tween.tween_interval(0.5)
-	tween.tween_callback(player2,"add_attribute",
-			[player2.next_effect.power,player2.next_effect.hit,player2.next_effect.block])
-	if player2.next_effect.power != 0:
-		tween.tween_interval(0.5)
 	tween.tween_interval(0.5)
-	tween.tween_callback(player1.next_effect,"set_stats",[0,0,0])
-	tween.tween_callback(player2.next_effect,"set_stats",[0,0,0])
 	yield(tween,"finished")
 
  # 交戦前タイミング

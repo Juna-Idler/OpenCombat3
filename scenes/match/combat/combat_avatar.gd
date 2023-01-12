@@ -11,12 +11,12 @@ onready var avatar := $Image
 onready var skills := $SkillList.get_children()
 # [$SkillList/Skill1, $SkillList/Skill2,$SkillList/Skill3,$SkillList/Skill4]
 
-onready var states
+onready var states : Array
 
 
-export(bool) onready var opponent_layout : bool = false setget set_opponent_layout
+export(bool) onready var opponent_layout : bool setget set_opponent_layout
 
-var current_effect_line : CombatSkillLine
+var current_effect_line : CombatEffectLine
 
 var power : int
 var hit : int
@@ -32,7 +32,7 @@ var magazine := CombatAvatarMagazine.new(10)
 
 func set_opponent_layout(value):
 	opponent_layout = value
-	if value:
+	if opponent_layout:
 		rotation_degrees = 180
 		$Image/Power/Label.rect_rotation = 180
 		$Image/Hit/Label.rect_rotation = 180
@@ -43,6 +43,10 @@ func set_opponent_layout(value):
 			var item := i as CombatSkillLine
 			item.rotation_degrees = 180
 			item.opponent_layout = true
+			item.target_position = Vector2(400,360)
+		for i in $StateList.get_children():
+			var item := i as CombatStateLine
+			item.rotation_degrees = 180
 			item.target_position = Vector2(400,360)
 	else:
 		rotation_degrees = 0
@@ -56,13 +60,17 @@ func set_opponent_layout(value):
 			item.rotation_degrees = 0
 			item.opponent_layout = false
 			item.target_position = Vector2(880,360)
+		for i in $StateList.get_children():
+			var item := i as CombatStateLine
+			item.rotation_degrees = 0
+			item.target_position = Vector2(880,360)
 		
 
-func initialize(cd : CardData,vs_color : int,link_color : int):
+func initialize(cd : CardData,vs_color : int,link_color : int,active_states : Array):
 	$Image/Image/Picture.texture = load("res://card_images/"+ cd.image +".png")
 	$Image/Image/Frame.self_modulate = CardData.RGB[cd.color]
 	
-	attack_type = AttackType.SHOOTING if cd.stats.hit > 0 else AttackType.IMMOBILE
+	attack_type = AttackType.SHOOTING if cd.hit > 0 else AttackType.IMMOBILE
 	damage = 0;
 	$Image/BlockDamage/Label.text = ""
 	$Image/Damage/Label.text = ""
@@ -78,6 +86,28 @@ func initialize(cd : CardData,vs_color : int,link_color : int):
 		var csl := skills[i] as CombatSkillLine
 		csl.hide()
 	
+	if states.size() < active_states.size():
+		for i in active_states.size() - states.size():
+			var StateLine = preload("res://scenes/match/combat/combat_state_line.tscn")
+			var line = StateLine.instance()
+			if opponent_layout:
+				line.target_position.x = 400
+				line.rotation_degrees = 180
+			else:
+				line.target_position.x = 880
+				line.rotation_degrees = 0
+			$StateList.add_child(line)
+			states.append(line)
+	var step := -40.0 if active_states.size() <= 4 else -160.0 / active_states.size()
+	for i in active_states.size():
+		var s := active_states[i] as MatchEffect.IState
+		var csl := states[i] as CombatStateLine
+		csl.set_state(s)
+		csl.position.y = step * i
+		csl.show()
+	for i in range(active_states.size(),states.size()):
+		var csl := states[i] as CombatStateLine
+		csl.hide()
 
 
 func _ready():

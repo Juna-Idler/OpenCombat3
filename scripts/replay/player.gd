@@ -12,13 +12,9 @@ var stock_count : int
 var played : PoolIntArray = []
 var discard : PoolIntArray = []
 
-var next_effect := CardData.Stats.new(0,0,0)
+var states : Array = []
 
 var select_card : MechanicsData.PlayerCard = null
-
-var multiply_power : float = 1.0
-var multiply_hit : float = 1.0
-var multiply_block : float = 1.0
 
 
 var rival_side : bool
@@ -33,7 +29,7 @@ func _init(match_log :MatchLog,rival : bool,card_catalog : CardCatalog) -> void:
 	rival_side = rival
 	var deck = match_log.primary_data.rival_deck_list if rival_side else match_log.primary_data.my_deck_list
 	for i in range(deck.size()):
-		var c := MechanicsData.PlayerCard.new(card_catalog.new_card_data(deck[i]),i,s_factory)
+		var c := MechanicsData.PlayerCard.new(card_catalog.get_card_data(deck[i]),i,s_factory)
 		deck_list.append(c);
 	var fd = match_log.first_data.rival if rival_side else match_log.first_data.myself
 	first_data = IGameServer.UpdateData.PlayerData.new(fd.hand,0,[],[],0,fd.life,
@@ -68,10 +64,8 @@ func _get_stock_count() -> int:
 func _get_life() -> int:
 	return step_data.life
 
-func _get_next_effect() -> CardData.Stats:
-	return next_effect
-func _add_next_effect(add : CardData.Stats):
-	next_effect.add(add)
+func _get_states() -> Array:
+	return states
 
 func _get_playing_hand() -> PoolIntArray:
 	return step_data.hand
@@ -91,11 +85,6 @@ func _get_effect_log() -> Array:
 	
 func _combat_start(i : int) -> void:
 	select_card = deck_list[hand.pop_at(i)]
-	select_card.affected.add_other(next_effect)
-	next_effect.reset()
-	multiply_power = 1.0
-	multiply_hit = 1.0
-	multiply_block = 1.0
 	return
 	
 
@@ -106,11 +95,11 @@ func _get_link_color() -> int:
 
 	
 func _get_current_power() -> int:
-	return int(select_card.get_current_power() * multiply_power)
+	return select_card.get_current_power()
 func _get_current_hit() -> int:
-	return int(select_card.get_current_hit() * multiply_hit)
+	return select_card.get_current_hit()
 func _get_current_block() -> int:
-	return int(select_card.get_current_block() * multiply_block)
+	return select_card.get_current_block()
 
 func _damage_is_fatal() -> bool:
 	return false

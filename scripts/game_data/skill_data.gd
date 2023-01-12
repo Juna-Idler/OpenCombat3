@@ -24,11 +24,12 @@ class NamedSkillData:
 	var id : int
 	var name : String
 	var short_name : String
-	var param_type : PoolIntArray
+	var param_type : PoolIntArray # of ParamType
 	var parameter : PoolStringArray
+	var states : PoolIntArray # of StateData id
 	var text : String
 	
-	func _init(i:int,n:String,sn:String,pt:String,p:String,t:String):
+	func _init(i:int,n:String,sn:String,pt:String,p:String,st:String,t:String):
 		id = i
 		name = n
 		short_name = sn
@@ -38,6 +39,11 @@ class NamedSkillData:
 			parameter = []
 		else:
 			parameter = p.split(",")
+		var states_strings := st.split(",")
+		if states_strings.size() == 1 and states_strings[0].empty():
+			states = []
+		else:
+			states = Array(states_strings)
 		text = t
 
 class SkillParameter:

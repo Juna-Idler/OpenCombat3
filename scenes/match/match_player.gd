@@ -21,8 +21,6 @@ var damage : int = 0
 var draw : Array = [] # of int
 var effect_logs : Array = [] # of IGameServer.UpdateData.EffectLog
 
-var next_effect := CardData.Stats.new(0,0,0)
-
 var states : Array = [] # of MatchEffect.IState
 
 
@@ -40,7 +38,6 @@ var discard_pos : Vector2
 
 var name_lable : Label
 var life_label : Label
-var next_effect_label: NextEffectLabel
 
 var combat_avatar : CombatAvatar
 
@@ -48,6 +45,7 @@ var damage_label : Label
 
 var power_balance : CombatPowerBalance.Interface
 
+var states_panel : StatesPanel
 
 func get_link_color() -> int:
 	if played.empty():
@@ -68,7 +66,7 @@ func _init(name : String,
 		d_pos : Vector2,
 		n_label : Label,
 		l_label : Label,
-		next_label : NextEffectLabel,
+		st_panel : StatesPanel,
 		avatar : CombatAvatar,
 		d_label : Label,
 		pb_interface : CombatPowerBalance.Interface):
@@ -89,7 +87,7 @@ func _init(name : String,
 	discard_pos = d_pos
 	name_lable = n_label
 	life_label = l_label
-	next_effect_label = next_label
+	states_panel = st_panel
 	combat_avatar = avatar
 	damage_label = d_label
 	power_balance = pb_interface
@@ -204,10 +202,6 @@ func _set_discard_visible():
 		deck_list[discard[discard.size()-2]].visible = ALWAYS_CARD_VISIBLE
 
 
-func set_next_effect_label():
-	next_effect_label.set_effect(next_effect)
-
-
 func get_current_power() -> int:
 	return playing_card.get_current_power()
 func get_current_hit() -> int:
@@ -229,21 +223,19 @@ func add_attribute(power :int,hit : int,block : int):
 
 func reset_board(h_card:PoolIntArray,p_card:PoolIntArray,d_card:PoolIntArray,
 		s_count:int,l_count:int,d_count:int,
-		n_effect:IGameServer.CompleteData.Affected,a_list:Array):
+		st:Array,a_list:Array,state_deserializer:MatchEffect.IStateDeserializer):
 	hand = Array(h_card)
 	played = Array(p_card)
 	discard = Array(d_card)
 	stock_count  = s_count
 	life = l_count
 	damage = d_count
-	next_effect.power = n_effect.power
-	next_effect.hit = n_effect.hit
-	next_effect.block = n_effect.block
+	states.clear()
+	for i in st:
+		state_deserializer._deserialize(i[0],i[1],states)
 	
 	for i in a_list.size():
-		deck_list[i].affected.power = a_list[i].power
-		deck_list[i].affected.hit = a_list[i].hit
-		deck_list[i].affected.block = a_list[i].block
+		deck_list[i].affected = a_list[i]
 
 	for c_ in deck_list:
 		var c := c_ as MatchCard
@@ -306,6 +298,7 @@ func reset_board(h_card:PoolIntArray,p_card:PoolIntArray,d_card:PoolIntArray,
 
 	life_label.text = "%d / %d" % [life,stock_count]
 	damage_label.text = str(damage) if damage > 0 else ""
-	set_next_effect_label()
+	
+	states_panel.set_states(states)
 
 

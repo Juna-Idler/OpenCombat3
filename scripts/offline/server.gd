@@ -112,7 +112,7 @@ func _send_combat_select(round_count:int,index:int,hands_order:PoolIntArray = []
 static func create_commander_player(player : MechanicsData.IPlayer) -> ICpuCommander.Player:
 	return ICpuCommander.Player.new(player._get_hand(),player._get_played(),
 			player._get_discard(),player._get_stock_count(),player._get_life(),
-			player._get_next_effect().duplicate())
+			player._get_states())
 	
 
 

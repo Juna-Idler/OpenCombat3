@@ -1,11 +1,57 @@
 class_name CardCatalog
 
+class StatsNames:
+	var power : String
+	var hit : String
+	var block : String
+	
+	var short_power : String
+	var short_hit : String
+	var short_block : String
+
+	var param_power : String
+	var param_hit : String
+	var param_block : String
+
+	func get_effect_string(stats : CardData.Stats) -> String:
+		var texts : PoolStringArray = []
+		if stats.power != 0:
+			texts.append(power + "%+d" % stats.power)
+		if stats.hit != 0:
+			texts.append(hit + "%+d" % stats.hit)
+		if stats.block != 0:
+			texts.append(block + "%+d" % stats.block)
+		return texts.join(" ")
+	
+	func get_short_effect_string(stats : CardData.Stats) -> String:
+		var texts : PoolStringArray = []
+		if stats.power != 0:
+			texts.append(short_power + "%+d" % stats.power)
+		if stats.hit != 0:
+			texts.append(short_hit + "%+d" % stats.hit)
+		if stats.block != 0:
+			texts.append(short_block + "%+d" % stats.block)
+		return texts.join(" ")
+
+	func create_stats_from_param_string(param : String) -> CardData.Stats:
+		var r := CardData.Stats.new(0,0,0)
+		for e in param.split(" "):
+			if e.find(param_power) == 0:
+				r.power = int(e.substr(param_power.length()))
+			elif e.find(param_hit) == 0:
+				r.hit = int(e.substr(param_hit.length()))
+			elif e.find(param_block) == 0:
+				r.block = int(e.substr(param_block.length()))
+		return r
+
+
+
 var _card_catalog : Dictionary = {}
 var _skill_catalog : Dictionary = {}
 
 var _state_catalog : Dictionary = {}
 
-var stats_names := CardData.StatsNames.new()
+var stats_names := StatsNames.new()
 
 
 var version : String
@@ -19,6 +65,7 @@ func _init():
 
 func load_catalog():
 	_load_attribute_data()
+	_load_state_data()
 	_load_skill_data()
 	_load_card_data()
 	
@@ -37,6 +84,8 @@ func set_card_data(card : CardData, id : int):
 func get_skill_data(id : int) -> SkillData.NamedSkillData:
 	return _skill_catalog[id]
 
+func get_state_data(id : int) -> StateData.PlayerStateData:
+	return _state_catalog[id]
 
 func get_skill_param(param_type : int,param : String) -> SkillData.SkillParameter:
 	match param_type:
@@ -112,8 +161,8 @@ func _load_skill_data():
 	for s in namedskills:
 		var csv = s.split("\t")
 		var id := int(csv[0])
-		var text = csv[5].replace("\\n","\n")
-		_skill_catalog[id] = SkillData.NamedSkillData.new(id,csv[1],csv[2],csv[3],csv[4],text)
+		var text = csv[6].replace("\\n","\n")
+		_skill_catalog[id] = SkillData.NamedSkillData.new(id,csv[1],csv[2],csv[3],csv[4],csv[5],text)
 
 	if translation.find("ja") != 0:
 		var trans_res = load("res://card_data/named_skill_" + translation + ".txt")
@@ -126,7 +175,32 @@ func _load_skill_data():
 			var data = _skill_catalog[id] as SkillData.NamedSkillData
 			data.name = tsv[1]
 			data.short_name = tsv[2]
-			data.text = tsv[3].replace("\\n","\n")
+			data.parameter = tsv[3].split(",")
+			data.text = tsv[4].replace("\\n","\n")
+
+func _load_state_data():
+	var state_resource := preload("res://card_data/state_catalog.txt")
+	var states = state_resource.text.split("\n")
+	for s in states:
+		var csv = s.split("\t")
+		var id := int(csv[0])
+		var text = csv[4].replace("\\n","\n")
+		_state_catalog[id] = StateData.PlayerStateData.new(id,csv[1],csv[2],csv[3],text)
+
+	if translation.find("ja") != 0:
+		var trans_res = load("res://card_data/named_skill_" + translation + ".txt")
+		if not trans_res:
+			trans_res = load("res://card_data/named_skill_en.txt")
+		var trans = trans_res.text.split("\n")
+		for i in trans.size():
+			var tsv = trans[i].split("\t")
+			var id := int(tsv[0])
+			var data = _state_catalog[id] as StateData.PlayerStateData
+			data.name = tsv[1]
+			data.short_name = tsv[2]
+			data.parameter = tsv[3]
+			data.text = tsv[4].replace("\\n","\n")
+
 
 
 func _load_attribute_data():
@@ -166,4 +240,4 @@ func _load_attribute_data():
 					stats_names.short_hit = tsv[2]
 				3:
 					stats_names.block = tsv[1]
-					stats_names.short_blcok = tsv[2]
+					stats_names.short_block = tsv[2]
