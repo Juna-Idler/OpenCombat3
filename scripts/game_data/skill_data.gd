@@ -74,18 +74,24 @@ class NamedSkill:
 	func get_string() -> String:
 		if data.param_type.empty():
 			return data.name
-		var p_str : PoolStringArray = []
-		for p in parameter:
-			p_str.append(p.name)
-		return data.name + "(" + p_str.join(",")  + ")"
+		return data.name + "(" + get_parameter_string()  + ")"
 
 	func get_short_string() -> String:
 		if data.param_type.empty():
 			return data.short_name
+		return data.short_name + "(" + get_short_parameter_string()  + ")"
+
+	func get_parameter_string() -> String:
+		var p_str : PoolStringArray = []
+		for p in parameter:
+			p_str.append(p.name)
+		return p_str.join(",")
+
+	func get_short_parameter_string() -> String:
 		var p_str : PoolStringArray = []
 		for p in parameter:
 			p_str.append(p.short_name)
-		return data.short_name + "(" + p_str.join(",")  + ")"
+		return p_str.join(",")
 
 
 	func test_condition(rival_color : int,link_color : int) -> bool :

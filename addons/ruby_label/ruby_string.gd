@@ -67,7 +67,7 @@ class RubyString:
 		return text
 
 
-	static func create(text : String,line_break : LineBreakWord,
+	static func create(text : String,line_break : ILineBreakWord,
 			parent:String,begin:String,end:String) -> RubyString:
 		if parent.empty() or begin.empty() or end.empty():
 			return create_by_regex(text,line_break,null)
@@ -76,7 +76,7 @@ class RubyString:
 		regex.compile(pattern)
 		return create_by_regex(text,line_break,regex)
 		
-	static func create_by_regex(text : String,line_break : LineBreakWord,regex : RegEx) -> RubyString:
+	static func create_by_regex(text : String,line_break : ILineBreakWord,regex : RegEx) -> RubyString:
 		if not regex:
 			var result = []
 			var lb_words := line_break.separate_word(text)
@@ -133,7 +133,19 @@ class RubyString:
 		
 
 
-class LineBreakWord:
+class ILineBreakWord:
+	func separate_word(text : String) -> PoolStringArray:
+		return PoolStringArray([text])
+	func is_link(c1 : String,c2 : String) -> bool:
+		return true
+
+class NoBreakLineBreakWord extends ILineBreakWord:
+	func separate_word(text : String) -> PoolStringArray:
+		return PoolStringArray([text])
+	func is_link(c1 : String,c2 : String) -> bool:
+		return true
+
+class LineBreakWord extends ILineBreakWord:
 	func separate_word(text : String) -> PoolStringArray:
 		if text.empty():
 			return PoolStringArray()

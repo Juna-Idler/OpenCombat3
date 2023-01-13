@@ -2,7 +2,7 @@
 
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=1]
 [ext_resource path="res://scenes/card/large_card_image.gd" type="Script" id=2]
-[ext_resource path="res://images/triangle.png" type="Texture" id=3]
+[ext_resource path="res://addons/ruby_label/ruby_label.gd" type="Script" id=3]
 
 [sub_resource type="StyleBoxFlat" id=7]
 bg_color = Color( 1, 1, 1, 1 )
@@ -17,32 +17,13 @@ corner_radius_top_right = 24
 corner_radius_bottom_right = 24
 corner_radius_bottom_left = 24
 
-[sub_resource type="ImageTexture" id=9]
-flags = 6
-flags = 6
-size = Vector2( 1, 1 )
+[sub_resource type="OpenSimplexNoise" id=9]
+octaves = 5
 
-[sub_resource type="StyleBoxFlat" id=8]
-bg_color = Color( 0, 0, 0, 0.760784 )
-
-[sub_resource type="DynamicFont" id=1]
-size = 36
-outline_size = 3
-outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 1 )
-
-[sub_resource type="StyleBoxFlat" id=5]
-bg_color = Color( 1, 1, 1, 1 )
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color( 0, 0, 0, 1 )
-border_blend = true
-corner_radius_top_left = 32
-corner_radius_top_right = 32
-corner_radius_bottom_right = 32
-corner_radius_bottom_left = 32
+[sub_resource type="NoiseTexture" id=10]
+width = 464
+height = 656
+noise = SubResource( 9 )
 
 [sub_resource type="DynamicFont" id=2]
 size = 64
@@ -57,20 +38,21 @@ outline_size = 2
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 1 )
 
-[sub_resource type="StyleBoxFlat" id=6]
-bg_color = Color( 1, 1, 1, 1 )
-border_color = Color( 0, 0, 0, 1 )
-corner_radius_top_left = 32
-corner_radius_top_right = 32
-corner_radius_bottom_right = 32
-corner_radius_bottom_left = 32
-shadow_size = 3
-
 [sub_resource type="DynamicFont" id=3]
 size = 40
 outline_size = 2
 outline_color = Color( 0, 0, 0, 1 )
 extra_spacing_top = -4
+font_data = ExtResource( 1 )
+
+[sub_resource type="StyleBoxFlat" id=8]
+bg_color = Color( 0, 0, 0, 0.760784 )
+
+[sub_resource type="DynamicFont" id=11]
+size = 32
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=12]
 font_data = ExtResource( 1 )
 
 [node name="CardBase" type="Panel"]
@@ -85,9 +67,101 @@ margin_left = 24.0
 margin_top = 32.0
 margin_right = 488.0
 margin_bottom = 688.0
-texture = SubResource( 9 )
+texture = SubResource( 10 )
 expand = true
 stretch_mode = 7
+
+[node name="Power" type="Polygon2D" parent="."]
+position = Vector2( 56, 56 )
+polygon = PoolVector2Array( -30, -42, -42, -30, -42, 30, -30, 42, 30, 42, 42, 30, 42, -30, 30, -42 )
+
+[node name="PowerLine2D" type="Line2D" parent="Power"]
+points = PoolVector2Array( 0, -42, -30, -42, -42, -30, -42, 30, -30, 42, 30, 42, 42, 30, 42, -30, 30, -42, 0, -42 )
+width = 2.0
+default_color = Color( 0, 0, 0, 1 )
+
+[node name="Hit" type="Polygon2D" parent="."]
+position = Vector2( 56, 144 )
+polygon = PoolVector2Array( 0, -40, -30, 10, -10, 30, 10, 30, 30, 10 )
+
+[node name="HitLine2D" type="Line2D" parent="Hit"]
+points = PoolVector2Array( 0, 30, 10, 30, 30, 10, 0, -40, -30, 10, -10, 30, 0, 30 )
+width = 2.0
+default_color = Color( 0, 0, 0, 1 )
+
+[node name="Block" type="Polygon2D" parent="."]
+position = Vector2( 56, 208 )
+polygon = PoolVector2Array( 10, 30, 30, 0, 20, -30, -20, -30, -30, 0, -10, 30 )
+
+[node name="BlockLine2D" type="Line2D" parent="Block"]
+points = PoolVector2Array( 0, -30, 20, -30, 30, 0, 10, 30, -10, 30, -30, 0, -20, -30, 0, -30 )
+width = 2.0
+default_color = Color( 0, 0, 0, 1 )
+joint_mode = 2
+
+[node name="Level" type="Polygon2D" parent="."]
+position = Vector2( 464, 48 )
+polygon = PoolVector2Array( 6, -36, 21, -30, 30, -21, 36, -6, 36, 6, 30, 21, 21, 30, 6, 36, -6, 36, -21, 30, -30, 21, -36, 6, -36, -6, -30, -21, -21, -30, -6, -36 )
+
+[node name="LevelLine2D" type="Line2D" parent="Level"]
+points = PoolVector2Array( 0, -36, 6, -36, 21, -30, 30, -21, 36, -6, 36, 6, 30, 21, 21, 30, 6, 36, -6, 36, -21, 30, -30, 21, -36, 6, -36, -6, -30, -21, -21, -30, -6, -36, 0, -36 )
+width = 2.0
+default_color = Color( 0, 0, 0, 1 )
+
+[node name="PowerLabel" type="Label" parent="."]
+margin_left = 38.0
+margin_top = 11.0
+margin_right = 74.0
+margin_bottom = 101.0
+rect_pivot_offset = Vector2( 48, 48 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_fonts/font = SubResource( 2 )
+text = "1"
+align = 1
+valign = 1
+max_lines_visible = 1
+
+[node name="HitLabel" type="Label" parent="."]
+margin_left = 45.0
+margin_top = 113.0
+margin_right = 68.0
+margin_bottom = 173.0
+grow_horizontal = 2
+grow_vertical = 2
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "1"
+align = 1
+valign = 1
+max_lines_visible = 1
+
+[node name="BlockLabel" type="Label" parent="."]
+margin_left = 45.0
+margin_top = 173.0
+margin_right = 68.0
+margin_bottom = 233.0
+grow_horizontal = 2
+grow_vertical = 2
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "1"
+align = 1
+valign = 1
+max_lines_visible = 1
+
+[node name="LevelLabel" type="Label" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -59.0
+margin_top = 20.0
+margin_right = -36.0
+margin_bottom = 76.0
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "1"
+align = 1
+valign = 1
+max_lines_visible = 1
 
 [node name="Name" type="Panel" parent="."]
 margin_left = 24.0
@@ -96,18 +170,36 @@ margin_right = 488.0
 margin_bottom = 688.0
 custom_styles/panel = SubResource( 8 )
 
-[node name="Name" type="Label" parent="Name"]
-anchor_top = 0.5
-anchor_bottom = 0.5
-margin_top = -32.0
-margin_right = 464.0
-margin_bottom = 32.0
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_fonts/font = SubResource( 1 )
-text = "名前"
-align = 1
-valign = 1
-max_lines_visible = 1
+[node name="Name" type="Control" parent="Name"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 3 )
+font_font = SubResource( 11 )
+font_ruby_font = SubResource( 12 )
+font_color = Color( 1, 1, 1, 1 )
+font_outline_color = Color( 0, 0, 0, 1 )
+ruby_alignment_ruby = 0
+ruby_alignment_parent = 0
+buffer_left_margin = 0
+buffer_right_margin = 0
+buffer_left_padding = 0
+buffer_right_padding = 0
+buffer_visible_border = false
+adjust_line_height = 0
+adjust_ruby_distance = -11
+adjust_no_ruby_space = 8
+text_input = "｜名前《なまえ》"
+text_ruby_parent = "｜"
+text_ruby_begin = "《"
+text_ruby_end = "》"
+display_horizontal_alignment = 1
+display_vertical_alignment = 0
+display_rate = 100.0
+display_rate_phonetic = false
+output_base_text = "名前"
+output_phonetic_text = "なまえ"
+clip_rect = false
+auto_fit_height = false
 
 [node name="Skills" type="VBoxContainer" parent="."]
 anchor_right = 1.0
@@ -118,85 +210,3 @@ margin_right = -24.0
 margin_bottom = -104.0
 rect_min_size = Vector2( 464, 0 )
 alignment = 2
-
-[node name="Power" type="Panel" parent="."]
-margin_left = 12.0
-margin_top = 12.0
-margin_right = 108.0
-margin_bottom = 108.0
-custom_styles/panel = SubResource( 5 )
-
-[node name="Label" type="Label" parent="Power"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-rect_pivot_offset = Vector2( 48, 48 )
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_fonts/font = SubResource( 2 )
-text = "1"
-align = 1
-valign = 1
-max_lines_visible = 1
-
-[node name="Hit" type="TextureRect" parent="."]
-margin_left = 20.0
-margin_top = 112.0
-margin_right = 92.0
-margin_bottom = 176.0
-texture = ExtResource( 3 )
-expand = true
-stretch_mode = 5
-
-[node name="Label" type="Label" parent="Hit"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_top = 2.0
-margin_bottom = 2.0
-grow_horizontal = 2
-grow_vertical = 2
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_fonts/font = SubResource( 4 )
-text = "1"
-align = 1
-valign = 1
-max_lines_visible = 1
-
-[node name="Block" type="TextureRect" parent="."]
-margin_left = 28.0
-margin_top = 184.0
-margin_right = 100.0
-margin_bottom = 248.0
-texture = ExtResource( 3 )
-expand = true
-stretch_mode = 5
-flip_v = true
-
-[node name="Label" type="Label" parent="Block"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_top = -12.0
-margin_bottom = -12.0
-grow_horizontal = 2
-grow_vertical = 2
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_fonts/font = SubResource( 4 )
-text = "1"
-align = 1
-valign = 1
-max_lines_visible = 1
-
-[node name="Level" type="Panel" parent="."]
-margin_left = 436.0
-margin_top = 12.0
-margin_right = 500.0
-margin_bottom = 76.0
-custom_styles/panel = SubResource( 6 )
-
-[node name="Label" type="Label" parent="Level"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_fonts/font = SubResource( 3 )
-text = "1"
-align = 1
-valign = 1
-max_lines_visible = 1

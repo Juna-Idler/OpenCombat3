@@ -188,9 +188,9 @@ func _load_state_data():
 		_state_catalog[id] = StateData.PlayerStateData.new(id,csv[1],csv[2],csv[3],text)
 
 	if translation.find("ja") != 0:
-		var trans_res = load("res://card_data/named_skill_" + translation + ".txt")
+		var trans_res = load("res://card_data/state_" + translation + ".txt")
 		if not trans_res:
-			trans_res = load("res://card_data/named_skill_en.txt")
+			trans_res = load("res://card_data/state_en.txt")
 		var trans = trans_res.text.split("\n")
 		for i in trans.size():
 			var tsv = trans[i].split("\t")
@@ -198,7 +198,8 @@ func _load_state_data():
 			var data = _state_catalog[id] as StateData.PlayerStateData
 			data.name = tsv[1]
 			data.short_name = tsv[2]
-			data.parameter = tsv[3]
+			if not data.parameter.empty():
+				data.parameter = tsv[3].split(",")
 			data.text = tsv[4].replace("\\n","\n")
 
 

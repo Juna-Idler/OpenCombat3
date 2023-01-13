@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=1]
+[ext_resource path="res://scenes/card/large_card_skill_text.gd" type="Script" id=2]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 1, 1, 1, 0.752941 )
@@ -18,6 +19,11 @@ default_font = SubResource( 2 )
 Panel/styles/panel = SubResource( 1 )
 RichTextLabel/colors/default_color = Color( 0, 0, 0, 1 )
 
+[sub_resource type="StyleBoxFlat" id=6]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color( 1, 1, 1, 0.75 )
+
 [sub_resource type="StyleBoxFlat" id=4]
 bg_color = Color( 1, 1, 1, 1 )
 corner_radius_top_left = 2
@@ -25,42 +31,39 @@ corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
-[node name="LargeCardSkillText" type="Panel"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_right = -816.0
-margin_bottom = -640.0
+[sub_resource type="StyleBoxFlat" id=5]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color( 0.800781, 0.800781, 0.800781, 0.74902 )
+border_width_left = 4
+border_width_right = 4
+border_width_bottom = 2
+
+[node name="VBoxContainer" type="VBoxContainer"]
+margin_right = 40.0
+margin_bottom = 40.0
 theme = SubResource( 3 )
+custom_constants/separation = 0
+script = ExtResource( 2 )
 
-[node name="Label" type="Label" parent="."]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 16.0
-margin_right = -16.0
-rect_clip_content = true
-size_flags_vertical = 1
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-valign = 2
-autowrap = true
-
-[node name="RichTextLabel" type="RichTextLabel" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 16.0
-margin_right = -16.0
+[node name="SkillLabel" type="RichTextLabel" parent="."]
+margin_right = 464.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 464, 26 )
+rect_clip_content = false
+custom_styles/normal = SubResource( 6 )
 bbcode_enabled = true
 fit_content_height = true
 scroll_active = false
 
-[node name="Left" type="Panel" parent="."]
+[node name="Left" type="Panel" parent="SkillLabel"]
 margin_left = -4.0
 margin_top = 3.0
 margin_right = 10.0
 margin_bottom = 23.0
 custom_styles/panel = SubResource( 4 )
 
-[node name="Right" type="Panel" parent="."]
+[node name="Right" type="Panel" parent="SkillLabel"]
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -13.0
@@ -68,3 +71,15 @@ margin_top = 6.0
 margin_right = 7.0
 margin_bottom = 20.0
 custom_styles/panel = SubResource( 4 )
+
+[node name="StateLabel" type="RichTextLabel" parent="."]
+margin_top = 26.0
+margin_right = 464.0
+margin_bottom = 54.0
+custom_styles/normal = SubResource( 5 )
+bbcode_enabled = true
+fit_content_height = true
+scroll_active = false
+deselect_on_focus_loss_enabled = false
+
+[connection signal="meta_clicked" from="SkillLabel" to="." method="_on_SkillLabel_meta_clicked"]
