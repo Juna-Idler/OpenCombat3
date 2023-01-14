@@ -6,10 +6,10 @@ func _ready():
 func show_layer(cd : CardData):
 	$LargeCard.initialize_card(cd)
 	$Flavor.text = cd.text
-	visible = true
+	show()
 	
 func hide_layer():
 	visible = false
 
 func _on_LargeCardView_clicked():
-	hide_layer()
+	hide()

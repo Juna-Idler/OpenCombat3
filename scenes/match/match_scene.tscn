@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://scenes/match/match_scene.gd" type="Script" id=1]
 [ext_resource path="res://scenes/settings/settings scene.tscn" type="PackedScene" id=2]
@@ -8,10 +8,11 @@
 [ext_resource path="res://camera2d.tscn" type="PackedScene" id=6]
 [ext_resource path="res://scenes/match/ui/my_hand_area.tscn" type="PackedScene" id=7]
 [ext_resource path="res://scenes/card/large_card_view.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scenes/match/ui/states_detail_view.tscn" type="PackedScene" id=9]
 [ext_resource path="res://scenes/match/combat/combat_overlap.tscn" type="PackedScene" id=10]
 [ext_resource path="res://scenes/ui/clickable_control.gd" type="Script" id=11]
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=12]
-[ext_resource path="res://scenes/match/states_panel.tscn" type="PackedScene" id=13]
+[ext_resource path="res://scenes/match/ui/states_panel.tscn" type="PackedScene" id=13]
 
 [sub_resource type="DynamicFont" id=9]
 size = 40
@@ -344,20 +345,20 @@ margin_left = -216.0
 margin_top = -104.0
 margin_right = -16.0
 margin_bottom = 96.0
-opponent_layout = true
+
+[node name="StatesDetailView" parent="TopUILayer" instance=ExtResource( 9 )]
+visible = false
+
+[node name="CardList" parent="TopUILayer" instance=ExtResource( 5 )]
+unique_name_in_owner = true
+visible = false
+large_card_view = NodePath("../../LargeCardLayer/LargeCardView")
 
 [node name="OverlapLayer" type="CanvasLayer" parent="."]
 layer = 4
 follow_viewport_enable = true
 
 [node name="CombatOverlap" parent="OverlapLayer" instance=ExtResource( 10 )]
-unique_name_in_owner = true
-visible = false
-
-[node name="CardListLayer" type="CanvasLayer" parent="."]
-layer = 8
-
-[node name="CardList" parent="CardListLayer" instance=ExtResource( 5 )]
 unique_name_in_owner = true
 visible = false
 
@@ -401,4 +402,6 @@ current = false
 [connection signal="held" from="UILayer/RivalField/Played" to="." method="_on_RivalPlayed_held"]
 [connection signal="clicked" from="UILayer/RivalField/Discard" to="." method="_on_RivalDiscard_clicked"]
 [connection signal="pressed" from="TopUILayer/Control/SettingButton" to="." method="_on_SettingButton_pressed"]
+[connection signal="pressed" from="TopUILayer/Control/MyStatesPanel" to="." method="_on_MyStatesPanel_pressed"]
+[connection signal="pressed" from="TopUILayer/Control/RivalStatesPanel" to="." method="_on_RivalStatesPanel_pressed"]
 [connection signal="timeout" from="LimitTimer" to="." method="_on_LimitTimer_timeout"]

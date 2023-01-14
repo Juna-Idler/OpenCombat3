@@ -34,7 +34,7 @@ mouse_filter = 2
 [node name="Flavor" type="Label" parent="."]
 margin_left = 640.0
 margin_top = 32.0
-margin_right = 1024.0
+margin_right = 1088.0
 margin_bottom = 688.0
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_fonts/font = SubResource( 2 )

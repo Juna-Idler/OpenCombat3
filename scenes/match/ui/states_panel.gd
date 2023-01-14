@@ -38,3 +38,4 @@ func set_states(states : Array):
 		pool.invert()
 	$Label.text = pool.join("\n")
 	
+

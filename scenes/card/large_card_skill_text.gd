@@ -1,6 +1,11 @@
 extends Control
 
 
+const ATTENTION_COLOR_CODE := "#B00"
+
+const ATTENTION_BBC := "[color=" + ATTENTION_COLOR_CODE + "]%s[/color]"
+const BRACKETS_PARAMETER_BBC := "(" + ATTENTION_BBC + ")"
+
 func _ready():
 	pass
 
@@ -8,11 +13,11 @@ func _ready():
 func initialize(skill : SkillData.NamedSkill,width : int):
 	
 	var skill_name := skill.data.name + ("" if skill.parameter.empty()
-			else "([color=red]%s[/color])" % skill.get_parameter_string())
+			else BRACKETS_PARAMETER_BBC % skill.get_parameter_string())
 	var skill_text := skill.text
 	for i in skill.parameter:
 		var param_text = i.name
-		skill_text = skill_text.replace("{%s}" % param_text,"[color=red]%s[/color]" % param_text)
+		skill_text = skill_text.replace("{%s}" % param_text,ATTENTION_BBC % param_text)
 	for i in skill.data.states:
 		var state := Global.card_catalog.get_state_data(i)
 		skill_text = skill_text.replace("{%s}" % state.name,"[url]%s[/url]" % state.name)
@@ -36,22 +41,20 @@ func initialize(skill : SkillData.NamedSkill,width : int):
 		right.visible = false
 
 	var state_label = $StateLabel
-	if skill.data.states.empty():
-		state_label.hide()
-	else:
-		state_label.show()
-		state_label.rect_position.y = rect_min_size.y
+	state_label.hide()
+	if not skill.data.states.empty():
 		state_label.rect_min_size.x = width - 32
 		var state_text : PoolStringArray = []
 		for i in skill.data.states:
 			var state := Global.card_catalog.get_state_data(i) as StateData.PlayerStateData
-			var param := "" if state.parameter.empty() else "([color=red]%s[/color])" % state.parameter.join(",")
+			var param := "" if state.parameter.empty() else\
+					 BRACKETS_PARAMETER_BBC % state.parameter.join(",")
 			state_text.append(state.name + param + " : " +
-					state.text.replace("{","[color=red]").replace("}","[/color]"))
+					state.text.replace("{","[color=" + ATTENTION_COLOR_CODE + "]").replace("}","[/color]"))
 		state_label.bbcode_text = state_text.join("\n")
 
 
-func _on_SkillLabel_meta_clicked(meta):
+func _on_SkillLabel_meta_clicked(_meta : String):
 	var state_label = $StateLabel
 	if not state_label.text.empty():
 		state_label.visible = not state_label.visible

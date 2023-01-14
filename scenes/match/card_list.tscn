@@ -18,7 +18,4 @@ mouse_filter = 2
 size_flags_vertical = 3
 custom_styles/panel = SubResource( 2 )
 
-[node name="Timer" type="Timer" parent="."]
-wait_time = 0.5
-
 [connection signal="clicked" from="." to="." method="_on_CardList_clicked"]

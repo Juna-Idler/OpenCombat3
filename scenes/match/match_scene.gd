@@ -53,7 +53,6 @@ var combat_director : CombatDirector = CombatDirector.new()
 var delay_time : float
 
 func _ready():
-	$"%CardList".large_card_view = $"%LargeCardView"
 	pass
 
 func _process(_delta):
@@ -145,6 +144,10 @@ func terminalize():
 		game_server.disconnect("recieved_complete_board",self,"_on_GameServer_recieved_complete_board")
 		game_server = null
 
+func restore_overlap():
+	$"%CardList".restore_now()
+	$TopUILayer/StatesDetailView.hide()
+	$"%LargeCardView".hide()
 
 func _on_GameServer_recieved_end(msg:String)->void:
 	$LimitTimer.stop()
@@ -382,3 +385,13 @@ func _on_SettingButton_pressed():
 
 
 
+
+
+func _on_MyStatesPanel_pressed():
+	$TopUILayer/StatesDetailView.set_states(myself.states)
+	$TopUILayer/StatesDetailView.show()
+
+
+func _on_RivalStatesPanel_pressed():
+	$TopUILayer/StatesDetailView.set_states(rival.states)
+	$TopUILayer/StatesDetailView.show()

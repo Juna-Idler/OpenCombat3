@@ -327,7 +327,7 @@ _global_script_classes=[ {
 "base": "Control",
 "class": "StatesPanel",
 "language": "GDScript",
-"path": "res://scenes/match/states_panel.gd"
+"path": "res://scenes/match/ui/states_panel.gd"
 }, {
 "base": "",
 "class": "TitleScene",

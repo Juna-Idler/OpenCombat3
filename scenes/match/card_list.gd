@@ -7,7 +7,7 @@ const CardListItem = preload("./card_list_item.tscn")
 
 onready var container := $ListContainer
 
-var large_card_view : Node
+export var large_card_view : NodePath
 
 const item_x_count := 7
 const x_start := 112
@@ -26,7 +26,7 @@ func set_card_list(list : Array,deck_list : Array):
 		for i in list.size() - container.get_child_count():
 			var ci = CardListItem.instance()
 			ci.connect("clicked",self,"_on_ListItem_clicked",[ci])
-			ci._timer = $Timer
+#			ci._timer = $Timer
 			container.add_child(ci)
 	
 	for i in list.size():
@@ -70,6 +70,7 @@ func set_card_list(list : Array,deck_list : Array):
 		c.z_index = 1000 + i
 
 func restore_card():
+	hide()
 	var tween := create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_QUAD)
@@ -94,13 +95,24 @@ func reset_card(ci):
 	ci.card.z_index = ci.o_z_index
 	ci.card.visible = ci.o_visible
 
+func restore_now():
+	if visible:
+		for ci in container.get_children():
+			if not ci.visible:
+				break
+			var c := ci.card as MatchCard
+			remove_child(c)
+			ci.o_parent_node.add_child(c)
+			c.rotation = ci.o_rotation
+			c.global_position = ci.o_position
+			reset_card(ci)
+
 
 func _on_ListItem_clicked(_self):
-	large_card_view.show_layer(_self.card.front.data)
+	get_node(large_card_view).show_layer(_self.card.front.data)
 
 
 func _on_CardList_clicked():
 	wait = true
-	hide()
 	yield(restore_card(),"completed")
 	wait = false
