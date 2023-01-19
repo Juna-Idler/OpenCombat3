@@ -97,6 +97,7 @@ func reset_card(ci):
 
 func restore_now():
 	if visible:
+		hide()
 		for ci in container.get_children():
 			if not ci.visible:
 				break

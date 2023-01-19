@@ -150,6 +150,7 @@ func restore_overlap():
 	$"%LargeCardView".hide()
 
 func _on_GameServer_recieved_end(msg:String)->void:
+	restore_overlap()
 	$LimitTimer.stop()
 	emit_signal("ended",-2,msg)
 	$TopUILayer/Control/SettingButton.disabled = true
@@ -179,6 +180,7 @@ func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
 	emit_signal("performed")
 
 func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
+	restore_overlap()
 	if data.myself.time >= 0:
 		var skill_count := data.myself.effect_logs.size() + data.rival.effect_logs.size()
 		var result_delay := skill_count * COMBAT_SKILL_DELAY + COMBAT_RESULT_DELAY
@@ -245,6 +247,7 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 
 
 func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
+	restore_overlap()
 	if data.myself.time >= 0:
 		if data.next_phase == IGameServer.Phase.COMBAT:
 			delay_time = match_regulation.combat_time + RECOVER_RESULT_DELAY
@@ -281,11 +284,13 @@ func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
 func _on_LimitTimer_timeout():
 	if not is_valid() or not card_manipulation:
 		return
+	restore_overlap()
 	var hand = $UILayer/MyField/HandArea.get_reorder_hand()
 	decide_card(0,hand)
 
 
 func _on_GameServer_recieved_complete_board(data:IGameServer.CompleteData)->void:
+	restore_overlap()
 	performing = true
 	
 	var state_deserializer := StateDeserializer.new()
@@ -388,10 +393,14 @@ func _on_SettingButton_pressed():
 
 
 func _on_MyStatesPanel_pressed():
+	if myself.states.empty():
+		return
 	$TopUILayer/StatesDetailView.set_states(myself.states)
 	$TopUILayer/StatesDetailView.show()
 
 
 func _on_RivalStatesPanel_pressed():
+	if rival.states.empty():
+		return
 	$TopUILayer/StatesDetailView.set_states(rival.states)
 	$TopUILayer/StatesDetailView.show()

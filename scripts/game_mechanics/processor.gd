@@ -160,11 +160,11 @@ func _engaged_process(p1_link_color : int, p2_link_color: int):
 	for i in player1._get_states().size():
 		var s := player1._get_states()[i] as MechanicsData.IState
 		for p in s._engaged_priority():
-			effect_order.append(EffectOrder.new(s,p,-(i+1),player1,player2))
+			effect_order.append(EffectOrder.new(s,p,-(i+1),player1,player2,situation,1))
 	for i in player2._get_states().size():
 		var s := player2._get_states()[i] as MechanicsData.IState
 		for p in s._engaged_priority():
-			effect_order.append(EffectOrder.new(s,p,-(i+1),player2,player1))
+			effect_order.append(EffectOrder.new(s,p,-(i+1),player2,player1,-situation,-1))
 	
 	for i in player1._get_playing_card().data.skills.size():
 		var s := player1._get_playing_card().skills[i] as MechanicsData.ISkill

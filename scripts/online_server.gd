@@ -93,9 +93,9 @@ func _on_data():
 			var r := data["r"] as Dictionary
 			var ys_logs := []
 			var rs_logs := []
-			for sl in (y["s"] as Array):
+			for sl in (y["e"] as Array):
 				ys_logs.append(IGameServer.UpdateData.EffectLog.new(sl["i"],sl["t"],sl["p"],sl["d"]))
-			for sl in (r["s"] as Array):
+			for sl in (r["e"] as Array):
 				rs_logs.append(IGameServer.UpdateData.EffectLog.new(sl["i"],sl["t"],sl["p"],sl["d"]))
 			var myself := IGameServer.UpdateData.PlayerData.new(y["h"],y["i"],ys_logs,y["dc"],y["d"],y["l"],y["t"]/1000.0)
 			var rival := IGameServer.UpdateData.PlayerData.new(r["h"],r["i"],rs_logs,r["dc"],r["d"],r["l"],r["t"]/1000.0)

@@ -131,7 +131,7 @@ func _recover(index : int) -> void:
 	_draw_card()
 
 func _no_recover() -> void:
-	playing_hand = hand
+	playing_hand = hand.duplicate()
 	select = -1
 	draw_indexes.resize(0)
 	skill_log.clear()
@@ -152,6 +152,7 @@ func _change_order(new_indexies : PoolIntArray) -> void:
 
 func _reset_select() -> void:
 	select = -1
+	select_card = null
 
 func _draw_card() -> void:
 	if stock.empty():
