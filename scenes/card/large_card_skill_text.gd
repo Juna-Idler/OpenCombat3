@@ -10,7 +10,7 @@ func _ready():
 	pass
 
 
-func initialize(skill : SkillData.NamedSkill,width : int):
+func initialize(skill : CatalogData.CardSkill,width : int):
 	
 	var skill_name := skill.data.name + ("" if skill.parameter.empty()
 			else BRACKETS_PARAMETER_BBC % skill.get_parameter_string())
@@ -28,14 +28,14 @@ func initialize(skill : SkillData.NamedSkill,width : int):
 	var left = $SkillLabel/Left
 	var right = $SkillLabel/Right
 	
-	if skill.condition & SkillData.ColorCondition.VS_FLAG:
+	if skill.condition & CatalogData.ColorCondition.VS_FLAG:
 		right.visible = false
 		left.visible = true
-		left.self_modulate = CardData.RGB[skill.condition & SkillData.ColorCondition.COLOR_BITS]
-	elif skill.condition & SkillData.ColorCondition.LINK_FLAG:
+		left.self_modulate = CatalogData.RGB[skill.condition & CatalogData.ColorCondition.COLOR_BITS]
+	elif skill.condition & CatalogData.ColorCondition.LINK_FLAG:
 		left.visible = false
 		right.visible = true
-		right.self_modulate = CardData.RGB[skill.condition & SkillData.ColorCondition.COLOR_BITS]
+		right.self_modulate = CatalogData.RGB[skill.condition & CatalogData.ColorCondition.COLOR_BITS]
 	else:
 		left.visible = false
 		right.visible = false

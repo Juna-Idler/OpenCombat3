@@ -4,7 +4,7 @@ class_name SkillProcessor
 
 class Reinforce extends MechanicsData.BasicSkill:
 	const PRIORITY = 1
-	func _init(data : SkillData.NamedSkill).(data):
+	func _init(data : CatalogData.CardSkill).(data):
 		pass
 	
 	func _before_priority() -> Array:
@@ -12,7 +12,7 @@ class Reinforce extends MechanicsData.BasicSkill:
 	func _process_before(index : int,_priority : int,
 			myself : MechanicsData.IPlayer,_rival : MechanicsData.IPlayer) -> void:
 		var affected := myself._get_playing_card().affected
-		var effect := _skill.parameter[0].data as CardData.Stats
+		var effect := _skill.parameter[0].data as CatalogData.Stats
 		affected.power += effect.power
 		affected.hit += effect.hit
 		affected.block += effect.block
@@ -21,7 +21,7 @@ class Reinforce extends MechanicsData.BasicSkill:
 
 class Pierce extends MechanicsData.BasicSkill:
 	const PRIORITY = 1
-	func _init(data : SkillData.NamedSkill).(data):
+	func _init(data : CatalogData.CardSkill).(data):
 		pass
 	
 	func _after_priority() -> Array:
@@ -38,7 +38,7 @@ class Pierce extends MechanicsData.BasicSkill:
 
 class Charge extends MechanicsData.BasicSkill:
 	const PRIORITY = 1
-	func _init(data : SkillData.NamedSkill).(data):
+	func _init(data : CatalogData.CardSkill).(data):
 		pass
 	
 	func _end_priority() -> Array:
@@ -46,7 +46,7 @@ class Charge extends MechanicsData.BasicSkill:
 	func _process_end(index : int,_priority : int,_situation : int,
 			myself : MechanicsData.IPlayer,_rival : MechanicsData.IPlayer) -> void:
 		if myself._is_recovery():
-			var effect := _skill.parameter[0].data as CardData.Stats
+			var effect := _skill.parameter[0].data as CatalogData.Stats
 			var _state = StateProcessor.Reinforce.new(effect,myself._get_states())
 			myself._append_effect_log(index,MechanicsData.EffectTiming.END,PRIORITY,true)
 		else:
@@ -55,7 +55,7 @@ class Charge extends MechanicsData.BasicSkill:
 
 class Isolate extends MechanicsData.BasicSkill:
 	const PRIORITY = 255
-	func _init(data : SkillData.NamedSkill).(data):
+	func _init(data : CatalogData.CardSkill).(data):
 		pass
 	
 	func _engaged_priority() -> Array:
@@ -68,7 +68,7 @@ class Isolate extends MechanicsData.BasicSkill:
 
 class Absorb extends MechanicsData.BasicSkill:
 	const PRIORITY = 1
-	func _init(data : SkillData.NamedSkill).(data):
+	func _init(data : CatalogData.CardSkill).(data):
 		pass
 	
 	func _before_priority() -> Array:
@@ -86,7 +86,7 @@ class Absorb extends MechanicsData.BasicSkill:
 				data = i
 				break
 		var affected := myself._get_playing_card().affected
-		var effect := _skill.parameter[1].data as CardData.Stats
+		var effect := _skill.parameter[1].data as CatalogData.Stats
 		affected.power += effect.power * level
 		affected.hit += effect.hit * level
 		affected.block += effect.block * level

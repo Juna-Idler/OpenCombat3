@@ -18,7 +18,7 @@ class ISkill extends IEffect:
 
 
 class ISkillFactory:
-	func _create(_skill : SkillData.NamedSkill) -> ISkill:
+	func _create(_skill : CatalogData.CardSkill) -> ISkill:
 		return null
 
 

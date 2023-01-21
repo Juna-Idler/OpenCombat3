@@ -8,9 +8,9 @@ func _init():
 
 
 class Reinforce extends MatchEffect.ISkill:
-	var stats : CardData.Stats
-	func _init(skill : SkillData.NamedSkill):
-		var effect := skill.parameter[0].data as CardData.Stats
+	var stats : CatalogData.Stats
+	func _init(skill : CatalogData.CardSkill):
+		var effect := skill.parameter[0].data as CatalogData.Stats
 		stats = effect.duplicate()
 
 	func _before(_priority : int ,myself : MatchPlayer,_rival : MatchPlayer,_data) -> void:
@@ -23,7 +23,7 @@ class Reinforce extends MatchEffect.ISkill:
 
 
 class Pierce extends MatchEffect.ISkill:
-	func _init(_skill : SkillData.NamedSkill):
+	func _init(_skill : CatalogData.CardSkill):
 		pass
 	
 	func _after(_priority : int,_situation : int,myself : MatchPlayer,rival : MatchPlayer,data) -> void:
@@ -38,10 +38,10 @@ class Pierce extends MatchEffect.ISkill:
 
 
 class Charge extends MatchEffect.ISkill:
-	var stats : CardData.Stats
+	var stats : CatalogData.Stats
 	
-	func _init(skill : SkillData.NamedSkill):
-		var effect := skill.parameter[0].data as CardData.Stats
+	func _init(skill : CatalogData.CardSkill):
+		var effect := skill.parameter[0].data as CatalogData.Stats
 		stats = effect.duplicate()
 	
 	func _end(_priority : int,_situation : int,myself : MatchPlayer,_rival : MatchPlayer,data) -> void:
@@ -57,7 +57,7 @@ class Charge extends MatchEffect.ISkill:
 		yield(myself.combat_avatar.get_tree(),"idle_frame")
 
 class Isolate extends MatchEffect.ISkill:
-	func _init(_skill : SkillData.NamedSkill):
+	func _init(_skill : CatalogData.CardSkill):
 		pass
 	
 	func _engaged(_priority : int,_situation : int,myself : MatchPlayer,_rival : MatchPlayer,_data) -> int:
@@ -67,9 +67,9 @@ class Isolate extends MatchEffect.ISkill:
 		return 0
 
 class Absorb extends MatchEffect.ISkill:
-	var stats : CardData.Stats
-	func _init(skill : SkillData.NamedSkill):
-		var effect := skill.parameter[1].data as CardData.Stats
+	var stats : CatalogData.Stats
+	func _init(skill : CatalogData.CardSkill):
+		var effect := skill.parameter[1].data as CatalogData.Stats
 		stats = effect.duplicate()
 
 	func _before(_priority : int,myself : MatchPlayer,_rival : MatchPlayer,data) -> void:

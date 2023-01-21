@@ -18,11 +18,10 @@ var skills : Array # of MatchEffect.IEffect
 
 var front : CardFront = null
 
-var affected := CardData.Stats.new(0,0,0)
+var affected := CatalogData.Stats.new(0,0,0)
 
 
-
-func initialize_card(id:int,cd : CardData,skill_factory : MatchEffect.ISkillFactory,rotate := false) -> MatchCard:
+func initialize_card(id:int,cd : CatalogData.CardData,skill_factory : MatchEffect.ISkillFactory,rotate := false) -> MatchCard:
 	id_in_deck = id
 	location = Location.STOCK
 	front = $CardFront.initialize_card(cd,rotate)
@@ -31,7 +30,7 @@ func initialize_card(id:int,cd : CardData,skill_factory : MatchEffect.ISkillFact
 
 	return self
 
-func get_card_data() -> CardData:
+func get_card_data() -> CatalogData.CardData:
 	return front.data
 
 func get_current_power() -> int:

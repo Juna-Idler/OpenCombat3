@@ -66,7 +66,7 @@ func set_deck(deck : Array,name : String,draggable = true):
 func get_deck() -> Array:
 	var r := []
 	for i in deck_container.get_children():
-		var cd := i.get_node("CardFront").data as CardData
+		var cd := i.get_node("CardFront").data as CatalogData.CardData
 		r.append(cd.id)
 	return r
 

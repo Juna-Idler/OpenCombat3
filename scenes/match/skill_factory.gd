@@ -13,5 +13,5 @@ const skills : Array = [
 	MatchSkillPerformer.Absorb,
 ]
 
-func _create(skill : SkillData.NamedSkill) -> MatchEffect.ISkill:
+func _create(skill : CatalogData.CardSkill) -> MatchEffect.ISkill:
 	return skills[skill.data.id].new(skill)

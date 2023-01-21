@@ -66,9 +66,9 @@ func set_opponent_layout(value):
 			item.target_position = Vector2(880,360)
 		
 
-func initialize(cd : CardData,vs_color : int,link_color : int,active_states : Array):
+func initialize(cd : CatalogData.CardData,vs_color : int,link_color : int,active_states : Array):
 	$Image/Image/Picture.texture = load("res://card_images/"+ cd.image +".png")
-	$Image/Image/Frame.self_modulate = CardData.RGB[cd.color]
+	$Image/Image/Frame.self_modulate = CatalogData.RGB[cd.color]
 	
 	attack_type = AttackType.SHOOTING if cd.hit > 0 else AttackType.IMMOBILE
 	damage = 0;
@@ -76,7 +76,7 @@ func initialize(cd : CardData,vs_color : int,link_color : int,active_states : Ar
 	$Image/Damage/Label.text = ""
 	
 	for i in cd.skills.size():
-		var s := cd.skills[i] as SkillData.NamedSkill
+		var s := cd.skills[i] as CatalogData.CardSkill
 		if s.data.id == 2:
 			attack_type = AttackType.CLOSE
 		var csl := skills[i] as CombatSkillLine

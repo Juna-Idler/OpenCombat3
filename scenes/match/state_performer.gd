@@ -7,9 +7,9 @@ func _init():
 
 class ReinForce extends MatchEffect.BasicState:
 	const ID = 1
-	var stats : CardData.Stats
+	var stats : CatalogData.Stats
 	func _init(data : Array,container : Array).(container):
-		stats = CardData.Stats.new(data[0],data[1],data[2])
+		stats = CatalogData.Stats.new(data[0],data[1],data[2])
 	
 	func _before(_priority : int ,myself : MatchPlayer,_rival : MatchPlayer,_data) -> void:
 		myself.combat_avatar.current_effect_line.succeeded()

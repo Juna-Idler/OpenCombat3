@@ -3,13 +3,13 @@ extends Control
 
 class_name CardFront
 
-var data : CardData = null
+var data : CatalogData.CardData = null
 
 
 const CardSkillLine = preload("card_skill_line.tscn")
 
 
-func initialize_card(cd : CardData,rotate := false) -> CardFront:
+func initialize_card(cd : CatalogData.CardData,rotate := false) -> CardFront:
 	for c in $Skills.get_children():
 		$Skills.remove_child(c)
 		c.queue_free()
@@ -36,10 +36,10 @@ func initialize_card(cd : CardData,rotate := false) -> CardFront:
 #	ResourceLoader.load_interactive
 	var texture := load("res://card_images/"+ data.image +".png")
 	$Picture.texture = texture if texture else null
-	$Frame.self_modulate = CardData.RGB[data.color]
-	$Power.self_modulate = CardData.RGB[data.color].darkened(0.5)
-	$Hit.self_modulate = CardData.RGB[data.color].lightened(0.5)
-	$Block.self_modulate = CardData.RGB[data.color].lightened(0.5)
+	$Frame.self_modulate = CatalogData.RGB[data.color]
+	$Power.self_modulate = CatalogData.RGB[data.color].darkened(0.5)
+	$Hit.self_modulate = CatalogData.RGB[data.color].lightened(0.5)
+	$Block.self_modulate = CatalogData.RGB[data.color].lightened(0.5)
 
 	for skill in data.skills:
 		var line = CardSkillLine.instance()

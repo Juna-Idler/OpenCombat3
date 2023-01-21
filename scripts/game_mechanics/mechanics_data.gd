@@ -4,13 +4,13 @@ class_name MechanicsData
 
 
 class PlayerCard:
-	var data : CardData = null
+	var data : CatalogData.CardData = null
 	var id_in_deck : int = 0
 	var skills : Array # of ISkill
 
-	var affected := CardData.Stats.new(0,0,0)
+	var affected := CatalogData.Stats.new(0,0,0)
 
-	func _init(cd : CardData,iid : int,factory : ISkillFactory):
+	func _init(cd : CatalogData.CardData,iid : int,factory : ISkillFactory):
 		data = cd
 		id_in_deck = iid
 		for s in cd.skills:
@@ -172,20 +172,20 @@ class IEffect:
 
 
 class ISkill extends IEffect:
-	func _get_skill() -> SkillData.NamedSkill:
+	func _get_skill() -> CatalogData.CardSkill:
 		return null
 
 class BasicSkill extends ISkill:
-	var _skill : SkillData.NamedSkill
-	func _init(skill : SkillData.NamedSkill):
+	var _skill : CatalogData.CardSkill
+	func _init(skill : CatalogData.CardSkill):
 		_skill = skill
 		
-	func _get_skill() -> SkillData.NamedSkill:
+	func _get_skill() -> CatalogData.CardSkill:
 		return _skill
 
 
 class ISkillFactory:
-	func _create(_skill : SkillData.NamedSkill) -> ISkill:
+	func _create(_skill : CatalogData.CardSkill) -> ISkill:
 		return null
 
 

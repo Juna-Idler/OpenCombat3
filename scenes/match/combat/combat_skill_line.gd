@@ -65,22 +65,22 @@ func move_and_remove(in_time : float,duration : float,end_time : float):
 	tween.tween_property(self,"modulate:a",1.0,0.5)
 
 
-func set_skill(skill : SkillData.NamedSkill,vs_color:int,link_color:int):
+func set_skill(skill : CatalogData.CardSkill,vs_color:int,link_color:int):
 	$Highlight.modulate = Color.black
 	$Background/Label.text = skill.get_short_string()
 
-	if skill.condition & SkillData.ColorCondition.VS_FLAG:
+	if skill.condition & CatalogData.ColorCondition.VS_FLAG:
 		$Background/ColorRectRight.visible = false
 		$Background/ColorRectLeft.visible = true
-		var color : int = skill.condition & SkillData.ColorCondition.COLOR_BITS
-		$Background/ColorRectLeft.color = CardData.RGB[color]
+		var color : int = skill.condition & CatalogData.ColorCondition.COLOR_BITS
+		$Background/ColorRectLeft.color = CatalogData.RGB[color]
 		$Background/Label.align = Label.ALIGN_RIGHT if opponent_layout else Label.ALIGN_LEFT
 		$Background/Invalid.visible = (color != vs_color)
-	elif skill.condition & SkillData.ColorCondition.LINK_FLAG:
+	elif skill.condition & CatalogData.ColorCondition.LINK_FLAG:
 		$Background/ColorRectLeft.visible = false
 		$Background/ColorRectRight.visible = true
-		var color : int = skill.condition & SkillData.ColorCondition.COLOR_BITS
-		$Background/ColorRectRight.color = CardData.RGB[color]
+		var color : int = skill.condition & CatalogData.ColorCondition.COLOR_BITS
+		$Background/ColorRectRight.color = CatalogData.RGB[color]
 		$Background/Label.align = Label.ALIGN_LEFT if opponent_layout else Label.ALIGN_RIGHT
 		$Background/Invalid.visible = (color != link_color)
 	else:

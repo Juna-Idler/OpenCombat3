@@ -2,13 +2,12 @@ extends Control
 
 const SkillText := preload("large_card_skill_text.tscn")
 
-const RGB = [Color(0,0,0,0),Color(0.9,0,0),Color(0,0.7,0),Color(0,0,1)]
 
 func _ready():
 	pass
 	
-func initialize_card(cd : CardData):
-	var color = RGB[cd.color]
+func initialize_card(cd : CatalogData.CardData):
+	var color = CatalogData.RGB[cd.color]
 	$Name/Name.text_input = cd.name if cd.ruby_name.empty() else cd.ruby_name
 	self_modulate = color
 	$Power.self_modulate = color.darkened(0.2)

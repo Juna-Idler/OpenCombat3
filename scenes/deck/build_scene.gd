@@ -83,7 +83,7 @@ func set_pool(start_index : int):
 		for j in pool_item_x_count:
 			var index = start_index + j + i * pool_item_x_count
 			if index >= 0 and index < card_pool.size():
-				var cd := card_pool[index] as CardData
+				var cd := card_pool[index] as CatalogData.CardData
 				pool_controls[i][j].get_node("CardFront").initialize_card(cd)
 				pool_controls[i][j].visible = true
 			else:
@@ -144,7 +144,7 @@ func add_card_index(id : int,index : int, g_position : Vector2,rate : float):
 			.set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_OUT)
 
 
-func remove_card(cd : CardData):
+func remove_card(cd : CatalogData.CardData):
 	deck_cost -= cd.level
 	deck_cards_count -= 1
 	display_deck_number()
@@ -167,7 +167,7 @@ func display_deck_number():
 func get_deck() -> Array:
 	var r := []
 	for i in deck_container.get_children():
-		var cd := i.get_node("CardFront").data as CardData
+		var cd := i.get_node("CardFront").data as CatalogData.CardData
 		r.append(cd.id)
 	return r
 
@@ -189,7 +189,7 @@ func _on_DeckItem_dropped(_self,relative_pos,start_pos):
 	var g_drop_pos = _self.rect_global_position + relative_pos + start_pos
 	if banner_mode:
 		if $"%BannerEditor".get_global_rect().has_point(g_drop_pos):
-			var cd : CardData = _self.get_node("CardFront").data
+			var cd : CatalogData.CardData = _self.get_node("CardFront").data
 			$"%BannerEditor".drop_card(cd.id)
 	else:
 		if $"%ScrollContainer".get_global_rect().has_point(g_drop_pos):
@@ -202,7 +202,7 @@ func _on_DeckItem_dropped(_self,relative_pos,start_pos):
 					_self.rect_position += relative_pos
 					deck_container.layout_tween()
 		else:
-			var cd : CardData = _self.get_node("CardFront").data
+			var cd : CatalogData.CardData = _self.get_node("CardFront").data
 			deck_container.remove_child(_self)
 			deck_container.layout_tween()
 			_self.queue_free()

@@ -13,7 +13,7 @@ class StatsNames:
 	var param_hit : String
 	var param_block : String
 
-	func get_effect_string(stats : CardData.Stats) -> String:
+	func get_effect_string(stats : CatalogData.Stats) -> String:
 		var texts : PoolStringArray = []
 		if stats.power != 0:
 			texts.append(power + "%+d" % stats.power)
@@ -23,7 +23,7 @@ class StatsNames:
 			texts.append(block + "%+d" % stats.block)
 		return texts.join(" ")
 	
-	func get_short_effect_string(stats : CardData.Stats) -> String:
+	func get_short_effect_string(stats : CatalogData.Stats) -> String:
 		var texts : PoolStringArray = []
 		if stats.power != 0:
 			texts.append(short_power + "%+d" % stats.power)
@@ -33,8 +33,8 @@ class StatsNames:
 			texts.append(short_block + "%+d" % stats.block)
 		return texts.join(" ")
 
-	func create_stats_from_param_string(param : String) -> CardData.Stats:
-		var r := CardData.Stats.new(0,0,0)
+	func create_stats_from_param_string(param : String) -> CatalogData.Stats:
+		var r := CatalogData.Stats.new(0,0,0)
 		for e in param.split(" "):
 			if e.find(param_power) == 0:
 				r.power = int(e.substr(param_power.length()))
@@ -73,30 +73,30 @@ func load_catalog():
 func get_max_card_id() -> int:
 	return _card_catalog.size() - 1
 
-func get_card_data(id : int) -> CardData:
+func get_card_data(id : int) -> CatalogData.CardData:
 	return _card_catalog[id]
 
 	
-func set_card_data(card : CardData, id : int):
-	CardData.copy(card,get_card_data(id))
+func set_card_data(card : CatalogData.CardData, id : int):
+	CatalogData.CardData.copy(card,get_card_data(id))
 
 
-func get_skill_data(id : int) -> SkillData.NamedSkillData:
+func get_skill_data(id : int) -> CatalogData.SkillData:
 	return _skill_catalog[id]
 
-func get_state_data(id : int) -> StateData.PlayerStateData:
+func get_state_data(id : int) -> CatalogData.StateData:
 	return _state_catalog[id]
 
-func get_skill_param(param_type : int,param : String) -> SkillData.SkillParameter:
+func get_skill_param(param_type : int,param : String) -> CatalogData.SkillParameter:
 	match param_type:
-		SkillData.ParamType.INTEGER:
-			return SkillData.SkillParameter.new(param,param,int(param))
-		SkillData.ParamType.ATTRIBUTES:
+		CatalogData.ParamType.INTEGER:
+			return CatalogData.SkillParameter.new(param,param,int(param))
+		CatalogData.ParamType.ATTRIBUTES:
 			var stats = stats_names.create_stats_from_param_string(param)
-			return SkillData.SkillParameter.new(stats_names.get_effect_string(stats),stats_names.get_short_effect_string(stats),stats)
-		SkillData.ParamType.COLOR:
+			return CatalogData.SkillParameter.new(stats_names.get_effect_string(stats),stats_names.get_short_effect_string(stats),stats)
+		CatalogData.ParamType.COLOR:
 			var ColorName := [tr("NO_COLOR"),tr("RED"),tr("GREEN"),tr("BLUE")]
-			return SkillData.SkillParameter.new(ColorName[int(param)],ColorName[int(param)],int(param))
+			return CatalogData.SkillParameter.new(ColorName[int(param)],ColorName[int(param)],int(param))
 	return null
 	
 
@@ -105,7 +105,7 @@ func get_deck_face(deck : DeckData) -> DeckData.DeckFace:
 	var rgb := [0,0,0,0]
 	var level := [0,0,0,0]
 	for i in deck.cards:
-		var c := Global.card_catalog.get_card_data(i) as CardData
+		var c := Global.card_catalog.get_card_data(i) as CatalogData.CardData
 		rgb[c.color] += 1
 		level[c.level] += 1
 		cost += c.level
@@ -130,14 +130,14 @@ func _load_card_data():
 			var skill_line_param : PoolStringArray = skill_line[2].split(",")
 			for i in base_data.param_type.size():
 				params.append(get_skill_param(base_data.param_type[i],skill_line_param[i]))
-			var skill := SkillData.NamedSkill.new(base_data,condition,params)
+			var skill := CatalogData.CardSkill.new(base_data,condition,params)
 			skills.append(skill)
 		var id := int(tsv[0])
 		var text = tsv[10].replace("\\n","\n")
-		_card_catalog[id] = CardData.new(id,tsv[1],tsv[2],tsv[3],
+		_card_catalog[id] = CatalogData.CardData.new(id,tsv[1],tsv[2],tsv[3],
 				int(tsv[4]),int(tsv[5]),int(tsv[6]),int(tsv[7]),int(tsv[8]),
 				skills,text,tsv[11])
-	version = (_card_catalog[0] as CardData).name
+	version = (_card_catalog[0] as CatalogData.CardData).name
 # warning-ignore:return_value_discarded
 	_card_catalog.erase(0)
 
@@ -149,7 +149,7 @@ func _load_card_data():
 		for i in trans.size():
 			var tsv = trans[i].split("\t")
 			var id := int(tsv[0])
-			var data = _card_catalog[id] as CardData
+			var data = _card_catalog[id] as CatalogData.CardData
 			data.name = tsv[1]
 			data.short_name = tsv[2]
 			data.ruby_name = ""
@@ -163,7 +163,7 @@ func _load_skill_data():
 		var tsv = s.split("\t")
 		var id := int(tsv[0])
 		var text = tsv[7].replace("\\n","\n")
-		_skill_catalog[id] = SkillData.NamedSkillData.new(id,tsv[1],tsv[2],tsv[3],tsv[4],tsv[5],tsv[6],text)
+		_skill_catalog[id] = CatalogData.SkillData.new(id,tsv[1],tsv[2],tsv[3],tsv[4],tsv[5],tsv[6],text)
 
 	if translation.find("ja") != 0:
 		var trans_res = load("res://card_data/named_skill_" + translation + ".txt")
@@ -173,7 +173,7 @@ func _load_skill_data():
 		for i in trans.size():
 			var tsv = trans[i].split("\t")
 			var id := int(tsv[0])
-			var data = _skill_catalog[id] as SkillData.NamedSkillData
+			var data = _skill_catalog[id] as CatalogData.SkillData
 			data.name = tsv[1]
 			data.short_name = tsv[2]
 			data.ruby_name = ""
@@ -188,7 +188,7 @@ func _load_state_data():
 		var tsv = s.split("\t")
 		var id := int(tsv[0])
 		var text = tsv[5].replace("\\n","\n")
-		_state_catalog[id] = StateData.PlayerStateData.new(id,tsv[1],tsv[2],tsv[3],tsv[4],text)
+		_state_catalog[id] = CatalogData.StateData.new(id,tsv[1],tsv[2],tsv[3],tsv[4],text)
 
 	if translation.find("ja") != 0:
 		var trans_res = load("res://card_data/state_" + translation + ".txt")
@@ -198,7 +198,7 @@ func _load_state_data():
 		for i in trans.size():
 			var tsv = trans[i].split("\t")
 			var id := int(tsv[0])
-			var data = _state_catalog[id] as StateData.PlayerStateData
+			var data = _state_catalog[id] as CatalogData.StateData
 			data.name = tsv[1]
 			data.short_name = tsv[2]
 			data.ruby_name = ""

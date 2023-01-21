@@ -13,5 +13,6 @@ const skills : Array = [
 	SkillProcessor.Absorb,
 ]
 
-func _create(skill : SkillData.NamedSkill) -> MechanicsData.ISkill:
+
+func _create(skill : CatalogData.CardSkill) -> MechanicsData.ISkill:
 	return skills[skill.data.id].new(skill)

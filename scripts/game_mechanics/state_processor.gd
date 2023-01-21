@@ -6,8 +6,8 @@ class_name StateProcessor
 class Reinforce extends MechanicsData.BasicState:
 	const STATE_ID = 1
 	const PRIORITY = 1
-	var _stats : CardData.Stats
-	func _init(stats : CardData.Stats,container : Array).(container):
+	var _stats : CatalogData.Stats
+	func _init(stats : CatalogData.Stats,container : Array).(container):
 		_stats = stats
 
 	func _before_priority() -> Array:
