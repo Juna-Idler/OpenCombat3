@@ -24,15 +24,17 @@ class NamedSkillData:
 	var id : int
 	var name : String
 	var short_name : String
+	var ruby_name : String
 	var param_type : PoolIntArray # of ParamType
 	var parameter : PoolStringArray
 	var states : PoolIntArray # of StateData id
 	var text : String
 	
-	func _init(i:int,n:String,sn:String,pt:String,p:String,st:String,t:String):
+	func _init(i:int,n:String,sn:String,rn:String,pt:String,p:String,st:String,t:String):
 		id = i
 		name = n
 		short_name = sn
+		ruby_name = rn
 		param_type = Array(pt.split(","))
 		if param_type.size() == 1 and param_type[0] == ParamType.VOID:
 			param_type = []

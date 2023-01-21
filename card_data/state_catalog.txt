@@ -1,2 +1,2 @@
-0	StateVersion			1673496601309
-1	強化	強化	Stats	交戦前　このカードに{Stats}を加算する。この状態は消滅する
+0	StateVersion			1674309241442	undefined
+1	次強化	次強化		Stats	交戦前　自分の交戦カードに{Stats}を加算する。この状態は消滅する。

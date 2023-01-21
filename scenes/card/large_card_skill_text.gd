@@ -46,7 +46,7 @@ func initialize(skill : SkillData.NamedSkill,width : int):
 		state_label.rect_min_size.x = width - 32
 		var state_text : PoolStringArray = []
 		for i in skill.data.states:
-			var state := Global.card_catalog.get_state_data(i) as StateData.PlayerStateData
+			var state := Global.card_catalog.get_state_data(i)
 			var param := "" if state.parameter.empty() else\
 					 BRACKETS_PARAMETER_BBC % state.parameter.join(",")
 			state_text.append(state.name + param + " : " +

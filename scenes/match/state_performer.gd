@@ -21,10 +21,12 @@ class ReinForce extends MatchEffect.BasicState:
 		remove_self()
 
 	func _get_caption() -> String:
-		return Global.card_catalog._state_catalog[ID].name + "(" + Global.card_catalog.stats_names.get_effect_string(stats) + ")"
+		return Global.card_catalog.get_state_data(ID).name + "(" + Global.card_catalog.stats_names.get_effect_string(stats) + ")"
 
 	func _get_short_caption() -> String:
-		return Global.card_catalog._state_catalog[ID].name + "(" + Global.card_catalog.stats_names.get_short_effect_string(stats) + ")"
+		return Global.card_catalog.get_state_data(ID).name + "(" + Global.card_catalog.stats_names.get_short_effect_string(stats) + ")"
 
 	func _get_description() -> String:
-		return Global.card_catalog._state_catalog[ID].text
+		var state := Global.card_catalog.get_state_data(ID)
+		var param := state.parameter[0]
+		return state.text.replace("{" + param + "}",Global.card_catalog.stats_names.get_effect_string(stats))

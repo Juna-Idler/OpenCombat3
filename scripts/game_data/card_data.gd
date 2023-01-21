@@ -35,6 +35,7 @@ const RGB = [Color(0,0,0,0),Color(1,0,0),Color(0,0.7,0),Color(0,0,1)]
 var id : int
 var name : String
 var short_name : String
+var ruby_name : String
 
 var color : int
 var level : int
@@ -46,12 +47,13 @@ var text : String
 var image : String 
 
 
-func _init(i : int,n : String,sn : String,
+func _init(i : int,n : String,sn : String,rn : String,
 		c : int,l : int,p : int,h : int,b : int,
 		s : Array,t : String,im : String):
 	id = i
 	name = n
 	short_name = sn
+	ruby_name = rn
 	color = c
 	level = l
 	power= p
@@ -67,6 +69,7 @@ static func copy(dest : CardData, src : CardData):
 	dest.id = src.id
 	dest.name = src.name
 	dest.short_name = src.short_name
+	dest.ruby_name = src.ruby_name
 	dest.color = src.color
 	dest.level = src.level
 	dest.power = src.power

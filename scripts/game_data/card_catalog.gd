@@ -117,9 +117,9 @@ func _load_card_data():
 	var carddata_resource := preload("res://card_data/card_data_catalog.txt")
 	var cards = carddata_resource.text.split("\n")
 	for c in cards:
-		var csv = c.split("\t")
+		var tsv = c.split("\t")
 		var skills = []
-		var skill_texts = csv[8].split(";")
+		var skill_texts = tsv[9].split(";")
 		if skill_texts.size() == 1 and skill_texts[0] == "":
 			skill_texts.resize(0)
 		for s in skill_texts:
@@ -132,11 +132,11 @@ func _load_card_data():
 				params.append(get_skill_param(base_data.param_type[i],skill_line_param[i]))
 			var skill := SkillData.NamedSkill.new(base_data,condition,params)
 			skills.append(skill)
-		var id := int(csv[0])
-		var text = csv[9].replace("\\n","\n")
-		_card_catalog[id] = CardData.new(id,csv[1],csv[2],
-				int(csv[3]),int(csv[4]),int(csv[5]),int(csv[6]),int(csv[7]),
-				skills,text,csv[10])
+		var id := int(tsv[0])
+		var text = tsv[10].replace("\\n","\n")
+		_card_catalog[id] = CardData.new(id,tsv[1],tsv[2],tsv[3],
+				int(tsv[4]),int(tsv[5]),int(tsv[6]),int(tsv[7]),int(tsv[8]),
+				skills,text,tsv[11])
 	version = (_card_catalog[0] as CardData).name
 # warning-ignore:return_value_discarded
 	_card_catalog.erase(0)
@@ -152,6 +152,7 @@ func _load_card_data():
 			var data = _card_catalog[id] as CardData
 			data.name = tsv[1]
 			data.short_name = tsv[2]
+			data.ruby_name = ""
 			data.text = tsv[3].replace("\\n","\n")
 
 
@@ -159,10 +160,10 @@ func _load_skill_data():
 	var namedskill_resource := preload("res://card_data/named_skill_catalog.txt")
 	var namedskills = namedskill_resource.text.split("\n")
 	for s in namedskills:
-		var csv = s.split("\t")
-		var id := int(csv[0])
-		var text = csv[6].replace("\\n","\n")
-		_skill_catalog[id] = SkillData.NamedSkillData.new(id,csv[1],csv[2],csv[3],csv[4],csv[5],text)
+		var tsv = s.split("\t")
+		var id := int(tsv[0])
+		var text = tsv[7].replace("\\n","\n")
+		_skill_catalog[id] = SkillData.NamedSkillData.new(id,tsv[1],tsv[2],tsv[3],tsv[4],tsv[5],tsv[6],text)
 
 	if translation.find("ja") != 0:
 		var trans_res = load("res://card_data/named_skill_" + translation + ".txt")
@@ -175,17 +176,19 @@ func _load_skill_data():
 			var data = _skill_catalog[id] as SkillData.NamedSkillData
 			data.name = tsv[1]
 			data.short_name = tsv[2]
-			data.parameter = tsv[3].split(",")
+			data.ruby_name = ""
+			if not data.parameter.empty():
+				data.parameter = tsv[3].split(",")
 			data.text = tsv[4].replace("\\n","\n")
 
 func _load_state_data():
 	var state_resource := preload("res://card_data/state_catalog.txt")
 	var states = state_resource.text.split("\n")
 	for s in states:
-		var csv = s.split("\t")
-		var id := int(csv[0])
-		var text = csv[4].replace("\\n","\n")
-		_state_catalog[id] = StateData.PlayerStateData.new(id,csv[1],csv[2],csv[3],text)
+		var tsv = s.split("\t")
+		var id := int(tsv[0])
+		var text = tsv[5].replace("\\n","\n")
+		_state_catalog[id] = StateData.PlayerStateData.new(id,tsv[1],tsv[2],tsv[3],tsv[4],text)
 
 	if translation.find("ja") != 0:
 		var trans_res = load("res://card_data/state_" + translation + ".txt")
@@ -198,6 +201,7 @@ func _load_state_data():
 			var data = _state_catalog[id] as StateData.PlayerStateData
 			data.name = tsv[1]
 			data.short_name = tsv[2]
+			data.ruby_name = ""
 			if not data.parameter.empty():
 				data.parameter = tsv[3].split(",")
 			data.text = tsv[4].replace("\\n","\n")

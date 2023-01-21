@@ -9,7 +9,7 @@ func _ready():
 	
 func initialize_card(cd : CardData):
 	var color = RGB[cd.color]
-	$Name/Name.text_input = cd.name
+	$Name/Name.text_input = cd.name if cd.ruby_name.empty() else cd.ruby_name
 	self_modulate = color
 	$Power.self_modulate = color.darkened(0.2)
 	$Hit.self_modulate = color.lightened(0.4)
