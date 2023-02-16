@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=1]
 [ext_resource path="res://scenes/match/match_scene.tscn" type="PackedScene" id=2]
@@ -7,6 +7,8 @@
 [ext_resource path="res://scenes/deck/select_scene.tscn" type="PackedScene" id=5]
 [ext_resource path="res://scenes/regulation/deck_select.tscn" type="PackedScene" id=6]
 [ext_resource path="res://scenes/regulation/match_select.tscn" type="PackedScene" id=7]
+[ext_resource path="res://scenes/match/hand/rival_hand_area.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scenes/match/hand/my_hand_area.tscn" type="PackedScene" id=9]
 
 [sub_resource type="Gradient" id=25]
 offsets = PoolRealArray( 0, 0.5, 1 )
@@ -46,6 +48,18 @@ default_font = SubResource( 27 )
 script = ExtResource( 3 )
 
 [node name="MatchScene" parent="." instance=ExtResource( 2 )]
+
+[node name="MyHandArea" parent="MatchScene/UILayer/MyField" index="4" instance=ExtResource( 9 )]
+margin_left = -400.0
+margin_top = 112.0
+margin_right = 400.0
+margin_bottom = 352.0
+
+[node name="RivalHandArea" parent="MatchScene/UILayer/RivalField" index="4" instance=ExtResource( 8 )]
+margin_left = -400.0
+margin_top = -352.0
+margin_right = 400.0
+margin_bottom = -112.0
 
 [node name="Panel" type="CanvasLayer" parent="."]
 layer = 10
@@ -200,3 +214,5 @@ visible = false
 [connection signal="decide_button_pressed" from="MenuLayer/RegulationSelect" to="." method="_on_RegulationSelect_decide_button_pressed"]
 [connection signal="return_button_pressed" from="MenuLayer/RegulationSelect" to="." method="_on_RegulationSelect_return_button_pressed"]
 [connection signal="decided" from="MenuLayer/MatchRegulationSelect" to="." method="_on_MatchRegulationSelect_decided"]
+
+[editable path="MatchScene"]

@@ -4,7 +4,7 @@ extends Node
 var card_catalog := CardCatalog.new()
 
 var deck_regulation_list := [
-	RegulationData.DeckRegulation.new("newbie",15,15,0,0,"1-31"),
+	RegulationData.DeckRegulation.new("newbie",15,15,0,0,"1-33"),
 ]
 var match_regulation_list := [
 	RegulationData.MatchRegulation.new("newbie",3,60,10,5),

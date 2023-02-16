@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=1]
 [ext_resource path="res://scenes/match/match_scene.tscn" type="PackedScene" id=2]
@@ -6,6 +6,8 @@
 [ext_resource path="res://scenes/deck/banner/banner.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scenes/deck/select_scene.tscn" type="PackedScene" id=5]
 [ext_resource path="res://scenes/regulation/deck_select.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scenes/match/hand/rival_hand_area.tscn" type="PackedScene" id=7]
+[ext_resource path="res://scenes/match/hand/my_hand_area.tscn" type="PackedScene" id=8]
 
 [sub_resource type="Gradient" id=24]
 offsets = PoolRealArray( 0, 0.5, 1 )
@@ -44,11 +46,32 @@ script = ExtResource( 3 )
 
 [node name="MatchScene" parent="." instance=ExtResource( 2 )]
 
+[node name="MyHandArea" parent="MatchScene/UILayer/MyField" index="4" instance=ExtResource( 8 )]
+margin_left = -400.0
+margin_top = 112.0
+margin_right = 400.0
+margin_bottom = 352.0
+
+[node name="RivalHandArea" parent="MatchScene/UILayer/RivalField" index="4" instance=ExtResource( 7 )]
+margin_left = -400.0
+margin_top = -352.0
+margin_right = 400.0
+margin_bottom = -112.0
+
+[node name="Control" parent="MatchScene/TopUILayer" index="0"]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="RivalStatesPanel" parent="MatchScene/TopUILayer/Control" index="12"]
+opponent_layout = false
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = 10
 
 [node name="ResultOverlap" type="Control" parent="CanvasLayer"]
 unique_name_in_owner = true
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -109,6 +132,7 @@ text = "再戦を申し込む"
 layer = 11
 
 [node name="Menu" type="Panel" parent="MenuLayer"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = SubResource( 26 )
@@ -190,3 +214,5 @@ visible = false
 [connection signal="return_button_pressed" from="MenuLayer/BuildSelectScene" to="." method="_on_BuildSelectScene_return_button_pressed"]
 [connection signal="decide_button_pressed" from="MenuLayer/RegulationSelect" to="." method="_on_RegulationSelect_decide_button_pressed"]
 [connection signal="return_button_pressed" from="MenuLayer/RegulationSelect" to="." method="_on_RegulationSelect_return_button_pressed"]
+
+[editable path="MatchScene"]

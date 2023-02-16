@@ -144,6 +144,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scenes/scene_changer.gd"
 }, {
+"base": "Control",
+"class": "I_HandArea",
+"language": "GDScript",
+"path": "res://scenes/match/hand/hand_area.gd"
+}, {
+"base": "I_HandArea",
+"class": "I_PlayableHandArea",
+"language": "GDScript",
+"path": "res://scenes/match/hand/playable_hand_area.gd"
+}, {
 "base": "Resource",
 "class": "JSONResource",
 "language": "GDScript",
@@ -285,7 +295,7 @@ _global_script_classes=[ {
 "path": "res://addons/ruby_label/ruby_label.gd"
 }, {
 "base": "",
-"class": "SinglePlayerEnemy",
+"class": "SinglePlayEnemy",
 "language": "GDScript",
 "path": "res://scripts/single/enemy.gd"
 }, {
@@ -362,6 +372,8 @@ _global_script_class_icons={
 "ICpuCommander": "",
 "IGameServer": "",
 "ISceneChanger": "",
+"I_HandArea": "",
+"I_PlayableHandArea": "",
 "JSONResource": "",
 "JSONResourceLoader": "",
 "JsonResourceSaver": "",
@@ -390,7 +402,7 @@ _global_script_class_icons={
 "ReplayServer": "",
 "Ruby": "",
 "RubyLabel": "res://addons/ruby_label/icon.png",
-"SinglePlayerEnemy": "",
+"SinglePlayEnemy": "",
 "SinglePlayerServer": "",
 "SkillFactory": "",
 "SkillProcessor": "",

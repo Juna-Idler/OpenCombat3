@@ -124,7 +124,8 @@ func _on_Server_matched():
 	else:
 		match_logger = null
 	
-	$MatchScene.initialize(match_logger if match_logger else server as IGameServer)
+	$MatchScene.initialize(match_logger if match_logger else server as IGameServer,
+			$MatchScene/UILayer/MyField/MyHandArea,$MatchScene/UILayer/RivalField/RivalHandArea)
 
 	Bgm.stream = load("res://sound/魔王魂  ファンタジー11.ogg")
 	Bgm.play()

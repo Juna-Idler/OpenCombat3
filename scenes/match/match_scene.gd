@@ -37,10 +37,12 @@ onready var exit_button : Button = $"%SettingsScene".get_node("ExitButton")
 
 
 var game_server : IGameServer = null
+
+var my_hand_area : I_PlayableHandArea
+var rival_hand_area : I_HandArea
+
 var deck_regulation : RegulationData.DeckRegulation
 var match_regulation : RegulationData.MatchRegulation
-
-var card_manipulation : bool
 
 var round_count = 0
 var phase : int = IGameServer.Phase.COMBAT
@@ -66,7 +68,7 @@ func _process(_delta):
 func is_valid() -> bool:
 	return game_server != null
 
-func initialize(server : IGameServer,manipulation : bool = true):
+func initialize(server : IGameServer,my_hand_area_ : I_PlayableHandArea,rival_hand_area_ : I_HandArea):
 	game_server = server
 	game_server.connect("recieved_first_data",self,"_on_GameServer_recieved_first_data")
 	game_server.connect("recieved_combat_result",self,"_on_GameServer_recieved_combat_result")
@@ -74,9 +76,14 @@ func initialize(server : IGameServer,manipulation : bool = true):
 	game_server.connect("recieved_end",self,"_on_GameServer_recieved_end")
 	game_server.connect("recieved_complete_board",self,"_on_GameServer_recieved_complete_board")
 
-	card_manipulation = manipulation
-	if not card_manipulation:
-		$UILayer/MyField/HandArea.ban_drag(true)
+	my_hand_area = my_hand_area_
+	my_hand_area.connect("card_clicked",self,"_on_MyHandArea_car_clicked")
+	my_hand_area.connect("card_held",self,"_on_MyHandArea_card_held")
+	my_hand_area.connect("card_decided",self,"_on_MyHandArea_card_decided")
+	my_hand_area.connect("card_order_changed",self,"_on_MyHandArea_card_order_changed")
+	rival_hand_area = rival_hand_area_
+	rival_hand_area.connect("card_clicked",self,"_on_RivalHandArea_card_clicked")
+	rival_hand_area.connect("card_held",self,"_on_RivalHandArea_card_held")
 	
 	for c in $CardLayer.get_children():
 		$CardLayer.remove_child(c)
@@ -88,7 +95,7 @@ func initialize(server : IGameServer,manipulation : bool = true):
 	match_regulation = pd.match_regulation
 	myself = MatchPlayer.new(pd.my_name,
 			pd.my_deck_list,skill_factory,false,$CardLayer,my_stock_pos,
-			$UILayer/MyField/HandArea,
+			my_hand_area,
 			my_combat_pos,
 			my_played_pos,
 			my_discard_pos,
@@ -100,7 +107,7 @@ func initialize(server : IGameServer,manipulation : bool = true):
 			CombatPowerBalance.Interface.new($BGLayer/PowerBalance,false))
 	rival = MatchPlayer.new(pd.rival_name,
 			pd.rival_deck_list,skill_factory,true,$CardLayer,rival_stock_pos,
-			$UILayer/RivalField/HandArea,
+			rival_hand_area,
 			rival_combat_pos,
 			rival_played_pos,
 			rival_discard_pos,
@@ -126,13 +133,13 @@ func initialize(server : IGameServer,manipulation : bool = true):
 func send_ready():
 	game_server._send_ready()
 
-func decide_card(index:int,hand:Array):
+func decide_card(index:int):
 	$LimitTimer.stop()
-	$UILayer/MyField/HandArea.ban_drag(true)
+	my_hand_area.disable_play(true)
 	if phase == IGameServer.Phase.COMBAT:
-		game_server._send_combat_select(round_count,index,hand)
+		game_server._send_combat_select(round_count,index,myself.hand)
 	elif phase == IGameServer.Phase.RECOVERY:
-		game_server._send_recovery_select(round_count,index,hand)
+		game_server._send_recovery_select(round_count,index,myself.hand)
 		
 
 func terminalize():
@@ -143,6 +150,17 @@ func terminalize():
 		game_server.disconnect("recieved_end",self,"_on_GameServer_recieved_end")
 		game_server.disconnect("recieved_complete_board",self,"_on_GameServer_recieved_complete_board")
 		game_server = null
+	if my_hand_area:
+		my_hand_area.disconnect("card_clicked",self,"_on_MyHandArea_car_clicked")
+		my_hand_area.disconnect("card_held",self,"_on_MyHandArea_card_held")
+		my_hand_area.disconnect("card_decided",self,"_on_MyHandArea_card_decided")
+		my_hand_area.disconnect("card_order_changed",self,"_on_MyHandArea_card_order_changed")
+		my_hand_area = null
+	if rival_hand_area:
+		rival_hand_area.disconnect("card_clicked",self,"_on_RivalHandArea_card_clicked")
+		rival_hand_area.disconnect("card_held",self,"_on_RivalHandArea_card_held")
+		rival_hand_area = null
+
 
 func restore_overlap():
 	$"%CardList".restore_now()
@@ -174,8 +192,7 @@ func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
 	phase = IGameServer.Phase.COMBAT
 	round_count = 1
 	yield(get_tree().create_timer(MatchPlayer.CARD_MOVE_DURATION), "timeout")
-	if card_manipulation:
-		$UILayer/MyField/HandArea.ban_drag(false)
+	my_hand_area.disable_play(false)
 	performing = false
 	emit_signal("performed")
 
@@ -240,8 +257,7 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 	if (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0):
 		game_server._send_recovery_select(data.round_count,-1)
 	else:
-		if card_manipulation:
-			$UILayer/MyField/HandArea.ban_drag(false)
+		my_hand_area.disable_play(false)
 	performing = false
 	emit_signal("performed")
 
@@ -275,18 +291,16 @@ func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
 	if (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0):
 		game_server._send_recovery_select(data.round_count,-1)
 	else:
-		if card_manipulation:
-			$UILayer/MyField/HandArea.ban_drag(false)
+		my_hand_area.disable_play(false)
 	performing = false
 	emit_signal("performed")
 
 
 func _on_LimitTimer_timeout():
-	if not is_valid() or not card_manipulation:
+	if not is_valid():
 		return
 	restore_overlap()
-	var hand = $UILayer/MyField/HandArea.get_reorder_hand()
-	decide_card(0,hand)
+	decide_card(0)
 
 
 func _on_GameServer_recieved_complete_board(data:IGameServer.CompleteData)->void:
@@ -309,35 +323,35 @@ func _on_GameServer_recieved_complete_board(data:IGameServer.CompleteData)->void
 	round_count = data.round_count
 	phase = data.next_phase
 	if (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0):
-		if card_manipulation:
-			$UILayer/MyField/HandArea.ban_drag(true)
+		my_hand_area.disable_play(true)
 		game_server._send_recovery_select(data.round_count,-1)
 	else:
-		if card_manipulation:
-			$UILayer/MyField/HandArea.ban_drag(false)
+		my_hand_area.disable_play(false)
 	performing = false
 	emit_signal("performed")
 
 
-func _on_MyHandArea_decided_card(index:int,hand:Array):
-	decide_card(index,hand)
+func _on_MyHandArea_card_decided(index:int):
+	decide_card(index)
 
+func _on_MyHandArea_card_order_changed(indexes : PoolIntArray):
+	myself.set_hand(indexes)
 
-func _on_MyHandArea_clicked_card(_index:int,_card:MatchCard):
+func _on_MyHandArea_card_clicked(_index:int):
 	pass # Replace with function body.
 
 
-func _on_RivalHandArea_clicked_card(_index:int,_card:MatchCard):
+func _on_RivalHandArea_card_clicked(_index:int):
 	pass # Replace with function body.
 
 
-func _on_MyHandArea_held_card(_index:int,card:MatchCard):
-	if card != null:
-		$"%LargeCardView".show_layer(card.get_card_data())
+func _on_MyHandArea_card_held(index:int):
+	if index < myself.hand.size():
+		$"%LargeCardView".show_layer(myself.hand[index].get_card_data())
 
-func _on_RivalHandArea_held_card(_index:int,card:MatchCard):
-	if card != null:
-		$"%LargeCardView".show_layer(card.get_card_data())
+func _on_RivalHandArea_card_held(index:int):
+	if index < rival.hand.size():
+		$"%LargeCardView".show_layer(rival.hand[index].get_card_data())
 
 func _on_held_card(card:MatchCard):
 	if card != null:

@@ -1,9 +1,8 @@
 # warning-ignore-all:return_value_discarded
 
-extends Control
+extends I_PlayableHandArea
 
-
-const HandSelectControl = preload("hand_select_control.tscn")
+const DraggableControl = preload("draggable_control.tscn")
 
 const control_width := 144
 const control_height := 216
@@ -12,18 +11,13 @@ const control_drag_play := 50
 const slide_change_duration := 0.5
 const slide_nochange_duration := 0.1
 
-signal decided_card(index,hands)
-signal held_card(index,card)
-signal clicked_card(index,card)
 
-export var timer_path: NodePath
-onready var timer := get_node(timer_path) as Timer
+onready var timer := $Timer
 
 
 var controls : Array = []
 var hands : Array# of MatchCard
 var distance : int
-var reorder : bool = false
 var drag_banned : bool = false
 
 
@@ -34,26 +28,19 @@ func _ready():
 	align()
 	pass
 
-func ban_drag(b:bool):
+func disable_play(b:bool):
 	for c in controls:
 		c.ban_drag = b
 	drag_banned = b
 
-func get_reorder_hand() -> Array:
-	var reorder_hand := []
-	if reorder:
-		for c in hands:
-			reorder_hand.append(c.id_in_deck)
-	return reorder_hand
 
-
-func set_hand_card(cards : Array):
+func set_card(cards : Array):
 	var old_count := hands.size()
 	var new_count := cards.size()
 	hands = cards
 	if new_count > controls.size():
 		for _i in range(new_count - controls.size()):
-			var c := HandSelectControl.instance()
+			var c := DraggableControl.instance()
 			c.index = controls.size()
 			c.connect("slid_card",self,"_on_slid_card")
 			c.connect("decided_card",self,"_on_decided_card")
@@ -117,23 +104,20 @@ func _on_slid_card(index,x):
 	var v = hands.pop_at(old_index)
 	hands.insert(new_index,v)
 
-	for i in range(hands.size()):
+	var reorder_hand := PoolIntArray([])
+	for i in hands.size():
 		controls[i].card = hands[i]
+		reorder_hand.append(hands[i].id_in_deck)
 	align()
 	move_card(slide_change_duration)
-	reorder = true
+	emit_signal("card_order_changed",reorder_hand)
 	
 	
 func _on_decided_card(index):
-	var reorder_hand := []
-	if reorder:
-		for c in hands:
-			reorder_hand.append(c.id_in_deck)
-	emit_signal("decided_card",index,reorder_hand)
-	reorder = false
+	emit_signal("card_decided",index)
 
 func _on_held_card(index):
-	emit_signal("held_card",index,hands[index])
+	emit_signal("card_held",index)
 
 func _on_clicked_card(index):
-	emit_signal("clicked_card",index,hands[index])
+	emit_signal("card_clicked",index)

@@ -116,7 +116,7 @@ func set_hand(new_hand_indexes:Array):
 		c.z_index = i + 100
 		c.location = MatchCard.Location.HAND
 		cards.append(c)
-	hand_area.set_hand_card(cards)
+	hand_area.set_card(cards)
 	hand_area.move_card(CARD_MOVE_DURATION)
 
 
@@ -197,6 +197,19 @@ func discard_card(hand_index : int,duration : float):
 	tween.tween_property(card,"global_position",discard_pos,duration)
 	tween.tween_callback(self,"_set_discard_visible")
 
+func send_to_deck(hand_index : int,duration : float):
+	if hand.empty():
+		return
+	var id = hand[hand_index]
+	hand.remove(hand_index)
+	stock_count += 1
+	var card := deck_list[id] as MatchCard
+	card.location = MatchCard.Location.STOCK
+	var tween := card.create_tween()
+	tween.tween_property(card,"global_position",stock_pos,duration)
+	tween.tween_callback(card,"hide")
+
+
 func _set_discard_visible():
 	if discard.size() >= 2:
 		deck_list[discard[discard.size()-2]].visible = ALWAYS_CARD_VISIBLE
@@ -272,13 +285,13 @@ func reset_board(h_card:PoolIntArray,p_card:PoolIntArray,d_card:PoolIntArray,
 		c.location = MatchCard.Location.HAND
 		tween.tween_property(c,"rotation",0.0,CARD_MOVE_DURATION)
 		cards.append(c)
-	hand_area.set_hand_card(cards)
+	hand_area.set_card(cards)
 	hand_area.move_card(CARD_MOVE_DURATION)
 	
 	for c_ in deck_list:
 		var c := c_ as MatchCard
 		if c.location == MatchCard.Location.STOCK:
-			tween.tween_property(c,"position",stock_pos,CARD_MOVE_DURATION)
+			tween.tween_property(c,"global_position",stock_pos,CARD_MOVE_DURATION)
 			tween.tween_property(c,"rotation",0.0,CARD_MOVE_DURATION)
 
 	tween.set_parallel(false)

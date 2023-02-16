@@ -11,6 +11,8 @@ const skills : Array = [
 	MatchSkillPerformer.Charge,
 	MatchSkillPerformer.Isolate,
 	MatchSkillPerformer.Absorb,
+	MatchSkillPerformer.BlowAway,
+	MatchSkillPerformer.Attract,
 ]
 
 func _create(skill : CatalogData.CardSkill) -> MatchEffect.ISkill:

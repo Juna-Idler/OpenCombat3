@@ -1,11 +1,9 @@
 # warning-ignore-all:return_value_discarded
 
-extends Control
+extends I_PlayableHandArea
 
-const ClickableCardControl = preload("clickable_card_control.tscn")
+const ClickableControl = preload("clickable_control.tscn")
 
-signal clicked_card(index,card)
-signal held_card(index,card)
 
 const control_width := 144
 const control_height := 216
@@ -14,8 +12,8 @@ const control_space := 10
 var controls : Array = []
 var hands : Array# of MatchCard
 
-export var timer_path: NodePath
-onready var _timer := get_node(timer_path) as Timer
+
+onready var _timer := $Timer
 
 
 func _init():
@@ -25,14 +23,17 @@ func _ready():
 	align()
 	pass
 
+func disable_play(_b:bool):
+	pass
 
-func set_hand_card(cards : Array):
+
+func set_card(cards : Array):
 	var old_count := hands.size()
 	var new_count := cards.size()
 	hands = cards
 	if new_count > controls.size():
 		for _i in range(new_count - controls.size()):
-			var c := ClickableCardControl.instance()
+			var c := ClickableControl.instance()
 # warning-ignore:return_value_discarded
 			c.connect("clicked_card",self,"_on_clicked_card")
 # warning-ignore:return_value_discarded
@@ -75,10 +76,10 @@ func move_card(sec : float):
 
 func _on_clicked_card(card : MatchCard):
 	var i := hands.find(card)
-	emit_signal("clicked_card",i,card)
+	emit_signal("card_clicked",i)
 
 func _on_held_card(card : MatchCard):
 	var i := hands.find(card)
-	emit_signal("held_card",i,card)
+	emit_signal("card_held",i)
 
 	

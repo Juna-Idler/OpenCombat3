@@ -94,3 +94,39 @@ class Absorb extends MatchEffect.ISkill:
 
 
 
+class BlowAway extends MatchEffect.ISkill:
+	func _init(_skill : CatalogData.CardSkill):
+		pass
+	
+	func _after(_priority : int,_situation : int,myself : MatchPlayer,rival : MatchPlayer,data) -> void:
+		if not data.empty():
+			myself.combat_avatar.current_effect_line.succeeded()
+			
+			for i in data.size():
+				rival.send_to_deck(0,0.8)
+				rival.draw_card()
+			var tween = myself.combat_avatar.create_tween()
+			tween.tween_interval(1.0)
+			yield(tween,"finished")
+			return
+		myself.combat_avatar.current_effect_line.failed()
+		yield(myself.combat_avatar.get_tree(),"idle_frame")
+
+class Attract extends MatchEffect.ISkill:
+	func _init(_skill : CatalogData.CardSkill):
+		pass
+	
+	func _after(_priority : int,_situation : int,myself : MatchPlayer,_rival : MatchPlayer,data) -> void:
+		if not data.empty():
+			myself.combat_avatar.current_effect_line.succeeded()
+			for i in data.size():
+				myself.send_to_deck(0,0.8)
+				myself.draw_card()
+			var tween = myself.combat_avatar.create_tween()
+			tween.tween_interval(1.0)
+			yield(tween,"finished")
+			return
+		myself.combat_avatar.current_effect_line.failed()
+		yield(myself.combat_avatar.get_tree(),"idle_frame")
+
+

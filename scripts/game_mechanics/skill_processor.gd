@@ -92,3 +92,46 @@ class Absorb extends MechanicsData.BasicSkill:
 		affected.block += effect.block * level
 		myself._append_effect_log(index,MechanicsData.EffectTiming.BEFORE,PRIORITY,data)
 	
+
+class BlowAway extends MechanicsData.BasicSkill:
+	const PRIORITY = 4
+	func _init(data : CatalogData.CardSkill).(data):
+		pass
+	
+	func _after_priority() -> Array:
+		return [PRIORITY]
+	func _process_after(index : int,_priority : int,_situation : int,
+			myself : MechanicsData.IPlayer,rival : MechanicsData.IPlayer) -> void:
+		var hand_size = rival._get_hand().size()
+		var count := _skill.parameter[0].data as int
+		if hand_size < count:
+			count = hand_size
+
+		var data = []
+		for i in count:
+			data.append(rival._get_hand()[0])
+			rival._hand_to_deck_bottom(0)
+			rival._draw_card()
+		myself._append_effect_log(index,MechanicsData.EffectTiming.AFTER,PRIORITY,data)
+
+class Attract extends MechanicsData.BasicSkill:
+	const PRIORITY = 3
+	func _init(data : CatalogData.CardSkill).(data):
+		pass
+	
+	func _after_priority() -> Array:
+		return [PRIORITY]
+	func _process_after(index : int,_priority : int,_situation : int,
+			myself : MechanicsData.IPlayer,_rival : MechanicsData.IPlayer) -> void:
+		var hand_size = myself._get_hand().size()
+		var count := _skill.parameter[0].data as int
+		if hand_size < count:
+			count = hand_size
+		var data = []
+		for i in count:
+			data.append(myself._get_hand()[0])
+			myself._hand_to_deck_bottom(0)
+			myself._draw_card()
+		myself._append_effect_log(index,MechanicsData.EffectTiming.AFTER,PRIORITY,data)
+
+

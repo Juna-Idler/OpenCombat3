@@ -22,7 +22,7 @@ func initialize(name:String,deck:Array,
 	match_regulation = regulation
 	
 	var p1 := OfflinePlayer.new(deck,regulation.hand_count,card_catalog,true)
-	var p2 := SinglePlayerEnemy.new(enemy_deck,3,30,card_catalog,true)
+	var p2 := SinglePlayEnemy.new(enemy_deck,3,30,card_catalog,true)
 # warning-ignore:return_value_discarded
 	_processor.standby(p1,p2)
 

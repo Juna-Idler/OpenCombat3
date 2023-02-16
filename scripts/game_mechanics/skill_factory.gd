@@ -11,6 +11,8 @@ const skills : Array = [
 	SkillProcessor.Charge,
 	SkillProcessor.Isolate,
 	SkillProcessor.Absorb,
+	SkillProcessor.BlowAway,
+	SkillProcessor.Attract,
 ]
 
 
