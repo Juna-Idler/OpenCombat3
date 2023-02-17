@@ -1,8 +1,8 @@
 # warning-ignore-all:return_value_discarded
 
-extends I_HandArea
+extends I_PlayableHandArea
 
-const ClickableControl = preload("clickable_control.tscn")
+const ClickableControl = preload("res://scenes/match/hand/clickable_control.tscn")
 
 
 const control_width := 144
@@ -10,7 +10,7 @@ const control_height := 216
 const control_space := 10
 
 var controls : Array = []
-var hands : Array # of MatchCard
+var hands : Array# of MatchCard
 
 
 onready var _timer := $Timer
@@ -21,6 +21,9 @@ func _init():
 
 func _ready():
 	align()
+	pass
+
+func _disable_play(_b:bool):
 	pass
 
 

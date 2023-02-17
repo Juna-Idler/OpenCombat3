@@ -1,8 +1,8 @@
 # warning-ignore-all:return_value_discarded
 
-extends I_PlayableHandArea
+extends I_HandArea
 
-const ClickableControl = preload("clickable_control.tscn")
+const ClickableControl = preload("res://scenes/match/hand/clickable_control.tscn")
 
 
 const control_width := 144
@@ -10,7 +10,7 @@ const control_height := 216
 const control_space := 10
 
 var controls : Array = []
-var hands : Array# of MatchCard
+var hands : Array # of MatchCard
 
 
 onready var _timer := $Timer
@@ -23,11 +23,8 @@ func _ready():
 	align()
 	pass
 
-func disable_play(_b:bool):
-	pass
 
-
-func set_card(cards : Array):
+func _set_card(cards : Array):
 	var old_count := hands.size()
 	var new_count := cards.size()
 	hands = cards
@@ -63,9 +60,11 @@ func align():
 	for i in range(hand_count):
 		controls[i].rect_position.x = start + step * (hand_count - 1 - i)
 		controls[i].rect_position.y = y
+	if not controls.empty():
+		controls[0].rect_position.y = y + 50
 
 
-func move_card(sec : float):
+func _move_card(sec : float):
 	var tween := create_tween()
 	for i in range(hands.size()):
 		var c := controls[i] as Control

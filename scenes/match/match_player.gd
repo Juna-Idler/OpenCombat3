@@ -30,7 +30,7 @@ var playing_card : MatchCard = null
 var player_name : String
 
 
-var hand_area
+var hand_area : I_HandArea
 var stock_pos : Vector2
 var combat_pos : Vector2
 var played_pos : Vector2
@@ -60,7 +60,7 @@ func _init(name : String,
 		reverse : bool,
 		card_layer:Node,
 		s_pos : Vector2,
-		hand_area_node,
+		hand_area_node : I_HandArea,
 		c_pos : Vector2,
 		p_pos : Vector2,
 		d_pos : Vector2,
@@ -116,8 +116,8 @@ func set_hand(new_hand_indexes:Array):
 		c.z_index = i + 100
 		c.location = MatchCard.Location.HAND
 		cards.append(c)
-	hand_area.set_card(cards)
-	hand_area.move_card(CARD_MOVE_DURATION)
+	hand_area._set_card(cards)
+	hand_area._move_card(CARD_MOVE_DURATION)
 
 
 func play(hand_select : int,new_hand : Array,d : int,draw_indexes : Array,s_log : Array,tween : SceneTreeTween):
@@ -285,8 +285,8 @@ func reset_board(h_card:PoolIntArray,p_card:PoolIntArray,d_card:PoolIntArray,
 		c.location = MatchCard.Location.HAND
 		tween.tween_property(c,"rotation",0.0,CARD_MOVE_DURATION)
 		cards.append(c)
-	hand_area.set_card(cards)
-	hand_area.move_card(CARD_MOVE_DURATION)
+	hand_area._set_card(cards)
+	hand_area._move_card(CARD_MOVE_DURATION)
 	
 	for c_ in deck_list:
 		var c := c_ as MatchCard

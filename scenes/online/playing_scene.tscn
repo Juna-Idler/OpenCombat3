@@ -58,14 +58,6 @@ margin_top = -352.0
 margin_right = 400.0
 margin_bottom = -112.0
 
-[node name="Control" parent="MatchScene/TopUILayer" index="0"]
-__meta__ = {
-"_edit_lock_": true
-}
-
-[node name="RivalStatesPanel" parent="MatchScene/TopUILayer/Control" index="12"]
-opponent_layout = false
-
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = 10
 

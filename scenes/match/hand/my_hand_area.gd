@@ -28,13 +28,13 @@ func _ready():
 	align()
 	pass
 
-func disable_play(b:bool):
+func _disable_play(b:bool):
 	for c in controls:
 		c.ban_drag = b
 	drag_banned = b
 
 
-func set_card(cards : Array):
+func _set_card(cards : Array):
 	var old_count := hands.size()
 	var new_count := cards.size()
 	hands = cards
@@ -76,7 +76,7 @@ func align():
 		controls[i].drag_limit_right = (hand_count - 1 - i) * step + control_drag_play
 	distance = int(step)
 
-func move_card(sec : float):
+func _move_card(sec : float):
 	var tween := create_tween()
 	for i in range(hands.size()):
 		var c := controls[i] as Control
@@ -97,7 +97,7 @@ func _on_tween_end():
 func _on_slid_card(index,x):
 	var skip : int = x / distance
 	if skip == 0:
-		move_card(slide_nochange_duration)
+		_move_card(slide_nochange_duration)
 		return
 	var old_index : int = index
 	var new_index : int = index + skip
@@ -109,7 +109,7 @@ func _on_slid_card(index,x):
 		controls[i].card = hands[i]
 		reorder_hand.append(hands[i].id_in_deck)
 	align()
-	move_card(slide_change_duration)
+	_move_card(slide_change_duration)
 	emit_signal("card_order_changed",reorder_hand)
 	
 	

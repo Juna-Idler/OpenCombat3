@@ -1,0 +1,138 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=1]
+[ext_resource path="res://scenes/match/match_scene.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/single/enemy_hand_area.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/single/playing_scene.gd" type="Script" id=8]
+[ext_resource path="res://scenes/match/hand/my_hand_area.tscn" type="PackedScene" id=9]
+
+[sub_resource type="Gradient" id=25]
+offsets = PoolRealArray( 0, 0.5, 1 )
+colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0.752941, 1, 1, 1, 0 )
+
+[sub_resource type="GradientTexture2D" id=20]
+gradient = SubResource( 25 )
+fill_to = Vector2( 0, 1 )
+
+[sub_resource type="Gradient" id=26]
+offsets = PoolRealArray( 0, 0.5, 1 )
+colors = PoolColorArray( 1, 1, 1, 0, 1, 1, 1, 0.752941, 1, 1, 1, 1 )
+
+[sub_resource type="GradientTexture2D" id=21]
+gradient = SubResource( 26 )
+fill_to = Vector2( 0, 1 )
+
+[sub_resource type="DynamicFont" id=22]
+size = 64
+outline_size = 4
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=23]
+size = 128
+outline_size = 5
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=27]
+size = 24
+font_data = ExtResource( 1 )
+
+[sub_resource type="Theme" id=24]
+default_font = SubResource( 27 )
+
+[node name="SinglePlayingScene" type="Node"]
+script = ExtResource( 8 )
+
+[node name="MatchScene" parent="." instance=ExtResource( 2 )]
+
+[node name="MyHandArea" parent="MatchScene/UILayer/MyField" index="4" instance=ExtResource( 9 )]
+margin_left = -400.0
+margin_top = 112.0
+margin_right = 400.0
+margin_bottom = 352.0
+
+[node name="RivalHandArea" parent="MatchScene/UILayer/RivalField" index="4" instance=ExtResource( 3 )]
+margin_left = -400.0
+margin_top = -352.0
+margin_right = 400.0
+margin_bottom = -112.0
+
+[node name="RivalStatesPanel" parent="MatchScene/TopUILayer/Control" index="12"]
+opponent_layout = false
+
+[node name="Panel" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="ResultOverlap" type="Control" parent="Panel"]
+unique_name_in_owner = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="RivalVeil" type="TextureRect" parent="Panel/ResultOverlap"]
+anchor_right = 1.0
+margin_bottom = 192.0
+mouse_filter = 2
+texture = SubResource( 20 )
+expand = true
+
+[node name="MyVeil" type="TextureRect" parent="Panel/ResultOverlap"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -192.0
+mouse_filter = 2
+texture = SubResource( 21 )
+expand = true
+
+[node name="ReturnButton" type="Button" parent="Panel/ResultOverlap"]
+margin_left = 384.0
+margin_top = 576.0
+margin_right = 896.0
+margin_bottom = 701.0
+custom_fonts/font = SubResource( 22 )
+text = "BACK"
+
+[node name="ResultLabel" type="Label" parent="Panel/ResultOverlap"]
+margin_left = 256.0
+margin_top = 32.0
+margin_right = 1024.0
+margin_bottom = 240.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 23 )
+text = "Win"
+align = 1
+valign = 1
+
+[node name="MenuLayer" type="CanvasLayer" parent="."]
+layer = 11
+
+[node name="Menu" type="Panel" parent="MenuLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = SubResource( 24 )
+
+[node name="ButtonBack" type="Button" parent="MenuLayer/Menu"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 208.0
+margin_bottom = 64.0
+text = "BACK"
+
+[node name="ButtonStart" type="Button" parent="MenuLayer/Menu"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -128.0
+margin_top = -40.0
+margin_right = 128.0
+margin_bottom = 88.0
+text = "START"
+
+[connection signal="ended" from="MatchScene" to="." method="_on_MatchScene_ended"]
+[connection signal="pressed" from="Panel/ResultOverlap/ReturnButton" to="." method="_on_ReturnButton_pressed"]
+[connection signal="pressed" from="MenuLayer/Menu/ButtonBack" to="." method="_on_ButtonBack_pressed"]
+[connection signal="pressed" from="MenuLayer/Menu/ButtonStart" to="." method="_on_ButtonStart_pressed"]
+
+[editable path="MatchScene"]

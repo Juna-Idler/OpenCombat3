@@ -7,22 +7,19 @@ var _player_name:String
 
 var _enemy_name:String
 
-var match_regulation : RegulationData.MatchRegulation
-
 
 func _init():
 	pass
 
-func initialize(name:String,deck:Array,
-		enemy_name,enemy_deck:Array,
-		regulation :RegulationData.MatchRegulation,card_catalog : CardCatalog):
+func initialize(name:String,deck:Array,hand_count : int,
+		enemy_name,enemy_deck:Array,enemy_hand : int,enemy_hp : int,
+		card_catalog : CardCatalog):
 	_player_name = name;
 	_enemy_name = enemy_name
 
-	match_regulation = regulation
 	
-	var p1 := OfflinePlayer.new(deck,regulation.hand_count,card_catalog,true)
-	var p2 := SinglePlayEnemy.new(enemy_deck,3,30,card_catalog,true)
+	var p1 := OfflinePlayer.new(deck,hand_count,card_catalog,true)
+	var p2 := SinglePlayEnemy.new(enemy_deck,enemy_hand,enemy_hp,card_catalog,true)
 # warning-ignore:return_value_discarded
 	_processor.standby(p1,p2)
 
@@ -35,7 +32,7 @@ func _get_primary_data() -> PrimaryData:
 		e_deck_list.append(c.data.id)
 	return PrimaryData.new(_player_name,my_deck_list,
 			_enemy_name,e_deck_list,
-			null,match_regulation)
+			null,null)
 
 
 func _send_ready():

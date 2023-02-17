@@ -88,7 +88,6 @@ margin_right = 446.0
 margin_bottom = 100.0
 rect_pivot_offset = Vector2( 108, 72 )
 script = ExtResource( 11 )
-timer_path = NodePath("../../../MouseHoldTimer")
 
 [node name="Discard" type="ReferenceRect" parent="UILayer/MyField"]
 anchor_left = 0.5
@@ -137,7 +136,6 @@ margin_right = -230.0
 margin_bottom = 44.0
 rect_pivot_offset = Vector2( 108, 72 )
 script = ExtResource( 11 )
-timer_path = NodePath("../../../MouseHoldTimer")
 
 [node name="Discard" type="ReferenceRect" parent="UILayer/RivalField"]
 anchor_left = 0.5
@@ -172,6 +170,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 theme = SubResource( 10 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="MyDeck" type="Panel" parent="TopUILayer/Control"]
 anchor_left = 1.0
@@ -360,10 +361,6 @@ layer = 10
 [node name="SettingsScene" parent="SettingsLayer" instance=ExtResource( 2 )]
 unique_name_in_owner = true
 visible = false
-
-[node name="MouseHoldTimer" type="Timer" parent="."]
-wait_time = 0.5
-one_shot = true
 
 [node name="LimitTimer" type="Timer" parent="."]
 one_shot = true

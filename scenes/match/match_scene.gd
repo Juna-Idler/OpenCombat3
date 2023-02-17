@@ -135,7 +135,7 @@ func send_ready():
 
 func decide_card(index:int):
 	$LimitTimer.stop()
-	my_hand_area.disable_play(true)
+	my_hand_area._disable_play(true)
 	if phase == IGameServer.Phase.COMBAT:
 		game_server._send_combat_select(round_count,index,myself.hand)
 	elif phase == IGameServer.Phase.RECOVERY:
@@ -192,7 +192,7 @@ func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
 	phase = IGameServer.Phase.COMBAT
 	round_count = 1
 	yield(get_tree().create_timer(MatchPlayer.CARD_MOVE_DURATION), "timeout")
-	my_hand_area.disable_play(false)
+	my_hand_area._disable_play(false)
 	performing = false
 	emit_signal("performed")
 
@@ -257,7 +257,7 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 	if (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0):
 		game_server._send_recovery_select(data.round_count,-1)
 	else:
-		my_hand_area.disable_play(false)
+		my_hand_area._disable_play(false)
 	performing = false
 	emit_signal("performed")
 
@@ -291,7 +291,7 @@ func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
 	if (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0):
 		game_server._send_recovery_select(data.round_count,-1)
 	else:
-		my_hand_area.disable_play(false)
+		my_hand_area._disable_play(false)
 	performing = false
 	emit_signal("performed")
 
@@ -323,10 +323,10 @@ func _on_GameServer_recieved_complete_board(data:IGameServer.CompleteData)->void
 	round_count = data.round_count
 	phase = data.next_phase
 	if (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0):
-		my_hand_area.disable_play(true)
+		my_hand_area._disable_play(true)
 		game_server._send_recovery_select(data.round_count,-1)
 	else:
-		my_hand_area.disable_play(false)
+		my_hand_area._disable_play(false)
 	performing = false
 	emit_signal("performed")
 

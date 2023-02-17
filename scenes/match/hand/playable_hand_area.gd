@@ -9,13 +9,13 @@ signal card_decided(index)
 #signal card_held(index)
 
 
-func disable_play(_b:bool):
+func _disable_play(_b:bool):
 	pass
 
-#func set_card(_cards : Array):
+#func _set_card(_cards : Array):
 #	pass
 #
-#func move_card(_sec : float):
+#func _move_card(_sec : float):
 #	pass
 
 
