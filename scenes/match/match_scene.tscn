@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://scenes/match/match_scene.gd" type="Script" id=1]
 [ext_resource path="res://scenes/settings/settings scene.tscn" type="PackedScene" id=2]
@@ -8,40 +8,7 @@
 [ext_resource path="res://scenes/card/large_card_view.tscn" type="PackedScene" id=8]
 [ext_resource path="res://scenes/match/ui/states_detail_view.tscn" type="PackedScene" id=9]
 [ext_resource path="res://scenes/match/combat/combat_overlap.tscn" type="PackedScene" id=10]
-[ext_resource path="res://scenes/ui/clickable_control.gd" type="Script" id=11]
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=12]
-[ext_resource path="res://scenes/match/ui/states_panel.tscn" type="PackedScene" id=13]
-
-[sub_resource type="DynamicFont" id=9]
-size = 40
-outline_size = 2
-outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 12 )
-
-[sub_resource type="Theme" id=10]
-Label/fonts/font = SubResource( 9 )
-
-[sub_resource type="DynamicFont" id=23]
-size = 24
-outline_size = 2
-outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 12 )
-
-[sub_resource type="StyleBoxFlat" id=24]
-bg_color = Color( 0, 0, 0, 0.752941 )
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[sub_resource type="DynamicFont" id=15]
-size = 40
-outline_size = 1
-font_data = ExtResource( 12 )
 
 [sub_resource type="DynamicFont" id=16]
 size = 24
@@ -49,105 +16,6 @@ font_data = ExtResource( 12 )
 
 [node name="MatchScene" type="Node"]
 script = ExtResource( 1 )
-
-[node name="UILayer" type="CanvasLayer" parent="."]
-layer = -1
-
-[node name="MyField" type="Node" parent="UILayer"]
-
-[node name="Stock" type="ReferenceRect" parent="UILayer/MyField"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = 480.0
-margin_top = 136.0
-margin_right = 624.0
-margin_bottom = 352.0
-rect_pivot_offset = Vector2( 72, 108 )
-script = ExtResource( 11 )
-
-[node name="Playing" type="ReferenceRect" parent="UILayer/MyField"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = 72.0
-margin_top = -108.0
-margin_right = 216.0
-margin_bottom = 108.0
-
-[node name="Played" type="ReferenceRect" parent="UILayer/MyField"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = 230.0
-margin_top = -44.0
-margin_right = 446.0
-margin_bottom = 100.0
-rect_pivot_offset = Vector2( 108, 72 )
-script = ExtResource( 11 )
-
-[node name="Discard" type="ReferenceRect" parent="UILayer/MyField"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = 480.0
-margin_top = -96.0
-margin_right = 624.0
-margin_bottom = 120.0
-rect_pivot_offset = Vector2( 72, 108 )
-script = ExtResource( 11 )
-
-[node name="RivalField" type="Node" parent="UILayer"]
-
-[node name="Stock" type="ReferenceRect" parent="UILayer/RivalField"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -624.0
-margin_top = -352.0
-margin_right = -480.0
-margin_bottom = -136.0
-rect_pivot_offset = Vector2( 72, 108 )
-script = ExtResource( 11 )
-
-[node name="Playing" type="ReferenceRect" parent="UILayer/RivalField"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -216.0
-margin_top = -108.0
-margin_right = -72.0
-margin_bottom = 108.0
-
-[node name="Played" type="ReferenceRect" parent="UILayer/RivalField"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -446.0
-margin_top = -100.0
-margin_right = -230.0
-margin_bottom = 44.0
-rect_pivot_offset = Vector2( 108, 72 )
-script = ExtResource( 11 )
-
-[node name="Discard" type="ReferenceRect" parent="UILayer/RivalField"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -624.0
-margin_top = -120.0
-margin_right = -480.0
-margin_bottom = 96.0
-rect_pivot_offset = Vector2( 72, 108 )
-script = ExtResource( 11 )
 
 [node name="BGLayer" type="CanvasLayer" parent="."]
 layer = 0
@@ -165,140 +33,7 @@ follow_viewport_enable = true
 layer = 3
 follow_viewport_enable = true
 
-[node name="Control" type="Control" parent="TopUILayer"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-theme = SubResource( 10 )
-__meta__ = {
-"_edit_lock_": true
-}
-
-[node name="MyDeck" type="Panel" parent="TopUILayer/Control"]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -160.0
-margin_top = -224.0
-margin_right = -16.0
-margin_bottom = -8.0
-
-[node name="MyLife" type="Label" parent="TopUILayer/Control"]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -160.0
-margin_top = -232.0
-margin_right = -16.0
-margin_bottom = -172.0
-text = "27"
-align = 1
-valign = 1
-max_lines_visible = 1
-
-[node name="MyName" type="Label" parent="TopUILayer/Control"]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -256.0
-margin_top = -64.0
-margin_bottom = -4.0
-custom_fonts/font = SubResource( 23 )
-custom_styles/normal = SubResource( 24 )
-text = "Name"
-align = 1
-valign = 1
-max_lines_visible = 1
-
-[node name="MyTimer" type="Label" parent="TopUILayer/Control"]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -160.0
-margin_top = -136.0
-margin_right = -16.0
-margin_bottom = -72.0
-text = "123"
-align = 1
-valign = 1
-clip_text = true
-
-[node name="MyDamage" type="Label" parent="TopUILayer/Control"]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -672.0
-margin_top = -280.0
-margin_right = -608.0
-margin_bottom = -216.0
-custom_colors/font_color = Color( 1, 0, 0, 1 )
-custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 15 )
-text = "3"
-align = 1
-valign = 1
-max_lines_visible = 1
-
-[node name="RivalDeck" type="Panel" parent="TopUILayer/Control"]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -1264.0
-margin_top = -712.0
-margin_right = -1120.0
-margin_bottom = -496.0
-
-[node name="RivalDamage" type="Label" parent="TopUILayer/Control"]
-margin_left = 608.0
-margin_top = 216.0
-margin_right = 672.0
-margin_bottom = 280.0
-custom_colors/font_color = Color( 1, 0, 0, 1 )
-custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 15 )
-text = "3"
-align = 1
-valign = 1
-max_lines_visible = 1
-
-[node name="RivalName" type="Label" parent="TopUILayer/Control"]
-margin_top = 4.0
-margin_right = 256.0
-margin_bottom = 64.0
-custom_fonts/font = SubResource( 23 )
-custom_styles/normal = SubResource( 24 )
-text = "Name"
-align = 1
-valign = 1
-max_lines_visible = 1
-
-[node name="RivalTimer" type="Label" parent="TopUILayer/Control"]
-margin_left = 16.0
-margin_top = 72.0
-margin_right = 160.0
-margin_bottom = 136.0
-text = "123"
-align = 1
-valign = 1
-clip_text = true
-
-[node name="RivalLife" type="Label" parent="TopUILayer/Control"]
-margin_left = 16.0
-margin_top = 168.0
-margin_right = 160.0
-margin_bottom = 228.0
-text = "27"
-align = 1
-valign = 1
-max_lines_visible = 1
-
-[node name="SettingButton" type="Button" parent="TopUILayer/Control"]
+[node name="SettingButton" type="Button" parent="TopUILayer"]
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -144.0
@@ -308,29 +43,6 @@ margin_bottom = 56.0
 grow_horizontal = 0
 custom_fonts/font = SubResource( 16 )
 text = "SETTINGS"
-
-[node name="MyStatesPanel" parent="TopUILayer/Control" instance=ExtResource( 13 )]
-unique_name_in_owner = true
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = 16.0
-margin_top = -96.0
-margin_right = 216.0
-margin_bottom = 104.0
-
-[node name="RivalStatesPanel" parent="TopUILayer/Control" instance=ExtResource( 13 )]
-unique_name_in_owner = true
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -216.0
-margin_top = -104.0
-margin_right = -16.0
-margin_bottom = 96.0
-opponent_layout = true
 
 [node name="StatesDetailView" parent="TopUILayer" instance=ExtResource( 9 )]
 visible = false
@@ -370,15 +82,5 @@ unique_name_in_owner = true
 anchor_mode = 1
 current = false
 
-[connection signal="clicked" from="UILayer/MyField/Stock" to="." method="_on_MyStock_clicked"]
-[connection signal="clicked" from="UILayer/MyField/Played" to="." method="_on_MyPlayed_clicked"]
-[connection signal="held" from="UILayer/MyField/Played" to="." method="_on_MyPlayed_held"]
-[connection signal="clicked" from="UILayer/MyField/Discard" to="." method="_on_MyDiscard_clicked"]
-[connection signal="clicked" from="UILayer/RivalField/Stock" to="." method="_on_RivalStock_clicked"]
-[connection signal="clicked" from="UILayer/RivalField/Played" to="." method="_on_RivalPlayed_clicked"]
-[connection signal="held" from="UILayer/RivalField/Played" to="." method="_on_RivalPlayed_held"]
-[connection signal="clicked" from="UILayer/RivalField/Discard" to="." method="_on_RivalDiscard_clicked"]
-[connection signal="pressed" from="TopUILayer/Control/SettingButton" to="." method="_on_SettingButton_pressed"]
-[connection signal="pressed" from="TopUILayer/Control/MyStatesPanel" to="." method="_on_MyStatesPanel_pressed"]
-[connection signal="pressed" from="TopUILayer/Control/RivalStatesPanel" to="." method="_on_RivalStatesPanel_pressed"]
+[connection signal="pressed" from="TopUILayer/SettingButton" to="." method="_on_SettingButton_pressed"]
 [connection signal="timeout" from="LimitTimer" to="." method="_on_LimitTimer_timeout"]

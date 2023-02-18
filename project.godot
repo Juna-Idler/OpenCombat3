@@ -154,6 +154,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scenes/match/hand/playable_hand_area.gd"
 }, {
+"base": "Node",
+"class": "I_PlayerField",
+"language": "GDScript",
+"path": "res://scenes/match/i_player_field.gd"
+}, {
 "base": "Resource",
 "class": "JSONResource",
 "language": "GDScript",
@@ -379,6 +384,7 @@ _global_script_class_icons={
 "ISceneChanger": "",
 "I_HandArea": "",
 "I_PlayableHandArea": "",
+"I_PlayerField": "",
 "JSONResource": "",
 "JSONResourceLoader": "",
 "JsonResourceSaver": "",

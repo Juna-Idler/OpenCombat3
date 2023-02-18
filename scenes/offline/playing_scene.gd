@@ -139,7 +139,7 @@ func _on_ButtonStart_pressed():
 		match_logger = null
 	
 	$MatchScene.initialize(match_logger as IGameServer if match_logger else offline_server as IGameServer,
-			$MatchScene/UILayer/MyField/MyHandArea,$MatchScene/UILayer/RivalField/RivalHandArea)
+			$MatchScene/TopUILayer/PlayerField,$MatchScene/TopUILayer/OpponentField)
 	$MatchScene.send_ready()
 
 	Bgm.stream = load("res://sound/魔王魂  ファンタジー11.ogg")

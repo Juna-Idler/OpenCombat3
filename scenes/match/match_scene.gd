@@ -16,21 +16,6 @@ const COMBAT_SKILL_DELAY = 1.0
 const RECOVER_RESULT_DELAY = 1.0
 
 
-onready var my_combat_pos : Vector2 = $UILayer/MyField/Playing.rect_global_position + $UILayer/MyField/Playing.rect_size / 2
-onready var rival_combat_pos : Vector2 = $UILayer/RivalField/Playing.rect_global_position + $UILayer/RivalField/Playing.rect_size / 2
-
-onready var my_stock_pos : Vector2 = $UILayer/MyField/Stock.rect_global_position + $UILayer/MyField/Stock.rect_size / 2
-onready var rival_stock_pos : Vector2 = $UILayer/RivalField/Stock.rect_global_position + $UILayer/RivalField/Stock.rect_size / 2
-
-onready var my_played_pos : Vector2 = $UILayer/MyField/Played.rect_global_position + $UILayer/MyField/Played.rect_size / 2
-onready var rival_played_pos : Vector2 = $UILayer/RivalField/Played.rect_global_position + $UILayer/RivalField/Played.rect_size / 2
-
-onready var my_discard_pos : Vector2 = $UILayer/MyField/Discard.rect_global_position + $UILayer/MyField/Discard.rect_size / 2
-onready var rival_discard_pos : Vector2 = $UILayer/RivalField/Discard.rect_global_position + $UILayer/RivalField/Discard.rect_size / 2
-
-onready var my_life := $TopUILayer/Control/MyLife
-onready var rival_life := $TopUILayer/Control/RivalLife
-
 onready var combat_overlap := $"%CombatOverlap"
 
 onready var exit_button : Button = $"%SettingsScene".get_node("ExitButton")
@@ -38,8 +23,8 @@ onready var exit_button : Button = $"%SettingsScene".get_node("ExitButton")
 
 var game_server : IGameServer = null
 
-var my_hand_area : I_PlayableHandArea
-var rival_hand_area : I_HandArea
+var my_field : I_PlayerField
+var rival_field : I_PlayerField
 
 var deck_regulation : RegulationData.DeckRegulation
 var match_regulation : RegulationData.MatchRegulation
@@ -61,14 +46,14 @@ func _process(_delta):
 	if not $LimitTimer.is_stopped():
 		var elapsed =  $LimitTimer.wait_time - $LimitTimer.time_left
 		if elapsed < delay_time:
-			$TopUILayer/Control/MyTimer.text = "%s +%.1f" % [int($LimitTimer.wait_time - delay_time),delay_time - elapsed]
+			my_field._set_time($LimitTimer.wait_time - delay_time,delay_time - elapsed)
 		else:
-			$TopUILayer/Control/MyTimer.text = "%.1f" % $LimitTimer.time_left
+			my_field._set_time($LimitTimer.time_left - delay_time,-1)
 
 func is_valid() -> bool:
 	return game_server != null
 
-func initialize(server : IGameServer,my_hand_area_ : I_PlayableHandArea,rival_hand_area_ : I_HandArea):
+func initialize(server : IGameServer,my_field_ : I_PlayerField,rival_field_ : I_PlayerField):
 	game_server = server
 	game_server.connect("recieved_first_data",self,"_on_GameServer_recieved_first_data")
 	game_server.connect("recieved_combat_result",self,"_on_GameServer_recieved_combat_result")
@@ -76,14 +61,27 @@ func initialize(server : IGameServer,my_hand_area_ : I_PlayableHandArea,rival_ha
 	game_server.connect("recieved_end",self,"_on_GameServer_recieved_end")
 	game_server.connect("recieved_complete_board",self,"_on_GameServer_recieved_complete_board")
 
-	my_hand_area = my_hand_area_
-	my_hand_area.connect("card_clicked",self,"_on_MyHandArea_car_clicked")
-	my_hand_area.connect("card_held",self,"_on_MyHandArea_card_held")
-	my_hand_area.connect("card_decided",self,"_on_MyHandArea_card_decided")
-	my_hand_area.connect("card_order_changed",self,"_on_MyHandArea_card_order_changed")
-	rival_hand_area = rival_hand_area_
-	rival_hand_area.connect("card_clicked",self,"_on_RivalHandArea_card_clicked")
-	rival_hand_area.connect("card_held",self,"_on_RivalHandArea_card_held")
+	my_field = my_field_
+	my_field.connect("card_clicked",self,"_on_MyHandArea_car_clicked")
+	my_field.connect("card_held",self,"_on_MyHandArea_card_held")
+	my_field.connect("card_decided",self,"_on_MyHandArea_card_decided")
+	my_field.connect("card_order_changed",self,"_on_MyHandArea_card_order_changed")
+	my_field.connect("stock_clicked",self,"_on_MyStock_clicked")
+	my_field.connect("stock_held",self,"_on_MyStock_held")
+	my_field.connect("played_clicked",self,"_on_MyPlayed_clicked")
+	my_field.connect("played_held",self,"_on_MyPlayed_clicked")
+	my_field.connect("discard_clicked",self,"_on_MyDiscard_clicked")
+	my_field.connect("discard_held",self,"_on_MyDiscard_clicked")
+	rival_field = rival_field_
+	rival_field.connect("card_clicked",self,"_on_RivalHandArea_card_clicked")
+	rival_field.connect("card_held",self,"_on_RivalHandArea_card_held")
+	rival_field.connect("stock_clicked",self,"_on_RivalStock_clicked")
+	rival_field.connect("stock_held",self,"_on_RivalStock_held")
+	rival_field.connect("played_clicked",self,"_on_RivalPlayed_clicked")
+	rival_field.connect("played_held",self,"_on_RivalPlayed_clicked")
+	rival_field.connect("discard_clicked",self,"_on_RivalDiscard_clicked")
+	rival_field.connect("discard_held",self,"_on_RivalDiscard_clicked")
+
 	
 	for c in $CardLayer.get_children():
 		$CardLayer.remove_child(c)
@@ -94,38 +92,22 @@ func initialize(server : IGameServer,my_hand_area_ : I_PlayableHandArea,rival_ha
 	deck_regulation = pd.deck_regulation
 	match_regulation = pd.match_regulation
 	myself = MatchPlayer.new(pd.my_name,
-			pd.my_deck_list,skill_factory,false,$CardLayer,my_stock_pos,
-			my_hand_area,
-			my_combat_pos,
-			my_played_pos,
-			my_discard_pos,
-			$TopUILayer/Control/MyName,
-			my_life,
-			$"%MyStatesPanel",
+			pd.my_deck_list,skill_factory,false,$CardLayer,my_field,
 			combat_overlap.p1_avatar,
-			$TopUILayer/Control/MyDamage,
 			CombatPowerBalance.Interface.new($BGLayer/PowerBalance,false))
 	rival = MatchPlayer.new(pd.rival_name,
-			pd.rival_deck_list,skill_factory,true,$CardLayer,rival_stock_pos,
-			rival_hand_area,
-			rival_combat_pos,
-			rival_played_pos,
-			rival_discard_pos,
-			$TopUILayer/Control/RivalName,
-			rival_life,
-			$"%RivalStatesPanel",
+			pd.rival_deck_list,skill_factory,true,$CardLayer,rival_field,
 			combat_overlap.p2_avatar,
-			$TopUILayer/Control/RivalDamage,
 			CombatPowerBalance.Interface.new($BGLayer/PowerBalance,true))
 
 	combat_director.initialize(myself,rival,
 			combat_overlap,$BGLayer/PowerBalance)
 	combat_overlap.visible = false
 	
-	$"%MyStatesPanel".set_states(myself.states)
-	$"%RivalStatesPanel".set_states(rival.states)
+	my_field._set_states(myself.states)
+	rival_field._set_states(rival.states)
 
-	$TopUILayer/Control/SettingButton.disabled = false
+	$TopUILayer/SettingButton.disabled = false
 	$"%SettingsScene".hide()
 	performing = false
 
@@ -135,7 +117,7 @@ func send_ready():
 
 func decide_card(index:int):
 	$LimitTimer.stop()
-	my_hand_area._disable_play(true)
+	my_field._disable_play(true)
 	if phase == IGameServer.Phase.COMBAT:
 		game_server._send_combat_select(round_count,index,myself.hand)
 	elif phase == IGameServer.Phase.RECOVERY:
@@ -150,16 +132,28 @@ func terminalize():
 		game_server.disconnect("recieved_end",self,"_on_GameServer_recieved_end")
 		game_server.disconnect("recieved_complete_board",self,"_on_GameServer_recieved_complete_board")
 		game_server = null
-	if my_hand_area:
-		my_hand_area.disconnect("card_clicked",self,"_on_MyHandArea_car_clicked")
-		my_hand_area.disconnect("card_held",self,"_on_MyHandArea_card_held")
-		my_hand_area.disconnect("card_decided",self,"_on_MyHandArea_card_decided")
-		my_hand_area.disconnect("card_order_changed",self,"_on_MyHandArea_card_order_changed")
-		my_hand_area = null
-	if rival_hand_area:
-		rival_hand_area.disconnect("card_clicked",self,"_on_RivalHandArea_card_clicked")
-		rival_hand_area.disconnect("card_held",self,"_on_RivalHandArea_card_held")
-		rival_hand_area = null
+	if my_field:
+		my_field.disconnect("card_clicked",self,"_on_MyHandArea_car_clicked")
+		my_field.disconnect("card_held",self,"_on_MyHandArea_card_held")
+		my_field.disconnect("card_decided",self,"_on_MyHandArea_card_decided")
+		my_field.disconnect("card_order_changed",self,"_on_MyHandArea_card_order_changed")
+		my_field.disconnect("stock_clicked",self,"_on_MyStock_clicked")
+		my_field.disconnect("stock_held",self,"_on_MyStock_held")
+		my_field.disconnect("played_clicked",self,"_on_MyPlayed_clicked")
+		my_field.disconnect("played_held",self,"_on_MyPlayed_clicked")
+		my_field.disconnect("discard_clicked",self,"_on_MyDiscard_clicked")
+		my_field.disconnect("discard_held",self,"_on_MyDiscard_clicked")
+		my_field = null
+	if rival_field:
+		rival_field.disconnect("card_clicked",self,"_on_RivalHandArea_card_clicked")
+		rival_field.disconnect("card_held",self,"_on_RivalHandArea_card_held")
+		rival_field.disconnect("stock_clicked",self,"_on_RivalStock_clicked")
+		rival_field.disconnect("stock_held",self,"_on_RivalStock_held")
+		rival_field.disconnect("played_clicked",self,"_on_RivalPlayed_clicked")
+		rival_field.disconnect("played_held",self,"_on_RivalPlayed_clicked")
+		rival_field.disconnect("discard_clicked",self,"_on_RivalDiscard_clicked")
+		rival_field.disconnect("discard_held",self,"_on_RivalDiscard_clicked")
+		rival_field = null
 
 
 func restore_overlap():
@@ -171,20 +165,17 @@ func _on_GameServer_recieved_end(msg:String)->void:
 	restore_overlap()
 	$LimitTimer.stop()
 	emit_signal("ended",-2,msg)
-	$TopUILayer/Control/SettingButton.disabled = true
+	$TopUILayer/SettingButton.disabled = true
 	return
 
 func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
 	if data.myself.time >= 0:
-		$TopUILayer/Control/MyTimer.text = str(data.myself.time)
 		delay_time = match_regulation.combat_time + 1
+		my_field._set_time(data.myself.time,delay_time)
 		$LimitTimer.start(data.myself.time + delay_time)
 	else:
-		$TopUILayer/Control/MyTimer.text = "∞"
-	if data.rival.time >= 0:
-		$TopUILayer/Control/RivalTimer.text = str(data.rival.time)
-	else:
-		$TopUILayer/Control/RivalTimer.text = "∞"
+		my_field._set_time(-1,-1)
+	rival_field._set_time(data.rival.time,-1)
 	
 	performing = true
 	myself.standby(data.myself.life,Array(data.myself.hand))
@@ -192,7 +183,7 @@ func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
 	phase = IGameServer.Phase.COMBAT
 	round_count = 1
 	yield(get_tree().create_timer(MatchPlayer.CARD_MOVE_DURATION), "timeout")
-	my_hand_area._disable_play(false)
+	my_field._disable_play(false)
 	performing = false
 	emit_signal("performed")
 
@@ -208,9 +199,9 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 			delay_time = match_regulation.recovery_time + result_delay
 			$LimitTimer.start(data.myself.time + delay_time)
 		else:
-			$TopUILayer/Control/MyTimer.text = "%.1f" % data.myself.time
+			my_field._set_time(data.myself.time,delay_time)
 	if data.rival.time >= 0:
-		$TopUILayer/Control/RivalTimer.text = "%.1f" % data.rival.time
+		rival_field._set_time(data.rival.time,-1)
 	performing = true
 	var tween := create_tween()
 	myself.play(data.myself.select,data.myself.hand,data.myself.damage,
@@ -221,8 +212,8 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 
 	yield(combat_director.perform(data.next_phase == IGameServer.Phase.GAME_END),"completed")
 
-	$"%MyStatesPanel".set_states(myself.states)
-	$"%RivalStatesPanel".set_states((rival.states))
+	my_field._set_states(myself.states)
+	rival_field._set_states(rival.states)
 	
 	if data.next_phase == IGameServer.Phase.GAME_END:
 		$LimitTimer.stop()
@@ -239,7 +230,7 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 			emit_signal("ended",-1,"lose")
 		else:
 			emit_signal("ended",0,"draw")
-		$TopUILayer/Control/SettingButton.disabled = true
+		$TopUILayer/SettingButton.disabled = true
 		return
 
 	myself.play_end()
@@ -257,7 +248,7 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 	if (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0):
 		game_server._send_recovery_select(data.round_count,-1)
 	else:
-		my_hand_area._disable_play(false)
+		my_field._disable_play(false)
 	performing = false
 	emit_signal("performed")
 
@@ -272,13 +263,13 @@ func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
 			delay_time = match_regulation.recovery_time + RECOVER_RESULT_DELAY
 			$LimitTimer.start(data.myself.time + delay_time)
 		else:
-			$TopUILayer/Control/MyTimer.text = "%.1f" % data.myself.time
+			my_field._set_time(data.myself.time,delay_time)
 	if data.rival.time >= 0:
-		$TopUILayer/Control/RivalTimer.text = "%.1f" % data.rival.time
-
+		rival_field._set_time(data.rival.time,-1)
+			
 	performing = true
-	myself.recover(data.myself.select,data.myself.hand,data.myself.draw)
-	rival.recover(data.rival.select,data.rival.hand,data.rival.draw)
+	myself.recover(data.myself.select,data.myself.hand,data.myself.draw,data.myself.life)
+	rival.recover(data.rival.select,data.rival.hand,data.rival.draw,data.rival.life)
 
 	round_count = data.round_count
 	phase = data.next_phase
@@ -291,7 +282,7 @@ func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
 	if (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0):
 		game_server._send_recovery_select(data.round_count,-1)
 	else:
-		my_hand_area._disable_play(false)
+		my_field._disable_play(false)
 	performing = false
 	emit_signal("performed")
 
@@ -323,10 +314,10 @@ func _on_GameServer_recieved_complete_board(data:IGameServer.CompleteData)->void
 	round_count = data.round_count
 	phase = data.next_phase
 	if (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0):
-		my_hand_area._disable_play(true)
+		my_field._disable_play(true)
 		game_server._send_recovery_select(data.round_count,-1)
 	else:
-		my_hand_area._disable_play(false)
+		my_field._disable_play(false)
 	performing = false
 	emit_signal("performed")
 
@@ -401,7 +392,6 @@ func _on_RivalDiscard_clicked():
 
 func _on_SettingButton_pressed():
 	$"%SettingsScene".show()
-
 
 
 

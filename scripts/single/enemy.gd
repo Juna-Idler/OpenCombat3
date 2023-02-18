@@ -114,8 +114,6 @@ func _combat_end() -> void:
 
 func _supply() -> void:
 	_draw_card()
-	if damage > 0:
-		_draw_card()
 	
 func _recover(index : int) -> void:
 	playing_hand = hand.duplicate()
@@ -123,6 +121,8 @@ func _recover(index : int) -> void:
 	select_card = null
 	draw_indexes.resize(0)
 	skill_log.clear()
+	damage = 0
+	
 
 func _no_recover() -> void:
 	playing_hand = hand.duplicate()
@@ -130,9 +130,10 @@ func _no_recover() -> void:
 	select_card = null
 	draw_indexes.resize(0)
 	skill_log.clear()
+	damage = 0
 	
 func _is_recovery() -> bool:
-	return true
+	return damage == 0
 
 func _change_order(new_indexies : PoolIntArray) -> void:
 	if new_indexies.size() != hand.size():
