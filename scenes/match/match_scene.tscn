@@ -6,7 +6,7 @@
 [ext_resource path="res://scenes/match/card_list.tscn" type="PackedScene" id=5]
 [ext_resource path="res://camera2d.tscn" type="PackedScene" id=6]
 [ext_resource path="res://scenes/card/large_card_view.tscn" type="PackedScene" id=8]
-[ext_resource path="res://scenes/match/ui/states_detail_view.tscn" type="PackedScene" id=9]
+[ext_resource path="res://scenes/match/field/effect/states_detail_view.tscn" type="PackedScene" id=9]
 [ext_resource path="res://scenes/match/combat/combat_overlap.tscn" type="PackedScene" id=10]
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=12]
 

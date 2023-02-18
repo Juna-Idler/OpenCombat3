@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://scenes/match/hand/draggable_control.gd" type="Script" id=1]
+[ext_resource path="res://scenes/match/field/hand/draggable_control.gd" type="Script" id=1]
 
 [node name="HandSelectControl" type="ReferenceRect"]
 margin_right = 144.0

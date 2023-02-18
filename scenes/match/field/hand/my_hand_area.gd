@@ -1,6 +1,6 @@
 # warning-ignore-all:return_value_discarded
 
-extends I_PlayableHandArea
+extends I_HandArea
 
 const DraggableControl = preload("draggable_control.tscn")
 

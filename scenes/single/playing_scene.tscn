@@ -4,7 +4,7 @@
 [ext_resource path="res://scenes/match/match_scene.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/single/enemy_hand_area.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/single/playing_scene.gd" type="Script" id=8]
-[ext_resource path="res://scenes/match/hand/my_hand_area.tscn" type="PackedScene" id=9]
+[ext_resource path="res://scenes/match/field/hand/my_hand_area.tscn" type="PackedScene" id=9]
 
 [sub_resource type="Gradient" id=25]
 offsets = PoolRealArray( 0, 0.5, 1 )

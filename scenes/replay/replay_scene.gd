@@ -60,7 +60,7 @@ func _on_ReplayMenu_start_pressed(selected):
 
 	replay_server.initialize(selected.match_log)
 	$MatchScene.initialize(replay_server,
-			$MatchScene/UILayer/MyField/MyHandArea,$MatchScene/UILayer/RivalField/RivalHandArea)
+			$MatchScene/TopUILayer/PlayerField,$MatchScene/TopUILayer/OpponentField)
 	$"%ResultOverlap".hide()
 	$Panel/ReplayMenu.hide()
 	$TimerPerformingCounter.start()

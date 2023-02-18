@@ -338,11 +338,11 @@ func _on_RivalHandArea_card_clicked(_index:int):
 
 func _on_MyHandArea_card_held(index:int):
 	if index < myself.hand.size():
-		$"%LargeCardView".show_layer(myself.hand[index].get_card_data())
+		$"%LargeCardView".show_layer(myself.deck_list[myself.hand[index]].get_card_data())
 
 func _on_RivalHandArea_card_held(index:int):
 	if index < rival.hand.size():
-		$"%LargeCardView".show_layer(rival.hand[index].get_card_data())
+		$"%LargeCardView".show_layer(rival.deck_list[rival.hand[index]].get_card_data())
 
 func _on_held_card(card:MatchCard):
 	if card != null:

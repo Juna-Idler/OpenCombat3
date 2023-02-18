@@ -4,8 +4,8 @@
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=2]
 [ext_resource path="res://scenes/replay/replay_menu.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/replay/replay_scene.gd" type="Script" id=4]
-[ext_resource path="res://scenes/match/hand/rival_hand_area.tscn" type="PackedScene" id=5]
-[ext_resource path="res://scenes/replay/replay_my_hand_area.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scenes/match/field/opponent_field.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/replay/replay_field.tscn" type="PackedScene" id=6]
 
 [sub_resource type="DynamicFont" id=26]
 font_data = ExtResource( 2 )
@@ -51,17 +51,9 @@ script = ExtResource( 4 )
 
 [node name="MatchScene" parent="." instance=ExtResource( 1 )]
 
-[node name="MyHandArea" parent="MatchScene/UILayer/MyField" index="4" instance=ExtResource( 6 )]
-margin_left = -400.0
-margin_top = 112.0
-margin_right = 400.0
-margin_bottom = 352.0
+[node name="OpponentField" parent="MatchScene/TopUILayer" index="0" instance=ExtResource( 5 )]
 
-[node name="RivalHandArea" parent="MatchScene/UILayer/RivalField" index="4" instance=ExtResource( 5 )]
-margin_left = -400.0
-margin_top = -352.0
-margin_right = 400.0
-margin_bottom = -112.0
+[node name="PlayerField" parent="MatchScene/TopUILayer" index="1" instance=ExtResource( 6 )]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = 7

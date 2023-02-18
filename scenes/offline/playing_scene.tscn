@@ -7,8 +7,8 @@
 [ext_resource path="res://scenes/deck/select_scene.tscn" type="PackedScene" id=5]
 [ext_resource path="res://scenes/regulation/deck_select.tscn" type="PackedScene" id=6]
 [ext_resource path="res://scenes/regulation/match_select.tscn" type="PackedScene" id=7]
-[ext_resource path="res://scenes/match/my_field.tscn" type="PackedScene" id=8]
-[ext_resource path="res://scenes/match/base_opponent_field.tscn" type="PackedScene" id=9]
+[ext_resource path="res://scenes/match/field/playable_field.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scenes/match/field/opponent_field.tscn" type="PackedScene" id=9]
 
 [sub_resource type="Gradient" id=25]
 offsets = PoolRealArray( 0, 0.5, 1 )
