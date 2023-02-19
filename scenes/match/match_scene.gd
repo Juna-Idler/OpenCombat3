@@ -129,7 +129,7 @@ func terminalize():
 		game_server.disconnect("recieved_complete_board",self,"_on_GameServer_recieved_complete_board")
 		game_server = null
 	if myself:
-		myself.player_field.disconnect("card_clicked",self,"_on_MyHandArea_car_clicked")
+		myself.player_field.disconnect("card_clicked",self,"_on_MyHandArea_card_clicked")
 		myself.player_field.disconnect("card_held",self,"_on_MyHandArea_card_held")
 		myself.player_field.disconnect("card_decided",self,"_on_MyHandArea_card_decided")
 		myself.player_field.disconnect("card_order_changed",self,"_on_MyHandArea_card_order_changed")
@@ -264,8 +264,8 @@ func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
 		rival.player_field._set_time(data.rival.time,-1)
 			
 	performing = true
-	myself.recover(data.myself.select,data.myself.hand,data.myself.draw,data.myself.life)
-	rival.recover(data.rival.select,data.rival.hand,data.rival.draw,data.rival.life)
+	myself.recover(data.myself.select,data.myself.hand,data.myself.draw,data.myself.damage,data.myself.life)
+	rival.recover(data.rival.select,data.rival.hand,data.rival.draw,data.rival.damage,data.rival.life)
 
 	round_count = data.round_count
 	phase = data.next_phase

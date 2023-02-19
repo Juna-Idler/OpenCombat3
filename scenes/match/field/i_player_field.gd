@@ -52,6 +52,8 @@ func _set_damage(_damage : int):
 
 func _set_life(_life : int):
 	pass
+func _set_life_provisional(_life : int):
+	pass
 
 func _set_stock(_stock : int):
 	pass

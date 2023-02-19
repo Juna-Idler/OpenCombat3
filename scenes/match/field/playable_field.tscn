@@ -188,11 +188,3 @@ margin_bottom = 352.0
 script = ExtResource( 5 )
 
 [node name="Timer" type="Timer" parent="HandArea"]
-
-[connection signal="clicked" from="Stock" to="." method="_on_Stock_clicked"]
-[connection signal="held" from="Stock" to="." method="_on_Stock_held"]
-[connection signal="clicked" from="Played" to="." method="_on_Played_clicked"]
-[connection signal="held" from="Played" to="." method="_on_Played_held"]
-[connection signal="clicked" from="Discard" to="." method="_on_Discard_clicked"]
-[connection signal="held" from="Discard" to="." method="_on_Discard_held"]
-[connection signal="pressed" from="States" to="." method="_on_States_pressed"]

@@ -154,7 +154,6 @@ margin_left = -216.0
 margin_top = -104.0
 margin_right = -16.0
 margin_bottom = 96.0
-opponent_layout = true
 
 [node name="HandArea" type="ReferenceRect" parent="."]
 anchor_left = 0.5
@@ -168,6 +167,3 @@ margin_bottom = -112.0
 script = ExtResource( 3 )
 
 [node name="Timer" type="Timer" parent="HandArea"]
-
-[connection signal="card_clicked" from="HandArea" to="." method="_on_RivalHandArea_card_clicked"]
-[connection signal="card_held" from="HandArea" to="." method="_on_RivalHandArea_card_held"]

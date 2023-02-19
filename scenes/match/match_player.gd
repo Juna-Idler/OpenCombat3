@@ -104,7 +104,7 @@ func play(hand_select : int,new_hand : Array,d : int,draw_indexes : Array,s_log 
 	playing_card = deck_list[playing_card_id]
 	hand.remove(hand_select)
 	life -= playing_card.get_card_data().level
-	player_field._set_life(life)
+	player_field._set_life_provisional(life)
 	tween.parallel()
 	tween.tween_property(playing_card,"global_position",player_field._get_playing_pos(),0.5)\
 			.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
@@ -134,16 +134,14 @@ func _set_played_visible():
 		deck_list[played[played.size()-2]].visible = ALWAYS_CARD_VISIBLE
 	
 
-func recover(hand_select : int,new_hand : Array,draw_indexes : Array,new_life : int):
+func recover(hand_select : int,new_hand : Array,draw_indexes : Array,now_damage : int,new_life : int):
 	hand = new_hand
 	draw = draw_indexes
 	if hand_select >= 0:
-		var select_id = hand[hand_select]
-		var recovery_card := deck_list[select_id] as MatchCard
 		discard_card(hand_select,CARD_MOVE_DURATION)
-		damage -= recovery_card.front.data.level
+	damage = now_damage
 	life = new_life
-	player_field._set_damage(damage)
+	player_field._set_damage(now_damage)
 	player_field._set_life(life)
 	draw_all_card()
 
@@ -169,7 +167,7 @@ func discard_card(hand_index : int,duration : float):
 	discard.append(select_id)
 	var card := deck_list[select_id] as MatchCard
 	life -= card.get_card_data().level
-	player_field._set_life(life)
+	player_field._set_life_provisional(life)
 	card.z_index = discard.size() + 200
 	card.location = MatchCard.Location.DISCARD
 	var tween := card.create_tween()

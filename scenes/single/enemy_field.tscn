@@ -4,7 +4,7 @@
 [ext_resource path="res://scenes/ui/clickable_control.gd" type="Script" id=2]
 [ext_resource path="res://scenes/single/enemy_hand_area.gd" type="Script" id=3]
 [ext_resource path="res://scenes/match/field/effect/states_panel.tscn" type="PackedScene" id=4]
-[ext_resource path="res://scenes/match/field/base_player_field.gd" type="Script" id=5]
+[ext_resource path="res://scenes/single/enemy_field.gd" type="Script" id=5]
 
 [sub_resource type="DynamicFont" id=9]
 size = 40
@@ -101,6 +101,16 @@ align = 1
 valign = 1
 max_lines_visible = 1
 
+[node name="StockCount" type="Label" parent="."]
+margin_left = 16.0
+margin_top = 120.0
+margin_right = 160.0
+margin_bottom = 180.0
+text = "27"
+align = 1
+valign = 1
+max_lines_visible = 1
+
 [node name="Name" type="Label" parent="."]
 margin_top = 4.0
 margin_right = 256.0
@@ -114,9 +124,9 @@ max_lines_visible = 1
 
 [node name="Timer" type="Label" parent="."]
 margin_left = 16.0
-margin_top = 72.0
+margin_top = 64.0
 margin_right = 160.0
-margin_bottom = 136.0
+margin_bottom = 128.0
 text = "123"
 align = 1
 valign = 1
@@ -157,6 +167,3 @@ margin_bottom = -112.0
 script = ExtResource( 3 )
 
 [node name="Timer" type="Timer" parent="HandArea"]
-
-[connection signal="card_clicked" from="HandArea" to="." method="_on_RivalHandArea_card_clicked"]
-[connection signal="card_held" from="HandArea" to="." method="_on_RivalHandArea_card_held"]
