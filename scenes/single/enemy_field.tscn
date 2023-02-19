@@ -2,9 +2,9 @@
 
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=1]
 [ext_resource path="res://scenes/ui/clickable_control.gd" type="Script" id=2]
-[ext_resource path="res://scenes/match/field/base_player_field.gd" type="Script" id=3]
+[ext_resource path="res://scenes/single/enemy_hand_area.gd" type="Script" id=3]
 [ext_resource path="res://scenes/match/field/effect/states_panel.tscn" type="PackedScene" id=4]
-[ext_resource path="res://scenes/match/field/hand/my_hand_area.gd" type="Script" id=5]
+[ext_resource path="res://scenes/match/field/base_player_field.gd" type="Script" id=5]
 
 [sub_resource type="DynamicFont" id=9]
 size = 40
@@ -37,22 +37,22 @@ size = 40
 outline_size = 1
 font_data = ExtResource( 1 )
 
-[node name="PlayerField" type="Control"]
+[node name="OpponentField" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 theme = SubResource( 10 )
-script = ExtResource( 3 )
+script = ExtResource( 5 )
 
 [node name="Stock" type="ColorRect" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = 488.0
-margin_top = 136.0
-margin_right = 632.0
-margin_bottom = 352.0
+margin_left = -624.0
+margin_top = -352.0
+margin_right = -480.0
+margin_bottom = -136.0
 rect_pivot_offset = Vector2( 72, 108 )
 color = Color( 0.254902, 0.254902, 0.254902, 1 )
 script = ExtResource( 2 )
@@ -62,9 +62,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = 80.0
+margin_left = -216.0
 margin_top = -108.0
-margin_right = 224.0
+margin_right = -72.0
 margin_bottom = 108.0
 
 [node name="Played" type="ReferenceRect" parent="."]
@@ -72,10 +72,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = 238.0
-margin_top = -44.0
-margin_right = 454.0
-margin_bottom = 100.0
+margin_left = -446.0
+margin_top = -100.0
+margin_right = -230.0
+margin_bottom = 44.0
 rect_pivot_offset = Vector2( 108, 72 )
 script = ExtResource( 2 )
 
@@ -84,50 +84,27 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = 488.0
-margin_top = -96.0
-margin_right = 632.0
-margin_bottom = 120.0
+margin_left = -624.0
+margin_top = -120.0
+margin_right = -480.0
+margin_bottom = 96.0
 rect_pivot_offset = Vector2( 72, 108 )
 script = ExtResource( 2 )
 
 [node name="Life" type="Label" parent="."]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -152.0
-margin_top = -224.0
-margin_right = -8.0
-margin_bottom = -164.0
-text = "27"
-align = 1
-valign = 1
-max_lines_visible = 1
-
-[node name="StockCount" type="Label" parent="."]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -152.0
-margin_top = -176.0
-margin_right = -8.0
-margin_bottom = -116.0
+margin_left = 16.0
+margin_top = 168.0
+margin_right = 160.0
+margin_bottom = 228.0
 text = "27"
 align = 1
 valign = 1
 max_lines_visible = 1
 
 [node name="Name" type="Label" parent="."]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -257.0
-margin_top = -61.0
-margin_right = -1.0
-margin_bottom = -1.0
+margin_top = 4.0
+margin_right = 256.0
+margin_bottom = 64.0
 custom_fonts/font = SubResource( 23 )
 custom_styles/normal = SubResource( 24 )
 text = "Name"
@@ -136,28 +113,20 @@ valign = 1
 max_lines_visible = 1
 
 [node name="Timer" type="Label" parent="."]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -152.0
-margin_top = -128.0
-margin_right = -8.0
-margin_bottom = -64.0
-grow_horizontal = 2
+margin_left = 16.0
+margin_top = 72.0
+margin_right = 160.0
+margin_bottom = 136.0
 text = "123"
 align = 1
 valign = 1
+clip_text = true
 
 [node name="Damage" type="Label" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -32.0
-margin_top = 56.0
-margin_right = 32.0
-margin_bottom = 120.0
+margin_left = 608.0
+margin_top = 216.0
+margin_right = 672.0
+margin_bottom = 280.0
 custom_colors/font_color = Color( 1, 0, 0, 1 )
 custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 15 )
@@ -171,28 +140,23 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = 24.0
-margin_top = -96.0
-margin_right = 224.0
-margin_bottom = 104.0
+margin_left = -216.0
+margin_top = -104.0
+margin_right = -16.0
+margin_bottom = 96.0
 
 [node name="HandArea" type="ReferenceRect" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -392.0
-margin_top = 112.0
-margin_right = 408.0
-margin_bottom = 352.0
-script = ExtResource( 5 )
+margin_left = -400.0
+margin_top = -352.0
+margin_right = 400.0
+margin_bottom = -112.0
+script = ExtResource( 3 )
 
 [node name="Timer" type="Timer" parent="HandArea"]
 
-[connection signal="clicked" from="Stock" to="." method="_on_Stock_clicked"]
-[connection signal="held" from="Stock" to="." method="_on_Stock_held"]
-[connection signal="clicked" from="Played" to="." method="_on_Played_clicked"]
-[connection signal="held" from="Played" to="." method="_on_Played_held"]
-[connection signal="clicked" from="Discard" to="." method="_on_Discard_clicked"]
-[connection signal="held" from="Discard" to="." method="_on_Discard_held"]
-[connection signal="pressed" from="States" to="." method="_on_States_pressed"]
+[connection signal="card_clicked" from="HandArea" to="." method="_on_RivalHandArea_card_clicked"]
+[connection signal="card_held" from="HandArea" to="." method="_on_RivalHandArea_card_held"]

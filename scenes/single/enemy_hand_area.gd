@@ -2,7 +2,7 @@
 
 extends I_HandArea
 
-const ClickableControl = preload("res://scenes/match/hand/clickable_control.tscn")
+const ClickableControl = preload("res://scenes/match/field/hand/clickable_control.tscn")
 
 
 const control_width := 144

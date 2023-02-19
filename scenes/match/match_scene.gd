@@ -23,8 +23,6 @@ onready var exit_button : Button = $"%SettingsScene".get_node("ExitButton")
 
 var game_server : IGameServer = null
 
-var my_field : I_PlayerField
-var rival_field : I_PlayerField
 
 var deck_regulation : RegulationData.DeckRegulation
 var match_regulation : RegulationData.MatchRegulation
@@ -46,14 +44,14 @@ func _process(_delta):
 	if not $LimitTimer.is_stopped():
 		var elapsed =  $LimitTimer.wait_time - $LimitTimer.time_left
 		if elapsed < delay_time:
-			my_field._set_time($LimitTimer.wait_time - delay_time,delay_time - elapsed)
+			myself.player_field._set_time($LimitTimer.wait_time - delay_time,delay_time - elapsed)
 		else:
-			my_field._set_time($LimitTimer.time_left - delay_time,-1)
+			myself.player_field._set_time($LimitTimer.time_left - delay_time,-1)
 
 func is_valid() -> bool:
 	return game_server != null
 
-func initialize(server : IGameServer,my_field_ : I_PlayerField,rival_field_ : I_PlayerField):
+func initialize(server : IGameServer,my_field : I_PlayerField,rival_field : I_PlayerField):
 	game_server = server
 	game_server.connect("recieved_first_data",self,"_on_GameServer_recieved_first_data")
 	game_server.connect("recieved_combat_result",self,"_on_GameServer_recieved_combat_result")
@@ -61,8 +59,7 @@ func initialize(server : IGameServer,my_field_ : I_PlayerField,rival_field_ : I_
 	game_server.connect("recieved_end",self,"_on_GameServer_recieved_end")
 	game_server.connect("recieved_complete_board",self,"_on_GameServer_recieved_complete_board")
 
-	my_field = my_field_
-	my_field.connect("card_clicked",self,"_on_MyHandArea_car_clicked")
+	my_field.connect("card_clicked",self,"_on_MyHandArea_card_clicked")
 	my_field.connect("card_held",self,"_on_MyHandArea_card_held")
 	my_field.connect("card_decided",self,"_on_MyHandArea_card_decided")
 	my_field.connect("card_order_changed",self,"_on_MyHandArea_card_order_changed")
@@ -72,7 +69,6 @@ func initialize(server : IGameServer,my_field_ : I_PlayerField,rival_field_ : I_
 	my_field.connect("played_held",self,"_on_MyPlayed_clicked")
 	my_field.connect("discard_clicked",self,"_on_MyDiscard_clicked")
 	my_field.connect("discard_held",self,"_on_MyDiscard_clicked")
-	rival_field = rival_field_
 	rival_field.connect("card_clicked",self,"_on_RivalHandArea_card_clicked")
 	rival_field.connect("card_held",self,"_on_RivalHandArea_card_held")
 	rival_field.connect("stock_clicked",self,"_on_RivalStock_clicked")
@@ -117,7 +113,7 @@ func send_ready():
 
 func decide_card(index:int):
 	$LimitTimer.stop()
-	my_field._disable_play(true)
+	myself.player_field._disable_play(true)
 	if phase == IGameServer.Phase.COMBAT:
 		game_server._send_combat_select(round_count,index,myself.hand)
 	elif phase == IGameServer.Phase.RECOVERY:
@@ -132,28 +128,28 @@ func terminalize():
 		game_server.disconnect("recieved_end",self,"_on_GameServer_recieved_end")
 		game_server.disconnect("recieved_complete_board",self,"_on_GameServer_recieved_complete_board")
 		game_server = null
-	if my_field:
-		my_field.disconnect("card_clicked",self,"_on_MyHandArea_car_clicked")
-		my_field.disconnect("card_held",self,"_on_MyHandArea_card_held")
-		my_field.disconnect("card_decided",self,"_on_MyHandArea_card_decided")
-		my_field.disconnect("card_order_changed",self,"_on_MyHandArea_card_order_changed")
-		my_field.disconnect("stock_clicked",self,"_on_MyStock_clicked")
-		my_field.disconnect("stock_held",self,"_on_MyStock_held")
-		my_field.disconnect("played_clicked",self,"_on_MyPlayed_clicked")
-		my_field.disconnect("played_held",self,"_on_MyPlayed_clicked")
-		my_field.disconnect("discard_clicked",self,"_on_MyDiscard_clicked")
-		my_field.disconnect("discard_held",self,"_on_MyDiscard_clicked")
-		my_field = null
-	if rival_field:
-		rival_field.disconnect("card_clicked",self,"_on_RivalHandArea_card_clicked")
-		rival_field.disconnect("card_held",self,"_on_RivalHandArea_card_held")
-		rival_field.disconnect("stock_clicked",self,"_on_RivalStock_clicked")
-		rival_field.disconnect("stock_held",self,"_on_RivalStock_held")
-		rival_field.disconnect("played_clicked",self,"_on_RivalPlayed_clicked")
-		rival_field.disconnect("played_held",self,"_on_RivalPlayed_clicked")
-		rival_field.disconnect("discard_clicked",self,"_on_RivalDiscard_clicked")
-		rival_field.disconnect("discard_held",self,"_on_RivalDiscard_clicked")
-		rival_field = null
+	if myself:
+		myself.player_field.disconnect("card_clicked",self,"_on_MyHandArea_car_clicked")
+		myself.player_field.disconnect("card_held",self,"_on_MyHandArea_card_held")
+		myself.player_field.disconnect("card_decided",self,"_on_MyHandArea_card_decided")
+		myself.player_field.disconnect("card_order_changed",self,"_on_MyHandArea_card_order_changed")
+		myself.player_field.disconnect("stock_clicked",self,"_on_MyStock_clicked")
+		myself.player_field.disconnect("stock_held",self,"_on_MyStock_held")
+		myself.player_field.disconnect("played_clicked",self,"_on_MyPlayed_clicked")
+		myself.player_field.disconnect("played_held",self,"_on_MyPlayed_clicked")
+		myself.player_field.disconnect("discard_clicked",self,"_on_MyDiscard_clicked")
+		myself.player_field.disconnect("discard_held",self,"_on_MyDiscard_clicked")
+		myself = null
+	if rival:
+		rival.player_field.disconnect("card_clicked",self,"_on_RivalHandArea_card_clicked")
+		rival.player_field.disconnect("card_held",self,"_on_RivalHandArea_card_held")
+		rival.player_field.disconnect("stock_clicked",self,"_on_RivalStock_clicked")
+		rival.player_field.disconnect("stock_held",self,"_on_RivalStock_held")
+		rival.player_field.disconnect("played_clicked",self,"_on_RivalPlayed_clicked")
+		rival.player_field.disconnect("played_held",self,"_on_RivalPlayed_clicked")
+		rival.player_field.disconnect("discard_clicked",self,"_on_RivalDiscard_clicked")
+		rival.player_field.disconnect("discard_held",self,"_on_RivalDiscard_clicked")
+		rival = null
 
 
 func restore_overlap():
@@ -171,11 +167,11 @@ func _on_GameServer_recieved_end(msg:String)->void:
 func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
 	if data.myself.time >= 0:
 		delay_time = match_regulation.combat_time + 1
-		my_field._set_time(data.myself.time,delay_time)
+		myself.player_field._set_time(data.myself.time,delay_time)
 		$LimitTimer.start(data.myself.time + delay_time)
 	else:
-		my_field._set_time(-1,-1)
-	rival_field._set_time(data.rival.time,-1)
+		myself.player_field._set_time(-1,-1)
+	rival.player_field._set_time(data.rival.time,-1)
 	
 	performing = true
 	myself.standby(data.myself.life,Array(data.myself.hand))
@@ -183,7 +179,7 @@ func _on_GameServer_recieved_first_data(data:IGameServer.FirstData):
 	phase = IGameServer.Phase.COMBAT
 	round_count = 1
 	yield(get_tree().create_timer(MatchPlayer.CARD_MOVE_DURATION), "timeout")
-	my_field._disable_play(false)
+	myself.player_field._disable_play(false)
 	performing = false
 	emit_signal("performed")
 
@@ -199,9 +195,9 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 			delay_time = match_regulation.recovery_time + result_delay
 			$LimitTimer.start(data.myself.time + delay_time)
 		else:
-			my_field._set_time(data.myself.time,delay_time)
+			myself.player_field._set_time(data.myself.time,delay_time)
 	if data.rival.time >= 0:
-		rival_field._set_time(data.rival.time,-1)
+		rival.player_field._set_time(data.rival.time,-1)
 	performing = true
 	var tween := create_tween()
 	myself.play(data.myself.select,data.myself.hand,data.myself.damage,
@@ -212,8 +208,8 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 
 	yield(combat_director.perform(data.next_phase == IGameServer.Phase.GAME_END),"completed")
 
-	my_field._set_states(myself.states)
-	rival_field._set_states(rival.states)
+	myself.player_field._set_states(myself.states)
+	rival.player_field._set_states(rival.states)
 	
 	if data.next_phase == IGameServer.Phase.GAME_END:
 		$LimitTimer.stop()
@@ -233,8 +229,8 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 		$TopUILayer/SettingButton.disabled = true
 		return
 
-	myself.play_end()
-	rival.play_end()
+	myself.play_end(data.myself.life)
+	rival.play_end(data.rival.life)
 	
 	round_count = data.round_count
 	phase = data.next_phase
@@ -248,7 +244,7 @@ func _on_GameServer_recieved_combat_result(data:IGameServer.UpdateData):
 	if (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0):
 		game_server._send_recovery_select(data.round_count,-1)
 	else:
-		my_field._disable_play(false)
+		myself.player_field._disable_play(false)
 	performing = false
 	emit_signal("performed")
 
@@ -263,9 +259,9 @@ func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
 			delay_time = match_regulation.recovery_time + RECOVER_RESULT_DELAY
 			$LimitTimer.start(data.myself.time + delay_time)
 		else:
-			my_field._set_time(data.myself.time,delay_time)
+			myself.player_field._set_time(data.myself.time,delay_time)
 	if data.rival.time >= 0:
-		rival_field._set_time(data.rival.time,-1)
+		rival.player_field._set_time(data.rival.time,-1)
 			
 	performing = true
 	myself.recover(data.myself.select,data.myself.hand,data.myself.draw,data.myself.life)
@@ -282,7 +278,7 @@ func _on_GameServer_recieved_recovery_result(data:IGameServer.UpdateData):
 	if (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0):
 		game_server._send_recovery_select(data.round_count,-1)
 	else:
-		my_field._disable_play(false)
+		myself.player_field._disable_play(false)
 	performing = false
 	emit_signal("performed")
 
@@ -314,10 +310,10 @@ func _on_GameServer_recieved_complete_board(data:IGameServer.CompleteData)->void
 	round_count = data.round_count
 	phase = data.next_phase
 	if (data.next_phase == IGameServer.Phase.RECOVERY and data.myself.damage == 0):
-		my_field._disable_play(true)
+		myself.player_field._disable_play(true)
 		game_server._send_recovery_select(data.round_count,-1)
 	else:
-		my_field._disable_play(false)
+		myself.player_field._disable_play(false)
 	performing = false
 	emit_signal("performed")
 

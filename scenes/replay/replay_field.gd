@@ -51,6 +51,9 @@ func _set_damage(damage : int):
 func _set_life(life : int):
 	$Life.text = str(life)
 	
+func _set_stock(stock : int):
+	$StockCount.text = str(stock)
+	
 func _set_time(time : float,delay : float):
 	if time < 0:
 		$Timer.text = "∞"

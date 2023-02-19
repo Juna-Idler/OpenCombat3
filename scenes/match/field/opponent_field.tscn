@@ -93,9 +93,19 @@ script = ExtResource( 2 )
 
 [node name="Life" type="Label" parent="."]
 margin_left = 16.0
-margin_top = 168.0
+margin_top = 208.0
 margin_right = 160.0
-margin_bottom = 228.0
+margin_bottom = 268.0
+text = "27"
+align = 1
+valign = 1
+max_lines_visible = 1
+
+[node name="StockCount" type="Label" parent="."]
+margin_left = 16.0
+margin_top = 144.0
+margin_right = 160.0
+margin_bottom = 204.0
 text = "27"
 align = 1
 valign = 1

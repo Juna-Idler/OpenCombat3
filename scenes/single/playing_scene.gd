@@ -79,7 +79,7 @@ func _on_ButtonStart_pressed():
 
 	
 	$MatchScene.initialize(single_player_server,
-			$MatchScene/UILayer/MyField/MyHandArea,$MatchScene/UILayer/RivalField/RivalHandArea)
+			$MatchScene/TopUILayer/PlayerField,$MatchScene/TopUILayer/OpponentField)
 	$MatchScene.send_ready()
 
 	Bgm.stream = load("res://sound/魔王魂  ファンタジー11.ogg")

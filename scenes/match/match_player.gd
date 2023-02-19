@@ -77,6 +77,7 @@ func _init(name : String,
 func standby(l: int,start_hand : Array):
 	life = l
 	player_field._set_damage(0)
+	player_field._set_life(life)
 	draw = start_hand
 	draw_all_card()
 
@@ -108,7 +109,10 @@ func play(hand_select : int,new_hand : Array,d : int,draw_indexes : Array,s_log 
 	tween.tween_property(playing_card,"global_position",player_field._get_playing_pos(),0.5)\
 			.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 
-func play_end():
+
+func play_end(new_life : int):
+	life = new_life
+	player_field._set_life(life)
 	played.append(playing_card_id)
 	playing_card.z_index = played.size() + 0
 	playing_card.location = MatchCard.Location.PLAYED
@@ -120,7 +124,6 @@ func play_end():
 	tween.tween_property(playing_card,"rotation",PI/2,0.5)
 	tween.tween_callback(self,"_set_played_visible")
 	draw_all_card()
-	player_field._set_life(life)
 	player_field._set_damage(damage)
 
 	playing_card_id = -1
@@ -134,12 +137,12 @@ func _set_played_visible():
 func recover(hand_select : int,new_hand : Array,draw_indexes : Array,new_life : int):
 	hand = new_hand
 	draw = draw_indexes
-	life = new_life
 	if hand_select >= 0:
 		var select_id = hand[hand_select]
 		var recovery_card := deck_list[select_id] as MatchCard
 		discard_card(hand_select,CARD_MOVE_DURATION)
 		damage -= recovery_card.front.data.level
+	life = new_life
 	player_field._set_damage(damage)
 	player_field._set_life(life)
 	draw_all_card()
@@ -147,7 +150,7 @@ func recover(hand_select : int,new_hand : Array,draw_indexes : Array,new_life : 
 func draw_card():
 	if not draw.empty():
 		stock_count -= 1
-		player_field._set_life(life)
+		player_field._set_stock(stock_count)
 		var c = draw.pop_front()
 		hand.append(c)
 	set_hand(hand)
@@ -155,7 +158,7 @@ func draw_card():
 func draw_all_card():
 	if not draw.empty():
 		stock_count -= draw.size()
-		player_field._set_life(life)
+		player_field._set_stock(stock_count)
 		hand.append_array(draw)
 		draw.clear()
 	set_hand(hand)
@@ -166,6 +169,7 @@ func discard_card(hand_index : int,duration : float):
 	discard.append(select_id)
 	var card := deck_list[select_id] as MatchCard
 	life -= card.get_card_data().level
+	player_field._set_life(life)
 	card.z_index = discard.size() + 200
 	card.location = MatchCard.Location.DISCARD
 	var tween := card.create_tween()
@@ -178,6 +182,7 @@ func send_to_deck(hand_index : int,duration : float):
 	var id = hand[hand_index]
 	hand.remove(hand_index)
 	stock_count += 1
+	player_field._set_stock(stock_count)
 	var card := deck_list[id] as MatchCard
 	card.location = MatchCard.Location.STOCK
 	var tween := card.create_tween()
@@ -285,6 +290,7 @@ func reset_board(h_card:PoolIntArray,p_card:PoolIntArray,d_card:PoolIntArray,
 					tween.tween_callback(c,"hide")
 
 	player_field._set_life(life)
+	player_field._set_stock(stock_count)
 	player_field._set_damage(damage)
 	player_field._set_states(states)
 

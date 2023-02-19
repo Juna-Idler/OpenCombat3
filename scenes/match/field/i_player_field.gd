@@ -52,7 +52,10 @@ func _set_damage(_damage : int):
 
 func _set_life(_life : int):
 	pass
-	
+
+func _set_stock(_stock : int):
+	pass
+
 func _set_time(_time : float,_delay : float):
 	pass
 
