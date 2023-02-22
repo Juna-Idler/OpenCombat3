@@ -1,7 +1,7 @@
 extends Control
 
 
-const StateLine := preload("res://scenes/match/field/effect/state_line.tscn")
+const StateLine := preload("res://scenes/match/field/states/state_line.tscn")
 
 onready var container := $Button/ScrollContainer/VBoxContainer
 

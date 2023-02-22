@@ -3,10 +3,10 @@
 [ext_resource path="res://scenes/match/match_scene.gd" type="Script" id=1]
 [ext_resource path="res://scenes/settings/settings scene.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/match/combat/combat_power_balance.tscn" type="PackedScene" id=4]
-[ext_resource path="res://scenes/match/card_list.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/match/info/card_list.tscn" type="PackedScene" id=5]
 [ext_resource path="res://camera2d.tscn" type="PackedScene" id=6]
 [ext_resource path="res://scenes/card/large_card_view.tscn" type="PackedScene" id=8]
-[ext_resource path="res://scenes/match/field/effect/states_detail_view.tscn" type="PackedScene" id=9]
+[ext_resource path="res://scenes/match/info/states_detail_view.tscn" type="PackedScene" id=9]
 [ext_resource path="res://scenes/match/combat/combat_overlap.tscn" type="PackedScene" id=10]
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=12]
 
@@ -45,7 +45,6 @@ custom_fonts/font = SubResource( 16 )
 text = "SETTINGS"
 
 [node name="StatesDetailView" parent="TopUILayer" instance=ExtResource( 9 )]
-visible = false
 
 [node name="CardList" parent="TopUILayer" instance=ExtResource( 5 )]
 unique_name_in_owner = true

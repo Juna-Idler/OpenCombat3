@@ -69,6 +69,7 @@ func initialize(server : IGameServer,my_field : I_PlayerField,rival_field : I_Pl
 	my_field.connect("played_held",self,"_on_MyPlayed_clicked")
 	my_field.connect("discard_clicked",self,"_on_MyDiscard_clicked")
 	my_field.connect("discard_held",self,"_on_MyDiscard_clicked")
+	my_field.connect("states_clicked",self,"_on_MyStatesPanel_pressed")
 	rival_field.connect("card_clicked",self,"_on_RivalHandArea_card_clicked")
 	rival_field.connect("card_held",self,"_on_RivalHandArea_card_held")
 	rival_field.connect("stock_clicked",self,"_on_RivalStock_clicked")
@@ -77,6 +78,7 @@ func initialize(server : IGameServer,my_field : I_PlayerField,rival_field : I_Pl
 	rival_field.connect("played_held",self,"_on_RivalPlayed_clicked")
 	rival_field.connect("discard_clicked",self,"_on_RivalDiscard_clicked")
 	rival_field.connect("discard_held",self,"_on_RivalDiscard_clicked")
+	rival_field.connect("states_clicked",self,"_on_RivalStatesPanel_pressed")
 
 	
 	for c in $CardLayer.get_children():
@@ -139,6 +141,7 @@ func terminalize():
 		myself.player_field.disconnect("played_held",self,"_on_MyPlayed_clicked")
 		myself.player_field.disconnect("discard_clicked",self,"_on_MyDiscard_clicked")
 		myself.player_field.disconnect("discard_held",self,"_on_MyDiscard_clicked")
+		myself.player_field.disconnect("states_clicked",self,"_on_MyStatesPanel_pressed")
 		myself = null
 	if rival:
 		rival.player_field.disconnect("card_clicked",self,"_on_RivalHandArea_card_clicked")
@@ -149,6 +152,7 @@ func terminalize():
 		rival.player_field.disconnect("played_held",self,"_on_RivalPlayed_clicked")
 		rival.player_field.disconnect("discard_clicked",self,"_on_RivalDiscard_clicked")
 		rival.player_field.disconnect("discard_held",self,"_on_RivalDiscard_clicked")
+		rival.player_field.disconnect("states_clicked",self,"_on_RivalStatesPanel_pressed")
 		rival = null
 
 

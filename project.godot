@@ -110,6 +110,11 @@ _global_script_classes=[ {
 "path": "res://scripts/game_data/deck_list.gd"
 }, {
 "base": "Reference",
+"class": "EnemyData",
+"language": "GDScript",
+"path": "res://scenes/single/enemy_data.gd"
+}, {
+"base": "Reference",
 "class": "GameProcessor",
 "language": "GDScript",
 "path": "res://scripts/game_mechanics/processor.gd"
@@ -182,12 +187,12 @@ _global_script_classes=[ {
 "base": "",
 "class": "MatchCardSkillFactory",
 "language": "GDScript",
-"path": "res://scenes/match/field/effect/skill_factory.gd"
+"path": "res://scenes/match/effect/skill_factory.gd"
 }, {
 "base": "Reference",
 "class": "MatchEffect",
 "language": "GDScript",
-"path": "res://scenes/match/field/effect/effect.gd"
+"path": "res://scenes/match/effect/effect.gd"
 }, {
 "base": "Reference",
 "class": "MatchLog",
@@ -217,12 +222,12 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "MatchSkillPerformer",
 "language": "GDScript",
-"path": "res://scenes/match/field/effect/skill_performer.gd"
+"path": "res://scenes/match/effect/skill_performer.gd"
 }, {
 "base": "Reference",
 "class": "MatchStatePerformer",
 "language": "GDScript",
-"path": "res://scenes/match/field/effect/state_performer.gd"
+"path": "res://scenes/match/effect/state_performer.gd"
 }, {
 "base": "Reference",
 "class": "MechanicsData",
@@ -322,7 +327,7 @@ _global_script_classes=[ {
 "base": "",
 "class": "StateDeserializer",
 "language": "GDScript",
-"path": "res://scenes/match/field/effect/state_deserializer.gd"
+"path": "res://scenes/match/effect/state_deserializer.gd"
 }, {
 "base": "Reference",
 "class": "StateProcessor",
@@ -332,7 +337,7 @@ _global_script_classes=[ {
 "base": "Control",
 "class": "StatesPanel",
 "language": "GDScript",
-"path": "res://scenes/match/field/effect/states_panel.gd"
+"path": "res://scenes/match/field/states/states_panel.gd"
 }, {
 "base": "",
 "class": "TitleScene",
@@ -370,6 +375,7 @@ _global_script_class_icons={
 "DeckBanner": "",
 "DeckData": "",
 "DeckList": "",
+"EnemyData": "",
 "GameProcessor": "",
 "GameSettings": "",
 "GitAPI": "",

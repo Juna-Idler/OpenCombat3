@@ -3,7 +3,7 @@
 [ext_resource path="res://fonts/ShipporiAntique-Medium.otf" type="DynamicFontData" id=1]
 [ext_resource path="res://scenes/ui/clickable_control.gd" type="Script" id=2]
 [ext_resource path="res://scenes/match/field/hand/rival_hand_area.gd" type="Script" id=3]
-[ext_resource path="res://scenes/match/field/effect/states_panel.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/match/field/states/states_panel.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scenes/match/field/base_player_field.gd" type="Script" id=5]
 
 [sub_resource type="DynamicFont" id=9]
@@ -154,6 +154,7 @@ margin_left = -216.0
 margin_top = -104.0
 margin_right = -16.0
 margin_bottom = 96.0
+opponent_layout = true
 
 [node name="HandArea" type="ReferenceRect" parent="."]
 anchor_left = 0.5
