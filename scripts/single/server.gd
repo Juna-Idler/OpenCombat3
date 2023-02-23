@@ -11,15 +11,16 @@ var _enemy_name:String
 func _init():
 	pass
 
-func initialize(name:String,deck:Array,hand_count : int,
-		enemy_name,enemy_deck:Array,enemy_hand : int,enemy_hp : int,
-		card_catalog : CardCatalog):
+func initialize(name:String,deck:Array,hand_count : int,card_catalog : I_CardCatalog,
+		enemy_name : String,enemy_deck:Array,enemy_hand : int,enemy_hp : int,enemy_catalog : I_CardCatalog
+		):
+#		enemy_data : EnemyData):
 	_player_name = name;
 	_enemy_name = enemy_name
 
 	
 	var p1 := OfflinePlayer.new(deck,hand_count,card_catalog,true)
-	var p2 := SinglePlayEnemy.new(enemy_deck,enemy_hand,enemy_hp,card_catalog,true)
+	var p2 := SinglePlayEnemy.new(enemy_deck,enemy_hand,enemy_hp,enemy_catalog,true)
 # warning-ignore:return_value_discarded
 	_processor.standby(p1,p2)
 

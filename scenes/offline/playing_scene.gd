@@ -138,7 +138,10 @@ func _on_ButtonStart_pressed():
 	else:
 		match_logger = null
 	
+	var skill_factory := MatchCardSkillFactory.new()
 	$MatchScene.initialize(match_logger as IGameServer if match_logger else offline_server as IGameServer,
+			Global.card_catalog,Global.card_catalog,
+			skill_factory,skill_factory,
 			$MatchScene/TopUILayer/PlayerField,$MatchScene/TopUILayer/OpponentField)
 	$MatchScene.send_ready()
 

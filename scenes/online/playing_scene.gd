@@ -124,7 +124,10 @@ func _on_Server_matched():
 	else:
 		match_logger = null
 	
+	var skill_factory := MatchCardSkillFactory.new()
 	$MatchScene.initialize(match_logger if match_logger else server as IGameServer,
+			Global.card_catalog,Global.card_catalog,
+			skill_factory,skill_factory,
 			$MatchScene/TopUILayer/PlayerField,$MatchScene/TopUILayer/OpponentField)
 
 	Bgm.stream = load("res://sound/魔王魂  ファンタジー11.ogg")

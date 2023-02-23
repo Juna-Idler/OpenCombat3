@@ -51,7 +51,10 @@ func _process(_delta):
 func is_valid() -> bool:
 	return game_server != null
 
-func initialize(server : IGameServer,my_field : I_PlayerField,rival_field : I_PlayerField):
+func initialize(server : IGameServer,
+		my_catalog : I_CardCatalog,rival_catalog : I_CardCatalog,
+		my_skill : MatchEffect.ISkillFactory,rival_skill : MatchEffect.ISkillFactory,
+		my_field : I_PlayerField,rival_field : I_PlayerField):
 	game_server = server
 	game_server.connect("recieved_first_data",self,"_on_GameServer_recieved_first_data")
 	game_server.connect("recieved_combat_result",self,"_on_GameServer_recieved_combat_result")
@@ -85,16 +88,15 @@ func initialize(server : IGameServer,my_field : I_PlayerField,rival_field : I_Pl
 		$CardLayer.remove_child(c)
 		c.queue_free()
 	
-	var skill_factory = MatchCardSkillFactory.new()
 	var pd := game_server._get_primary_data()
 	deck_regulation = pd.deck_regulation
 	match_regulation = pd.match_regulation
-	myself = MatchPlayer.new(pd.my_name,
-			pd.my_deck_list,skill_factory,false,$CardLayer,my_field,
+	myself = MatchPlayer.new(pd.my_name,pd.my_deck_list,
+			my_catalog,my_skill,false,$CardLayer,my_field,
 			combat_overlap.p1_avatar,
 			CombatPowerBalance.Interface.new($BGLayer/PowerBalance,false))
-	rival = MatchPlayer.new(pd.rival_name,
-			pd.rival_deck_list,skill_factory,true,$CardLayer,rival_field,
+	rival = MatchPlayer.new(pd.rival_name,pd.rival_deck_list,
+			rival_catalog,rival_skill,true,$CardLayer,rival_field,
 			combat_overlap.p2_avatar,
 			CombatPowerBalance.Interface.new($BGLayer/PowerBalance,true))
 

@@ -77,8 +77,10 @@ func _on_ButtonStart_pressed():
 			"Enemy",cpu_deck,4,30,
 			Global.card_catalog)
 
-	
+	var skill_factory := MatchCardSkillFactory.new()
 	$MatchScene.initialize(single_player_server,
+			Global.card_catalog,Global.card_catalog,
+			skill_factory,skill_factory,
 			$MatchScene/TopUILayer/PlayerField,$MatchScene/TopUILayer/OpponentField)
 	$MatchScene.send_ready()
 

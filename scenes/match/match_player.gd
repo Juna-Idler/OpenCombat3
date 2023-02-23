@@ -47,6 +47,7 @@ func get_link_color() -> int:
 
 func _init(name : String,
 		dl:Array,
+		catalog : I_CardCatalog,
 		skill_factory : MatchEffect.ISkillFactory,
 		reverse : bool,
 		card_layer:Node,
@@ -62,7 +63,7 @@ func _init(name : String,
 	deck_list = []
 	for i in dl.size():
 		var c := CardScene.instance().initialize_card(i,
-				Global.card_catalog._get_card_data(dl[i]),skill_factory,reverse) as MatchCard
+				catalog._get_card_data(dl[i]),skill_factory,reverse) as MatchCard
 		deck_list.append(c)
 		c.position = player_field._get_stock_pos()
 		c.visible = ALWAYS_CARD_VISIBLE
