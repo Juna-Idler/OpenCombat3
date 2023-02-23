@@ -3,9 +3,9 @@
 [sub_resource type="GDScript" id=1]
 script/source = "# warning-ignore-all:return_value_discarded
 
-extends I_PlayableHandArea
+extends I_HandArea
 
-const ClickableControl = preload(\"res://scenes/match/hand/clickable_control.tscn\")
+const ClickableControl = preload(\"res://scenes/match/field/hand/clickable_control.tscn\")
 
 
 const control_width := 144

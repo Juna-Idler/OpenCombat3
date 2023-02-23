@@ -45,6 +45,7 @@ custom_fonts/font = SubResource( 16 )
 text = "SETTINGS"
 
 [node name="StatesDetailView" parent="TopUILayer" instance=ExtResource( 9 )]
+visible = false
 
 [node name="CardList" parent="TopUILayer" instance=ExtResource( 5 )]
 unique_name_in_owner = true

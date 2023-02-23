@@ -146,11 +146,13 @@ func _on_ButtonPause_toggled(button_pressed):
 	if button_pressed:
 		if replay_mode == ReplayMode.AUTO:
 			$Timer.stop()
+			$MatchScene/LimitTimer.stop()
 		replay_mode = ReplayMode.STEP
 		$CanvasLayer/Panel/TabContainer.current_tab = 1
 	else:
 		replay_mode = ReplayMode.NO_WAIT if $"%ButtonNoWait".pressed else ReplayMode.AUTO
 		$CanvasLayer/Panel/TabContainer.current_tab = 0
+		$MatchScene/LimitTimer.start()
 
 	if not $MatchScene.performing:
 		start_auto_replay()
@@ -166,12 +168,14 @@ func _on_ButtonStep_pressed():
 	$TimerPerformingCounter.start()
 #	time_start_perform = Time.get_ticks_msec()
 	replay_server.step_forward()
+	$MatchScene/LimitTimer.stop()
 
 
 func _on_ButtonStepBack_pressed():
 	if $MatchScene.performing:
 		return
 	replay_server.step_backward()
+	$MatchScene/LimitTimer.stop()
 
 
 func start_auto_replay():
@@ -193,7 +197,9 @@ func start_auto_replay():
 			$TimerPerformingCounter.start()
 #			time_start_perform = Time.get_ticks_msec()
 			replay_server.step_forward()
-	
+		ReplayMode.STEP:
+			$MatchScene/LimitTimer.stop()
+
 
 
 
