@@ -18,8 +18,7 @@ func initialize(skill : CatalogData.CardSkill,width : int):
 	for i in skill.parameter:
 		var param_text = i.name
 		skill_text = skill_text.replace("{%s}" % param_text,ATTENTION_BBC % param_text)
-	for i in skill.data.states:
-		var state := Global.card_catalog.get_state_data(i)
+	for state in skill.data.states:
 		skill_text = skill_text.replace("{%s}" % state.name,"[url]%s[/url]" % state.name)
 	
 	var skill_label = $SkillLabel
@@ -45,8 +44,7 @@ func initialize(skill : CatalogData.CardSkill,width : int):
 	if not skill.data.states.empty():
 		state_label.rect_min_size.x = width - 32
 		var state_text : PoolStringArray = []
-		for i in skill.data.states:
-			var state := Global.card_catalog.get_state_data(i)
+		for state in skill.data.states:
 			var param := "" if state.parameter.empty() else\
 					 BRACKETS_PARAMETER_BBC % state.parameter.join(",")
 			state_text.append(state.name + param + " : " +

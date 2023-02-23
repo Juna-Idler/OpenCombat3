@@ -82,10 +82,10 @@ class SkillData:
 	var ruby_name : String
 	var param_type : PoolIntArray # of ParamType
 	var parameter : PoolStringArray
-	var states : PoolIntArray # of StateData id
+	var states : Array # of StateData
 	var text : String
 	
-	func _init(i:int,n:String,sn:String,rn:String,pt:String,p:String,st:String,t:String):
+	func _init(i:int,n:String,sn:String,rn:String,pt:String,p:String,st:Array,t:String):
 		id = i
 		name = n
 		short_name = sn
@@ -96,11 +96,7 @@ class SkillData:
 			parameter = []
 		else:
 			parameter = p.split(",")
-		var states_strings := st.split(",")
-		if states_strings.size() == 1 and states_strings[0].empty():
-			states = []
-		else:
-			states = Array(states_strings)
+		states = st
 		text = t
 
 class SkillParameter:

@@ -188,3 +188,4 @@ margin_bottom = 352.0
 script = ExtResource( 5 )
 
 [node name="Timer" type="Timer" parent="HandArea"]
+wait_time = 0.5

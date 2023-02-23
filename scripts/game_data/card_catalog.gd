@@ -163,7 +163,13 @@ func _load_skill_data():
 		var tsv = s.split("\t")
 		var id := int(tsv[0])
 		var text = tsv[7].replace("\\n","\n")
-		_skill_catalog[id] = CatalogData.SkillData.new(id,tsv[1],tsv[2],tsv[3],tsv[4],tsv[5],tsv[6],text)
+
+		var states_strings : PoolStringArray = tsv[6].split(",")
+		var states : Array = []
+		if not (states_strings.size() == 1 and states_strings[0].empty()):
+			for i in states_strings:
+				states.append(_state_catalog[int(i)])
+		_skill_catalog[id] = CatalogData.SkillData.new(id,tsv[1],tsv[2],tsv[3],tsv[4],tsv[5],states,text)
 
 	if translation.find("ja") != 0:
 		var trans_res = load("res://card_data/named_skill_" + translation + ".txt")
