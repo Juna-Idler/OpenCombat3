@@ -6,9 +6,8 @@ func _init():
 
 
 class ReinForce extends MatchEffect.BasicState:
-	const ID = 1
 	var stats : CatalogData.Stats
-	func _init(data : Array,container : Array).(container):
+	func _init(state : CatalogData.StateData,data : Array,container : Array).(state,container):
 		stats = CatalogData.Stats.new(data[0],data[1],data[2])
 	
 	func _before(_priority : int ,myself : MatchPlayer,_rival : MatchPlayer,_data) -> void:
@@ -21,12 +20,11 @@ class ReinForce extends MatchEffect.BasicState:
 		remove_self()
 
 	func _get_caption() -> String:
-		return Global.card_catalog.get_state_data(ID).name + "(" + Global.card_catalog.stats_names.get_effect_string(stats) + ")"
+		return _state.name + "(" + Global.card_catalog.stats_names.get_effect_string(stats) + ")"
 
 	func _get_short_caption() -> String:
-		return Global.card_catalog.get_state_data(ID).name + "(" + Global.card_catalog.stats_names.get_short_effect_string(stats) + ")"
+		return _state.name + "(" + Global.card_catalog.stats_names.get_short_effect_string(stats) + ")"
 
 	func _get_description() -> String:
-		var state := Global.card_catalog.get_state_data(ID)
-		var param := state.parameter[0]
-		return state.text.replace("{" + param + "}",Global.card_catalog.stats_names.get_effect_string(stats))
+		var param := _state.parameter[0]
+		return _state.text.replace("{" + param + "}",Global.card_catalog.stats_names.get_effect_string(stats))

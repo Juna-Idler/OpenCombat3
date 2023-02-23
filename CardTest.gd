@@ -4,7 +4,7 @@ extends Node
 const MatchCard := preload("res://scenes/card/card.tscn")
 
 func _ready():
-	var card = Global.card_catalog.get_card_data(4)
+	var card = Global.card_catalog._get_card_data(4)
 	$CardFront.initialize_card(card)
 
 	$CardFront2.initialize_card(card)

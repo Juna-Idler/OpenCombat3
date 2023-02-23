@@ -67,7 +67,7 @@ func set_opponent_layout(value):
 		
 
 func initialize(cd : CatalogData.CardData,vs_color : int,link_color : int,active_states : Array):
-	$Image/Image/Picture.texture = load("res://card_images/"+ cd.image +".png")
+	$Image/Image/Picture.texture = load(cd.image)
 	$Image/Image/Frame.self_modulate = CatalogData.RGB[cd.color]
 	
 	attack_type = AttackType.SHOOTING if cd.hit > 0 else AttackType.IMMOBILE

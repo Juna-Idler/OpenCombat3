@@ -59,7 +59,7 @@ func set_deck(deck : Array,name : String,draggable = true):
 		c.connect("mouse_exited",self,"_on_DeckItem_mouse_exited",[c])
 		c.rect_position = Vector2(x,y)
 		deck_container.add_child(c)
-		var cd = Global.card_catalog.get_card_data(deck[i])
+		var cd = Global.card_catalog._get_card_data(deck[i])
 		c.get_node("CardFront").initialize_card(cd)
 
 

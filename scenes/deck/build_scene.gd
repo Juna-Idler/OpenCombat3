@@ -103,7 +103,7 @@ func set_deck(deck : Array):
 		c.connect("held",self,"_on_DeckItem_held")
 		c._timer = $Timer
 		deck_container.add_child(c)
-		var cd := Global.card_catalog.get_card_data(deck[i])
+		var cd := Global.card_catalog._get_card_data(deck[i])
 		c.get_node("CardFront").initialize_card(cd)
 		deck_cost += cd.level
 	deck_container.layout()
@@ -131,7 +131,7 @@ func add_card_index(id : int,index : int, g_position : Vector2,rate : float):
 	deck_container.add_child(c)
 	deck_container.move_child(c,index)
 	deck_container.layout_tween()
-	var cd := Global.card_catalog.get_card_data(id)
+	var cd := Global.card_catalog._get_card_data(id)
 	c.get_node("CardFront").initialize_card(cd)
 	deck_cards_count += 1
 	deck_cost += cd.level

@@ -34,7 +34,7 @@ func initialize_card(cd : CatalogData.CardData,rotate := false) -> CardFront:
 	$SpriteLevel.frame = data.level
 	$Name.text = data.name
 #	ResourceLoader.load_interactive
-	var texture := load("res://card_images/"+ data.image +".png")
+	var texture := load(data.image)
 	$Picture.texture = texture if texture else null
 	$Frame.self_modulate = CatalogData.RGB[data.color]
 	$Power.self_modulate = CatalogData.RGB[data.color].darkened(0.5)

@@ -31,8 +31,10 @@ class IState extends IEffect:
 		return ""
 
 class BasicState extends IState:
+	var _state : CatalogData.StateData
 	var _container : Array
-	func _init(container : Array):
+	func _init(state : CatalogData.StateData,container : Array):
+		_state = state
 		_container = container
 		_container.append(self)
 

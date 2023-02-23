@@ -57,7 +57,7 @@ func remove_card(dbcard):
 func reset_visual():
 	$Name.text = deck_data.name
 	
-	var face := Global.card_catalog.get_deck_face(deck_data)
+	var face := deck_data.get_deck_face(Global.card_catalog)
 
 	$Information.bbcode_text = (
 		tr("CARDS:%s COST:%s") % [face.cards_count,face.total_cost] + "\n" +
@@ -69,7 +69,7 @@ func reset_visual():
 		c.queue_free()
 		
 	for i in deck_data.key_cards.size():
-		var cd := Global.card_catalog.get_card_data(deck_data.key_cards[i])
+		var cd := Global.card_catalog._get_card_data(deck_data.key_cards[i])
 		var dbcard = DeckBannerCard.instance()
 		dbcard.get_node("CardFront").initialize_card(cd)
 		if editor_mode:

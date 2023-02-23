@@ -74,7 +74,7 @@ class DeckRegulation:
 		for id in deck:
 			if not _check_card_pool(id):
 				failed.append(Regulation_Failed.CARD_POOL)
-			var cd := catalog.get_card_data(id)
+			var cd := catalog._get_card_data(id)
 			cost += cd.level
 			level2_count += 1 if cd.level == 2 else 0
 			level3_count += 1 if cd.level == 3 else 0

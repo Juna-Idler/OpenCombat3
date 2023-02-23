@@ -1,3 +1,6 @@
+
+extends I_CardCatalog
+
 class_name CardCatalog
 
 class StatsNames:
@@ -56,10 +59,9 @@ var stats_names := StatsNames.new()
 
 var version : String
 
-var translation : String
 
 func _init():
-	translation = TranslationServer.get_locale()
+#	translation = TranslationServer.get_locale()
 	
 	load_catalog()
 
@@ -73,12 +75,10 @@ func load_catalog():
 func get_max_card_id() -> int:
 	return _card_catalog.size() - 1
 
-func get_card_data(id : int) -> CatalogData.CardData:
+func _get_card_data(id : int) -> CatalogData.CardData:
 	return _card_catalog[id]
 
 	
-func set_card_data(card : CatalogData.CardData, id : int):
-	CatalogData.CardData.copy(card,get_card_data(id))
 
 
 func get_skill_data(id : int) -> CatalogData.SkillData:
@@ -99,17 +99,6 @@ func get_skill_param(param_type : int,param : String) -> CatalogData.SkillParame
 			return CatalogData.SkillParameter.new(ColorName[int(param)],ColorName[int(param)],int(param))
 	return null
 	
-
-func get_deck_face(deck : DeckData) -> DeckData.DeckFace:
-	var cost := 0
-	var rgb := [0,0,0,0]
-	var level := [0,0,0,0]
-	for i in deck.cards:
-		var c := Global.card_catalog.get_card_data(i) as CatalogData.CardData
-		rgb[c.color] += 1
-		level[c.level] += 1
-		cost += c.level
-	return DeckData.DeckFace.new(deck.name,deck.key_cards,deck.cards.size(),cost,level,rgb)
 
 
 
@@ -134,13 +123,15 @@ func _load_card_data():
 			skills.append(skill)
 		var id := int(tsv[0])
 		var text = tsv[10].replace("\\n","\n")
+		var image = "res://card_images/"+ tsv[11] +".png"
 		_card_catalog[id] = CatalogData.CardData.new(id,tsv[1],tsv[2],tsv[3],
 				int(tsv[4]),int(tsv[5]),int(tsv[6]),int(tsv[7]),int(tsv[8]),
-				skills,text,tsv[11])
+				skills,text,image)
 	version = (_card_catalog[0] as CatalogData.CardData).name
 # warning-ignore:return_value_discarded
 	_card_catalog.erase(0)
 
+	var translation := TranslationServer.get_locale()
 	if translation.find("ja") != 0:
 		var trans_res = load("res://card_data/card_data_" + translation + ".txt")
 		if not trans_res:
@@ -171,6 +162,7 @@ func _load_skill_data():
 				states.append(_state_catalog[int(i)])
 		_skill_catalog[id] = CatalogData.SkillData.new(id,tsv[1],tsv[2],tsv[3],tsv[4],tsv[5],states,text)
 
+	var translation := TranslationServer.get_locale()
 	if translation.find("ja") != 0:
 		var trans_res = load("res://card_data/named_skill_" + translation + ".txt")
 		if not trans_res:
@@ -196,6 +188,7 @@ func _load_state_data():
 		var text = tsv[5].replace("\\n","\n")
 		_state_catalog[id] = CatalogData.StateData.new(id,tsv[1],tsv[2],tsv[3],tsv[4],text)
 
+	var translation := TranslationServer.get_locale()
 	if translation.find("ja") != 0:
 		var trans_res = load("res://card_data/state_" + translation + ".txt")
 		if not trans_res:
@@ -234,6 +227,7 @@ func _load_attribute_data():
 				stats_names.block = tsv[2]
 				stats_names.short_block = tsv[3]
 
+	var translation := TranslationServer.get_locale()
 	if translation.find("ja") != 0:
 		var trans_res = load("res://card_data/attribute_" + translation + ".txt")
 		if not trans_res:

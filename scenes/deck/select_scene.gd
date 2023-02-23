@@ -17,7 +17,7 @@ func initialize_build(regulation : RegulationData.DeckRegulation):
 	card_pool = []
 	for i in range(0,regulation.card_pool.size(),2):
 		for id in range(regulation.card_pool[i],regulation.card_pool[i + 1] + 1):
-			card_pool.append(Global.card_catalog.get_card_data(id))
+			card_pool.append(Global.card_catalog._get_card_data(id))
 
 	$Panel/BuildControl.show()
 	$Panel/ButtonDecide.hide()
@@ -28,7 +28,7 @@ func initialize_select(regulation : RegulationData.DeckRegulation):
 	card_pool = []
 	for i in range(0,regulation.card_pool.size(),2):
 		for id in range(regulation.card_pool[i],regulation.card_pool[i + 1] + 1):
-			card_pool.append(Global.card_catalog.get_card_data(id))
+			card_pool.append(Global.card_catalog._get_card_data(id))
 			
 	$Panel/BuildControl.hide()
 	$Panel/ButtonDecide.show()

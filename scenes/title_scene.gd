@@ -5,7 +5,7 @@ class_name TitleScene
 var scene_changer : ISceneChanger
 
 func _ready():
-	if Global.card_catalog.translation == "en":
+	if TranslationServer.get_locale() == "en":
 		$Panel/LanguageOptionButton.selected = 1
 	
 	$SettingsScene.self_modulate.a = 0.9

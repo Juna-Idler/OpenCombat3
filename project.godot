@@ -19,7 +19,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scenes/deck/select_scene.gd"
 }, {
-"base": "Reference",
+"base": "I_CardCatalog",
 "class": "CardCatalog",
 "language": "GDScript",
 "path": "res://scripts/game_data/card_catalog.gd"
@@ -148,6 +148,11 @@ _global_script_classes=[ {
 "class": "ISceneChanger",
 "language": "GDScript",
 "path": "res://scenes/scene_changer.gd"
+}, {
+"base": "Reference",
+"class": "I_CardCatalog",
+"language": "GDScript",
+"path": "res://scripts/game_data/i_card_catalog.gd"
 }, {
 "base": "Control",
 "class": "I_HandArea",
@@ -383,6 +388,7 @@ _global_script_class_icons={
 "ICpuCommander": "",
 "IGameServer": "",
 "ISceneChanger": "",
+"I_CardCatalog": "",
 "I_HandArea": "",
 "I_PlayerField": "",
 "JSONResource": "",

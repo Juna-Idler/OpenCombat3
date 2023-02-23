@@ -29,7 +29,7 @@ func _init(match_log :MatchLog,rival : bool,card_catalog : CardCatalog) -> void:
 	rival_side = rival
 	var deck = match_log.primary_data.rival_deck_list if rival_side else match_log.primary_data.my_deck_list
 	for i in range(deck.size()):
-		var c := MechanicsData.PlayerCard.new(card_catalog.get_card_data(deck[i]),i,s_factory)
+		var c := MechanicsData.PlayerCard.new(card_catalog._get_card_data(deck[i]),i,s_factory)
 		deck_list.append(c);
 	var fd = match_log.first_data.rival if rival_side else match_log.first_data.myself
 	first_data = IGameServer.UpdateData.PlayerData.new(fd.hand,0,[],[],0,fd.life,

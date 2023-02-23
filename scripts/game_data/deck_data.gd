@@ -39,3 +39,15 @@ class DeckFace:
 		total_cost = cost
 		level = l
 		color = c
+
+func get_deck_face(catalog : CardCatalog) -> DeckFace:
+	var cost := 0
+	var rgb := [0,0,0,0]
+	var level := [0,0,0,0]
+	for i in cards:
+		var c := catalog._get_card_data(i) as CatalogData.CardData
+		rgb[c.color] += 1
+		level[c.level] += 1
+		cost += c.level
+	return DeckFace.new(name,key_cards,cards.size(),cost,level,rgb)
+
