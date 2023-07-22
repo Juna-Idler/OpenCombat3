@@ -59,10 +59,7 @@ func _on_ReplayMenu_start_pressed(selected):
 	performing_durations.clear()
 
 	replay_server.initialize(selected.match_log)
-	var skill_factory := MatchCardSkillFactory.new()
 	$MatchScene.initialize(replay_server,
-			Global.card_catalog,Global.card_catalog,
-			skill_factory,skill_factory,
 			$MatchScene/TopUILayer/PlayerField,$MatchScene/TopUILayer/OpponentField)
 	$"%ResultOverlap".hide()
 	$Panel/ReplayMenu.hide()
